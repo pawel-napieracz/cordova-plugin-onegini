@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+
+    "elementtree":"*",
+    "plist":"*",
+    "lodash":"*",
+    "cordova-minify":"*",
+    "uglify-js":"*",
+    "clean-css":"*"
+  }
+}
