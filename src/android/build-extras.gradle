@@ -1,0 +1,24 @@
+android {
+  dexOptions {
+    preDexLibraries = false
+    javaMaxHeapSize "4g"
+  }
+
+  packagingOptions {
+    exclude 'META-INF/ASL2.0.txt'
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/NOTICE.txt'
+  }
+}
+
+afterEvaluate {
+  tasks.matching {
+    it.name.startsWith('dex')
+  }.each { dx ->
+    if (dx.additionalParameters == null) {
+      dx.additionalParameters = ['--multi-dex']
+    } else {
+      dx.additionalParameters += '--multi-dex'
+    }
+  }
+}
