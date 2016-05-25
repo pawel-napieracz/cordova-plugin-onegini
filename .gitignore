@@ -1,3 +1,15 @@
+# Generic
+.DS_Store
+.idea/
+**/*.iml
+*.orig
+.gradle/
+build/
+local.properties
+cordova/
+**/*--
+
+# iOS specific
 src/ios/Pods
 src/ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata
 src/ios/OneginiCordovaPlugin.xcodeproj/project.xcworkspace/xcuserdata
@@ -5,19 +17,12 @@ src/ios/OneginiCordovaPlugin.xcodeproj/xcuserdata
 src/ios/OneginiCordovaPlugin.xcworkspace/xcuserdata
 src/ios/DerivedData
 *.xccheckout
-.idea/
-.DS_Store
-src/ios/Example native PIN/CustomPINEntry/CustomPINEntry.xcodeproj/project.xcworkspace/xcuserdata/eduard.xcuserdatad
-src/ios/Example native PIN/CustomPINEntry/CustomPINEntry.xcodeproj/xcuserdata/eduard.xcuserdatad
 
+# Android specific
 src/android/.gradle
 src/android/CordovaLib/build
 src/android/build
 
-*.orig
-
-.gradle/
-build/
-**/*.iml
-local.properties
-**/*--
+src/ios/OneginiSDKiOS/Headers/*
+src/ios/OneginiSDKiOS/*.a
+src/ios/OneginiSDKiOS/*.tar
