@@ -57,16 +57,7 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGCustomizationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
-    <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-4.08.04-Release-fat-binary.a" framework="true"/>
-
-    <resource-file src="src/generic/pin-config.json"/>
-    <resource-file src="src/generic/pin_container_ipad_landscape_bg.png"/>
-    <resource-file src="src/generic/pin_delete_key_normal.png"/>
-    <resource-file src="src/generic/pin_delete_key_highlighted.png"/>
-    <resource-file src="src/generic/pin_key_highlighted.png"/>
-    <resource-file src="src/generic/pin_key_normal.png"/>
-    <resource-file src="src/generic/pin-occupied-ic.png"/>
-    <resource-file src="src/generic/pin-clear-ic.png"/>
+    <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-4.09.00-Release-fat-binary.a" framework="true"/>
 
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/fingerprint.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/key.png"/>
@@ -91,14 +82,6 @@
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond1@2x.jpg"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond2.jpg"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond2@2x.jpg"/>
-
-    <resource-file src="src/generic/fonts/SourceSansPro-ExtraLight.ttf"/>
-    <resource-file src="src/generic/fonts/SourceSansPro-ExtraLightItalic.ttf"/>
-    <resource-file src="src/generic/fonts/SourceSansPro-Italic.ttf"/>
-    <resource-file src="src/generic/fonts/SourceSansPro-Light.ttf"/>
-    <resource-file src="src/generic/fonts/SourceSansPro-LightItalic.ttf"/>
-    <resource-file src="src/generic/fonts/SourceSansPro-Regular.ttf"/>
-    <resource-file src="src/generic/fonts/SourceSansPro-Semibold.ttf"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
@@ -235,6 +218,8 @@
                  target-dir="src/com/onegini/action/"/>
     <source-file src="src/android/src/android/com/onegini/action/FingerprintAuthenticationStateAction.java"
                  target-dir="src/com/onegini/action/"/>
+    <source-file src="src/android/src/android/com/onegini/action/PinHandlerProvider.java"
+                 target-dir="src/com/onegini/action/"/>
     <!-- dialog -->
     <source-file src="src/android/src/android/com/onegini/dialog/AcceptWithPinDialog.java"
                  target-dir="src/com/onegini/dialog/" />
@@ -257,9 +242,9 @@
     <source-file src="src/android/src/android/com/onegini/dialog/PushWithPinActivity.java"
                  target-dir="src/com/onegini/dialog"/>
     <source-file src="src/android/src/android/com/onegini/dialog/helper/PinActivityStarter.java"
-                 target-dir="src/com/onegini/util/"/>
+                 target-dir="src/com/onegini/dialog/helper/"/>
     <source-file src="src/android/src/android/com/onegini/dialog/helper/PinActivityMessageMapper.java"
-                 target-dir="src/com/onegini/util/"/>
+                 target-dir="src/com/onegini/dialog/helper/"/>
     <source-file src="src/android/src/android/com/onegini/dialog/PinKeyboard.java"
                  target-dir="src/com/onegini/dialog"/>
     <source-file src="src/android/src/android/com/onegini/dialog/helper/PinKeyboardHandler.java"
