@@ -513,7 +513,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 -(void)readConfigProperty:(CDVInvokedUrlCommand *)command{
-    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.baseURL];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.resourceBaseURL];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
@@ -1136,7 +1136,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         else
             [self sendErrorCallback:self.inAppBrowserCommandTxId];
     }
-    dispatch_after(1.5, dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:self.pinViewController animated:YES completion:^{
             self.pinViewController.messages = [MessagesModel sharedInstance].messages;
         }];
