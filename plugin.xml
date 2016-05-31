@@ -70,23 +70,12 @@
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/buttonPijl@2x.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/buttonPijl@3x.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/ipad-steps.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-keyboard.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-keyboard@3x.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-pinslot-selected.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-pinslot.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-steps.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo@2x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo~ipad.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo~ipad@2x.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit@2x.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit@3x.png"/>
-
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond1.jpg"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond1@2x.jpg"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond2.jpg"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond2@2x.jpg"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
