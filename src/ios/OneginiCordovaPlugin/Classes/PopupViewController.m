@@ -7,10 +7,13 @@
 //
 
 #import "PopupViewController.h"
+#import "OGNColorFileParser.h"
 
 @interface PopupViewController ()
+
 @property (weak, nonatomic) IBOutlet UIView *labelView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsFrame;
+@property (weak, nonatomic) IBOutlet UIView *backgroundView;
 
 @end
 
@@ -21,6 +24,19 @@
     // Do any additional setup after loading the view.
     self.contentTextView.contentInset = UIEdgeInsetsMake(-4,-4,0,0);
     self.contentTextView.editable = NO;
+    
+    [self setColors];
+}
+
+
+-(void)setColors{
+    self.labelView.backgroundColor = [OGNColorFileParser colorForKey:@"popup_header_background"];
+    [self.titleLabel setTextColor:[OGNColorFileParser colorForKey:@"popupheader_text"]];
+    self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:@"popup_body_background"];
+    self.proceedButton.backgroundColor = [OGNColorFileParser colorForKey:@"popup_button_background"];
+    self.proceedButton.titleLabel.textColor = [OGNColorFileParser colorForKey:@"popup_button_text"];
+    self.cancelButton.backgroundColor = [OGNColorFileParser colorForKey:@"popup_button_background"];
+    self.cancelButton.titleLabel.textColor = [OGNColorFileParser colorForKey:@"popup_button_text"];
 }
 
 - (void)didReceiveMemoryWarning {

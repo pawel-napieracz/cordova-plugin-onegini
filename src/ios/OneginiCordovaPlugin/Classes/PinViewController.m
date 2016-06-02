@@ -9,6 +9,7 @@
 #import "PinViewController.h"
 #import "PopupViewController.h"
 #import "MessagesModel.h"
+#import "OGNColorFileParser.h"
 
 @interface PinViewController()
 
@@ -20,6 +21,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 @property (weak, nonatomic) IBOutlet UIButton *helpButton;
 @property (weak, nonatomic) IBOutlet UIButton *pinForgottenButton;
+@property (weak, nonatomic) IBOutlet UIView *headerView;
+@property (weak, nonatomic) IBOutlet UIView *backgroundView;
+@property (weak, nonatomic) IBOutlet UIView *pinBackgroundView;
 
 @property (nonatomic) PopupViewController* popupViewController;
 
@@ -55,12 +59,27 @@
     self.pinEntry = [NSMutableArray new];
     [self.helpButton setTitle:[MessagesModel messageForKey:@"HELP_LINK_TITLE"] forState:UIControlStateNormal];
     [self.pinForgottenButton setTitle:[MessagesModel messageForKey:@"PIN_FORGOTTEN_TITLE"] forState:UIControlStateNormal];
+    [self setColors];
 }
 
 -(void)viewWillAppear:(BOOL)animated{   
     [super viewDidAppear:animated];
     self.mode = self.mode;
     [self initPopupViewController];
+}
+
+-(void)setColors{
+    self.headerView.backgroundColor = [OGNColorFileParser colorForKey:@"pinscreen_header_background"];
+    self.helpButton.titleLabel.textColor = [OGNColorFileParser colorForKey:@"pinscreen_header_help_label_text"];
+    self.titleLabel.textColor = [OGNColorFileParser colorForKey:@"pinscreen_title"];
+    self.pinForgottenButton.titleLabel.textColor = [OGNColorFileParser colorForKey:@"pinscreen_forgotten_label"];
+    self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:@"pinscreen_background"];
+    self.pinBackgroundView.backgroundColor = [OGNColorFileParser colorForKey:@"pin_keyboard_background"];
+    
+    for (UIButton *keyboardButton in @[self.key1,self.key2,self.key3,self.key4,self.key5,self.key6,self.key7,self.key8,self.key9,self.key0, self.backKey]) {
+        keyboardButton.backgroundColor = [OGNColorFileParser colorForKey:@"pin_keyboard_button_background"];
+        keyboardButton.titleLabel.textColor = [OGNColorFileParser colorForKey:@"pin_keyboard_button_text"];
+    }
 }
 
 -(void)invalidPinWithReason:(NSString *)message {

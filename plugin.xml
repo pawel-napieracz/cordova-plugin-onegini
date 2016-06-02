@@ -37,6 +37,10 @@
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/MessagesModel.m"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/CDVAppDelegate+Onegini.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/CDVAppDelegate+Onegini.m"/>
+    <header-file src="src/ios/OneginiCordovaPlugin/Classes/OGNColorFileParser.h"/>
+    <source-file src="src/ios/OneginiCordovaPlugin/Classes/OGNColorFileParser.m"/>
+    <header-file src="src/ios/OneginiCordovaPlugin/Classes/UIColor+OGNHex.h"/>
+    <source-file src="src/ios/OneginiCordovaPlugin/Classes/UIColor+OGNHex.m"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGAuthorizationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGConfigModel.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGChangePinDelegate.h"/>

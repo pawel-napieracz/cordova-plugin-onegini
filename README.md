@@ -19,6 +19,10 @@ Plugin dependencies needs to be resolved before it can be installed in Cordova a
 
     gradle clean resolveDependencies
 
+#### Native screen support 
+Native screens are available only when cordova-onegini-native-screens is installed along with cordova-onegini-plugin. 
+cordova-onegini-native-screens plugin is available on gitlab: 
+`ssh://git@ssh.gitlab.onegini.com:10022/mobile-platform/cordova-native-sceens.git`
 
 # 2. Package contents.
 Cordova-plugin package contents: <br>

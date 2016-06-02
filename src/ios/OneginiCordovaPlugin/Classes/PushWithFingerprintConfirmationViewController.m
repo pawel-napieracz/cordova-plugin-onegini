@@ -8,6 +8,7 @@
 
 #import "PushWithFingerprintConfirmationViewController.h"
 #import "MessagesModel.h"
+#import "OGNColorFileParser.h"
 
 @interface PushWithFingerprintConfirmationViewController()
 
@@ -17,6 +18,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (nonatomic, copy) PushAuthenticationConfirmation confirmationBlock;
 @property (nonatomic) NSString *message;
+@property (weak, nonatomic) IBOutlet UIView *headerView;
+@property (weak, nonatomic) IBOutlet UIView *backgroundView;
 
 @end
 
@@ -37,6 +40,19 @@
     self.messageLabel.text = self.message;
     [self.confirmButton setTitle:[MessagesModel messageForKey:@"PUSH_CONFIRMATION_CONFIRM_BUTTON"] forState:UIControlStateNormal];
     [self.cancelButton setTitle:[MessagesModel messageForKey:@"PUSH_CONFIRMATION_CANCEL_BUTTON"] forState:UIControlStateNormal];
+    [self setColors];
+}
+
+- (void)setColors{
+    self.headerView.backgroundColor = [OGNColorFileParser colorForKey:@"pinscreen_header_background"];
+    self.titleLabel.textColor = [OGNColorFileParser colorForKey:@"pinscreen_title"];
+    self.messageLabel.textColor = [OGNColorFileParser colorForKey:@"pinscreen_title"];
+    self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:@"popup_body_background"];
+    self.view.backgroundColor = [OGNColorFileParser colorForKey:@"pinscreen_background"];
+    for (UIButton *button in @[self.confirmButton, self.cancelButton]) {
+        button.backgroundColor = [OGNColorFileParser colorForKey:@"pin_keyboard_button_background"];
+        button.titleLabel.textColor = [OGNColorFileParser colorForKey:@"pin_keyboard_button_text"];
+    }
 }
 
 -(IBAction)confirmButton:(id)sender{

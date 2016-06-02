@@ -51,6 +51,8 @@
 		5CC1A7401C4E394E00F8B2A7 /* PinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC1A73F1C4E394E00F8B2A7 /* PinViewController.m */; };
 		5CC1A7471C4E4C4200F8B2A7 /* PINViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CC1A7451C4E4C4200F8B2A7 /* PINViewController.xib */; };
 		5CC1A7481C4E4C4200F8B2A7 /* PINViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CC1A7461C4E4C4200F8B2A7 /* PINViewController~ipad.xib */; };
+		5CC5605B1D004B38007FC5F0 /* OGNColorFileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5605A1D004B38007FC5F0 /* OGNColorFileParser.m */; };
+		5CC560791D005E47007FC5F0 /* UIColor+OGNHex.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC560781D005E47007FC5F0 /* UIColor+OGNHex.m */; };
 		5CC592D71B03444000E73832 /* plugin.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5CC592D61B03444000E73832 /* plugin.xml */; };
 		5CCD1DD91C58BF4500C68541 /* PushConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CCD1DD71C58BF4500C68541 /* PushConfirmationViewController.m */; };
 		5CCD1DDA1C58BF4500C68541 /* PushConfirmationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CCD1DD81C58BF4500C68541 /* PushConfirmationViewController.xib */; };
@@ -169,6 +171,10 @@
 		5CC1A73F1C4E394E00F8B2A7 /* PinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PinViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		5CC1A7451C4E4C4200F8B2A7 /* PINViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PINViewController.xib; sourceTree = "<group>"; };
 		5CC1A7461C4E4C4200F8B2A7 /* PINViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PINViewController~ipad.xib"; sourceTree = "<group>"; };
+		5CC560591D004B38007FC5F0 /* OGNColorFileParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGNColorFileParser.h; sourceTree = "<group>"; };
+		5CC5605A1D004B38007FC5F0 /* OGNColorFileParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OGNColorFileParser.m; sourceTree = "<group>"; };
+		5CC560771D005E47007FC5F0 /* UIColor+OGNHex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+OGNHex.h"; sourceTree = "<group>"; };
+		5CC560781D005E47007FC5F0 /* UIColor+OGNHex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+OGNHex.m"; sourceTree = "<group>"; };
 		5CC592D61B03444000E73832 /* plugin.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = plugin.xml; path = ../../plugin.xml; sourceTree = "<group>"; };
 		5CCD1DD61C58BF4500C68541 /* PushConfirmationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushConfirmationViewController.h; sourceTree = "<group>"; };
 		5CCD1DD71C58BF4500C68541 /* PushConfirmationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PushConfirmationViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -220,6 +226,9 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				5CC560761D005E1C007FC5F0 /* Categories */,
+				5CC560591D004B38007FC5F0 /* OGNColorFileParser.h */,
+				5CC5605A1D004B38007FC5F0 /* OGNColorFileParser.m */,
 				5CCD1DDB1C58CAFB00C68541 /* MessagesModel.h */,
 				5CCD1DDC1C58CAFB00C68541 /* MessagesModel.m */,
 				5C0C1F611C58EE6600533E9A /* PushWithPinConfirmationViewController.h */,
@@ -426,6 +435,15 @@
 			path = splash;
 			sourceTree = "<group>";
 		};
+		5CC560761D005E1C007FC5F0 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				5CC560771D005E47007FC5F0 /* UIColor+OGNHex.h */,
+				5CC560781D005E47007FC5F0 /* UIColor+OGNHex.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		EB87FDF11871DA420020F90C /* Staging */ = {
 			isa = PBXGroup;
 			children = (
@@ -566,6 +584,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				5CC5605B1D004B38007FC5F0 /* OGNColorFileParser.m in Sources */,
 				5CCD1DD91C58BF4500C68541 /* PushConfirmationViewController.m in Sources */,
 				5CCD1DDD1C58CAFB00C68541 /* MessagesModel.m in Sources */,
 				5CE8588C1CCA26EE004A5594 /* PushWithFingerprintConfirmationViewController.m in Sources */,
@@ -575,6 +594,7 @@
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				5C21E8F81CC8C67F00F31E57 /* CDVAppDelegate+Onegini.m in Sources */,
 				23CC2D081AA43F890056F377 /* OneginiCordovaClient.m in Sources */,
+				5CC560791D005E47007FC5F0 /* UIColor+OGNHex.m in Sources */,
 				5C7C00B61BAC4C0900FDAA56 /* XMLReader.m in Sources */,
 				5CC1A7401C4E394E00F8B2A7 /* PinViewController.m in Sources */,
 			);
