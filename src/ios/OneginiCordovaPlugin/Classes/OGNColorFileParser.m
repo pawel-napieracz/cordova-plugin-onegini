@@ -9,6 +9,22 @@
 #import "OGNColorFileParser.h"
 #import "UIColor+OGNHex.h"
 
+NSString * const kOGNPopupHeaderBackground = @"popup_header_background";
+NSString * const kOGNPopupHeaderText = @"popup_header_text";
+NSString * const kOGNPopupBodyText = @"popup_body_text";
+NSString * const kOGNPopupBodyBackground = @"popup_body_background";
+NSString * const kOGNPopupButtonText = @"popup_button_text";
+NSString * const kOGNPopupButtonBackground = @"popup_button_background";
+
+NSString * const kOGNPinscreenTitle = @"pinscreen_title";
+NSString * const kOGNPinscreenHeaderBackground = @"pinscreen_header_background";
+NSString * const kOGNPinscreenHeaderHelpLabelText = @"pinscreen_header_help_label_text";
+NSString * const kOGNPinscreenBackground = @"pinscreen_background";
+NSString * const kOGNPinKeyboardBackground = @"pin_keyboard_background";
+NSString * const kOGNPinKeyboardButtonBackground = @"pin_keyboard_button_background";
+NSString * const kOGNPinKeyboardButtonText = @"pin_keyboard_button_text";
+NSString * const kOGNPinscreenForgottenLabel = @"pinscreen_forgotten_label";
+
 @interface OGNColorFileParser() <NSXMLParserDelegate>
 
 @property (nonatomic) NSMutableDictionary<NSString*,UIColor*> *parsedColors;

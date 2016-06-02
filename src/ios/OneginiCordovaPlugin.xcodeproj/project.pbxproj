@@ -44,7 +44,6 @@
 		5C0C1F651C58EE6600533E9A /* PushWithPinConfirmationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C0C1F631C58EE6600533E9A /* PushWithPinConfirmationViewController.xib */; };
 		5C1882A91ADE8AE600DE7286 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C1882A81ADE8AE600DE7286 /* SystemConfiguration.framework */; };
 		5C21E8F81CC8C67F00F31E57 /* CDVAppDelegate+Onegini.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C21E8F71CC8C67F00F31E57 /* CDVAppDelegate+Onegini.m */; };
-		5C4E772B1CCD4BF9001C2E09 /* OneginiSDKiOS-4.08.04-Release-fat-binary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C4E772A1CCD4BF9001C2E09 /* OneginiSDKiOS-4.08.04-Release-fat-binary.a */; };
 		5C5F64351B0C617500457C8E /* PopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F64311B0C617500457C8E /* PopupViewController.m */; };
 		5C5F64361B0C617500457C8E /* PopupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C5F64321B0C617500457C8E /* PopupViewController.xib */; };
 		5C7C00B61BAC4C0900FDAA56 /* XMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C7C00B51BAC4C0900FDAA56 /* XMLReader.m */; };
@@ -53,6 +52,7 @@
 		5CC1A7481C4E4C4200F8B2A7 /* PINViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CC1A7461C4E4C4200F8B2A7 /* PINViewController~ipad.xib */; };
 		5CC5605B1D004B38007FC5F0 /* OGNColorFileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5605A1D004B38007FC5F0 /* OGNColorFileParser.m */; };
 		5CC560791D005E47007FC5F0 /* UIColor+OGNHex.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC560781D005E47007FC5F0 /* UIColor+OGNHex.m */; };
+		5CC560C51D00A1E5007FC5F0 /* OneginiSDKiOS-4.09.00-Release-fat-binary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CC560C41D00A1E5007FC5F0 /* OneginiSDKiOS-4.09.00-Release-fat-binary.a */; };
 		5CC592D71B03444000E73832 /* plugin.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5CC592D61B03444000E73832 /* plugin.xml */; };
 		5CCD1DD91C58BF4500C68541 /* PushConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CCD1DD71C58BF4500C68541 /* PushConfirmationViewController.m */; };
 		5CCD1DDA1C58BF4500C68541 /* PushConfirmationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CCD1DD81C58BF4500C68541 /* PushConfirmationViewController.xib */; };
@@ -161,7 +161,6 @@
 		5C1882A81ADE8AE600DE7286 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		5C21E8F61CC8C67F00F31E57 /* CDVAppDelegate+Onegini.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDVAppDelegate+Onegini.h"; sourceTree = "<group>"; };
 		5C21E8F71CC8C67F00F31E57 /* CDVAppDelegate+Onegini.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CDVAppDelegate+Onegini.m"; sourceTree = "<group>"; };
-		5C4E772A1CCD4BF9001C2E09 /* OneginiSDKiOS-4.08.04-Release-fat-binary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "OneginiSDKiOS-4.08.04-Release-fat-binary.a"; sourceTree = "<group>"; };
 		5C5F64301B0C617500457C8E /* PopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupViewController.h; sourceTree = "<group>"; };
 		5C5F64311B0C617500457C8E /* PopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupViewController.m; sourceTree = "<group>"; };
 		5C5F64321B0C617500457C8E /* PopupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopupViewController.xib; sourceTree = "<group>"; };
@@ -175,6 +174,7 @@
 		5CC5605A1D004B38007FC5F0 /* OGNColorFileParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OGNColorFileParser.m; sourceTree = "<group>"; };
 		5CC560771D005E47007FC5F0 /* UIColor+OGNHex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+OGNHex.h"; sourceTree = "<group>"; };
 		5CC560781D005E47007FC5F0 /* UIColor+OGNHex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+OGNHex.m"; sourceTree = "<group>"; };
+		5CC560C41D00A1E5007FC5F0 /* OneginiSDKiOS-4.09.00-Release-fat-binary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "OneginiSDKiOS-4.09.00-Release-fat-binary.a"; sourceTree = "<group>"; };
 		5CC592D61B03444000E73832 /* plugin.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = plugin.xml; path = ../../plugin.xml; sourceTree = "<group>"; };
 		5CCD1DD61C58BF4500C68541 /* PushConfirmationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushConfirmationViewController.h; sourceTree = "<group>"; };
 		5CCD1DD71C58BF4500C68541 /* PushConfirmationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PushConfirmationViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -209,12 +209,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C4E772B1CCD4BF9001C2E09 /* OneginiSDKiOS-4.08.04-Release-fat-binary.a in Frameworks */,
 				5C1882A91ADE8AE600DE7286 /* SystemConfiguration.framework in Frameworks */,
 				23C663F21A8B805B007C1838 /* libCordova.a in Frameworks */,
 				2351A2591A655E2F00C89FF6 /* libiconv.dylib in Frameworks */,
 				2351A2571A655E2300C89FF6 /* libc++.dylib in Frameworks */,
 				5B1594DD16A7569C00FEF299 /* AssetsLibrary.framework in Frameworks */,
+				5CC560C51D00A1E5007FC5F0 /* OneginiSDKiOS-4.09.00-Release-fat-binary.a in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 			);
@@ -305,7 +305,7 @@
 		23FD95D01A9CCC3800A1AC62 /* OneginiSDKiOS */ = {
 			isa = PBXGroup;
 			children = (
-				5C4E772A1CCD4BF9001C2E09 /* OneginiSDKiOS-4.08.04-Release-fat-binary.a */,
+				5CC560C41D00A1E5007FC5F0 /* OneginiSDKiOS-4.09.00-Release-fat-binary.a */,
 				23FD95D11A9CCC3800A1AC62 /* Headers */,
 			);
 			path = OneginiSDKiOS;

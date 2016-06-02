@@ -30,14 +30,14 @@
 
 
 -(void)setColors{
-    self.labelView.backgroundColor = [OGNColorFileParser colorForKey:@"popup_header_background"];
-    self.titleLabel.textColor = [OGNColorFileParser colorForKey:@"popup_header_text"];
-    self.contentTextView.textColor = [OGNColorFileParser colorForKey:@"popup_body_text"];
-    self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:@"popup_body_background"];
-    self.proceedButton.backgroundColor = [OGNColorFileParser colorForKey:@"popup_button_background"];
-    [self.proceedButton setTitleColor:[OGNColorFileParser colorForKey:@"popup_button_text"] forState:UIControlStateNormal];
-    self.cancelButton.backgroundColor = [OGNColorFileParser colorForKey:@"popup_button_background"];
-    [self.cancelButton setTitleColor:[OGNColorFileParser colorForKey:@"popup_button_text"] forState:UIControlStateNormal];
+    self.labelView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPopupHeaderBackground];
+    self.titleLabel.textColor = [OGNColorFileParser colorForKey:kOGNPopupHeaderText];
+    self.contentTextView.textColor = [OGNColorFileParser colorForKey:kOGNPopupBodyText];
+    self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPopupBodyBackground];
+    self.proceedButton.backgroundColor = [OGNColorFileParser colorForKey:kOGNPopupButtonBackground];
+    [self.proceedButton setTitleColor:[OGNColorFileParser colorForKey:kOGNPopupButtonText] forState:UIControlStateNormal];
+    self.cancelButton.backgroundColor = [OGNColorFileParser colorForKey:kOGNPopupButtonBackground];
+    [self.cancelButton setTitleColor:[OGNColorFileParser colorForKey:kOGNPopupButtonText] forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning {

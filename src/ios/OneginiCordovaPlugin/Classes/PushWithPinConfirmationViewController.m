@@ -82,14 +82,14 @@
 }
 
 -(void)setColors{
-    self.headerView.backgroundColor = [OGNColorFileParser colorForKey:@"pinscreen_header_background"];
-    self.titleLabel.textColor = [OGNColorFileParser colorForKey:@"pinscreen_title"];
-    self.messageLabel.textColor = [OGNColorFileParser colorForKey:@"pinscreen_title"];
-    self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:@"popup_body_background"];
-    self.view.backgroundColor = [OGNColorFileParser colorForKey:@"pinscreen_background"];
+    self.headerView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinscreenHeaderBackground];
+    self.titleLabel.textColor = [OGNColorFileParser colorForKey:kOGNPinscreenTitle];
+    self.messageLabel.textColor = [OGNColorFileParser colorForKey:kOGNPinscreenTitle];
+    self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPopupBodyBackground];
+    self.view.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinscreenBackground];
     for (UIButton *keyboardButton in @[self.key1,self.key2,self.key3,self.key4,self.key5,self.key6,self.key7,self.key8,self.key9,self.key0,self.denyButton,self.backKey]) {
-        keyboardButton.backgroundColor = [OGNColorFileParser colorForKey:@"pin_keyboard_button_background"];
-        [keyboardButton setTitleColor:[OGNColorFileParser colorForKey:@"pin_keyboard_button_text"] forState:UIControlStateNormal];
+        keyboardButton.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinKeyboardButtonBackground];
+        [keyboardButton setTitleColor:[OGNColorFileParser colorForKey:kOGNPinKeyboardButtonText] forState:UIControlStateNormal];
     }
 }
 

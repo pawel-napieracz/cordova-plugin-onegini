@@ -44,16 +44,15 @@
 }
 
 - (void)setColors{
-    self.headerView.backgroundColor = [OGNColorFileParser colorForKey:@"pinscreen_header_background"];
-    self.titleLabel.textColor = [OGNColorFileParser colorForKey:@"pinscreen_title"];
-    self.messageLabel.textColor = [OGNColorFileParser colorForKey:@"pinscreen_title"];
-    self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:@"popup_body_background"];
-    self.view.backgroundColor = [OGNColorFileParser colorForKey:@"pinscreen_background"];
+    self.headerView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinscreenHeaderBackground];
+    self.titleLabel.textColor = [OGNColorFileParser colorForKey:kOGNPinscreenTitle];
+    self.messageLabel.textColor = [OGNColorFileParser colorForKey:kOGNPinscreenTitle];
+    self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPopupBodyBackground];
+    self.view.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinscreenBackground];
     for (UIButton *button in @[self.confirmButton, self.cancelButton]) {
-        button.backgroundColor = [OGNColorFileParser colorForKey:@"pin_keyboard_button_background"];
-        [button setTitleColor:[OGNColorFileParser colorForKey:@"pin_keyboard_button_text"] forState:UIControlStateNormal];
+        button.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinKeyboardButtonBackground];
+        [button setTitleColor:[OGNColorFileParser colorForKey:kOGNPinKeyboardButtonText] forState:UIControlStateNormal];
     }
-
 }
 
 -(IBAction)confirmButton:(id)sender{
