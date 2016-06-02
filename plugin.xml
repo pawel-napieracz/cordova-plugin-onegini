@@ -57,10 +57,8 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGCustomizationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
-    <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-4.08.04-Release-fat-binary.a" framework="true"/>
+    <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-4.09.00-Release-fat-binary.a" framework="true"/>
 
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/PositiveSSLCA2.cer"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/PositiveSSLCA2.pem"/>
     <resource-file src="src/generic/messages/messages.properties"/>
     <asset src="src/generic/messages/messages.properties" target="res/messages.properties"/>
 
@@ -72,23 +70,12 @@
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/buttonPijl@2x.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/buttonPijl@3x.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/ipad-steps.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-keyboard.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-keyboard@3x.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-pinslot-selected.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-pinslot.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-steps.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo@2x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo~ipad.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo~ipad@2x.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit@2x.png"/>
     <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit@3x.png"/>
-
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond1.jpg"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond1@2x.jpg"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond2.jpg"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond2@2x.jpg"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
@@ -249,9 +236,9 @@
     <source-file src="src/android/src/android/com/onegini/dialog/PushWithPinActivity.java"
                  target-dir="src/com/onegini/dialog"/>
     <source-file src="src/android/src/android/com/onegini/dialog/helper/PinActivityStarter.java"
-                 target-dir="src/com/onegini/util/"/>
+                 target-dir="src/com/onegini/dialog/helper/"/>
     <source-file src="src/android/src/android/com/onegini/dialog/helper/PinActivityMessageMapper.java"
-                 target-dir="src/com/onegini/util/"/>
+                 target-dir="src/com/onegini/dialog/helper/"/>
     <source-file src="src/android/src/android/com/onegini/dialog/PinKeyboard.java"
                  target-dir="src/com/onegini/dialog"/>
     <source-file src="src/android/src/android/com/onegini/dialog/helper/PinKeyboardHandler.java"
