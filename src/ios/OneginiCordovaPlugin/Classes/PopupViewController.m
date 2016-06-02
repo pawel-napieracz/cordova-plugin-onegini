@@ -31,12 +31,13 @@
 
 -(void)setColors{
     self.labelView.backgroundColor = [OGNColorFileParser colorForKey:@"popup_header_background"];
-    [self.titleLabel setTextColor:[OGNColorFileParser colorForKey:@"popupheader_text"]];
+    self.titleLabel.textColor = [OGNColorFileParser colorForKey:@"popup_header_text"];
+    self.contentTextView.textColor = [OGNColorFileParser colorForKey:@"popup_body_text"];
     self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:@"popup_body_background"];
     self.proceedButton.backgroundColor = [OGNColorFileParser colorForKey:@"popup_button_background"];
-    self.proceedButton.titleLabel.textColor = [OGNColorFileParser colorForKey:@"popup_button_text"];
+    [self.proceedButton setTitleColor:[OGNColorFileParser colorForKey:@"popup_button_text"] forState:UIControlStateNormal];
     self.cancelButton.backgroundColor = [OGNColorFileParser colorForKey:@"popup_button_background"];
-    self.cancelButton.titleLabel.textColor = [OGNColorFileParser colorForKey:@"popup_button_text"];
+    [self.cancelButton setTitleColor:[OGNColorFileParser colorForKey:@"popup_button_text"] forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning {

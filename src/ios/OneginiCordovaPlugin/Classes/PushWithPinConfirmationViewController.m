@@ -89,7 +89,7 @@
     self.view.backgroundColor = [OGNColorFileParser colorForKey:@"pinscreen_background"];
     for (UIButton *keyboardButton in @[self.key1,self.key2,self.key3,self.key4,self.key5,self.key6,self.key7,self.key8,self.key9,self.key0,self.denyButton,self.backKey]) {
         keyboardButton.backgroundColor = [OGNColorFileParser colorForKey:@"pin_keyboard_button_background"];
-        keyboardButton.titleLabel.textColor = [OGNColorFileParser colorForKey:@"pin_keyboard_button_text"];
+        [keyboardButton setTitleColor:[OGNColorFileParser colorForKey:@"pin_keyboard_button_text"] forState:UIControlStateNormal];
     }
 }
 

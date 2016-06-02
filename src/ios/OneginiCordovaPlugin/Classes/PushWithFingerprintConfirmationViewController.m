@@ -51,7 +51,7 @@
     self.view.backgroundColor = [OGNColorFileParser colorForKey:@"pinscreen_background"];
     for (UIButton *button in @[self.confirmButton, self.cancelButton]) {
         button.backgroundColor = [OGNColorFileParser colorForKey:@"pin_keyboard_button_background"];
-        button.titleLabel.textColor = [OGNColorFileParser colorForKey:@"pin_keyboard_button_text"];
+        [button setTitleColor:[OGNColorFileParser colorForKey:@"pin_keyboard_button_text"] forState:UIControlStateNormal];
     }
 }
 
