@@ -139,10 +139,10 @@
         }];
     }
     for (UIImageView* pinslot in self.pinSlots) {
-        pinslot.image = [UIImage imageNamed:@"iphone-pinslot"];
+        pinslot.image = [UIImage imageNamed:@"pinslot"];
     }
     if (self.pinEntry.count<self.pinSlots.count){
-        ((UIImageView*)[self.pinSlots objectAtIndex:self.pinEntry.count]).image = [UIImage imageNamed:@"iphone-pinslot-selected"];
+        ((UIImageView*)[self.pinSlots objectAtIndex:self.pinEntry.count]).image = [UIImage imageNamed:@"pinslotSelected"];
     }
     
     if (self.pinEntry.count == 0){

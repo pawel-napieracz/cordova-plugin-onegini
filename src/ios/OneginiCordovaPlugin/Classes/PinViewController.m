@@ -8,6 +8,7 @@
 
 #import "PinViewController.h"
 #import "PopupViewController.h"
+#import "MessagesModel.h"
 
 @interface PinViewController()
 
@@ -52,8 +53,8 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     self.pinEntry = [NSMutableArray new];
-    [self.helpButton setTitle:[self.messages objectForKey:@"HELP_LINK_TITLE"] forState:UIControlStateNormal];
-    [self.pinForgottenButton setTitle:[self.messages objectForKey:@"PIN_FORGOTTEN_TITLE"] forState:UIControlStateNormal];
+    [self.helpButton setTitle:[MessagesModel messageForKey:@"HELP_LINK_TITLE"] forState:UIControlStateNormal];
+    [self.pinForgottenButton setTitle:[MessagesModel messageForKey:@"PIN_FORGOTTEN_TITLE"] forState:UIControlStateNormal];
 }
 
 -(void)viewWillAppear:(BOOL)animated{   
@@ -83,37 +84,37 @@
     switch (mode) {
         case PINCheckMode:
             self.pinForgottenButton.hidden = NO;
-            self.titleLabel.text = [self.messages objectForKey:@"LOGIN_PIN_SCREEN_TITLE"];
+            self.titleLabel.text = [MessagesModel messageForKey:@"LOGIN_PIN_SCREEN_TITLE"];
             self.errorLabel.text = @"";
             break;
         case PINRegistrationMode:
             self.pinForgottenButton.hidden = YES;
-            self.titleLabel.text = [self.messages objectForKey:@"CREATE_PIN_SCREEN_TITLE"];
+            self.titleLabel.text = [MessagesModel messageForKey:@"CREATE_PIN_SCREEN_TITLE"];
             self.errorLabel.text = @"";
             break;
         case PINRegistrationVerififyMode:
             self.pinForgottenButton.hidden = YES;
-            self.titleLabel.text = [self.messages objectForKey:@"CONFIRM_PIN_SCREEN_TITLE"];
+            self.titleLabel.text = [MessagesModel messageForKey:@"CONFIRM_PIN_SCREEN_TITLE"];
             self.errorLabel.text = @"";
             break;
         case PINChangeCheckMode:
             self.pinForgottenButton.hidden = NO;
-            self.titleLabel.text = [self.messages objectForKey:@"LOGIN_BEFORE_CHANGE_PIN_SCREEN_TITLE"];
+            self.titleLabel.text = [MessagesModel messageForKey:@"LOGIN_BEFORE_CHANGE_PIN_SCREEN_TITLE"];
             self.errorLabel.text = @"";
             break;
         case PINChangeNewPinMode:
             self.pinForgottenButton.hidden = YES;
-            self.titleLabel.text = [self.messages objectForKey:@"CHANGE_PIN_SCREEN_TITLE"];
+            self.titleLabel.text = [MessagesModel messageForKey:@"CHANGE_PIN_SCREEN_TITLE"];
             self.errorLabel.text = @"";
             break;
         case PINChangeNewPinVerifyMode:
             self.pinForgottenButton.hidden = YES;
-            self.titleLabel.text = [self.messages objectForKey:@"CONFIRM_CHANGE_PIN_SCREEN_TITLE"];
+            self.titleLabel.text = [MessagesModel messageForKey:@"CONFIRM_CHANGE_PIN_SCREEN_TITLE"];
             self.errorLabel.text = @"";
             break;
         case PINFingerprintCheckMode:
             self.pinForgottenButton.hidden = NO;
-            self.titleLabel.text = [self.messages objectForKey:@"LOGIN_BEFORE_FINGERPRINT_ENROLLMENT_TITLE"];
+            self.titleLabel.text = [MessagesModel messageForKey:@"LOGIN_BEFORE_FINGERPRINT_ENROLLMENT_TITLE"];
             self.errorLabel.text = @"";
             break;
         default:
@@ -170,10 +171,10 @@
         }];
     }
     for (UIImageView* pinslot in self.pinSlots) {
-        pinslot.image = [UIImage imageNamed:@"iphone-pinslot"];
+        pinslot.image = [UIImage imageNamed:@"pinslot"];
     }
     if (self.pinEntry.count<self.pinSlots.count){
-        ((UIImageView*)[self.pinSlots objectAtIndex:self.pinEntry.count]).image = [UIImage imageNamed:@"iphone-pinslot-selected"];
+        ((UIImageView*)[self.pinSlots objectAtIndex:self.pinEntry.count]).image = [UIImage imageNamed:@"pinslotSelected"];
     }
     
     if (self.pinEntry.count == 0){
@@ -225,37 +226,37 @@
     
     switch (self.mode) {
         case PINCheckMode:
-            popupViewController.titleLabel.text = [self.messages objectForKey:@"LOGIN_PIN_HELP_TITLE"];
-            [self.popupViewController setPopupMessage:[self.messages objectForKey:@"LOGIN_PIN_HELP_MESSAGE"]];
+            popupViewController.titleLabel.text = [MessagesModel messageForKey:@"LOGIN_PIN_HELP_TITLE"];
+            [self.popupViewController setPopupMessage:[MessagesModel messageForKey:@"LOGIN_PIN_HELP_MESSAGE"]];
             break;
         case PINRegistrationMode:
-            popupViewController.titleLabel.text = [self.messages objectForKey:@"CREATE_PIN_HELP_TITLE"];
-            [self.popupViewController setPopupMessage:[self.messages objectForKey:@"CREATE_PIN_HELP_MESSAGE"]];
+            popupViewController.titleLabel.text = [MessagesModel messageForKey:@"CREATE_PIN_HELP_TITLE"];
+            [self.popupViewController setPopupMessage:[MessagesModel messageForKey:@"CREATE_PIN_HELP_MESSAGE"]];
             break;
         case PINRegistrationVerififyMode:
-            popupViewController.titleLabel.text = [self.messages objectForKey:@"CONFIRM_PIN_HELP_TITLE"];
-            [self.popupViewController setPopupMessage:[self.messages objectForKey:@"CONFIRM_PIN_HELP_MESSAGE"]];
+            popupViewController.titleLabel.text = [MessagesModel messageForKey:@"CONFIRM_PIN_HELP_TITLE"];
+            [self.popupViewController setPopupMessage:[MessagesModel messageForKey:@"CONFIRM_PIN_HELP_MESSAGE"]];
             break;
         case PINChangeCheckMode:
-            popupViewController.titleLabel.text = [self.messages objectForKey:@"LOGIN_BEFORE_CHANGE_PIN_HELP_TITLE"];
-            [self.popupViewController setPopupMessage:[self.messages objectForKey:@"LOGIN_BEFORE_CHANGE_PIN_HELP_MESSAGE"]];
+            popupViewController.titleLabel.text = [MessagesModel messageForKey:@"LOGIN_BEFORE_CHANGE_PIN_HELP_TITLE"];
+            [self.popupViewController setPopupMessage:[MessagesModel messageForKey:@"LOGIN_BEFORE_CHANGE_PIN_HELP_MESSAGE"]];
             break;
         case PINChangeNewPinMode:
-            popupViewController.titleLabel.text = [self.messages objectForKey:@"CHANGE_PIN_HELP_TITLE"];
-            [self.popupViewController setPopupMessage:[self.messages objectForKey:@"CHANGE_PIN_HELP_MESSAGE"]];
+            popupViewController.titleLabel.text = [MessagesModel messageForKey:@"CHANGE_PIN_HELP_TITLE"];
+            [self.popupViewController setPopupMessage:[MessagesModel messageForKey:@"CHANGE_PIN_HELP_MESSAGE"]];
             break;
         case PINChangeNewPinVerifyMode:
-            popupViewController.titleLabel.text = [self.messages objectForKey:@"CONFIRM_CHANGE_PIN_HELP_TITLE"];
-            [self.popupViewController setPopupMessage:[self.messages objectForKey:@"CONFIRM_CHANGE_PIN_HELP_MESSAGE"]];
+            popupViewController.titleLabel.text = [MessagesModel messageForKey:@"CONFIRM_CHANGE_PIN_HELP_TITLE"];
+            [self.popupViewController setPopupMessage:[MessagesModel messageForKey:@"CONFIRM_CHANGE_PIN_HELP_MESSAGE"]];
             break;
         case PINFingerprintCheckMode:
-            popupViewController.titleLabel.text = [self.messages objectForKey:@"LOGIN_BEFORE_FINGERPRINT_ENROLLMENT_HELP_TITLE"];
-            [self.popupViewController setPopupMessage:[self.messages objectForKey:@"LOGIN_BEFORE_FINGERPRINT_ENROLLMENT_HELP_MESSAGE"]];
+            popupViewController.titleLabel.text = [MessagesModel messageForKey:@"LOGIN_BEFORE_FINGERPRINT_ENROLLMENT_HELP_TITLE"];
+            [self.popupViewController setPopupMessage:[MessagesModel messageForKey:@"LOGIN_BEFORE_FINGERPRINT_ENROLLMENT_HELP_MESSAGE"]];
             break;
         default:
             break;
     }
-    [popupViewController.proceedButton setTitle:[self.messages objectForKey:@"HELP_POPUP_OK"] forState:UIControlStateNormal] ;
+    [popupViewController.proceedButton setTitle:[MessagesModel messageForKey:@"HELP_POPUP_OK"] forState:UIControlStateNormal] ;
     [self showPopupView];
     
     popupViewController.cancelButtonVisible = NO;
@@ -273,10 +274,10 @@
 }
 
 - (IBAction)forgotPinClicked:(id)sender {
-    self.popupViewController.titleLabel.text = [self.messages objectForKey:@"DISCONNECT_FORGOT_PIN_TITLE"];
-    [self.popupViewController setPopupMessage:[self.messages objectForKey:@"DISCONNECT_FORGOT_PIN"]];
-    [self.popupViewController.proceedButton setTitle:[self.messages objectForKey:@"CONFIRM_POPUP_OK"] forState:UIControlStateNormal] ;
-    [self.popupViewController.cancelButton setTitle:[self.messages objectForKey:@"CONFIRM_POPUP_CANCEL"] forState:UIControlStateNormal] ;
+    self.popupViewController.titleLabel.text = [MessagesModel messageForKey:@"DISCONNECT_FORGOT_PIN_TITLE"];
+    [self.popupViewController setPopupMessage:[MessagesModel messageForKey:@"DISCONNECT_FORGOT_PIN"]];
+    [self.popupViewController.proceedButton setTitle:[MessagesModel messageForKey:@"CONFIRM_POPUP_OK"] forState:UIControlStateNormal] ;
+    [self.popupViewController.cancelButton setTitle:[MessagesModel messageForKey:@"CONFIRM_POPUP_CANCEL"] forState:UIControlStateNormal] ;
     [self showPopupView];
     
     self.popupViewController.cancelButtonVisible = YES;

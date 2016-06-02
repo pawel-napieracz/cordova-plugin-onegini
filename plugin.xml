@@ -25,20 +25,14 @@
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/XMLReader.m"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/PopupViewController.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/PopupViewController.m"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PopupViewController.xib"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PINViewController~ipad.xib"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PINViewController.xib"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/PinViewController.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/PinViewController.m"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/PushConfirmationViewController.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushConfirmationViewController.m"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushConfirmationViewController.xib"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithPinConfirmationViewController.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithPinConfirmationViewController.m"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithPinConfirmationViewController.xib"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithFingerprintConfirmationViewController.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithFingerprintConfirmationViewController.m"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithFingerprintConfirmationViewController.xib"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/MessagesModel.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/MessagesModel.m"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/CDVAppDelegate+Onegini.h"/>
@@ -58,30 +52,6 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
     <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-4.09.00-Release-fat-binary.a" framework="true"/>
-
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/fingerprint.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/key.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/buttonPijl.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/buttonPijl@2x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/buttonPijl@3x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/ipad-steps.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-keyboard.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-keyboard@3x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-pinslot-selected.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-pinslot.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-steps.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo@2x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo~ipad.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/logo~ipad@2x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit@2x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit@3x.png"/>
-
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond1.jpg"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond1@2x.jpg"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond2.jpg"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/achtergrond2@2x.jpg"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
