@@ -564,13 +564,6 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askForCurrentPin {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForCurrentPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
-    
     if (useNativePinView) {
         pinEntryMode = PINCheckMode;
         [self showPinEntryViewInMode:PINCheckMode];
@@ -582,13 +575,6 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askForNewPin:(NSUInteger)pinSize {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForNewPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
-    
     if (useNativePinView) {
         pinEntryMode = PINRegistrationMode;
         [self showPinEntryViewInMode:PINRegistrationMode];
@@ -601,12 +587,6 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askNewPinForChangeRequest:(NSUInteger)pinSize {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askNewPinForChangeRequest: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINChangeNewPinMode;
         [self.pinViewController reset];
@@ -619,12 +599,6 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askCurrentPinForChangeRequest {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askCurrentPinForChangeRequest: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINChangeCheckMode;
         [self showPinEntryViewInMode:PINChangeCheckMode];
@@ -975,12 +949,6 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 #pragma mark - FingerprintDelegate
 
 -(void)askCurrentPinForFingerprintAuthentication{
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForCurrentPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINFingerprintCheckMode;
         [self showPinEntryViewInMode:PINFingerprintCheckMode];
