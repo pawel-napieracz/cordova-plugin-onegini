@@ -513,7 +513,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 -(void)readConfigProperty:(CDVInvokedUrlCommand *)command{
-    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.baseURL];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.resourceBaseURL];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
@@ -564,17 +564,16 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askForCurrentPin {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForCurrentPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
-    
     if (useNativePinView) {
         pinEntryMode = PINCheckMode;
         [self showPinEntryViewInMode:PINCheckMode];
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askForCurrentPin: pinCommandTxId is nil");
+#endif
+            return;
+        }
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askForCurrentPin"}];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -582,18 +581,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askForNewPin:(NSUInteger)pinSize {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForNewPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
-    
     if (useNativePinView) {
         pinEntryMode = PINRegistrationMode;
         [self showPinEntryViewInMode:PINRegistrationMode];
         
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askForNewPin: pinCommandTxId is nil");
+#endif
+            return;
+        }
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askForNewPin" }];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -601,17 +599,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askNewPinForChangeRequest:(NSUInteger)pinSize {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askNewPinForChangeRequest: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINChangeNewPinMode;
         [self.pinViewController reset];
         self.pinViewController.mode = pinEntryMode;
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askNewPinForChangeRequest: pinCommandTxId is nil");
+#endif
+            return;
+        }
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askNewPinForChangeRequest" }];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -619,16 +617,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askCurrentPinForChangeRequest {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askCurrentPinForChangeRequest: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINChangeCheckMode;
         [self showPinEntryViewInMode:PINChangeCheckMode];
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askCurrentPinForChangeRequest: pinCommandTxId is nil");
+#endif
+            return;
+        }
+
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askCurrentPinForChangeRequest" }];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -975,16 +974,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 #pragma mark - FingerprintDelegate
 
 -(void)askCurrentPinForFingerprintAuthentication{
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForCurrentPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINFingerprintCheckMode;
         [self showPinEntryViewInMode:PINFingerprintCheckMode];
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askForCurrentPin: pinCommandTxId is nil");
+#endif
+            return;
+        }
+
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askForCurrentPin"}];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
