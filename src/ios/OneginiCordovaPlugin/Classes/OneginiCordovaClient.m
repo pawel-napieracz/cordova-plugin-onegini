@@ -512,6 +512,14 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         [self sendErrorCallback:command.callbackId];
 }
 
+- (void)isFingerprintAuthenticationAvailable:(CDVInvokedUrlCommand *)command {
+  if (oneginiClient.isFingerprintAuthenticationAvailable) {
+    [self sendSuccessCallback:command.callbackId];
+  } else {
+    [self sendErrorCallback:command.callbackId];
+  }
+}
+
 -(void)readConfigProperty:(CDVInvokedUrlCommand *)command{
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.resourceBaseURL];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
