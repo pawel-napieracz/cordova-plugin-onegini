@@ -342,6 +342,24 @@ module.exports = {
     };
     exec(onFingerprintEnabledCallback, onFingerprintDisabledCallback, oneginiCordovaPlugin.OG_CONSTANTS.CORDOVA_CLIENT, oneginiCordovaPlugin.OG_CONSTANTS.FINGERPRINT_AUTHENTICATION_STATE, []);
   },
+  
+  /**
+   * Determines if fingerprint authentication is possible by checking if device possess Touch ID sensor, 
+   * at least one fingerprint is registered and if fingerprint is enabled for client configuration provided by token server. 
+   * Device cannot be jailbroken and have to be running iOS 9 or greater.
+   *
+   * @param successCallback   Function to be called when fingerprint authentication is available
+   * @param errorCallback     Function to be called when fingerprint authentication is not available
+   */
+  isFingerprintAuthenticationAvailable:  function (successCallback, errorCallback) {
+    var onSuccess = function (response) {
+      successCallback();
+    };
+    var onError = function (error) {
+      errorCallback();
+    };
+    exec(onSuccess, onError, oneginiCordovaPlugin.OG_CONSTANTS.CORDOVA_CLIENT, oneginiCordovaPlugin.OG_CONSTANTS.FINGERPRINT_AUTHENTICATION_AVAILABLE, []);
+  },
 
   /**
    * Determine if the user is registered.
@@ -710,7 +728,7 @@ module.exports = {
   isiOS: function () {
     return ( navigator.userAgent.indexOf("iPhone") > 0 || navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf("iPod") > 0);
   },
-
+    
   readConfigProperty: function(propertyKey, onFetched) {
     var onSuccess = function(propertyValue) {
       onFetched(propertyValue);
@@ -802,6 +820,8 @@ module.exports = {
     FINGERPRINT_AUTHENTICATION_STATE: "checkFingerpringAuthenticationState",
     FINGERPRINT_AUTHENTICATION_DISABLE: "disableFingerprintAuthentication",
     FINGERPRINT_ENROLL_FOR_FINGERPRINT_AUTHENTICATION: "enrollForFingerprintAuthentication",
+    FINGERPRINT_AUTHENTICATION_AVAILABLE: "isFingerprintAuthenticationAvailable",
+    
     FINGERPRINT_ENROLMENT_SUCCESS: "fingerprint_enrolment_success",
     FINGERPRINT_ENROLMENT_FAILURE: "fingerprint_enrolment_failure",
     FINGERPRINT_ENROLMENT_FAILURE_TOO_MANY_PIN_ATTEMPTS: "fingerprint_enrolment_failure_too_many_attempts",
