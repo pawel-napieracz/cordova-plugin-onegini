@@ -8,6 +8,7 @@
 
 #import "PushWithPinConfirmationViewController.h"
 #import "MessagesModel.h"
+#import "OGNColorFileParser.h"
 
 @interface PushWithPinConfirmationViewController ()
 
@@ -49,6 +50,10 @@
 @property (weak, nonatomic) IBOutlet UIImageView *pin4;
 @property (weak, nonatomic) IBOutlet UIImageView *pin5;
 
+@property (weak, nonatomic) IBOutlet UIView *headerView;
+@property (weak, nonatomic) IBOutlet UIButton *denyButton;
+@property (weak, nonatomic) IBOutlet UIView *backgroundView;
+
 @end
 
 @implementation PushWithPinConfirmationViewController
@@ -72,6 +77,20 @@
     errorMessage = [NSString stringWithFormat:@"%@ %lu", self.message, self.maxAttempts-self.retryAttempts];
     self.errorLabel.text = errorMessage;
     self.errorLabel.hidden = self.retryAttempts==0;
+    
+    [self setColors];
+}
+
+-(void)setColors{
+    self.headerView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinscreenHeaderBackground];
+    self.titleLabel.textColor = [OGNColorFileParser colorForKey:kOGNPinscreenTitle];
+    self.messageLabel.textColor = [OGNColorFileParser colorForKey:kOGNPinscreenTitle];
+    self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPopupBodyBackground];
+    self.view.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinscreenBackground];
+    for (UIButton *keyboardButton in @[self.key1,self.key2,self.key3,self.key4,self.key5,self.key6,self.key7,self.key8,self.key9,self.key0,self.denyButton,self.backKey]) {
+        keyboardButton.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinKeyboardButtonBackground];
+        [keyboardButton setTitleColor:[OGNColorFileParser colorForKey:kOGNPinKeyboardButtonText] forState:UIControlStateNormal];
+    }
 }
 
 - (IBAction)cancelButton:(id)sender {
@@ -139,10 +158,10 @@
         }];
     }
     for (UIImageView* pinslot in self.pinSlots) {
-        pinslot.image = [UIImage imageNamed:@"iphone-pinslot"];
+        pinslot.image = [UIImage imageNamed:@"pinslot"];
     }
     if (self.pinEntry.count<self.pinSlots.count){
-        ((UIImageView*)[self.pinSlots objectAtIndex:self.pinEntry.count]).image = [UIImage imageNamed:@"iphone-pinslot-selected"];
+        ((UIImageView*)[self.pinSlots objectAtIndex:self.pinEntry.count]).image = [UIImage imageNamed:@"pinslotSelected"];
     }
     
     if (self.pinEntry.count == 0){
