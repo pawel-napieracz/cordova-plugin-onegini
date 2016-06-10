@@ -13,6 +13,7 @@ cordova/
 project.xcworkspace/
 xcuserdata/
 Breakpoints_v2.xcbkptlist
+DerivedData
 
 src/ios/OneginiSDKiOS
 
@@ -26,4 +27,6 @@ src/android/build
 build/
 **/*.iml
 local.properties
-**/*—
+**/*—-
+
+*.bks
