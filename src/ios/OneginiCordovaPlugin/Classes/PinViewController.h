@@ -21,7 +21,6 @@
 @property (nonatomic) PINEntryModes mode;
 @property (weak, nonatomic) id <PinViewControllerDelegate> delegate;
 @property (nonatomic) NSUInteger supportedOrientations;
-@property (nonatomic) NSDictionary *messages;
 
 - (void)invalidPinWithReason:(NSString *)message;
 
