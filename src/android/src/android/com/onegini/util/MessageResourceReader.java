@@ -30,7 +30,7 @@ public class MessageResourceReader {
   }
 
   private MessageResourceReader(final Context context) {
-    final int messagesPointer = context.getResources().getIdentifier("messages", "raw", context.getPackageName());
+    final int messagesPointer = context.getResources().getIdentifier("ogn_native_messages", "raw", context.getPackageName());
     final InputStream inputStream = context.getResources().openRawResource(messagesPointer);
     this.messages = new Properties();
     try {

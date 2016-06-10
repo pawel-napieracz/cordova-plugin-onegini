@@ -8,6 +8,12 @@
 
 #import "MessagesModel.h"
 
+@interface MessagesModel ()
+
+@property (nonatomic) NSDictionary* messages;
+
+@end
+
 @implementation MessagesModel
 
 + (MessagesModel *)sharedInstance {
@@ -16,7 +22,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         singleton = [[self alloc] init];
-        [singleton loadMessagesFromFile:@"messages.properties"];
+        [singleton loadMessagesFromFile:@"ogn_native_messages.properties"];
     });
     
     return singleton;

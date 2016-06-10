@@ -12,3 +12,6 @@
     * [1.2.0](Release-notes/1.2.md)
     * [1.3.0](Release-notes/1.3.md)
     * [1.4.0](Release-notes/1.4.md)
+    * [1.5.0](Release-notes/1.5.md)
+    * [1.5.1](Release-notes/1.5.md)
+    * [1.6.0](Release-notes/1.6.md)

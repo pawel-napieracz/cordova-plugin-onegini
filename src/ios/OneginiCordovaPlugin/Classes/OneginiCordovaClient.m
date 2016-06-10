@@ -24,7 +24,7 @@ NSString* const kRemainingAttempts	= @"remainingAttempts";
 NSString* const kMethod				= @"method";
 NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 
-#define certificates @[@"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",@"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"]
+#define certificates @[@"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"]
 
 @interface MainViewController()
 
@@ -513,7 +513,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 -(void)readConfigProperty:(CDVInvokedUrlCommand *)command{
-    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.resourceBaseURL];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.baseURL];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
@@ -564,17 +564,16 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askForCurrentPin {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForCurrentPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
-    
     if (useNativePinView) {
         pinEntryMode = PINCheckMode;
         [self showPinEntryViewInMode:PINCheckMode];
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askForCurrentPin: pinCommandTxId is nil");
+#endif
+            return;
+        }
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askForCurrentPin"}];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -582,18 +581,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askForNewPin:(NSUInteger)pinSize {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForNewPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
-    
     if (useNativePinView) {
         pinEntryMode = PINRegistrationMode;
         [self showPinEntryViewInMode:PINRegistrationMode];
         
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askForNewPin: pinCommandTxId is nil");
+#endif
+            return;
+        }
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askForNewPin" }];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -601,17 +599,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askNewPinForChangeRequest:(NSUInteger)pinSize {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askNewPinForChangeRequest: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINChangeNewPinMode;
         [self.pinViewController reset];
         self.pinViewController.mode = pinEntryMode;
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askNewPinForChangeRequest: pinCommandTxId is nil");
+#endif
+            return;
+        }
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askNewPinForChangeRequest" }];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -619,16 +617,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askCurrentPinForChangeRequest {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askCurrentPinForChangeRequest: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINChangeCheckMode;
         [self showPinEntryViewInMode:PINChangeCheckMode];
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askCurrentPinForChangeRequest: pinCommandTxId is nil");
+#endif
+            return;
+        }
+
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askCurrentPinForChangeRequest" }];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -653,7 +652,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
             [self resetAll];
         }
     } else {
-        [self.pinViewController invalidPinWithReason:[NSString stringWithFormat:[[MessagesModel sharedInstance].messages objectForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(remaining)]];
+        [self.pinViewController invalidPinWithReason:[NSString stringWithFormat:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(remaining)]];
     }
 }
 
@@ -825,7 +824,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 - (void)pinBlackListed {
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
-        [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_BLACK_LISTED"]];
+        [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_BLACK_LISTED"]];
     } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                 messageAsDictionary:@{ kReason:@"pinBlackListed" }];
@@ -837,7 +836,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 - (void)pinShouldNotBeASequence {
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
-        [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_SHOULD_NOT_BE_A_SEQUENCE"]];
+        [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_SHOULD_NOT_BE_A_SEQUENCE"]];
     } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                 messageAsDictionary:@{ kReason:@"pinShouldNotBeASequence" }];
@@ -848,7 +847,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 - (void)pinShouldNotUseSimilarDigits:(NSUInteger)count {
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
-        [self.pinViewController invalidPinWithReason:[NSString stringWithFormat:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_SHOULD_NOT_USE_SIMILAR_DIGITS"], @(count)]];
+        [self.pinViewController invalidPinWithReason:[NSString stringWithFormat:[MessagesModel messageForKey:@"PIN_SHOULD_NOT_USE_SIMILAR_DIGITS"], @(count)]];
     } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                 messageAsDictionary:@{ kReason:@"pinShouldNotUseSimilarDigits", kMaxSimilarDigits:@(count) }];
@@ -859,7 +858,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 - (void)pinTooShort {
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
-        [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_TOO_SHORT"]];
+        [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_TOO_SHORT"]];
     } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                 messageAsDictionary:@{ kReason:@"pinTooShort" }];
@@ -917,7 +916,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         return;
     }
     if (self.pinViewController){
-        [self.pinViewController invalidPinWithReason: [NSString stringWithFormat:[[MessagesModel sharedInstance].messages objectForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(remaining)]];
+        [self.pinViewController invalidPinWithReason: [NSString stringWithFormat:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(remaining)]];
     }
     else{
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{ kReason:@"invalidCurrentPin", kRemainingAttempts:@(remaining)} ];
@@ -963,7 +962,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         return;
     }
     if (self.pinViewController){
-        [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"AUTHORIZATION_ERROR_PIN_CHANGE_FAILED"]];
+        [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_CHANGE_FAILED"]];
     }
     else{
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{ kReason:@"pinChangeError"} ];
@@ -975,16 +974,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 #pragma mark - FingerprintDelegate
 
 -(void)askCurrentPinForFingerprintAuthentication{
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForCurrentPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINFingerprintCheckMode;
         [self showPinEntryViewInMode:PINFingerprintCheckMode];
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askForCurrentPin: pinCommandTxId is nil");
+#endif
+            return;
+        }
+
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askForCurrentPin"}];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -1037,7 +1037,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         return;
     }
     if (self.pinViewController){
-        [self.pinViewController invalidPinWithReason: [NSString stringWithFormat:[[MessagesModel sharedInstance].messages objectForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(attemptCount)]];
+        [self.pinViewController invalidPinWithReason: [NSString stringWithFormat:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(attemptCount)]];
     }
     @try {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{ kReason:@"fingerprint_enrolment_failure_invalid_pin", kRemainingAttempts:@(attemptCount)}];
@@ -1124,7 +1124,6 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         self.pinViewController = [[PinViewController alloc] initWithNibName:@"PINViewController" bundle:nil];
     }
     
-    self.pinViewController.messages = [MessagesModel sharedInstance].messages;
     self.pinViewController.delegate = self;
     self.pinViewController.supportedOrientations = self.supportedOrientations;
     self.pinViewController.mode = mode;
@@ -1136,10 +1135,9 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         else
             [self sendErrorCallback:self.inAppBrowserCommandTxId];
     }
+
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:self.pinViewController animated:YES completion:^{
-            self.pinViewController.messages = [MessagesModel sharedInstance].messages;
-        }];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:self.pinViewController animated:YES completion:nil];
     });
 }
 
@@ -1236,7 +1234,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
                 verifyPin = nil;
                 pinEntryMode = PINRegistrationMode;
                 self.pinViewController.mode = PINRegistrationMode;
-                [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_CODES_DIFFERS"]];
+                [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_CODES_DIFFERS"]];
             } else {
                 // The user entered the second verification PIN, check if they are equal and confirm the PIN
                 verifyPin = nil;
@@ -1271,7 +1269,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
                 pinEntryMode = PINChangeNewPinMode;
                 self.pinViewController.mode = PINChangeNewPinMode;
                 [self.pinViewController reset];
-                [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_CODES_DIFFERS"]];
+                [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_CODES_DIFFERS"]];
             } else {
                 // The user entered the second verification PIN, check if they are equal and confirm the PIN
                 verifyPin = nil;
