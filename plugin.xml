@@ -166,6 +166,8 @@
                  target-dir="src/com/onegini/action/"/>
     <source-file src="src/android/src/android/com/onegini/action/InAppBrowserControlSession.java"
                  target-dir="src/com/onegini/action/"/>
+    <source-file src="src/android/src/android/com/onegini/action/IsFingerprintAuthenticationAvailableAction.java"
+                 target-dir="src/com/onegini/action/"/>
     <source-file src="src/android/src/android/com/onegini/action/IsPushAuthenticationAvailableAction.java"
                  target-dir="src/com/onegini/action/"/>
     <source-file src="src/android/src/android/com/onegini/action/LogoutAction.java"
