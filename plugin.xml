@@ -9,7 +9,6 @@
   </js-module>
 
   <platform name="ios">
-<resource-file src="src/ios/OneginiCordovaPlugin/Resources/Comodo-Intermediate_star.onegini.com.cer"/>
     <config-file target="config.xml" parent="/*">
       <feature name="OneginiCordovaClient">
         <param name="ios-package" value="OneginiCordovaClient"/>
