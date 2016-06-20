@@ -190,6 +190,11 @@
 - (void)checkFingerpringAuthenticationState:(CDVInvokedUrlCommand *)command;
 
 /**
+ Determines if fingerprint authentication is possible by checking if device possess Touch ID sensor, at least one fingerprint is registered and if fingerprint is enabled for client configuration provided by token server. Device cannot be jailbroken and have to be running iOS 9 or greater.
+ */
+- (void)isFingerprintAuthenticationAvailable:(CDVInvokedUrlCommand *)command;
+
+/**
  Returns base URL for OneginiClient configuration
  */
 -(void)readConfigProperty:(CDVInvokedUrlCommand *)command;
