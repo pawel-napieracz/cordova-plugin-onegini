@@ -6,6 +6,9 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.ClassCastException;
+import java.lang.IllegalArgumentException;
+import java.lang.RuntimeException;
 import java.lang.reflect.Type;
 
 import org.apache.commons.io.IOUtils;
@@ -27,8 +30,10 @@ public class RetrofitByteConverter implements Converter {
     try {
       final byte[] bytes = ((String) object).getBytes("UTF-8");
       return new ByteTypedOutput(bytes);
+    } catch (final ClassCastException e) {
+      throw new IllegalArgumentException("Request body should be a String", e);
     } catch (final UnsupportedEncodingException e) {
-      return new ByteTypedOutput(new byte[0]);
+      throw new RuntimeException("Unable to convert String body using UTF-8", e);
     }
   }
 
