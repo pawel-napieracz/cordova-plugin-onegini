@@ -19,6 +19,7 @@ The configuration file must contain fallowing properties:
 - "kOGResourceBaseURL": Resource Server instance address, for secure HTTPS connection please refer to [Certificate pinning](4Certificatepinning.md)
 - "kOGRedirectURL": redirection URL prefix which should be accepted by the SDK within authorization flow
 - "kOGgcmSenderId": GCM project identifier, substitute you own sender ID here. This is the project number you got from the API Console.
+- "kOGUseNativePinScreen": Specifies whether native (authentication) screens or html authentication screens are used. `true` for native, `false` for html. If `true` is specified you need to also install the `onegini-cordova-native-screens` plugin. See also the [Pin Screens](2Pinscreen.md) page
 
 The configuration file can also define optional properties:
 - "kOGMaxPinFailures": int, allowed number of PIN attempts (default value is 3)
