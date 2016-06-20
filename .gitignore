@@ -2,6 +2,13 @@
 .DS_Store
 .idea/
 cordova/
+*.orig
+.gradle/
+build/
+**/*.iml
+local.properties
+**/*--
+*.bks
 
 # iOS specific
 *.pbxuser
@@ -21,12 +28,3 @@ src/ios/OneginiSDKiOS
 src/android/.gradle
 src/android/CordovaLib/build
 src/android/build
-
-*.orig
-.gradle/
-build/
-**/*.iml
-local.properties
-**/*--
-
-*.bks
