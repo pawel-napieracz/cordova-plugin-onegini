@@ -10,8 +10,6 @@
 
 @interface MessagesModel : NSObject
 
-@property (nonatomic) NSDictionary* messages;
-
 +(MessagesModel*)sharedInstance;
 +(NSString*)messageForKey:(NSString*)key;
 

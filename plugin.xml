@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
-        id="com.onegini.oneginiCordovaPlugin"
-        version="1.3.0">
+        id="cordova-plugin-onegini"
+        version="1.6.0">
   <name>OneginiCordovaPlugin</name>
   <description>Cordova Device Plugin</description>
   <js-module src="www/onegini.js" name="oneginiCordovaPlugin">
@@ -25,24 +25,22 @@
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/XMLReader.m"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/PopupViewController.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/PopupViewController.m"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PopupViewController.xib"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PINViewController~ipad.xib"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PINViewController.xib"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/PinViewController.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/PinViewController.m"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/PushConfirmationViewController.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushConfirmationViewController.m"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushConfirmationViewController.xib"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithPinConfirmationViewController.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithPinConfirmationViewController.m"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithPinConfirmationViewController.xib"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithFingerprintConfirmationViewController.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithFingerprintConfirmationViewController.m"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Classes/PushWithFingerprintConfirmationViewController.xib"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/MessagesModel.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/MessagesModel.m"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/CDVAppDelegate+Onegini.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/CDVAppDelegate+Onegini.m"/>
+    <header-file src="src/ios/OneginiCordovaPlugin/Classes/OGNColorFileParser.h"/>
+    <source-file src="src/ios/OneginiCordovaPlugin/Classes/OGNColorFileParser.m"/>
+    <header-file src="src/ios/OneginiCordovaPlugin/Classes/UIColor+OGNHex.h"/>
+    <source-file src="src/ios/OneginiCordovaPlugin/Classes/UIColor+OGNHex.m"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGAuthorizationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGConfigModel.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGChangePinDelegate.h"/>
@@ -58,24 +56,6 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
     <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-4.09.00-Release-fat-binary.a" framework="true"/>
-
-    <resource-file src="src/generic/messages/messages.properties"/>
-    <asset src="src/generic/messages/messages.properties" target="res/messages.properties"/>
-
-    <resource-file src="src/generic/pin-occupied-ic.png"/>
-
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/fingerprint.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/key.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/buttonPijl.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/buttonPijl@2x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/buttonPijl@3x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/ipad-steps.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-pinslot-selected.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-pinslot.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/iphone-steps.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit@2x.png"/>
-    <resource-file src="src/ios/OneginiCordovaPlugin/Resources/sluit@3x.png"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
@@ -185,6 +165,8 @@
     <source-file src="src/android/src/android/com/onegini/action/ForgotPinHandler.java"
                  target-dir="src/com/onegini/action/"/>
     <source-file src="src/android/src/android/com/onegini/action/InAppBrowserControlSession.java"
+                 target-dir="src/com/onegini/action/"/>
+    <source-file src="src/android/src/android/com/onegini/action/IsFingerprintAuthenticationAvailableAction.java"
                  target-dir="src/com/onegini/action/"/>
     <source-file src="src/android/src/android/com/onegini/action/IsPushAuthenticationAvailableAction.java"
                  target-dir="src/com/onegini/action/"/>
@@ -314,35 +296,5 @@
                  target-dir="src/com/onegini/util/"/>
     <source-file src="src/android/src/android/com/onegini/util/MessageResourceReader.java"
                  target-dir="src/com/onegini/util/"/>
-
-    <!-- assets -->
-    <resource-file src="src/android/res/drawable/form_active.9.png" target="res/drawable/form_active.9.png" />
-    <resource-file src="src/android/res/drawable/form_inactive.9.png" target="res/drawable/form_inactive.9.png" />
-    <resource-file src="src/android/res/drawable/onegini_logo.9.png" target="res/drawable/onegini_logo.9.png" />
-    <resource-file src="src/android/res/drawable/popup_button.xml" target="res/drawable/popup_button.xml" />
-    <resource-file src="src/android/res/drawable/button_text.xml" target="res/drawable/button_text.xml" />
-    <resource-file src="src/android/res/drawable-hdpi/ic_backspace.png" target="res/drawable-hdpi/ic_backspace.png" />
-    <resource-file src="src/android/res/drawable-mdpi/ic_backspace.png" target="res/drawable-mdpi/ic_backspace.png" />
-    <resource-file src="src/android/res/drawable-xhdpi/ic_backspace.png" target="res/drawable-xhdpi/ic_backspace.png" />
-    <resource-file src="src/android/res/drawable-hdpi/ic_fingerprint.png" target="res/drawable-hdpi/ic_fingerprint.png" />
-    <resource-file src="src/android/res/drawable-mdpi/ic_fingerprint.png" target="res/drawable-mdpi/ic_fingerprint.png" />
-    <resource-file src="src/android/res/drawable-xhdpi/ic_fingerprint.png" target="res/drawable-xhdpi/ic_fingerprint.png" />
-    <resource-file src="src/android/res/layout/alert_dialog.xml" target="res/layout/alert_dialog.xml" />
-    <resource-file src="src/android/res/layout/confirm_dialog.xml" target="res/layout/confirm_dialog.xml" />
-    <resource-file src="src/android/res/layout/keyboard.xml" target="res/layout/keyboard.xml" />
-    <resource-file src="src/android/res/layout/pin_screen.xml" target="res/layout/pin_screen.xml" />
-    <resource-file src="src/android/res/layout/push_simple_dialog.xml" target="res/layout/push_simple_dialog.xml" />
-    <resource-file src="src/android/res/layout/activity_fingerprint.xml" target="res/layout/activity_fingerprint.xml" />
-    <resource-file src="src/android/res/layout/activity_push_fingerprint.xml" target="res/layout/activity_push_fingerprint.xml" />
-    <resource-file src="src/android/res/layout-land/pin_screen.xml" target="res/layout-land/pin_screen.xml" />
-    <resource-file src="src/android/res/raw/keystore.bks" target="res/raw/keystore.bks" />
-    <resource-file src="src/android/res/values/bools.xml" target="res/values/bools.xml" />
-    <resource-file src="src/android/res/values/colors.xml" target="res/values/colors.xml" />
-    <resource-file src="src/android/res/values/styles.xml" target="res/values/styles.xml" />
-    <resource-file src="src/android/res/values-sw600dp/bools.xml" target="res/values-sw600dp/bools.xml" />
-    <resource-file src="src/android/res/values-xlarge/bools.xml" target="res/values-xlarge/bools.xml" />
-
-    <resource-file src="src/generic/messages/messages.properties" target="res/raw/messages.properties"/>
-    <asset src="src/generic/messages/messages.properties" target="res/messages.properties"/>
   </platform>
 </plugin>

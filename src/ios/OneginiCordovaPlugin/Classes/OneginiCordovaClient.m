@@ -512,8 +512,16 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         [self sendErrorCallback:command.callbackId];
 }
 
+- (void)isFingerprintAuthenticationAvailable:(CDVInvokedUrlCommand *)command {
+  if (oneginiClient.isFingerprintAuthenticationAvailable) {
+    [self sendSuccessCallback:command.callbackId];
+  } else {
+    [self sendErrorCallback:command.callbackId];
+  }
+}
+
 -(void)readConfigProperty:(CDVInvokedUrlCommand *)command{
-    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.resourceBaseURL];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.baseURL];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
@@ -564,17 +572,16 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askForCurrentPin {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForCurrentPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
-    
     if (useNativePinView) {
         pinEntryMode = PINCheckMode;
         [self showPinEntryViewInMode:PINCheckMode];
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askForCurrentPin: pinCommandTxId is nil");
+#endif
+            return;
+        }
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askForCurrentPin"}];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -582,18 +589,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askForNewPin:(NSUInteger)pinSize {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForNewPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
-    
     if (useNativePinView) {
         pinEntryMode = PINRegistrationMode;
         [self showPinEntryViewInMode:PINRegistrationMode];
         
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askForNewPin: pinCommandTxId is nil");
+#endif
+            return;
+        }
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askForNewPin" }];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -601,17 +607,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askNewPinForChangeRequest:(NSUInteger)pinSize {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askNewPinForChangeRequest: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINChangeNewPinMode;
         [self.pinViewController reset];
         self.pinViewController.mode = pinEntryMode;
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askNewPinForChangeRequest: pinCommandTxId is nil");
+#endif
+            return;
+        }
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askNewPinForChangeRequest" }];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -619,16 +625,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 }
 
 - (void)askCurrentPinForChangeRequest {
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askCurrentPinForChangeRequest: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINChangeCheckMode;
         [self showPinEntryViewInMode:PINChangeCheckMode];
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askCurrentPinForChangeRequest: pinCommandTxId is nil");
+#endif
+            return;
+        }
+
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askCurrentPinForChangeRequest" }];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -653,7 +660,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
             [self resetAll];
         }
     } else {
-        [self.pinViewController invalidPinWithReason:[NSString stringWithFormat:[[MessagesModel sharedInstance].messages objectForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(remaining)]];
+        [self.pinViewController invalidPinWithReason:[NSString stringWithFormat:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(remaining)]];
     }
 }
 
@@ -825,7 +832,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 - (void)pinBlackListed {
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
-        [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_BLACK_LISTED"]];
+        [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_BLACK_LISTED"]];
     } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                 messageAsDictionary:@{ kReason:@"pinBlackListed" }];
@@ -837,7 +844,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 - (void)pinShouldNotBeASequence {
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
-        [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_SHOULD_NOT_BE_A_SEQUENCE"]];
+        [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_SHOULD_NOT_BE_A_SEQUENCE"]];
     } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                 messageAsDictionary:@{ kReason:@"pinShouldNotBeASequence" }];
@@ -848,7 +855,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 - (void)pinShouldNotUseSimilarDigits:(NSUInteger)count {
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
-        [self.pinViewController invalidPinWithReason:[NSString stringWithFormat:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_SHOULD_NOT_USE_SIMILAR_DIGITS"], @(count)]];
+        [self.pinViewController invalidPinWithReason:[NSString stringWithFormat:[MessagesModel messageForKey:@"PIN_SHOULD_NOT_USE_SIMILAR_DIGITS"], @(count)]];
     } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                 messageAsDictionary:@{ kReason:@"pinShouldNotUseSimilarDigits", kMaxSimilarDigits:@(count) }];
@@ -859,7 +866,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 - (void)pinTooShort {
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
-        [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_TOO_SHORT"]];
+        [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_TOO_SHORT"]];
     } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                 messageAsDictionary:@{ kReason:@"pinTooShort" }];
@@ -917,7 +924,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         return;
     }
     if (self.pinViewController){
-        [self.pinViewController invalidPinWithReason: [NSString stringWithFormat:[[MessagesModel sharedInstance].messages objectForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(remaining)]];
+        [self.pinViewController invalidPinWithReason: [NSString stringWithFormat:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(remaining)]];
     }
     else{
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{ kReason:@"invalidCurrentPin", kRemainingAttempts:@(remaining)} ];
@@ -963,7 +970,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         return;
     }
     if (self.pinViewController){
-        [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"AUTHORIZATION_ERROR_PIN_CHANGE_FAILED"]];
+        [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_CHANGE_FAILED"]];
     }
     else{
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{ kReason:@"pinChangeError"} ];
@@ -975,16 +982,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 #pragma mark - FingerprintDelegate
 
 -(void)askCurrentPinForFingerprintAuthentication{
-    if (pinDialogCommandTxId == nil) {
-#ifdef DEBUG
-        NSLog(@"askForCurrentPin: pinCommandTxId is nil");
-#endif
-        return;
-    }
     if (useNativePinView) {
         pinEntryMode = PINFingerprintCheckMode;
         [self showPinEntryViewInMode:PINFingerprintCheckMode];
     } else {
+        if (pinDialogCommandTxId == nil) {
+#ifdef DEBUG
+            NSLog(@"askForCurrentPin: pinCommandTxId is nil");
+#endif
+            return;
+        }
+
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ kMethod:@"askForCurrentPin"}];
         result.keepCallback = @(1);
         [self.commandDelegate sendPluginResult:result callbackId:pinDialogCommandTxId];
@@ -1037,7 +1045,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         return;
     }
     if (self.pinViewController){
-        [self.pinViewController invalidPinWithReason: [NSString stringWithFormat:[[MessagesModel sharedInstance].messages objectForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(attemptCount)]];
+        [self.pinViewController invalidPinWithReason: [NSString stringWithFormat:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(attemptCount)]];
     }
     @try {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{ kReason:@"fingerprint_enrolment_failure_invalid_pin", kRemainingAttempts:@(attemptCount)}];
@@ -1059,7 +1067,8 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
     }
     [self closePinView];
     @try {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"fingerprint_enrolment_failure_too_many_attempts"];
+        NSDictionary *message = @{kReason:@"fingerprint_enrolment_failure_too_many_attempts"};
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:message];
         result.keepCallback = @(0);
         [self.commandDelegate sendPluginResult:result callbackId:self.fingerprintEnrollmentCommandTxId];
     }
@@ -1124,7 +1133,6 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         self.pinViewController = [[PinViewController alloc] initWithNibName:@"PINViewController" bundle:nil];
     }
     
-    self.pinViewController.messages = [MessagesModel sharedInstance].messages;
     self.pinViewController.delegate = self;
     self.pinViewController.supportedOrientations = self.supportedOrientations;
     self.pinViewController.mode = mode;
@@ -1136,10 +1144,9 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         else
             [self sendErrorCallback:self.inAppBrowserCommandTxId];
     }
+
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:self.pinViewController animated:YES completion:^{
-            self.pinViewController.messages = [MessagesModel sharedInstance].messages;
-        }];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:self.pinViewController animated:YES completion:nil];
     });
 }
 
@@ -1236,7 +1243,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
                 verifyPin = nil;
                 pinEntryMode = PINRegistrationMode;
                 self.pinViewController.mode = PINRegistrationMode;
-                [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_CODES_DIFFERS"]];
+                [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_CODES_DIFFERS"]];
             } else {
                 // The user entered the second verification PIN, check if they are equal and confirm the PIN
                 verifyPin = nil;
@@ -1271,7 +1278,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
                 pinEntryMode = PINChangeNewPinMode;
                 self.pinViewController.mode = PINChangeNewPinMode;
                 [self.pinViewController reset];
-                [self.pinViewController invalidPinWithReason:[[MessagesModel sharedInstance].messages objectForKey:@"PIN_CODES_DIFFERS"]];
+                [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_CODES_DIFFERS"]];
             } else {
                 // The user entered the second verification PIN, check if they are equal and confirm the PIN
                 verifyPin = nil;

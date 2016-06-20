@@ -4,6 +4,7 @@ import static com.onegini.OneginiConstants.AUTHORIZE_ACTION;
 import static com.onegini.OneginiConstants.AWAIT_INITIALIZATION;
 import static com.onegini.OneginiConstants.CHANGE_PIN_ACTION;
 import static com.onegini.OneginiConstants.CHECK_IS_REGISTERED_ACTION;
+import static com.onegini.OneginiConstants.CHECK_FINGERPRINT_AUTHENTICATION_AVAILABLE_ACTION;
 import static com.onegini.OneginiConstants.CHECK_MOBILE_AUTHENTICATION_AVAILABLE_ACTION;
 import static com.onegini.OneginiConstants.CONFIRM_CURRENT_PIN_ACTION;
 import static com.onegini.OneginiConstants.CONFIRM_CURRENT_PIN_CHANGE_PIN_ACTION;
@@ -49,6 +50,7 @@ import com.onegini.action.FetchResourceAction;
 import com.onegini.action.FetchResourceAnonymouslyAction;
 import com.onegini.action.FingerprintAuthenticationStateAction;
 import com.onegini.action.InAppBrowserControlSession;
+import com.onegini.action.IsFingerprintAuthenticationAvailableAction;
 import com.onegini.action.IsPushAuthenticationAvailableAction;
 import com.onegini.action.LogoutAction;
 import com.onegini.action.MobileAuthenticationAction;
@@ -133,6 +135,7 @@ public class OneginiCordovaPlugin extends CordovaPlugin {
 
     actions.put(MOBILE_AUTHENTICATION_ENROLL_ACTION, MobileAuthenticationAction.class);
     actions.put(CHECK_IS_REGISTERED_ACTION, CheckIsRegisteredAction.class);
+    actions.put(CHECK_FINGERPRINT_AUTHENTICATION_AVAILABLE_ACTION, IsFingerprintAuthenticationAvailableAction.class);
     actions.put(CHECK_MOBILE_AUTHENTICATION_AVAILABLE_ACTION, IsPushAuthenticationAvailableAction.class);
 
     actions.put(ENROLL_FOR_FINGEPRINT_AUTHENITCATION, EnrollForFingerprintAction.class);

@@ -27,6 +27,6 @@ src/android/build
 build/
 **/*.iml
 local.properties
-**/*—-
+**/*--
 
 *.bks
