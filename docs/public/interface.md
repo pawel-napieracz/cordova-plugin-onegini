@@ -1,6 +1,6 @@
-# 1. OneginiCordovaPlugin interface
+# cordova-plugin-onegini interface
 
-This page describes all public methods of OneginiCordovaPlugin.
+This page describes all public methods of `cordova-plugin-onegini`.
 
 ### awaitPluginInitialization(router)
 Awaits notification that the Onegini plugin initialization is finished.

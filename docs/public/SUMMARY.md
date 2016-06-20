@@ -1,12 +1,11 @@
 # Summary
 
-* [Interface](1Interface.md)
-* [How to change in-app messages](2Messages.md)
-* [How to customize native PIN screen](3Pinscreen.md)
-* [Certificate pinning](4Certificatepinning.md)
-* [Configuration](5Configuration.md)
-* [AppSecret generation](6AppSecretGeneration.md)
-* [Release notes](Release-notes/Introduction.md)
+* [Interface](interface.md)
+* [Native or HTML screens?](screens.md)
+* [Certificate pinning](certificate-pinning.md)
+* [Configuration](configuration.md)
+* [AppSecret generation](app-secret-generation.md)
+* [Release notes](release-notes/introduction.md)
     * [1.0.0](Release-notes/1.0.md)
     * [1.1.0](Release-notes/1.1.md)
     * [1.2.0](Release-notes/1.2.md)
@@ -15,3 +14,4 @@
     * [1.5.0](Release-notes/1.5.md)
     * [1.5.1](Release-notes/1.5.md)
     * [1.6.0](Release-notes/1.6.md)
+    * [1.7.0](Release-notes/1.7.md)

@@ -1,4 +1,4 @@
-# 4. Certificate pinning
+# Certificate pinning
 
 In order to allow the application to communicate safely over HTTPS protocol the application performs certificate pinning.
 Please note, if you pin the servers certificate itself you will need to deploy a new version of the application when you change the servers certificate. Best alternative is to use the intermediate certificate of the Certificate Authority used to get the server certificate (the second level in the certificate chain). This gives you the option to renew the server certificate without having to deploy a new version of the application.
