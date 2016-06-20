@@ -1,56 +1,19 @@
-# 1. Environment configuration
-Download and install node.js (http://nodejs.org/download) for the platform of your choice. <br>
-Once it's done execute
+# 1. Installing the plugin
 
-    npm install -g cordova
+To install this plugin execute the following command from your Cordova application project directory.
 
-to install cordova.
-Depending on planned usage additionally install 
+    cordova plugin add <path_to_this_plugin>
 
-    npm install -g ios-deploy
-
-for iOS real device deployment support, or/and
-
-    npm install -g ios-sim
-for iOS simulator.
-
-#### Resolving dependencies
-Plugin dependencies needs to be resolved before it can be installed in Cordova application.
+## Resolving dependencies
+Plugin dependencies needs to be resolved before it can be installed in your Cordova application.
 
     gradle clean resolveDependencies
 
-#### Native screen support 
-Native screens are available only when cordova-onegini-native-screens is installed along with cordova-onegini-plugin. 
-cordova-onegini-native-screens plugin is available on gitlab: 
-`ssh://git@ssh.gitlab.onegini.com:10022/mobile-platform/cordova-native-sceens.git`
+## Native screen support
 
-# 2. Package contents.
-Cordova-plugin package contents: <br>
-./platforms - contains platform specific plugin implementation - currently iOS <br>
-./www - top level application, contains HTML together with javascripts responsible for handling the communication with OneginiCordovaPlugin and OneginiSDKiOS. If using the cordova CLI, all front-end changes should be applied within this folder.
-...
+For added security this plugin has support for some native screens. These screens are used to let the user enter sensitive data, such as a PIN.
+The native screens plugin provides an example implementation of these native screens.
 
-# 3. Running the BaseApp.
-#### Cordova CLI
-Navigate to project root folder (where ./platforms directory is located) and execute: <br>
+The native screens are only available when the `cordova-onegini-native-screens` plugin is installed along with `cordova-onegini-plugin`.
 
-    cordova build ios   // to build the app for iOS platform
-    cordova run ios     // to deploy and run application directly on connected physical iOS device
-    cordova emulate ios // to deploy and run application on iOS emulator
-    
-Please note that the xCode should not be running when using the cordova CLI. 
-
-#### xCode
-Package comes with OneginiCordovaPlugin xCode project which can be used to execute the cordova application. To access it open ./platforms/ios/OneginiCordovaPlugin.xcworkspace
-
-# 4. Dependencies
-Currently OneginiCordovaPlugin has only one dependency (OneginiSDKiOS) which is included within the package, we're now working on project structure changes so it may change soon.
-
-# 5. Functionalities
-OneginiCordovaPlugin contains already all APIs implemenetions, so it is possible to use the plugin to perform all basic flows. <br>
-BaseApp implementation covers most of the flows available within the OneginiCordovaPlugin expect change pin functionallity.
-
-# 6. Todo
-- BaseApp change pin functionality implementation.
-- BaseApp styling.
-- Project cleanup and optimization. 
+The `cordova-onegini-native-screens` plugin is available on [GitHub](https://github.com/Onegini/cordova-plugin-onegini-native-screens):
