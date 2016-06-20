@@ -316,7 +316,7 @@ module.exports = {
     };
 
     var onError = function (error) {
-      if (error.reason == oneginiCordovaPlugin.OG_CONSTANTS.PIN_INVALID) {
+      if (error.reason == oneginiCordovaPlugin.OG_CONSTANTS.PIN_INVALID || error.reason == oneginiCordovaPlugin.OG_CONSTANTS.FINGERPRINT_ENROLMENT_FAILURE_INVALID_PIN) {
         router.errorInvalidCurrentPin(error.remainingAttempts);
       }
       if (error.reason == oneginiCordovaPlugin.OG_CONSTANTS.FINGERPRINT_ENROLMENT_FAILURE_TOO_MANY_PIN_ATTEMPTS) {
@@ -825,6 +825,7 @@ module.exports = {
     FINGERPRINT_ENROLMENT_SUCCESS: "fingerprint_enrolment_success",
     FINGERPRINT_ENROLMENT_FAILURE: "fingerprint_enrolment_failure",
     FINGERPRINT_ENROLMENT_FAILURE_TOO_MANY_PIN_ATTEMPTS: "fingerprint_enrolment_failure_too_many_attempts",
+    FINGERPRINT_ENROLMENT_FAILURE_INVALID_PIN: "fingerprint_enrolment_failure_invalid_pin",
 
     READ_CONFIG_PROPERTY_ACTION: "readConfigProperty",
 

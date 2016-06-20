@@ -1067,7 +1067,8 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
     }
     [self closePinView];
     @try {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"fingerprint_enrolment_failure_too_many_attempts"];
+        NSDictionary *message = @{kReason:@"fingerprint_enrolment_failure_too_many_attempts"};
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:message];
         result.keepCallback = @(0);
         [self.commandDelegate sendPluginResult:result callbackId:self.fingerprintEnrollmentCommandTxId];
     }
