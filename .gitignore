@@ -4,6 +4,7 @@
 cordova/
 *.orig
 .gradle/
+gradle
 build/
 **/*.iml
 local.properties
