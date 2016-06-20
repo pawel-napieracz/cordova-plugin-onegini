@@ -31,9 +31,9 @@ public class RetrofitByteConverter implements Converter {
       final byte[] bytes = ((String) object).getBytes("UTF-8");
       return new ByteTypedOutput(bytes);
     } catch (final ClassCastException e) {
-      throw new IllegalArgumentException("Request body should be a String", e);
+      throw new IllegalArgumentException("Request body must be a String", e);
     } catch (final UnsupportedEncodingException e) {
-      throw new RuntimeException("Unable to convert String body using UTF-8", e);
+      throw new RuntimeException("Unable to convert String body, UTF-8 encoding not available", e);
     }
   }
 
