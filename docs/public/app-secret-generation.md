@@ -1,27 +1,25 @@
-# AppSecret generation
+# App secret generation
 
-In order to allow application to perform a successful Dynamic Client Registration a fingerprint of the app needs to be provided to the client configuration on the Token Server.
+In order to allow the application to perform successful Dynamic Client Registration a fingerprint of the app needs to be provided to the client configuration on the Token Server.
 
 > Please note that each platform uses its own dedicated BinaryHashCalculator instance.
 
-
 ## Android
 
-Since version 3.02.01 Android-SDK uses calculated binary checksum as a application secret when responding to OCRA challenge in DCR flow. Such approach provides additional security protecting clients app against tampering/modification.
-
+Since Android SDK version 3.02.01 it uses a calculated binary checksum as a application secret when responding to OCRA challenge in DCR flow. Such approach provides additional security protecting clients app against tampering/modification.
 
 #### Calculating value
-Navigate to 'binaryhashcalculator' folder and from the command line execute:
+Navigate to the 'binaryhashcalculator' folder and from the command line execute:
 ```bash
 java com.onegini.mobile.hashCalc.HashCalculator PATH_TO_BINARY_FILE
 ```
 
-If provided path is valid the program will print calculated hash value. 
+If the provided path is valid the program will print the calculated hash value. 
 ```bash
 Calculated hash - a491d0374840ac684d6bcb4bf9fc93ee4d9731dbe2996b5a1db2313efb42b7e
 ```
 
-### iOS
+## iOS
 
 Since version 3.02.00 iOS-SDK calculates binary fingerprint and uses it as an application secret when responding to OCRA challenge in DCR flow. Such approach provides additional security protecting client's application against tampering/modification.
 

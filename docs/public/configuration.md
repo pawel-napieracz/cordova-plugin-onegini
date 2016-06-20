@@ -1,4 +1,4 @@
-# 5. Configuration
+# Configuration
 
 ## 5.1. plugin.xml
 
