@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.ClassCastException;
+import java.lang.IllegalArgumentException;
+import java.lang.RuntimeException;
 import java.lang.reflect.Type;
 
 import org.apache.commons.io.IOUtils;
@@ -24,10 +28,12 @@ public class RetrofitByteConverter implements Converter {
   @Override
   public TypedOutput toBody(final Object object) {
     try {
-      final byte[] bytes = getBytes(object);
+      final byte[] bytes = ((String) object).getBytes("UTF-8");
       return new ByteTypedOutput(bytes);
-    } catch (IOException e) {
-      return new ByteTypedOutput(new byte[0]);
+    } catch (final ClassCastException e) {
+      throw new IllegalArgumentException("Request body must be a String", e);
+    } catch (final UnsupportedEncodingException e) {
+      throw new RuntimeException("Unable to convert String body, UTF-8 encoding not available", e);
     }
   }
 
@@ -37,13 +43,6 @@ public class RetrofitByteConverter implements Converter {
     } catch (IOException e) {
       return new byte[0];
     }
-  }
-
-  private byte[] getBytes(final Object object) throws IOException {
-    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    ObjectOutput out = new ObjectOutputStream(bos);
-    out.writeObject(object);
-    return bos.toByteArray();
   }
 
   private static class ByteTypedOutput implements TypedOutput {
