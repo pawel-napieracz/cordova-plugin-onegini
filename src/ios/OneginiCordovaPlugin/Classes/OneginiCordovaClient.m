@@ -1027,7 +1027,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         return;
     }
     @try {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"fingerprint_enrolment_failure"];
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"fingerprint_enrolment_failure"];
         result.keepCallback = @(0);
         [self.commandDelegate sendPluginResult:result callbackId:self.fingerprintEnrollmentCommandTxId];
     }
@@ -1044,16 +1044,17 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
         [self resetAll];
         return;
     }
-    if (self.pinViewController){
+    if (useNativePinView && self.pinViewController){
         [self.pinViewController invalidPinWithReason: [NSString stringWithFormat:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"],@(attemptCount)]];
-    }
-    @try {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{ kReason:@"fingerprint_enrolment_failure_invalid_pin", kRemainingAttempts:@(attemptCount)}];
-        result.keepCallback = @(0);
-        [self.commandDelegate sendPluginResult:result callbackId:self.fingerprintEnrollmentCommandTxId];
-    }
-    @finally {
-        [self resetAll];
+    } else {
+        @try {
+            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{ kReason:@"fingerprint_enrolment_failure_invalid_pin", kRemainingAttempts:@(attemptCount)}];
+            result.keepCallback = @(1);
+            [self.commandDelegate sendPluginResult:result callbackId:self.fingerprintEnrollmentCommandTxId];
+        }
+        @finally {
+            [self resetAll];
+        }
     }
 }
 
