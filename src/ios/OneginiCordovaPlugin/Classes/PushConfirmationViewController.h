@@ -11,6 +11,6 @@
 
 @interface PushConfirmationViewController : UIViewController
 
--(instancetype)initWithMessage:(NSString*)message confirmationBlock:(PushAuthenticationConfirmation)confirmationBlock NibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
-    
+- (instancetype)initWithMessage:(NSString *)message confirmationBlock:(PushAuthenticationConfirmation)confirmationBlock NibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+
 @end

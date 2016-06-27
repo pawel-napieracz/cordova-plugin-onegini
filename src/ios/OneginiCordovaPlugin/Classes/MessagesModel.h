@@ -10,7 +10,8 @@
 
 @interface MessagesModel : NSObject
 
-+(MessagesModel*)sharedInstance;
-+(NSString*)messageForKey:(NSString*)key;
++ (MessagesModel *)sharedInstance;
+
++ (NSString *)messageForKey:(NSString *)key;
 
 @end
