@@ -61,9 +61,10 @@
     [self.helpButton setTitle:[MessagesModel messageForKey:@"HELP_LINK_TITLE"] forState:UIControlStateNormal];
     [self.pinForgottenButton setTitle:[MessagesModel messageForKey:@"PIN_FORGOTTEN_TITLE"] forState:UIControlStateNormal];
     [self setColors];
+    [self hideBackKey];
 }
 
--(void)viewWillAppear:(BOOL)animated{   
+-(void)viewWillAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     self.mode = self.mode;
     [self initPopupViewController];
@@ -76,7 +77,7 @@
     [self.pinForgottenButton setTitleColor:[OGNColorFileParser colorForKey:kOGNPinscreenForgottenLabel] forState:UIControlStateNormal];
     self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinscreenBackground];
     self.pinBackgroundView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinKeyboardBackground];
-    
+
     for (UIButton *keyboardButton in @[self.key1,self.key2,self.key3,self.key4,self.key5,self.key6,self.key7,self.key8,self.key9,self.key0, self.backKey]) {
         keyboardButton.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinKeyboardButtonBackground];
         [keyboardButton setTitleColor:[OGNColorFileParser colorForKey:kOGNPinKeyboardButtonText] forState:UIControlStateNormal];
@@ -150,28 +151,28 @@
     if (self.pinEntry == nil) {
         self.pinEntry = [NSMutableArray new];
     }
-    
+
     if (self.pinEntry.count >= self.pin.count) {
 #ifdef DEBUG
         NSLog(@"max entries PIN reached");
 #endif
         return;
     }
-    
+
     [self.pinEntry addObject:[NSString stringWithFormat:@"%ld",(long)key.tag]];
-    
+
     [self evaluatePinState];
 }
 
 - (IBAction)backKeyPressed:(id)sender {
     [self.pinEntry removeLastObject];
-    
+
     [self updatePinStateRepresentation];
 }
 
 - (void)evaluatePinState {
     [self updatePinStateRepresentation];
-    
+
     if (self.pinEntry.count == self.pin.count) {
         [self showProgressIndicator];
         [self.delegate pinEntered:[self.pinEntry componentsJoinedByString:@""]];
@@ -216,15 +217,19 @@
     if (self.pinEntry.count<self.pinSlots.count){
         ((UIImageView*)[self.pinSlots objectAtIndex:self.pinEntry.count]).image = [UIImage imageNamed:@"pinslotSelected"];
     }
-    
+
     if (self.pinEntry.count == 0){
-        self.backKey.alpha = 0;
-        self.backKey.enabled = NO;
+        [self hideBackKey];
     }
     else{
         self.backKey.alpha = 1;
         self.backKey.enabled = YES;
     }
+}
+
+- (void)hideBackKey {
+    self.backKey.alpha = 0;
+    self.backKey.enabled = NO;
 }
 
 -(void)initPopupViewController {
@@ -263,7 +268,7 @@
 
 - (IBAction)helpButtonClicked:(id)sender {
     PopupViewController* popupViewController = self.popupViewController;
-    
+
     switch (self.mode) {
         case PINCheckMode:
             popupViewController.titleLabel.text = [MessagesModel messageForKey:@"LOGIN_PIN_HELP_TITLE"];
@@ -298,9 +303,9 @@
     }
     [popupViewController.proceedButton setTitle:[MessagesModel messageForKey:@"HELP_POPUP_OK"] forState:UIControlStateNormal] ;
     [self showPopupView];
-    
+
     popupViewController.cancelButtonVisible = NO;
-    
+
     __weak PinViewController* weakSelf = self;
     popupViewController.proceedBlock = ^{
         [weakSelf closePopupView];
@@ -319,9 +324,9 @@
     [self.popupViewController.proceedButton setTitle:[MessagesModel messageForKey:@"CONFIRM_POPUP_OK"] forState:UIControlStateNormal] ;
     [self.popupViewController.cancelButton setTitle:[MessagesModel messageForKey:@"CONFIRM_POPUP_CANCEL"] forState:UIControlStateNormal] ;
     [self showPopupView];
-    
+
     self.popupViewController.cancelButtonVisible = YES;
-    
+
     __weak PinViewController* weakSelf = self;
     self.popupViewController.proceedBlock = ^{
         [weakSelf closePopupView];
