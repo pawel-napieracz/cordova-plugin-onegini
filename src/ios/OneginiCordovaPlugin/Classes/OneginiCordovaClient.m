@@ -1156,6 +1156,7 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
  */
 - (void)closePinView {
     if (self.pinViewController != nil) {
+        [self.pinViewController reset];
         [self.viewController dismissViewControllerAnimated:YES completion:nil];
         self.pinViewController = nil;
     }
@@ -1211,8 +1212,6 @@ NSString* const kMaxSimilarDigits	= @"maxSimilarDigits";
 #pragma mark -
 #pragma mark PinEntryContainerViewControllerDelegate
 - (void)pinEntered:(NSString *)pin {
-    
-    [self.pinViewController reset];
     switch (pinEntryMode) {
         case PINCheckMode: {
             [oneginiClient confirmCurrentPin:pin];

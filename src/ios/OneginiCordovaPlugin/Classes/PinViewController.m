@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIView *backgroundView;
 @property (weak, nonatomic) IBOutlet UIView *pinBackgroundView;
 
+@property (nonatomic) UIActivityIndicatorView *spinner;
 @property (nonatomic) PopupViewController* popupViewController;
 
 @property (weak, nonatomic) IBOutlet UIButton *key1;
@@ -83,6 +84,8 @@
 }
 
 -(void)invalidPinWithReason:(NSString *)message {
+    [self reset];
+
     self.errorLabel.text = message;
 }
 
@@ -170,7 +173,24 @@
     [self updatePinStateRepresentation];
     
     if (self.pinEntry.count == self.pin.count) {
+        [self showProgressIndicator];
         [self.delegate pinEntered:[self.pinEntry componentsJoinedByString:@""]];
+    }
+}
+
+-(void)showProgressIndicator {
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
+    self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    self.spinner.center = self.view.center;
+    [self.spinner startAnimating];
+    [self.view addSubview:_spinner];
+}
+
+-(void)hideProgressIndicator {
+    if (self.spinner) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.spinner removeFromSuperview];
+        });
     }
 }
 
@@ -180,6 +200,7 @@
     }
     self.pinEntry = [NSMutableArray new];
    	[self updatePinStateRepresentation];
+    [self hideProgressIndicator];
 }
 
 -(void)updatePinStateRepresentation {
