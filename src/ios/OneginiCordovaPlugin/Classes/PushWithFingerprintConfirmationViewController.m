@@ -10,22 +10,22 @@
 #import "MessagesModel.h"
 #import "OGNColorFileParser.h"
 
-@interface PushWithFingerprintConfirmationViewController()
+@interface PushWithFingerprintConfirmationViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
-@property (weak, nonatomic) IBOutlet UIButton *confirmButton;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (nonatomic, copy) PushAuthenticationConfirmation confirmationBlock;
-@property (nonatomic) NSString *message;
-@property (weak, nonatomic) IBOutlet UIView *headerView;
-@property (weak, nonatomic) IBOutlet UIView *backgroundView;
+@property(weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property(weak, nonatomic) IBOutlet UILabel *messageLabel;
+@property(weak, nonatomic) IBOutlet UIButton *confirmButton;
+@property(weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property(nonatomic, copy) PushAuthenticationConfirmation confirmationBlock;
+@property(nonatomic) NSString *message;
+@property(weak, nonatomic) IBOutlet UIView *headerView;
+@property(weak, nonatomic) IBOutlet UIView *backgroundView;
 
 @end
 
 @implementation PushWithFingerprintConfirmationViewController
 
--(instancetype)initWithMessage:(NSString*)message confirmationBlock:(PushAuthenticationConfirmation)confirmationBlock NibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+- (instancetype)initWithMessage:(NSString *)message confirmationBlock:(PushAuthenticationConfirmation)confirmationBlock NibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.confirmationBlock = confirmationBlock;
@@ -43,7 +43,7 @@
     [self setColors];
 }
 
-- (void)setColors{
+- (void)setColors {
     self.headerView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinscreenHeaderBackground];
     self.titleLabel.textColor = [OGNColorFileParser colorForKey:kOGNPinscreenTitle];
     self.messageLabel.textColor = [OGNColorFileParser colorForKey:kOGNPinscreenTitle];
@@ -55,14 +55,16 @@
     }
 }
 
--(IBAction)confirmButton:(id)sender{
+- (IBAction)confirmButton:(id)sender {
     self.confirmationBlock(YES);
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
 }
 
 - (IBAction)cancelButton:(id)sender {
     self.confirmationBlock(NO);
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
 }
 
 @end

@@ -10,18 +10,18 @@
 
 @interface PopupViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UITextView *contentTextView;
-@property (weak, nonatomic) IBOutlet UIButton *proceedButton;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UIButton *closeButton;
+@property(weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property(weak, nonatomic) IBOutlet UITextView *contentTextView;
+@property(weak, nonatomic) IBOutlet UIButton *proceedButton;
+@property(weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property(weak, nonatomic) IBOutlet UIButton *closeButton;
 
-@property (nonatomic) bool cancelButtonVisible;
+@property(nonatomic) bool cancelButtonVisible;
 
-@property (nonatomic, copy) void (^proceedBlock)();
-@property (nonatomic, copy) void (^cancelBlock)();
-@property (nonatomic, copy) void (^closeBlock)();
+@property(nonatomic, copy) void (^proceedBlock)();
+@property(nonatomic, copy) void (^cancelBlock)();
+@property(nonatomic, copy) void (^closeBlock)();
 
--(void)setPopupMessage:(NSString*)message;
-    
+- (void)setPopupMessage:(NSString *)message;
+
 @end

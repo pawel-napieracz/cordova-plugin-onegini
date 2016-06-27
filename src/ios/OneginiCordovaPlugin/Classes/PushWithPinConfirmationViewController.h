@@ -11,6 +11,6 @@
 
 @interface PushWithPinConfirmationViewController : UIViewController
 
--(instancetype)initWithMessage:(NSString*)message retryAttempts:(NSUInteger)retryAttempts maxAttempts:(NSUInteger)maxAttempts confirmationBlock:(PushAuthenticationWithPinConfirmation)confirmationBlock NibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+- (instancetype)initWithMessage:(NSString *)message retryAttempts:(NSUInteger)retryAttempts maxAttempts:(NSUInteger)maxAttempts confirmationBlock:(PushAuthenticationWithPinConfirmation)confirmationBlock NibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 
 @end

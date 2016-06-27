@@ -5,13 +5,13 @@
 #import <Foundation/Foundation.h>
 
 
-@interface XMLReader : NSObject
-{
+@interface XMLReader : NSObject {
     NSMutableArray *dictionaryStack;
     NSMutableString *textInProgress;
 }
 
 + (NSDictionary *)dictionaryForXMLData:(NSData *)data;
+
 + (NSDictionary *)dictionaryForXMLString:(NSString *)string;
 
 @end
