@@ -15,25 +15,32 @@
 #import "PushWithFingerprintConfirmationViewController.h"
 
 NSString *const kHeaders = @"headers";
+
 NSString *const kStatus = @"status";
+
 NSString *const kURL = @"url";
+
 NSString *const kBody = @"body";
+
 NSString *const kReason = @"reason";
+
 NSString *const kRemainingAttempts = @"remainingAttempts";
+
 NSString *const kMethod = @"method";
+
 NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
 #define certificates @[@"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",@"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"]
 
 @interface MainViewController ()
 
-@property(nonatomic, readwrite, strong) NSArray *supportedOrientations;
+@property (nonatomic, readwrite, strong) NSArray *supportedOrientations;
 
 @end
 
 @interface OneginiCordovaClient ()
 
-@property(nonatomic) NSUInteger supportedOrientations;
+@property (nonatomic) NSUInteger supportedOrientations;
 
 @end
 
@@ -60,11 +67,13 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 #pragma mark -
 #pragma mark overrides
 
-- (void)dealloc {
+- (void)dealloc
+{
     verifyPin = nil;
 }
 
-- (void)pluginInitialize {
+- (void)pluginInitialize
+{
 #ifdef DEBUG
     NSLog(@"pluginInitialize");
     [CDVPluginResult setVerbose:YES];
@@ -85,24 +94,29 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (BOOL)initializationSuccessful {
+- (BOOL)initializationSuccessful
+{
     return self.oneginiClient && self.pinDialogInitalized && self.inAppBrowserInitialized;
 }
 
-- (BOOL)pinDialogInitalized {
+- (BOOL)pinDialogInitalized
+{
     return useNativePinView || pinDialogCommandTxId;
 }
 
-- (BOOL)inAppBrowserInitialized {
+- (BOOL)inAppBrowserInitialized
+{
     return !configModel.useEmbeddedWebView || self.inAppBrowserCommandTxId;
 }
 
-- (BOOL)useNativePinScreen {
+- (BOOL)useNativePinScreen
+{
     NSNumber *n = [configModel objectForKey:@"kOGUseNativePinScreen"];
     return n.boolValue;
 }
 
-- (BOOL)prepareConfiguration {
+- (BOOL)prepareConfiguration
+{
     NSString *configContent = [self loadConfigurationFile];
     NSDictionary *configuration = [XMLReader dictionaryForXMLString:configContent];
     NSDictionary *widget = [configuration objectForKey:@"widget"];
@@ -129,7 +143,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 }
 
 
-- (NSString *)loadFileToString:(NSString *)path {
+- (NSString *)loadFileToString:(NSString *)path
+{
     NSError *error;
     NSString *fileContent = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:path ofType:nil] encoding:NSUTF8StringEncoding error:&error];
 
@@ -140,18 +155,21 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     return fileContent;
 }
 
-- (NSString *)loadConfigurationFile {
+- (NSString *)loadConfigurationFile
+{
     NSString *configPath = @"config.xml";
     return [self loadFileToString:configPath];
 }
 
-- (void)handleOpenURL:(NSNotification *)notification {
+- (void)handleOpenURL:(NSNotification *)notification
+{
     [super handleOpenURL:notification];
 
     [[OGOneginiClient sharedInstance] handleAuthorizationCallback:notification.object];
 }
 
-- (void)closeInAppBrowser {
+- (void)closeInAppBrowser
+{
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{kMethod : @"closeInAppBrowser"}];
     pluginResult.keepCallback = @(1);
     if (self.inAppBrowserCommandTxId) {
@@ -159,13 +177,15 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)onAppTerminate {
+- (void)onAppTerminate
+{
     [oneginiClient logoutWithDelegate:self];
 }
 
 #pragma mark -
 
-- (void)resetAll {
+- (void)resetAll
+{
     self.pluginInitializedCommandTxId = nil;
     self.authorizeCommandTxId = nil;
     self.pinValidateCommandTxId = nil;
@@ -174,11 +194,13 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     self.fingerprintEnrollmentCommandTxId = nil;
 }
 
-- (void)authorizationErrorCallbackWIthReason:(NSString *)reason {
+- (void)authorizationErrorCallbackWIthReason:(NSString *)reason
+{
     [self authorizationErrorCallbackWIthReason:reason error:nil];
 }
 
-- (void)authorizationErrorCallbackWIthReason:(NSString *)reason error:(NSError *)error {
+- (void)authorizationErrorCallbackWIthReason:(NSString *)reason error:(NSError *)error
+{
     if (authorizeCommandTxId == nil) {
         return;
     }
@@ -193,7 +215,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 #pragma mark -
 #pragma mark Cordova entry points
 
-- (void)clearTokens:(CDVInvokedUrlCommand *)command {
+- (void)clearTokens:(CDVInvokedUrlCommand *)command
+{
     NSError *error;
     if (![[OGOneginiClient sharedInstance] clearTokens:&error]) {
 #ifdef DEBUG
@@ -202,11 +225,13 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)clearCredentials:(CDVInvokedUrlCommand *)command {
+- (void)clearCredentials:(CDVInvokedUrlCommand *)command
+{
     [[OGOneginiClient sharedInstance] clearCredentials];
 }
 
-- (void)awaitPluginInitialization:(CDVInvokedUrlCommand *)command {
+- (void)awaitPluginInitialization:(CDVInvokedUrlCommand *)command
+{
     self.pluginInitializedCommandTxId = command.callbackId;
     if (![self isConnected]) {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"connectivityProblem"}];
@@ -215,7 +240,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     [self handleInitializationCallback];
 }
 
-- (void)initPinCallbackSession:(CDVInvokedUrlCommand *)command {
+- (void)initPinCallbackSession:(CDVInvokedUrlCommand *)command
+{
     self.pinDialogCommandTxId = command.callbackId;
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -225,7 +251,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     [self handleInitializationCallback];
 }
 
-- (void)inAppBrowserControlSession:(CDVInvokedUrlCommand *)command {
+- (void)inAppBrowserControlSession:(CDVInvokedUrlCommand *)command
+{
     self.inAppBrowserCommandTxId = command.callbackId;
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -235,21 +262,24 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     [self handleInitializationCallback];
 }
 
-- (void)handleInitializationCallback {
+- (void)handleInitializationCallback
+{
     if (self.pluginInitializedCommandTxId && self.initializationSuccessful) {
         [self sendSuccessCallback:self.pluginInitializedCommandTxId];
         self.pluginInitializedCommandTxId = nil;
     }
 }
 
-- (void)isRegistered:(CDVInvokedUrlCommand *)command {
+- (void)isRegistered:(CDVInvokedUrlCommand *)command
+{
     if (oneginiClient.isClientRegistered)
         [self sendSuccessCallback:command.callbackId];
     else
         [self sendErrorCallback:command.callbackId];
 }
 
-- (bool)isConnected {
+- (bool)isConnected
+{
     Reachability *currentReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [currentReachability currentReachabilityStatus];
 
@@ -259,7 +289,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
         return NO;
 }
 
-- (void)authorize:(CDVInvokedUrlCommand *)command {
+- (void)authorize:(CDVInvokedUrlCommand *)command
+{
     [self resetAll];
     self.authorizeCommandTxId = command.callbackId;
 
@@ -268,14 +299,15 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
         return;
     }
     id scopeArgument = [command.arguments firstObject];
-    if ([scopeArgument isKindOfClass:[NSArray class]] && ((NSArray *) scopeArgument).count > 0) {
+    if ([scopeArgument isKindOfClass:[NSArray class]] && ((NSArray *)scopeArgument).count > 0) {
         [oneginiClient authorize:scopeArgument];
     } else {
         [oneginiClient authorize:nil];
     }
 }
 
-- (void)reauthorize:(CDVInvokedUrlCommand *)command {
+- (void)reauthorize:(CDVInvokedUrlCommand *)command
+{
     [self resetAll];
     self.authorizeCommandTxId = command.callbackId;
 
@@ -284,23 +316,25 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
         return;
     }
     id scopeArgument = [command.arguments firstObject];
-    if ([scopeArgument isKindOfClass:[NSArray class]] && ((NSArray *) scopeArgument).count > 0) {
+    if ([scopeArgument isKindOfClass:[NSArray class]] && ((NSArray *)scopeArgument).count > 0) {
         [oneginiClient reauthorize:scopeArgument];
     } else {
         [oneginiClient reauthorize:nil];
     }
 }
 
-- (void)isAuthorized:(CDVInvokedUrlCommand *)command {
+- (void)isAuthorized:(CDVInvokedUrlCommand *)command
+{
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[oneginiClient isAuthorized]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-- (void)confirmNewPin:(CDVInvokedUrlCommand *)command {
+- (void)confirmNewPin:(CDVInvokedUrlCommand *)command
+{
     self.pinValidateCommandTxId = nil;
     self.pinChangeCommandTxId = nil;
     if (command.arguments.count != 1) {
-        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"expected 1 argument but received %lu", (unsigned long) command.arguments.count]];
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"expected 1 argument but received %lu", (unsigned long)command.arguments.count]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
@@ -310,14 +344,15 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     [oneginiClient confirmNewPin:pin validation:self];
 }
 
-- (void)confirmCurrentPin:(CDVInvokedUrlCommand *)command {
+- (void)confirmCurrentPin:(CDVInvokedUrlCommand *)command
+{
     if (![self isConnected]) {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"connectivityProblem"}];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
 
     if (command.arguments.count != 1) {
-        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"expected 1 argument but received %lu", (unsigned long) command.arguments.count]];
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"expected 1 argument but received %lu", (unsigned long)command.arguments.count]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
@@ -332,7 +367,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     [self sendSuccessCallback:command.callbackId];
 }
 
-- (void)changePin:(CDVInvokedUrlCommand *)command {
+- (void)changePin:(CDVInvokedUrlCommand *)command
+{
     if (![self isConnected]) {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"connectivityProblem"}];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -343,17 +379,19 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     [oneginiClient changePinRequest:self];
 }
 
-- (void)cancelPinChange:(CDVInvokedUrlCommand *)command {
+- (void)cancelPinChange:(CDVInvokedUrlCommand *)command
+{
     self.pinChangeCommandTxId = nil;
     self.pinValidateCommandTxId = nil;
     // TODO add cancel PIN change method to public API of OGOneginiClient in order to invalidate the state.
 }
 
-- (void)confirmCurrentPinForChangeRequest:(CDVInvokedUrlCommand *)command {
+- (void)confirmCurrentPinForChangeRequest:(CDVInvokedUrlCommand *)command
+{
     self.pinValidateCommandTxId = nil;
 
     if (command.arguments.count != 1) {
-        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"expected 1 argument but received %lu", (unsigned long) command.arguments.count]];
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"expected 1 argument but received %lu", (unsigned long)command.arguments.count]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
@@ -362,11 +400,12 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     [oneginiClient confirmCurrentPinForChangeRequest:pin];
 }
 
-- (void)confirmNewPinForChangeRequest:(CDVInvokedUrlCommand *)command {
+- (void)confirmNewPinForChangeRequest:(CDVInvokedUrlCommand *)command
+{
     self.pinValidateCommandTxId = nil;
 
     if (command.arguments.count != 1) {
-        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"expected 1 argument but received %lu", (unsigned long) command.arguments.count]];
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"expected 1 argument but received %lu", (unsigned long)command.arguments.count]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
@@ -378,9 +417,10 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     [oneginiClient confirmNewPinForChangeRequest:pin validation:self];
 }
 
-- (void)validatePin:(CDVInvokedUrlCommand *)command {
+- (void)validatePin:(CDVInvokedUrlCommand *)command
+{
     if (command.arguments.count != 1) {
-        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"expected 1 argument but received %lu", (unsigned long) command.arguments.count]];
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"expected 1 argument but received %lu", (unsigned long)command.arguments.count]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
@@ -429,15 +469,18 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)fetchResource:(CDVInvokedUrlCommand *)command {
+- (void)fetchResource:(CDVInvokedUrlCommand *)command
+{
     [self performResourceCall:command isAnonymous:NO];
 }
 
-- (void)fetchAnonymousResource:(CDVInvokedUrlCommand *)command {
+- (void)fetchAnonymousResource:(CDVInvokedUrlCommand *)command
+{
     [self performResourceCall:command isAnonymous:YES];
 }
 
-- (void)performResourceCall:(CDVInvokedUrlCommand *)command isAnonymous:(BOOL)isAnonymous {
+- (void)performResourceCall:(CDVInvokedUrlCommand *)command isAnonymous:(BOOL)isAnonymous
+{
     if (![self isConnected]) {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"connectivityProblem"}];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -453,67 +496,64 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
     NSString *requestId = nil;
     if (isAnonymous) {
-        requestId = [oneginiClient fetchAnonymousResource:path
-                                            requestMethod:requestMethodString
-                                                   params:params
-                                           paramsEncoding:OGJSONParameterEncoding
-                                                  headers:convertedHeaders
-                                                 delegate:self];
-
+        requestId = [oneginiClient fetchAnonymousResource:path requestMethod:requestMethodString params:params paramsEncoding:OGJSONParameterEncoding headers:convertedHeaders delegate:self];
     } else {
-        requestId = [oneginiClient fetchResource:path
-                                   requestMethod:requestMethodString
-                                          params:params
-                                  paramsEncoding:OGJSONParameterEncoding
-                                         headers:convertedHeaders
-                                        delegate:self];
+        requestId = [oneginiClient fetchResource:path requestMethod:requestMethodString params:params paramsEncoding:OGJSONParameterEncoding headers:convertedHeaders delegate:self];
     }
     [self.fetchResourceCommandsTxId setObject:command.callbackId forKey:requestId];
 }
 
-- (void)logout:(CDVInvokedUrlCommand *)command {
+- (void)logout:(CDVInvokedUrlCommand *)command
+{
     self.logoutCommandTxId = command.callbackId;
     [self.oneginiClient logoutWithDelegate:self];
 }
 
-- (void)disconnect:(CDVInvokedUrlCommand *)command {
+- (void)disconnect:(CDVInvokedUrlCommand *)command
+{
     self.disconnectCommandTxId = command.callbackId;
     [self.oneginiClient disconnectWithDelegate:self];
 }
 
-- (void)sendSuccessCallback:(NSString *)callbackId {
+- (void)sendSuccessCallback:(NSString *)callbackId
+{
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
-- (void)sendErrorCallback:(NSString *)callbackId {
+- (void)sendErrorCallback:(NSString *)callbackId
+{
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
-- (void)enrollForFingerprintAuthentication:(CDVInvokedUrlCommand *)command {
+- (void)enrollForFingerprintAuthentication:(CDVInvokedUrlCommand *)command
+{
     self.fingerprintEnrollmentCommandTxId = command.callbackId;
 
     id scopeArgument = [command.arguments firstObject];
-    if ([scopeArgument isKindOfClass:[NSArray class]] && ((NSArray *) scopeArgument).count > 0) {
+    if ([scopeArgument isKindOfClass:[NSArray class]] && ((NSArray *)scopeArgument).count > 0) {
         [self.oneginiClient enrollForFingerprintAuthentication:scopeArgument delegate:self];
     } else {
         [self.oneginiClient enrollForFingerprintAuthentication:nil delegate:self];
     }
 }
 
-- (void)disableFingerprintAuthentication:(CDVInvokedUrlCommand *)command {
+- (void)disableFingerprintAuthentication:(CDVInvokedUrlCommand *)command
+{
     [self.oneginiClient disableFingerprintAuthentication];
 }
 
-- (void)checkFingerpringAuthenticationState:(CDVInvokedUrlCommand *)command {
+- (void)checkFingerpringAuthenticationState:(CDVInvokedUrlCommand *)command
+{
     if ([self.oneginiClient isEnrolledForFingerprintAuthentication])
         [self sendSuccessCallback:command.callbackId];
     else
         [self sendErrorCallback:command.callbackId];
 }
 
-- (void)isFingerprintAuthenticationAvailable:(CDVInvokedUrlCommand *)command {
+- (void)isFingerprintAuthenticationAvailable:(CDVInvokedUrlCommand *)command
+{
     if (oneginiClient.isFingerprintAuthenticationAvailable) {
         [self sendSuccessCallback:command.callbackId];
     } else {
@@ -521,7 +561,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)readConfigProperty:(CDVInvokedUrlCommand *)command {
+- (void)readConfigProperty:(CDVInvokedUrlCommand *)command
+{
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.baseURL];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
@@ -529,7 +570,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 #pragma mark -
 #pragma mark OGAuthorizationDelegate
 
-- (void)requestAuthorization:(NSURL *)url {
+- (void)requestAuthorization:(NSURL *)url
+{
     if (configModel.useEmbeddedWebView) {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{kMethod : @"requestAuthorization", @"url" : url.absoluteString}];
         result.keepCallback = @(1);
@@ -540,7 +582,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)authorizationSuccess {
+- (void)authorizationSuccess
+{
     if (authorizeCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"authorizationSuccess");
@@ -556,23 +599,25 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"authorizationSuccess"];
         result.keepCallback = @(0);
         [self.commandDelegate sendPluginResult:result callbackId:authorizeCommandTxId];
-    }
-    @finally {
+    } @finally {
         [self resetAll];
     }
 }
 
-- (void)authorizationError {
+- (void)authorizationError
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"connectivityProblem"];
 }
 
-- (void)authorizationErrorClientRegistrationFailed:(NSError *)error {
+- (void)authorizationErrorClientRegistrationFailed:(NSError *)error
+{
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorClientRegistrationFailed" error:error];
 }
 
-- (void)askForCurrentPin {
+- (void)askForCurrentPin
+{
     if (useNativePinView) {
         pinEntryMode = PINCheckMode;
         [self showPinEntryViewInMode:PINCheckMode];
@@ -589,11 +634,11 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)askForNewPin:(NSUInteger)pinSize {
+- (void)askForNewPin:(NSUInteger)pinSize
+{
     if (useNativePinView) {
         pinEntryMode = PINRegistrationMode;
         [self showPinEntryViewInMode:PINRegistrationMode];
-
     } else {
         if (pinDialogCommandTxId == nil) {
 #ifdef DEBUG
@@ -607,7 +652,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)askNewPinForChangeRequest:(NSUInteger)pinSize {
+- (void)askNewPinForChangeRequest:(NSUInteger)pinSize
+{
     if (useNativePinView) {
         pinEntryMode = PINChangeNewPinMode;
         [self.pinViewController reset];
@@ -625,7 +671,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)askCurrentPinForChangeRequest {
+- (void)askCurrentPinForChangeRequest
+{
     if (useNativePinView) {
         pinEntryMode = PINChangeCheckMode;
         [self showPinEntryViewInMode:PINChangeCheckMode];
@@ -643,7 +690,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)authorizationErrorInvalidGrant:(NSUInteger)remaining {
+- (void)authorizationErrorInvalidGrant:(NSUInteger)remaining
+{
     if (authorizeCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"authorizationErrorInvalidGrant: remaining attempts %d", remaining);
@@ -656,8 +704,7 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"authorizationErrorInvalidGrant", kRemainingAttempts : @(remaining)}];
             result.keepCallback = @(0);
             [self.commandDelegate sendPluginResult:result callbackId:authorizeCommandTxId];
-        }
-        @finally {
+        } @finally {
             [self resetAll];
         }
     } else {
@@ -665,100 +712,114 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)authorizationErrorTooManyPinFailures {
+- (void)authorizationErrorTooManyPinFailures
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorTooManyPinFailures"];
 }
 
-- (void)authorizationErrorNotAuthenticated {
+- (void)authorizationErrorNotAuthenticated
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorNotAuthenticated"];
 }
 
-- (void)authorizationErrorInvalidScope {
+- (void)authorizationErrorInvalidScope
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorInvalidScope"];
 }
 
-- (void)authorizationErrorInvalidState {
+- (void)authorizationErrorInvalidState
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorInvalidState"];
 }
 
-- (void)authorizationErrorNoAccessToken {
+- (void)authorizationErrorNoAccessToken
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorNoAccessToken"];
 }
 
-- (void)authorizationErrorNotAuthorized {
+- (void)authorizationErrorNotAuthorized
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorNotAuthorized"];
 }
 
-- (void)authorizationErrorInvalidRequest {
+- (void)authorizationErrorInvalidRequest
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorInvalidRequest"];
 }
 
-- (void)authorizationErrorInvalidGrantType {
+- (void)authorizationErrorInvalidGrantType
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorInvalidGrantType"];
 }
 
-- (void)authorizationErrorNoAuthorizationGrant {
+- (void)authorizationErrorNoAuthorizationGrant
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorNoAuthorizationGrant"];
 }
 
-- (void)authorizationErrorInvalidAppPlatformOrVersion {
+- (void)authorizationErrorInvalidAppPlatformOrVersion
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"unsupportedAppVersion"];
 }
 
-- (void)askForPushAuthenticationConfirmation:(NSString *)message notificationType:(NSString *)notificationType confirm:(PushAuthenticationConfirmation)confirm {
+- (void)askForPushAuthenticationConfirmation:(NSString *)message notificationType:(NSString *)notificationType confirm:(PushAuthenticationConfirmation)confirm
+{
     PushConfirmationViewController *pushConfirmationViewController = [[PushConfirmationViewController alloc] initWithMessage:message confirmationBlock:confirm NibName:@"PushConfirmationViewController" bundle:nil];
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:pushConfirmationViewController animated:NO completion:^{
     }];
 }
 
-- (void)askForPushAuthenticationWithPinConfirmation:(NSString *)message notificationType:(NSString *)notificationType
-                                            pinSize:(NSUInteger)pinSize maxAttempts:(NSUInteger)maxAttempts retryAttempt:(NSUInteger)retryAttempt
-                                            confirm:(PushAuthenticationWithPinConfirmation)confirm {
+- (void)askForPushAuthenticationWithPinConfirmation:(NSString *)message notificationType:(NSString *)notificationType pinSize:(NSUInteger)pinSize maxAttempts:(NSUInteger)maxAttempts retryAttempt:(NSUInteger)retryAttempt confirm:(PushAuthenticationWithPinConfirmation)confirm
+{
     PushWithPinConfirmationViewController *pushWithPinConfirmationViewController = [[PushWithPinConfirmationViewController alloc] initWithMessage:message retryAttempts:retryAttempt maxAttempts:maxAttempts confirmationBlock:confirm NibName:@"PushWithPinConfirmationViewController" bundle:nil];
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:pushWithPinConfirmationViewController animated:NO completion:^{
     }];
 }
 
-- (void)askForPushAuthenticationWithFingerprint:(NSString *)message notificationType:(NSString *)notificationType confirm:(PushAuthenticationConfirmation)confirm {
+- (void)askForPushAuthenticationWithFingerprint:(NSString *)message notificationType:(NSString *)notificationType confirm:(PushAuthenticationConfirmation)confirm
+{
     PushWithFingerprintConfirmationViewController *pushConfirmationViewController = [[PushWithFingerprintConfirmationViewController alloc] initWithMessage:message confirmationBlock:confirm NibName:@"PushWithFingerprintConfirmationViewController" bundle:nil];
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:pushConfirmationViewController animated:NO completion:^{
     }];
 }
 
-- (void)authorizationErrorUnsupportedOS {
+- (void)authorizationErrorUnsupportedOS
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"authorizationErrorUnsupportedOS"];
 }
 
-- (void)authorizationClientConfigFailed {
+- (void)authorizationClientConfigFailed
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"connectivityProblem"];
 }
 
 // @optional
-- (void)authorizationError:(NSError *)error {
+- (void)authorizationError:(NSError *)error
+{
     [self closePinView];
 
     [self authorizationErrorCallbackWIthReason:@"connectivityProblem"];
@@ -766,12 +827,14 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
 #pragma mark - OGDisconnectDelegate
 
-- (void)disconnectSuccessful {
+- (void)disconnectSuccessful
+{
     [self sendSuccessCallback:self.disconnectCommandTxId];
     [self resetAll];
 }
 
-- (void)disconnectFailureWithError:(NSError *)error {
+- (void)disconnectFailureWithError:(NSError *)error
+{
     [self sendSuccessCallback:self.disconnectCommandTxId];
     [self resetAll];
 }
@@ -779,12 +842,14 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 #pragma mark -
 #pragma mark - OGLogoutDelegate
 
-- (void)logoutSuccessful {
+- (void)logoutSuccessful
+{
     [self sendSuccessCallback:self.logoutCommandTxId];
     [self resetAll];
 }
 
-- (void)logoutFailureWithError:(NSError *)error {
+- (void)logoutFailureWithError:(NSError *)error
+{
     [self sendSuccessCallback:self.logoutCommandTxId];
     [self resetAll];
 }
@@ -792,13 +857,17 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 #pragma mark -
 #pragma mark OGResourceHandlerDelegate
 
-- (void)resourceResponse:(NSHTTPURLResponse *)response body:(NSData *)body requestId:(NSString *)requestId {
+- (void)resourceResponse:(NSHTTPURLResponse *)response body:(NSData *)body requestId:(NSString *)requestId
+{
     CDVPluginResult *result;
 
     NSMutableDictionary *responseJSON = [NSMutableDictionary new];
-    if (response.allHeaderFields) [responseJSON setObject:response.allHeaderFields forKey:kHeaders];
-    if (response.URL.absoluteString) [responseJSON setObject:response.URL.absoluteString forKey:kURL];
-    if (body) [responseJSON setObject:body.base64Encoding forKey:kBody];
+    if (response.allHeaderFields)
+        [responseJSON setObject:response.allHeaderFields forKey:kHeaders];
+    if (response.URL.absoluteString)
+        [responseJSON setObject:response.URL.absoluteString forKey:kURL];
+    if (body)
+        [responseJSON setObject:body.base64Encoding forKey:kBody];
     [responseJSON setObject:@(response.statusCode) forKey:kStatus];
 
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseJSON];
@@ -808,7 +877,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
-- (void)resourceError:(NSError *)error requestId:(NSString *)requestId {
+- (void)resourceError:(NSError *)error requestId:(NSString *)requestId
+{
     NSString *errorReason = nil;
     switch (error.code) {
         case OGResourceErrorCode_InvalidRequestMethod:
@@ -821,8 +891,7 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
     NSString *callbackId = [self.fetchResourceCommandsTxId objectForKey:requestId];
     [self.fetchResourceCommandsTxId removeObjectForKey:requestId];
-    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                            messageAsDictionary:@{kReason : errorReason}];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : errorReason}];
     [self.commandDelegate sendPluginResult:result callbackId:callbackId];
 }
 
@@ -835,62 +904,63 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
 #warning TODO use correct validation messages
 
-- (void)pinBlackListed {
+- (void)pinBlackListed
+{
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
         [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_BLACK_LISTED"]];
     } else {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                                messageAsDictionary:@{kReason : @"pinBlackListed"}];
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"pinBlackListed"}];
 
         [self.commandDelegate sendPluginResult:result callbackId:pinValidateCommandTxId];
     }
 }
 
-- (void)pinShouldNotBeASequence {
+- (void)pinShouldNotBeASequence
+{
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
         [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_SHOULD_NOT_BE_A_SEQUENCE"]];
     } else {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                                messageAsDictionary:@{kReason : @"pinShouldNotBeASequence"}];
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"pinShouldNotBeASequence"}];
         [self.commandDelegate sendPluginResult:result callbackId:pinValidateCommandTxId];
     }
 }
 
-- (void)pinShouldNotUseSimilarDigits:(NSUInteger)count {
+- (void)pinShouldNotUseSimilarDigits:(NSUInteger)count
+{
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
         [self.pinViewController invalidPinWithReason:[NSString stringWithFormat:[MessagesModel messageForKey:@"PIN_SHOULD_NOT_USE_SIMILAR_DIGITS"], @(count)]];
     } else {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                                messageAsDictionary:@{kReason : @"pinShouldNotUseSimilarDigits", kMaxSimilarDigits : @(count)}];
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"pinShouldNotUseSimilarDigits", kMaxSimilarDigits : @(count)}];
         [self.commandDelegate sendPluginResult:result callbackId:pinValidateCommandTxId];
     }
 }
 
-- (void)pinTooShort {
+- (void)pinTooShort
+{
     if (self.pinViewController != nil) {
         [self retryPinEntryAfterValidationFailure];
         [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"PIN_TOO_SHORT"]];
     } else {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                                messageAsDictionary:@{kReason : @"pinTooShort"}];
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"pinTooShort"}];
         [self.commandDelegate sendPluginResult:result callbackId:pinValidateCommandTxId];
     }
 }
 
 // @optional
-- (void)pinEntryError:(NSError *)error {
-    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                            messageAsDictionary:@{kReason : @"pinEntryError"}];
+- (void)pinEntryError:(NSError *)error
+{
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"pinEntryError"}];
     [self.commandDelegate sendPluginResult:result callbackId:pinValidateCommandTxId];
 }
 
 #pragma mark -
 #pragma mark OGChangePinDelegate
 
-- (void)pinChangeError:(NSError *)error {
+- (void)pinChangeError:(NSError *)error
+{
     if (pinChangeCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"pinChangeError: pinCommandTxId is nil, invocation is out of context");
@@ -905,7 +975,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     pinChangeCommandTxId = nil;
 }
 
-- (void)invalidCurrentPin {
+- (void)invalidCurrentPin
+{
     if (pinChangeCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"invalidCurrentPin: pinCommandTxId is nil");
@@ -914,15 +985,15 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
     if (self.pinViewController) {
         [self.pinViewController invalidPinWithReason:@"Invalid pin"];
-    }
-    else {
+    } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"invalidCurrentPin"}];
         [self.commandDelegate sendPluginResult:result callbackId:pinChangeCommandTxId];
         pinChangeCommandTxId = nil;
     }
 }
 
-- (void)invalidCurrentPin:(NSUInteger)remaining {
+- (void)invalidCurrentPin:(NSUInteger)remaining
+{
     if (pinChangeCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"invalidCurrentPin: pinCommandTxId is nil");
@@ -931,15 +1002,15 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
     if (self.pinViewController) {
         [self.pinViewController invalidPinWithReason:[NSString stringWithFormat:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_INVALID"], @(remaining)]];
-    }
-    else {
+    } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"invalidCurrentPin", kRemainingAttempts : @(remaining)}];
         [self.commandDelegate sendPluginResult:result callbackId:pinChangeCommandTxId];
         pinChangeCommandTxId = nil;
     }
 }
 
-- (void)pinChangeErrorTooManyPinFailures {
+- (void)pinChangeErrorTooManyPinFailures
+{
     if (pinChangeCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"invalidCurrentPin: pinCommandTxId is nil");
@@ -952,7 +1023,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     pinChangeCommandTxId = nil;
 }
 
-- (void)pinChanged {
+- (void)pinChanged
+{
     if (pinChangeCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"pinChanged: pinCommandTxId is nil");
@@ -968,7 +1040,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     pinChangeCommandTxId = nil;
 }
 
-- (void)pinChangeError {
+- (void)pinChangeError
+{
     if (pinChangeCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"pinChangeError: pinCommandTxId is nil");
@@ -977,8 +1050,7 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
     if (self.pinViewController) {
         [self.pinViewController invalidPinWithReason:[MessagesModel messageForKey:@"AUTHORIZATION_ERROR_PIN_CHANGE_FAILED"]];
-    }
-    else {
+    } else {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"pinChangeError"}];
         [self.commandDelegate sendPluginResult:result callbackId:pinChangeCommandTxId];
         pinChangeCommandTxId = nil;
@@ -987,7 +1059,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
 #pragma mark - FingerprintDelegate
 
-- (void)askCurrentPinForFingerprintAuthentication {
+- (void)askCurrentPinForFingerprintAuthentication
+{
     if (useNativePinView) {
         pinEntryMode = PINFingerprintCheckMode;
         [self showPinEntryViewInMode:PINFingerprintCheckMode];
@@ -1005,7 +1078,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)fingerprintAuthenticationEnrollmentSuccessful {
+- (void)fingerprintAuthenticationEnrollmentSuccessful
+{
     if (self.fingerprintEnrollmentCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"fingerprint_enrolment_success");
@@ -1018,13 +1092,13 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"fingerprint_enrolment_success"];
         result.keepCallback = @(0);
         [self.commandDelegate sendPluginResult:result callbackId:self.fingerprintEnrollmentCommandTxId];
-    }
-    @finally {
+    } @finally {
         [self resetAll];
     }
 }
 
-- (void)fingerprintAuthenticationEnrollmentFailure {
+- (void)fingerprintAuthenticationEnrollmentFailure
+{
     if (self.fingerprintEnrollmentCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"fingerprint_enrolment_failure");
@@ -1036,13 +1110,13 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"fingerprint_enrolment_failure"];
         result.keepCallback = @(0);
         [self.commandDelegate sendPluginResult:result callbackId:self.fingerprintEnrollmentCommandTxId];
-    }
-    @finally {
+    } @finally {
         [self resetAll];
     }
 }
 
-- (void)fingerprintAuthenticationEnrollmentErrorInvalidPin:(NSUInteger)attemptCount {
+- (void)fingerprintAuthenticationEnrollmentErrorInvalidPin:(NSUInteger)attemptCount
+{
     if (self.fingerprintEnrollmentCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"fingerprint_enrolment_failure");
@@ -1057,14 +1131,14 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{kReason : @"fingerprint_enrolment_failure_invalid_pin", kRemainingAttempts : @(attemptCount)}];
             result.keepCallback = @(1);
             [self.commandDelegate sendPluginResult:result callbackId:self.fingerprintEnrollmentCommandTxId];
-        }
-        @finally {
+        } @finally {
             [self resetAll];
         }
     }
 }
 
-- (void)fingerprintAuthenticationEnrollmentErrorTooManyPinFailures {
+- (void)fingerprintAuthenticationEnrollmentErrorTooManyPinFailures
+{
     if (self.fingerprintEnrollmentCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"fingerprint_enrolment_failure");
@@ -1078,8 +1152,7 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:message];
         result.keepCallback = @(0);
         [self.commandDelegate sendPluginResult:result callbackId:self.fingerprintEnrollmentCommandTxId];
-    }
-    @finally {
+    } @finally {
         [self resetAll];
     }
 }
@@ -1087,7 +1160,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 #pragma mark -
 #pragma mark Util
 
-- (OGHTTPClientParameterEncoding)parameterEncodingForString:(NSString *)paramsEncodingString {
+- (OGHTTPClientParameterEncoding)parameterEncodingForString:(NSString *)paramsEncodingString
+{
     if ([paramsEncodingString isEqualToString:@"FORM"]) {
         return OGFormURLParameterEncoding;
     } else if ([paramsEncodingString isEqualToString:@"JSON"]) {
@@ -1099,20 +1173,21 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)setupScreenOrientation:(CDVInvokedUrlCommand *)command {
+- (void)setupScreenOrientation:(CDVInvokedUrlCommand *)command
+{
 
     if ([[UIDevice currentDevice].model rangeOfString:@"iPhone"].location == NSNotFound) {
-        ((MainViewController *) self.viewController).supportedOrientations = [NSArray arrayWithObjects:[NSNumber numberWithInteger:UIInterfaceOrientationLandscapeLeft], [NSNumber numberWithInteger:UIInterfaceOrientationLandscapeRight], nil];
+        ((MainViewController *)self.viewController).supportedOrientations = [NSArray arrayWithObjects:[NSNumber numberWithInteger:UIInterfaceOrientationLandscapeLeft], [NSNumber numberWithInteger:UIInterfaceOrientationLandscapeRight], nil];
         self.supportedOrientations = UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
-    }
-    else {
-        ((MainViewController *) self.viewController).supportedOrientations = [NSArray arrayWithObjects:[NSNumber numberWithInteger:UIInterfaceOrientationPortrait], [NSNumber numberWithInteger:UIInterfaceOrientationPortraitUpsideDown], nil];
+    } else {
+        ((MainViewController *)self.viewController).supportedOrientations = [NSArray arrayWithObjects:[NSNumber numberWithInteger:UIInterfaceOrientationPortrait], [NSNumber numberWithInteger:UIInterfaceOrientationPortraitUpsideDown], nil];
         self.supportedOrientations = UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
     }
 }
 
 
-- (NSDictionary *)convertNumbersToStringsInDictionary:(NSDictionary *)dictionary {
+- (NSDictionary *)convertNumbersToStringsInDictionary:(NSDictionary *)dictionary
+{
     if (!dictionary)
         return nil;
     NSMutableDictionary *convertedDictionary = [[NSMutableDictionary alloc] init];
@@ -1133,7 +1208,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
  Load the custom configuration and overlay the current view with the custom PIN entry view
  */
 
-- (void)showPinEntryViewInMode:(PINEntryModes)mode {
+- (void)showPinEntryViewInMode:(PINEntryModes)mode
+{
     if ([[UIScreen mainScreen] bounds].size.height == 480) {
         self.pinViewController = [[PinViewController alloc] initWithNibName:@"PINViewController" bundle:nil];
     } else {
@@ -1151,7 +1227,7 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
             [self sendErrorCallback:self.inAppBrowserCommandTxId];
     }
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:self.pinViewController animated:YES completion:nil];
     });
 }
@@ -1159,7 +1235,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 /**
  Close the custom PIN entry view
  */
-- (void)closePinView {
+- (void)closePinView
+{
     if (self.pinViewController != nil) {
         [self.pinViewController reset];
         [self.viewController dismissViewControllerAnimated:YES completion:nil];
@@ -1172,7 +1249,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 /**
  After a PIN validation error occurs the PIN entry must be reset to the state where the user can enter the first PIN again.
  */
-- (void)retryPinEntryAfterValidationFailure {
+- (void)retryPinEntryAfterValidationFailure
+{
     if (pinEntryMode == PINRegistrationVerififyMode) {
         pinEntryMode = PINRegistrationMode;
     } else if (pinEntryMode == PINChangeNewPinVerifyMode) {
@@ -1180,7 +1258,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (bool)isPinValid:(NSString *)pin {
+- (bool)isPinValid:(NSString *)pin
+{
     NSError *error;
     if (![oneginiClient isPinValid:verifyPin error:&error]) {
         switch (error.code) {
@@ -1206,16 +1285,15 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
             }
         }
         return NO;
-    }
-    else
+    } else
         return YES;
-
 }
 
 #pragma mark -
 #pragma mark PinEntryContainerViewControllerDelegate
 
-- (void)pinEntered:(NSString *)pin {
+- (void)pinEntered:(NSString *)pin
+{
     switch (pinEntryMode) {
         case PINCheckMode: {
             [oneginiClient confirmCurrentPin:pin];
@@ -1230,8 +1308,7 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
             if (![self isPinValid:verifyPin]) {
                 [self.pinViewController reset];
-            }
-            else {
+            } else {
                 // Switch to registration mode so the user can enter the second verification PIN
                 pinEntryMode = PINRegistrationVerififyMode;
                 self.pinViewController.mode = PINRegistrationVerififyMode;
@@ -1262,8 +1339,7 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
             verifyPin = [pin copy];
             if (![self isPinValid:verifyPin]) {
                 [self.pinViewController reset];
-            }
-            else {
+            } else {
                 pinEntryMode = PINChangeNewPinVerifyMode;
 
                 self.pinViewController.mode = PINChangeNewPinVerifyMode;
@@ -1284,7 +1360,6 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
                 verifyPin = nil;
                 [oneginiClient confirmNewPinForChangeRequest:pin validation:self];
             }
-
         }
         default: {
 #ifdef DEBUG
@@ -1294,7 +1369,8 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 }
 
-- (void)pinForgotten {
+- (void)pinForgotten
+{
     [self closePinView];
 
     NSDictionary *d = @{kReason : @"authorizationErrorPinForgotten"};
@@ -1310,18 +1386,20 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
 #pragma mark - Mobile authentication enrollment
 
-- (void)enrollForMobileAuthentication:(CDVInvokedUrlCommand *)command {
+- (void)enrollForMobileAuthentication:(CDVInvokedUrlCommand *)command
+{
     [self resetAll];
     self.enrollmentCommandTxId = command.callbackId;
     id scopeArgument = [command.arguments firstObject];
-    if ([scopeArgument isKindOfClass:[NSArray class]] && ((NSArray *) scopeArgument).count > 0) {
+    if ([scopeArgument isKindOfClass:[NSArray class]] && ((NSArray *)scopeArgument).count > 0) {
         [[OGOneginiClient sharedInstance] enrollForMobileAuthentication:scopeArgument delegate:self];
     } else {
         [[OGOneginiClient sharedInstance] enrollForMobileAuthentication:nil delegate:self];
     }
 }
 
-- (void)enrollmentSuccess {
+- (void)enrollmentSuccess
+{
     if (self.enrollmentCommandTxId == nil) {
 #ifdef DEBUG
         NSLog(@"enrollmentSuccess");
@@ -1333,13 +1411,13 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"enrollmentSuccess"];
         result.keepCallback = @(0);
         [self.commandDelegate sendPluginResult:result callbackId:self.enrollmentCommandTxId];
-    }
-    @finally {
+    } @finally {
         [self resetAll];
     }
 }
 
-- (void)enrollmentErrorCallbackWIthReason:(NSString *)reason error:(NSError *)error {
+- (void)enrollmentErrorCallbackWIthReason:(NSString *)reason error:(NSError *)error
+{
     if (self.enrollmentCommandTxId == nil) {
         return;
     }
@@ -1349,39 +1427,48 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     [self resetAll];
 }
 
-- (void)enrollmentError {
+- (void)enrollmentError
+{
     [self enrollmentErrorCallbackWIthReason:@"enrollmentError" error:nil];
 }
 
-- (void)enrollmentError:(NSError *)error {
+- (void)enrollmentError:(NSError *)error
+{
     [self enrollmentErrorCallbackWIthReason:@"enrollmentError" error:error];
 }
 
-- (void)enrollmentNotAvailable {
+- (void)enrollmentNotAvailable
+{
     [self enrollmentErrorCallbackWIthReason:@"enrollmentErrorNotAvailable" error:nil];
 }
 
-- (void)enrollmentInvalidRequest {
+- (void)enrollmentInvalidRequest
+{
     [self enrollmentErrorCallbackWIthReason:@"enrollmentErrorInvalidRequest" error:nil];
 }
 
-- (void)enrollmentInvalidTransaction {
+- (void)enrollmentInvalidTransaction
+{
     [self enrollmentErrorCallbackWIthReason:@"enrollmentErrorInvalidTransaction" error:nil];
 }
 
-- (void)enrollmentAuthenticationError {
+- (void)enrollmentAuthenticationError
+{
     [self enrollmentErrorCallbackWIthReason:@"enrollmentErrorAuthenticationError" error:nil];
 }
 
-- (void)enrollmentUserAlreadyEnrolled {
+- (void)enrollmentUserAlreadyEnrolled
+{
     [self enrollmentErrorCallbackWIthReason:@"enrollmentErrorUserAlreadyEnrolled" error:nil];
 }
 
-- (void)enrollmentDeviceAlreadyEnrolled {
+- (void)enrollmentDeviceAlreadyEnrolled
+{
     [self enrollmentErrorCallbackWIthReason:@"enrollmentErrorDeviceAlreadyEnrolled" error:nil];
 }
 
-- (void)enrollmentInvalidClientCredentials {
+- (void)enrollmentInvalidClientCredentials
+{
     [self enrollmentErrorCallbackWIthReason:@"enrollmentErrorInvalidClientCredentials" error:nil];
 }
 

@@ -7,12 +7,11 @@
 //
 
 typedef enum : NSUInteger {
-    PINEntryModeUnknown,
-    PINCheckMode,                   // Ask current PIN
-    PINRegistrationMode,            // Ask new PIN first entry
-    PINRegistrationVerififyMode,    // Ask new PIN second entry (verification)
-    PINChangeCheckMode,             // Ask current PIN for change PIN request
-    PINChangeNewPinMode,            // Ask new PIN first entry for change PIN request
-    PINChangeNewPinVerifyMode,      // Ask new PIN second entry (verification) for change PIN request
-    PINFingerprintCheckMode         // Ask current PIN for fingerprint authentication
+    PINEntryModeUnknown, PINCheckMode,          // Ask current PIN
+    PINRegistrationMode,                        // Ask new PIN first entry
+    PINRegistrationVerififyMode,                // Ask new PIN second entry (verification)
+    PINChangeCheckMode,                         // Ask current PIN for change PIN request
+    PINChangeNewPinMode,                        // Ask new PIN first entry for change PIN request
+    PINChangeNewPinVerifyMode,                  // Ask new PIN second entry (verification) for change PIN request
+    PINFingerprintCheckMode                     // Ask current PIN for fingerprint authentication
 } PINEntryModes;

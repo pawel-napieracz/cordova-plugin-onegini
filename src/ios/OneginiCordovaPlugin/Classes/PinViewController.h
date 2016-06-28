@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Commons.h"
 
-@protocol PinViewControllerDelegate <NSObject>
+@protocol PinViewControllerDelegate<NSObject>
 
 - (void)pinEntered:(NSString *)pin;
 
@@ -19,9 +19,9 @@
 
 @interface PinViewController : UIViewController
 
-@property(nonatomic) PINEntryModes mode;
-@property(weak, nonatomic) id <PinViewControllerDelegate> delegate;
-@property(nonatomic) NSUInteger supportedOrientations;
+@property (nonatomic) PINEntryModes mode;
+@property (weak, nonatomic) id<PinViewControllerDelegate> delegate;
+@property (nonatomic) NSUInteger supportedOrientations;
 
 - (void)invalidPinWithReason:(NSString *)message;
 
