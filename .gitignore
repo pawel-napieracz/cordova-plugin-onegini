@@ -9,7 +9,6 @@ build/
 **/*.iml
 local.properties
 **/*--
-*.bks
 
 # iOS specific
 *.pbxuser
