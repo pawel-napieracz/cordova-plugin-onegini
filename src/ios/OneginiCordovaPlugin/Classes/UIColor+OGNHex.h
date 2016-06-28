@@ -11,5 +11,5 @@
 @interface UIColor (OGNHex)
 
 + (UIColor *)ogn_colorWithHexString:(NSString *)hexString;
-    
+
 @end

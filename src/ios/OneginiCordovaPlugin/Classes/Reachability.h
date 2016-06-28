@@ -51,9 +51,9 @@
 
 
 typedef enum : NSInteger {
-	NotReachable = 0,
-	ReachableViaWiFi,
-	ReachableViaWWAN
+    NotReachable = 0,
+    ReachableViaWiFi,
+    ReachableViaWWAN
 } NetworkStatus;
 
 
@@ -86,6 +86,7 @@ extern NSString *kReachabilityChangedNotification;
  * Start listening for reachability notifications on the current run loop.
  */
 - (BOOL)startNotifier;
+
 - (void)stopNotifier;
 
 - (NetworkStatus)currentReachabilityStatus;
