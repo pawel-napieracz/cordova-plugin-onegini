@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -27,7 +28,7 @@ public class PushWithPinActivity extends CordovaActivity {
   private PowerManager.WakeLock screenOn;
 
   private PinKeyboard pinKeyboard;
-  private final TextView[] pinInputs = new TextView[MAX_DIGITS];
+  private final ImageView[] pinInputs = new ImageView[MAX_DIGITS];
 
   private TextView screenTitleTextView;
   private TextView helpLinkTextView;
@@ -99,8 +100,8 @@ public class PushWithPinActivity extends CordovaActivity {
     };
 
     pinKeyboardHandler = new PinKeyboardHandler(pinProvidedListener, pinInputs);
-    pinKeyboardHandler.setInputFocusedBackgroundResourceId(resources.getIdentifier("form_active", "drawable", packageName));
-    pinKeyboardHandler.setInputNormalBackgroundResourceId(resources.getIdentifier("form_inactive", "drawable", packageName));
+    pinKeyboardHandler.setInputFocusedBackgroundResourceId(resources.getIdentifier("input_active_background", "drawable", packageName));
+    pinKeyboardHandler.setInputEmptyBackgroundResourceId(resources.getIdentifier("input_inactive_background", "drawable", packageName));
     pinKeyboardHandler.reset();
     pinKeyboard = new PinKeyboard(pinKeyboardHandler);
 
@@ -111,7 +112,7 @@ public class PushWithPinActivity extends CordovaActivity {
   private void initPinInputs() {
     for (int input = 0; input < MAX_DIGITS; input++) {
       final int inputId = resources.getIdentifier("pin_input_" + input, "id", packageName);
-      pinInputs[input] = (TextView) findViewById(inputId);
+      pinInputs[input] = (ImageView) findViewById(inputId);
     }
   }
 

@@ -4,26 +4,27 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 public class PinKeyboardHandler {
 
   private static final Spanned HTML_CHAR_DOT = Html.fromHtml("&#9679;");
 
-  private final TextView[] pinInputs;
+  private final ImageView[] pinInputs;
   private final int pinLength;
   private final PinProvidedListener pinProvidedHandler;
   private int cursorIndex;
   private char[] pin;
 
   private int inputFocusedBackgroundResourceId;
-  private int inputNormalBackgroundResourceId;
+  private int inputEmptyBackgroundResourceId;
+  private int inputFilledBackgroundResourceId;
 
   public interface PinProvidedListener {
     void onPinProvided(char[] pin);
   }
 
-  public PinKeyboardHandler(final PinProvidedListener handler, final TextView[] pinInputs) {
+  public PinKeyboardHandler(final PinProvidedListener handler, final ImageView[] pinInputs) {
     pinProvidedHandler = handler;
     this.pinInputs = pinInputs;
     this.pinLength = pinInputs.length;
@@ -35,13 +36,18 @@ public class PinKeyboardHandler {
     this.inputFocusedBackgroundResourceId = inputFocusedBackgroundResourceId;
   }
 
-  public void setInputNormalBackgroundResourceId(final int inputNormalBackgroundResourceId) {
-    this.inputNormalBackgroundResourceId = inputNormalBackgroundResourceId;
+  public void setInputEmptyBackgroundResourceId(final int inputEmptyBackgroundResourceId) {
+    this.inputEmptyBackgroundResourceId = inputEmptyBackgroundResourceId;
   }
+
+  public void setInputFilledBackgroundResourceId(final int inputFilledBackgroundResourceId) {
+    this.inputFilledBackgroundResourceId = inputFilledBackgroundResourceId;
+  }
+
 
   public void onPinDigitRemoved(final ImageButton deleteButton) {
     if (cursorIndex > 0) {
-      pinInputs[cursorIndex].setBackgroundResource(inputNormalBackgroundResourceId);
+      pinInputs[cursorIndex].setBackgroundResource(inputEmptyBackgroundResourceId);
       pin[--cursorIndex] = '\0';
 
       if (cursorIndex == 0) {
@@ -49,7 +55,6 @@ public class PinKeyboardHandler {
       }
     }
 
-    pinInputs[cursorIndex].setText("");
     pinInputs[cursorIndex].setBackgroundResource(inputFocusedBackgroundResourceId);
   }
 
@@ -57,8 +62,7 @@ public class PinKeyboardHandler {
     if (cursorIndex < pinLength) {
       pin[cursorIndex] = Character.forDigit(digit, 10);
 
-      pinInputs[cursorIndex].setText(HTML_CHAR_DOT);
-      pinInputs[cursorIndex].setBackgroundResource(inputNormalBackgroundResourceId);
+      pinInputs[cursorIndex].setBackgroundResource(inputFilledBackgroundResourceId);
     }
 
     cursorIndex++;
@@ -67,15 +71,13 @@ public class PinKeyboardHandler {
       pinProvidedHandler.onPinProvided(pin.clone());
       clearPin();
     } else {
-      pinInputs[cursorIndex].setText("");
       pinInputs[cursorIndex].setBackgroundResource(inputFocusedBackgroundResourceId);
     }
   }
 
   public void reset() {
     for (int i = 0; i < pinLength; i++) {
-      pinInputs[i].setText("");
-      pinInputs[i].setBackgroundResource(inputNormalBackgroundResourceId);
+      pinInputs[i].setBackgroundResource(inputEmptyBackgroundResourceId);
     }
     pinInputs[cursorIndex].setBackgroundResource(inputFocusedBackgroundResourceId);
 
