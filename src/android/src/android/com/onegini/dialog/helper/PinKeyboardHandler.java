@@ -1,14 +1,10 @@
 package com.onegini.dialog.helper;
 
-import android.text.Html;
-import android.text.Spanned;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class PinKeyboardHandler {
-
-  private static final Spanned HTML_CHAR_DOT = Html.fromHtml("&#9679;");
 
   private final ImageView[] pinInputs;
   private final int pinLength;
@@ -61,7 +57,6 @@ public class PinKeyboardHandler {
   public void onPinDigitPressed(final int digit) {
     if (cursorIndex < pinLength) {
       pin[cursorIndex] = Character.forDigit(digit, 10);
-
       pinInputs[cursorIndex].setBackgroundResource(inputFilledBackgroundResourceId);
     }
 
