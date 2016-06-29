@@ -102,6 +102,7 @@ public class PushWithPinActivity extends CordovaActivity {
     pinKeyboardHandler = new PinKeyboardHandler(pinProvidedListener, pinInputs);
     pinKeyboardHandler.setInputFocusedBackgroundResourceId(resources.getIdentifier("input_active_background", "drawable", packageName));
     pinKeyboardHandler.setInputEmptyBackgroundResourceId(resources.getIdentifier("input_inactive_background", "drawable", packageName));
+    pinKeyboardHandler.setInputFilledBackgroundResourceId(resources.getIdentifier("input_inactive_filled", "drawable", packageName));
     pinKeyboardHandler.reset();
     pinKeyboard = new PinKeyboard(pinKeyboardHandler);
 
