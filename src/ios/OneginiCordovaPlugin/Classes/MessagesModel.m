@@ -10,13 +10,14 @@
 
 @interface MessagesModel ()
 
-@property(nonatomic) NSDictionary *messages;
+@property (nonatomic) NSDictionary *messages;
 
 @end
 
 @implementation MessagesModel
 
-+ (MessagesModel *)sharedInstance {
++ (MessagesModel *)sharedInstance
+{
     static id singleton;
 
     static dispatch_once_t onceToken;
@@ -28,11 +29,13 @@
     return singleton;
 }
 
-+ (NSString *)messageForKey:(NSString *)key {
++ (NSString *)messageForKey:(NSString *)key
+{
     return [[MessagesModel sharedInstance].messages objectForKey:key];
 }
 
-- (void)loadMessagesFromFile:(NSString *)fileName {
+- (void)loadMessagesFromFile:(NSString *)fileName
+{
     NSString *properties = [self loadFileToString:fileName];
     NSError *error;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{.*\\}" options:NSRegularExpressionCaseInsensitive error:&error];
@@ -53,7 +56,8 @@
     self.messages = mutablemessages;
 }
 
-- (NSString *)loadFileToString:(NSString *)path {
+- (NSString *)loadFileToString:(NSString *)path
+{
     NSError *error;
     NSString *fileContent = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:path ofType:nil] encoding:NSUTF8StringEncoding error:&error];
     if (error) {

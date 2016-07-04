@@ -51,9 +51,7 @@
 
 
 typedef enum : NSInteger {
-    NotReachable = 0,
-    ReachableViaWiFi,
-    ReachableViaWWAN
+    NotReachable = 0, ReachableViaWiFi, ReachableViaWWAN
 } NetworkStatus;
 
 

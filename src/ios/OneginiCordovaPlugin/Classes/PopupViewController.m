@@ -11,15 +11,16 @@
 
 @interface PopupViewController ()
 
-@property(weak, nonatomic) IBOutlet UIView *labelView;
-@property(weak, nonatomic) IBOutlet UIView *buttonsFrame;
-@property(weak, nonatomic) IBOutlet UIView *backgroundView;
+@property (weak, nonatomic) IBOutlet UIView *labelView;
+@property (weak, nonatomic) IBOutlet UIView *buttonsFrame;
+@property (weak, nonatomic) IBOutlet UIView *backgroundView;
 
 @end
 
 @implementation PopupViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.contentTextView.contentInset = UIEdgeInsetsMake(-4, -4, 0, 0);
@@ -29,7 +30,8 @@
 }
 
 
-- (void)setColors {
+- (void)setColors
+{
     self.labelView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPopupHeaderBackground];
     self.titleLabel.textColor = [OGNColorFileParser colorForKey:kOGNPopupHeaderText];
     self.contentTextView.textColor = [OGNColorFileParser colorForKey:kOGNPopupBodyText];
@@ -40,12 +42,14 @@
     [self.cancelButton setTitleColor:[OGNColorFileParser colorForKey:kOGNPopupButtonText] forState:UIControlStateNormal];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void)setPopupMessage:(NSString *)message {
+- (void)setPopupMessage:(NSString *)message
+{
     float textHeight = self.contentTextView.frame.size.height;
     self.contentTextView.text = message;
     CGRect labrect = [message boundingRectWithSize:self.contentTextView.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : self.contentTextView.font} context:Nil];
@@ -53,24 +57,27 @@
     self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - (textHeight - labrect.size.height - 30));
 }
 
-- (IBAction)buttonProceedClick:(id)sender {
+- (IBAction)buttonProceedClick:(id)sender
+{
     self.proceedBlock();
 }
 
-- (IBAction)buttonCancelClick:(id)sender {
+- (IBAction)buttonCancelClick:(id)sender
+{
     self.cancelBlock();
 }
 
-- (IBAction)buttonCloseClick:(id)sender {
+- (IBAction)buttonCloseClick:(id)sender
+{
     self.closeBlock();
 }
 
-- (void)setCancelButtonVisible:(bool)cancelButtonVisible {
+- (void)setCancelButtonVisible:(bool)cancelButtonVisible
+{
     if (cancelButtonVisible) {
         self.cancelButton.hidden = NO;
         self.proceedButton.frame = CGRectMake(self.cancelButton.frame.size.width + 8, 0, self.buttonsFrame.frame.size.width - (self.cancelButton.frame.size.width + 8), self.buttonsFrame.frame.size.height);
-    }
-    else {
+    } else {
         self.cancelButton.hidden = YES;
         self.proceedButton.frame = CGRectMake(0, 0, self.buttonsFrame.frame.size.width, self.buttonsFrame.frame.size.height);
     }

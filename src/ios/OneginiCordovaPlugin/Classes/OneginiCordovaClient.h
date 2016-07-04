@@ -12,24 +12,24 @@
 #import "MainViewController.h"
 #import "Commons.h"
 
-@interface OneginiCordovaClient : CDVPlugin <OGAuthorizationDelegate, OGResourceHandlerDelegate, OGPinValidationDelegate, OGChangePinDelegate, PinViewControllerDelegate, OGDisconnectDelegate, OGLogoutDelegate, OGEnrollmentHandlerDelegate, OGFingerprintDelegate>
+@interface OneginiCordovaClient : CDVPlugin<OGAuthorizationDelegate, OGResourceHandlerDelegate, OGPinValidationDelegate, OGChangePinDelegate, PinViewControllerDelegate, OGDisconnectDelegate, OGLogoutDelegate, OGEnrollmentHandlerDelegate, OGFingerprintDelegate>
 
-@property(strong, nonatomic) OGOneginiClient *oneginiClient;
-@property(strong, nonatomic) OGConfigModel *configModel;
+@property (strong, nonatomic) OGOneginiClient *oneginiClient;
+@property (strong, nonatomic) OGConfigModel *configModel;
 
-@property(strong, nonatomic) PinViewController *pinViewController;
+@property (strong, nonatomic) PinViewController *pinViewController;
 
-@property(nonatomic) NSMutableDictionary<NSString *, NSString *> *fetchResourceCommandsTxId;
-@property(copy, nonatomic) NSString *pluginInitializedCommandTxId;
-@property(copy, nonatomic) NSString *authorizeCommandTxId;
-@property(copy, nonatomic) NSString *pinDialogCommandTxId;
-@property(copy, nonatomic) NSString *inAppBrowserCommandTxId;
-@property(copy, nonatomic) NSString *pinValidateCommandTxId;
-@property(copy, nonatomic) NSString *pinChangeCommandTxId;
-@property(copy, nonatomic) NSString *disconnectCommandTxId;
-@property(copy, nonatomic) NSString *logoutCommandTxId;
-@property(copy, nonatomic) NSString *enrollmentCommandTxId;
-@property(copy, nonatomic) NSString *fingerprintEnrollmentCommandTxId;
+@property (nonatomic) NSMutableDictionary<NSString *, NSString *> *fetchResourceCommandsTxId;
+@property (copy, nonatomic) NSString *pluginInitializedCommandTxId;
+@property (copy, nonatomic) NSString *authorizeCommandTxId;
+@property (copy, nonatomic) NSString *pinDialogCommandTxId;
+@property (copy, nonatomic) NSString *inAppBrowserCommandTxId;
+@property (copy, nonatomic) NSString *pinValidateCommandTxId;
+@property (copy, nonatomic) NSString *pinChangeCommandTxId;
+@property (copy, nonatomic) NSString *disconnectCommandTxId;
+@property (copy, nonatomic) NSString *logoutCommandTxId;
+@property (copy, nonatomic) NSString *enrollmentCommandTxId;
+@property (copy, nonatomic) NSString *fingerprintEnrollmentCommandTxId;
 
 /** FOR TESTING PURPOSE ONLY */
 - (void)clearTokens:(CDVInvokedUrlCommand *)command;
