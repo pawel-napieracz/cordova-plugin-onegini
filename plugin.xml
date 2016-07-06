@@ -233,6 +233,8 @@
                  target-dir="src/com/onegini/dialog"/>
     <source-file src="src/android/src/android/com/onegini/dialog/PushWithFingerprintActivity.java"
                  target-dir="src/com/onegini/dialog"/>
+    <source-file src="src/android/src/android/com/onegini/dialog/ScreenOrientationAwareActivity.java"
+                 target-dir="src/com/onegini/dialog"/>
     <!-- exception -->
     <source-file src="src/android/src/android/com/onegini/exception/PluginConfigException.java"
                  target-dir="src/com/onegini/exception"/>
