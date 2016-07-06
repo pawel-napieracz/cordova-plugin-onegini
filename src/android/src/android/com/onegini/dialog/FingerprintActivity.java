@@ -71,6 +71,12 @@ public class FingerprintActivity extends Activity {
     }
   }
 
+  @Override
+  public void onBackPressed() {
+    // we don't want to be able to go back from the pin screen
+    return;
+  }
+
   private void initFallbackButton() {
     pinFallbackButton.setOnClickListener(new View.OnClickListener() {
       @Override
