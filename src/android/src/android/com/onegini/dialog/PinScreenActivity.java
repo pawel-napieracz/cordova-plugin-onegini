@@ -8,11 +8,8 @@ import static com.onegini.model.MessageKey.HELP_LINK_TITLE;
 import static com.onegini.model.MessageKey.HELP_POPUP_OK;
 import static com.onegini.util.MessageResourceReader.getMessageForKey;
 
-import org.apache.cordova.CordovaActivity;
-
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,9 +24,8 @@ import com.onegini.dialog.helper.PinActivityMessageMapper;
 import com.onegini.dialog.helper.PinKeyboardHandler;
 import com.onegini.dialog.helper.PinKeyboardHandler.PinProvidedListener;
 import com.onegini.mobile.sdk.android.library.handlers.OneginiPinProvidedHandler;
-import com.onegini.util.DeviceUtil;
 
-public class PinScreenActivity extends CordovaActivity {
+public class PinScreenActivity extends ScreenOrientationAwareActivity {
 
   private static final int MAX_DIGITS = 5;
 
@@ -107,14 +103,6 @@ public class PinScreenActivity extends CordovaActivity {
   public void onBackPressed() {
     // we don't want to be able to go back from the pin screen
     return;
-  }
-
-  private void lockScreenOrientation() {
-    if (DeviceUtil.isTablet(this)) {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    } else {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    }
   }
 
   private void initLayout() {
