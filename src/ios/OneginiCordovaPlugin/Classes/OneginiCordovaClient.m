@@ -1217,7 +1217,6 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 
     self.pinViewController.delegate = self;
-    self.pinViewController.supportedOrientations = self.supportedOrientations;
     self.pinViewController.mode = mode;
 
     if (self.pluginInitializedCommandTxId) {

@@ -1,8 +1,5 @@
 package com.onegini.dialog;
 
-import org.apache.cordova.CordovaActivity;
-
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -12,11 +9,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.onegini.mobile.sdk.android.library.utils.dialogs.AlertInterface;
-import com.onegini.util.DeviceUtil;
 
-
-public class PushSimpleActivity extends CordovaActivity {
+public class PushSimpleActivity extends ScreenOrientationAwareActivity {
 
   private Resources resources;
   private String packageName;
@@ -112,15 +106,6 @@ public class PushSimpleActivity extends CordovaActivity {
     if (screenOn.isHeld()) {
       screenOn.release();
       finish();
-    }
-  }
-
-  private void lockScreenOrientation() {
-    if (DeviceUtil.isTablet(this)) {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    }
-    else {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
   }
 }
