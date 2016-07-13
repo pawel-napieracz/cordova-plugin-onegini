@@ -16,6 +16,8 @@
       </feature>
     </config-file>
 
+    <header-file src="src/ios/OneginiCordovaPlugin/Configuration/OneginiConfigModel.h"/>
+    <source-file src="src/ios/OneginiCordovaPlugin/Configuration/OneginiConfigModel.m"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/Commons.h"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/Reachability.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/Reachability.m"/>
@@ -245,7 +247,7 @@
     <!-- fingerprint -->
     <source-file src="src/android/src/android/com/onegini/response/FingerprintResponse.java" target-dir="src/com/onegini/response/"/>
     <!-- model -->
-    <source-file src="src/android/src/android/com/onegini/model/ConfigModel.java" target-dir="src/com/onegini/model/"/>
+    <source-file src="src/android/src/android/com/onegini/model/OneginiCordovaPluginConfigModel.java" target-dir="src/com/onegini/model/"/>
     <source-file src="src/android/src/android/com/onegini/model/MessageKey.java" target-dir="src/com/onegini/model/"/>
     <!-- resource -->
     <source-file src="src/android/src/android/com/onegini/resource/RetrofitByteConverter.java"

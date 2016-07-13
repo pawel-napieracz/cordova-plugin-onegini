@@ -1,7 +1,5 @@
 package com.onegini.action;
 
-import static com.onegini.OneginiConstants.KEYSTORE_HASH;
-
 import org.apache.cordova.Config;
 
 import android.app.Application;
@@ -17,7 +15,8 @@ import com.onegini.dialog.FingerprintActivity;
 import com.onegini.dialog.FingerprintDialog;
 import com.onegini.dialog.PushAuthenticateWithFingerprintDialog;
 import com.onegini.mobile.sdk.android.library.OneginiClient;
-import com.onegini.model.ConfigModel;
+import com.onegini.mobile.sdk.android.library.model.OneginiClientConfigModel;
+import com.onegini.model.OneginiCordovaPluginConfigModel;
 import com.onegini.util.MessageResourceReader;
 
 public class PluginInitializer {
@@ -31,23 +30,19 @@ public class PluginInitializer {
   public void setup(final OneginiCordovaPlugin client) {
     final Application application = client.getCordova().getActivity().getApplication();
 
-    final ConfigModel configModel = retrieveConfiguration();
-    if (configModel == null) {
+    final OneginiCordovaPluginConfigModel oneginiCordovaPluginConfigModel = retrieveConfiguration();
+    if (oneginiCordovaPluginConfigModel == null) {
       return;
     }
 
-    final int keystoreResourcePointer = client.getCordova().getActivity().getResources().getIdentifier("keystore", "raw", application.getPackageName());
-    configModel.setCertificatePinningKeyStore(keystoreResourcePointer);
-    configModel.setKeyStoreHash(KEYSTORE_HASH);
-
     final Context applicationContext = client.cordova.getActivity().getApplicationContext();
-    final OneginiClient oneginiClient = OneginiClient.setupInstance(applicationContext, configModel);
+    final OneginiClient oneginiClient = OneginiClient.setupInstance(applicationContext);
     client.setOneginiClient(oneginiClient);
 
-    final boolean shouldUseNativeScreens = configModel.useNativePinScreen();
+    final boolean shouldUseNativeScreens = oneginiCordovaPluginConfigModel.useNativePinScreen();
     setupDialogs(shouldUseNativeScreens, application.getApplicationContext());
 
-    setupURLHandler(oneginiClient, configModel);
+    setupURLHandler(oneginiClient, oneginiCordovaPluginConfigModel);
     MessageResourceReader.setupInstance(applicationContext);
 
     configured = true;
@@ -70,12 +65,12 @@ public class PluginInitializer {
     client.setConfirmationWithFingerprintDialog(new PushAuthenticateWithFingerprintDialog(context));
   }
 
-  private ConfigModel retrieveConfiguration() {
-    return ConfigModel.from(Config.getPreferences());
+  private OneginiCordovaPluginConfigModel retrieveConfiguration() {
+    return OneginiCordovaPluginConfigModel.from(Config.getPreferences());
   }
 
-  private void setupURLHandler(final OneginiClient client, final ConfigModel configModel) {
-    if (configModel.useEmbeddedWebview()) {
+  private void setupURLHandler(final OneginiClient client, final OneginiCordovaPluginConfigModel oneginiCordovaPluginConfigModel) {
+    if (oneginiCordovaPluginConfigModel.useEmbeddedWebview()) {
       client.setOneginiURLHandler(new URLHandler());
     }
   }
