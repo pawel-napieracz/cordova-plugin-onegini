@@ -10,6 +10,7 @@ module.exports = function (context) {
     '--config', configPath,
     '--app-dir', context.opts.projectRoot
   ];
+  console.log(`Configuring Onegini SDK for ${env}`);
 
   context.opts.platforms.forEach((platform) => {
     let platformArgs = args;
@@ -22,10 +23,16 @@ function execConfigurator(args) {
   const configurator = spawn('sdk-configurator', args);
 
   configurator.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
+    process.stdout.write(data);
   });
 
   configurator.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`)
+    process.stdout.write(data);
+  });
+
+  configurator.on('close', (code) => {
+    if(code !== 0) {
+      console.log(`onegini-cordova-plugin: Could not configure Onegini SDK with your configuration`);
+    }
   });
 }
