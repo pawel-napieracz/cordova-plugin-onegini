@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-onegini"
-        version="1.7.2">
+        version="1.7.3">
   <name>OneginiCordovaPlugin</name>
   <description>Cordova Device Plugin</description>
   <hook type="after_platform_add" src="src/hooks/configure_sdk.js" />
@@ -17,6 +17,8 @@
       </feature>
     </config-file>
 
+    <header-file src="src/ios/OneginiCordovaPlugin/Configuration/OneginiConfigModel.h"/>
+    <source-file src="src/ios/OneginiCordovaPlugin/Configuration/OneginiConfigModel.m"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/Commons.h"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/Reachability.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/Reachability.m"/>
@@ -89,7 +91,7 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="oneginisdk"/>
+        <data android:scheme=""/> <!-- Intentionally Empty, SDK Configurator fills schemes from tokenserver config. -->
       </intent-filter>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -234,6 +236,8 @@
                  target-dir="src/com/onegini/dialog"/>
     <source-file src="src/android/src/android/com/onegini/dialog/PushWithFingerprintActivity.java"
                  target-dir="src/com/onegini/dialog"/>
+    <source-file src="src/android/src/android/com/onegini/dialog/ScreenOrientationAwareActivity.java"
+                 target-dir="src/com/onegini/dialog"/>
     <!-- exception -->
     <source-file src="src/android/src/android/com/onegini/exception/PluginConfigException.java"
                  target-dir="src/com/onegini/exception"/>
@@ -244,7 +248,7 @@
     <!-- fingerprint -->
     <source-file src="src/android/src/android/com/onegini/response/FingerprintResponse.java" target-dir="src/com/onegini/response/"/>
     <!-- model -->
-    <source-file src="src/android/src/android/com/onegini/model/ConfigModel.java" target-dir="src/com/onegini/model/"/>
+    <source-file src="src/android/src/android/com/onegini/model/OneginiCordovaPluginConfigModel.java" target-dir="src/com/onegini/model/"/>
     <source-file src="src/android/src/android/com/onegini/model/MessageKey.java" target-dir="src/com/onegini/model/"/>
     <!-- resource -->
     <source-file src="src/android/src/android/com/onegini/resource/RetrofitByteConverter.java"

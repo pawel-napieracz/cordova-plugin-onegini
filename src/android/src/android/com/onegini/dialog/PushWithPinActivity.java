@@ -1,9 +1,6 @@
 package com.onegini.dialog;
 
-import org.apache.cordova.CordovaActivity;
-
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -14,12 +11,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
 import com.onegini.dialog.helper.PinKeyboardHandler;
 import com.onegini.dialog.helper.PinKeyboardHandler.PinProvidedListener;
-import com.onegini.util.DeviceUtil;
 
-public class PushWithPinActivity extends CordovaActivity {
+public class PushWithPinActivity extends ScreenOrientationAwareActivity {
 
   private static final int MAX_DIGITS = 5;
 
@@ -144,15 +139,6 @@ public class PushWithPinActivity extends CordovaActivity {
     if (screenOn.isHeld()) {
       screenOn.release();
       finish();
-    }
-  }
-
-  private void lockScreenOrientation() {
-    if (DeviceUtil.isTablet(this)) {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    }
-    else {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
   }
 }

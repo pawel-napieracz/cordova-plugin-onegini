@@ -9,7 +9,7 @@ import org.json.JSONArray;
 
 import android.content.Context;
 import com.onegini.OneginiCordovaPlugin;
-import com.onegini.model.ConfigModel;
+import com.onegini.model.OneginiCordovaPluginConfigModel;
 import com.onegini.util.CallbackResultBuilder;
 
 public class AwaitInitialization implements OneginiPluginAction {
@@ -27,20 +27,20 @@ public class AwaitInitialization implements OneginiPluginAction {
   }
 
   private static boolean isPluginInitializedSuccessfully() {
-    final ConfigModel configModel = ConfigModel.from(Config.getPreferences());
+    final OneginiCordovaPluginConfigModel oneginiCordovaPluginConfigModel = OneginiCordovaPluginConfigModel.from(Config.getPreferences());
 
-    final boolean pinCallbackValid = shouldUseHTMLScreens(configModel) ? isPinCallbackSessionSet() : true;
-    final boolean browserControlCallbackValid = shouldUseEmbeddedWebview(configModel) ? isInAppBrowserControlCallbackSessionSet() : true;
+    final boolean pinCallbackValid = shouldUseHTMLScreens(oneginiCordovaPluginConfigModel) ? isPinCallbackSessionSet() : true;
+    final boolean browserControlCallbackValid = shouldUseEmbeddedWebview(oneginiCordovaPluginConfigModel) ? isInAppBrowserControlCallbackSessionSet() : true;
 
     return PluginInitializer.isConfigured() && pinCallbackValid && browserControlCallbackValid;
   }
 
-  private static boolean shouldUseEmbeddedWebview(final ConfigModel configModel) {
-    return configModel.useEmbeddedWebview();
+  private static boolean shouldUseEmbeddedWebview(final OneginiCordovaPluginConfigModel oneginiCordovaPluginConfigModel) {
+    return oneginiCordovaPluginConfigModel.useEmbeddedWebview();
   }
 
-  private static boolean shouldUseHTMLScreens(final ConfigModel configModel) {
-    return !configModel.useNativePinScreen();
+  private static boolean shouldUseHTMLScreens(final OneginiCordovaPluginConfigModel oneginiCordovaPluginConfigModel) {
+    return !oneginiCordovaPluginConfigModel.useNativePinScreen();
   }
 
   public static void notifyPluginInitializationFailed() {

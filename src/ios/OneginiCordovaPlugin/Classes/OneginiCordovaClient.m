@@ -30,8 +30,6 @@ NSString *const kMethod = @"method";
 
 NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
-#define certificates @[@""]
-
 @interface MainViewController ()
 
 @property (nonatomic, readwrite, strong) NSArray *supportedOrientations;
@@ -61,7 +59,7 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     NSString *verifyPin;
 }
 
-@synthesize oneginiClient, pluginInitializedCommandTxId, authorizeCommandTxId, configModel;
+@synthesize oneginiClient, pluginInitializedCommandTxId, authorizeCommandTxId, oneginiConfigDictionary;
 @synthesize fetchResourceCommandsTxId, pinDialogCommandTxId, pinValidateCommandTxId, pinChangeCommandTxId;
 
 #pragma mark -
@@ -80,18 +78,51 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 #endif
     pinEntryMode = PINEntryModeUnknown;
 
-    if ([self prepareConfiguration]) {
-        self.oneginiClient = [[OGOneginiClient alloc] initWithConfig:configModel delegate:self];
+    self.oneginiClient = [[OGOneginiClient alloc] initWithDelegate: self];
 
-        [oneginiClient setX509PEMCertificates:certificates];
+    NSString *const configModelClassName = @"OneginiConfigModel";
+    NSString *const configurationMethodName = @"configuration";
 
-        if (self.configModel && self.oneginiClient) {
-            useNativePinView = [self useNativePinScreen];
+    if ([NSClassFromString(configModelClassName) class]) {
+        if ([NSClassFromString(configModelClassName) respondsToSelector:NSSelectorFromString(configurationMethodName)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            oneginiConfigDictionary = [NSClassFromString(configModelClassName) performSelector:NSSelectorFromString(configurationMethodName)];
+#pragma clang diagnostic pop
         }
-        self.fetchResourceCommandsTxId = [NSMutableDictionary new];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeInAppBrowser) name:OGCloseWebViewNotification object:nil];
     }
+    if (!oneginiConfigDictionary)
+        @throw @"OneginiConfigModel class was not included or is invalid. Please use configuration tool to supply configuration to the project or use OGOneginiClient#initWithConfig:delegate instead.";
+
+    if (self.oneginiClient) {
+        useNativePinView = [self useNativePinScreen];
+    }
+    self.fetchResourceCommandsTxId = [NSMutableDictionary new];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeInAppBrowser) name:OGCloseWebViewNotification object:nil];
+}
+
+- (NSString *)readCordovaPreference:(NSString *)name
+{
+    NSString *configContent = [self loadConfigurationFile];
+    NSDictionary *configuration = [XMLReader dictionaryForXMLString:configContent];
+    NSDictionary *widget = [configuration objectForKey:@"widget"];
+    if (widget == nil) {
+        @throw @"Cordova config.xml invalid or unreadable.";
+    }
+    NSArray *preferences = [widget objectForKey:@"preference"];
+    if (preferences == nil) {
+        @throw @"Could not find any preferences in Cordova config.xml";
+    }
+
+    NSString *value;
+    for (id pref in preferences) {
+        if ([[pref valueForKey:@"name"] isEqualToString:name]) {
+            value = [NSString stringWithUTF8String:[[pref valueForKey:@"value"] UTF8String]];
+        }
+    }
+
+    return value;
 }
 
 - (BOOL)initializationSuccessful
@@ -106,42 +137,13 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
 - (BOOL)inAppBrowserInitialized
 {
-    return !configModel.useEmbeddedWebView || self.inAppBrowserCommandTxId;
+    return oneginiConfigDictionary[@"kOGUseEmbeddedWebview"] || self.inAppBrowserCommandTxId;
 }
 
 - (BOOL)useNativePinScreen
 {
-    NSNumber *n = [configModel objectForKey:@"kOGUseNativePinScreen"];
-    return n.boolValue;
+    return [[self readCordovaPreference:@"kOGUseNativePinScreen"] boolValue] || [[self readCordovaPreference:@"OneginiNativeScreens"] boolValue];
 }
-
-- (BOOL)prepareConfiguration
-{
-    NSString *configContent = [self loadConfigurationFile];
-    NSDictionary *configuration = [XMLReader dictionaryForXMLString:configContent];
-    NSDictionary *widget = [configuration objectForKey:@"widget"];
-    if (widget == nil) {
-        return NO;
-    }
-    NSArray *preferences = [widget objectForKey:@"preference"];
-    if (preferences == nil) {
-        return NO;
-    }
-
-    NSMutableDictionary *preferencesDict = [NSMutableDictionary new];
-    for (id pref in preferences) {
-        if ([[pref valueForKey:@"name"] hasPrefix:@"kOG"]) {
-            NSString *key = [NSString stringWithUTF8String:[[pref valueForKey:@"name"] UTF8String]];
-            NSString *value = [NSString stringWithUTF8String:[[pref valueForKey:@"value"] UTF8String]];
-            [preferencesDict setValue:value forKey:key];
-        }
-    }
-
-    [preferencesDict setValue:@"ios" forKey:kOGAppPlatform];
-    self.configModel = [[OGConfigModel alloc] initWithDictionary:preferencesDict];
-    return YES;
-}
-
 
 - (NSString *)loadFileToString:(NSString *)path
 {
@@ -563,7 +565,7 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
 - (void)readConfigProperty:(CDVInvokedUrlCommand *)command
 {
-    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.configModel.baseURL];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:oneginiConfigDictionary[@"kOGAppBaseURL"]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
@@ -572,7 +574,7 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
 
 - (void)requestAuthorization:(NSURL *)url
 {
-    if (configModel.useEmbeddedWebView) {
+    if (oneginiConfigDictionary[@"kOGUseEmbeddedWebview"]) {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{kMethod : @"requestAuthorization", @"url" : url.absoluteString}];
         result.keepCallback = @(1);
 
@@ -1217,7 +1219,6 @@ NSString *const kMaxSimilarDigits = @"maxSimilarDigits";
     }
 
     self.pinViewController.delegate = self;
-    self.pinViewController.supportedOrientations = self.supportedOrientations;
     self.pinViewController.mode = mode;
 
     if (self.pluginInitializedCommandTxId) {

@@ -64,7 +64,7 @@ import com.onegini.action.SetupScreenOrientationAction;
 import com.onegini.action.ValidatePinAction;
 import com.onegini.mobile.sdk.android.library.OneginiClient;
 import com.onegini.mobile.sdk.android.library.model.OneginiClientConfigModel;
-import com.onegini.model.ConfigModel;
+import com.onegini.model.OneginiCordovaPluginConfigModel;
 
 public class OneginiCordovaPlugin extends CordovaPlugin {
 
@@ -187,9 +187,9 @@ public class OneginiCordovaPlugin extends CordovaPlugin {
   }
 
   private void initConfigModelValues() {
-    final ConfigModel configModel = ConfigModel.from(Config.getPreferences());
-    setShouldUseNativeScreens(configModel.useNativePinScreen());
-    setShouldUseInAppBrowserControl(configModel.useEmbeddedWebview());
+    final OneginiCordovaPluginConfigModel oneginiCordovaPluginConfigModel = OneginiCordovaPluginConfigModel.from(Config.getPreferences());
+    setShouldUseNativeScreens(oneginiCordovaPluginConfigModel.useNativePinScreen());
+    setShouldUseInAppBrowserControl(oneginiCordovaPluginConfigModel.useEmbeddedWebview());
   }
 
   private void setShouldUseInAppBrowserControl(final boolean useEmbeddedWebview) {

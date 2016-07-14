@@ -20,7 +20,7 @@ import android.content.Context;
 import com.onegini.OneginiCordovaPlugin;
 import com.onegini.gcm.GCMHelper;
 import com.onegini.mobile.sdk.android.library.handlers.OneginiMobileAuthEnrollmentHandler;
-import com.onegini.model.ConfigModel;
+import com.onegini.model.OneginiCordovaPluginConfigModel;
 import com.onegini.resource.ResourceRequest;
 import com.onegini.util.CallbackResultBuilder;
 
@@ -43,8 +43,8 @@ public class MobileAuthenticationAction implements OneginiPluginAction {
 
     try {
       final String[] scopes = ResourceRequest.parseScopes(args.getJSONArray(0));
-      final ConfigModel configModel = (ConfigModel) client.getOneginiClient().getConfigModel();
-      final String gcmSenderId = configModel.getGcmSenderId();
+      final OneginiCordovaPluginConfigModel oneginiCordovaPluginConfigModel = (OneginiCordovaPluginConfigModel) client.getOneginiClient().getConfigModel();
+      final String gcmSenderId = oneginiCordovaPluginConfigModel.getGcmSenderId();
       enroll(client, scopes, gcmSenderId, callbackContext);
     } catch (JSONException e) {
       callbackContext.error("Invalid parameter, failed to read scopes," + e.getMessage());

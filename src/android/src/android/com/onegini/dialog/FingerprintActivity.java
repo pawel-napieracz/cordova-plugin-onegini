@@ -6,7 +6,6 @@ import static com.onegini.model.MessageKey.FINGERPRINT_VERIFICATION;
 import static com.onegini.model.MessageKey.HELP_POPUP_OK;
 import static com.onegini.util.MessageResourceReader.getMessageForKey;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import android.widget.TextView;
 import com.onegini.dialog.helper.PinActivityMessageMapper;
 import com.onegini.mobile.sdk.android.library.handlers.OneginiAuthenticatorFallbackHandler;
 
-public class FingerprintActivity extends Activity {
+public class FingerprintActivity extends ScreenOrientationAwareActivity {
 
   public static final String EXTRA_COMMAND = "command";
   public static final String COMMAND_SHOW = "show";
@@ -41,7 +40,7 @@ public class FingerprintActivity extends Activity {
   private View.OnClickListener helpButtonListener;
 
   @Override
-  protected void onCreate(final Bundle savedInstanceState) {
+  public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(getResources().getIdentifier("activity_fingerprint", "layout", getPackageName()));
     fingerprintIco = (ImageView) findViewById(getResources().getIdentifier("fingerprint_ico", "id", getPackageName()));
@@ -57,6 +56,7 @@ public class FingerprintActivity extends Activity {
     };
 
     initFallbackButton();
+    lockScreenOrientation();
   }
 
   @Override
@@ -69,6 +69,12 @@ public class FingerprintActivity extends Activity {
     } else if (COMMAND_CLOSE.equals(extraMessage)) {
       finish();
     }
+  }
+
+  @Override
+  public void onBackPressed() {
+    // we don't want to be able to go back from the pin screen
+    return;
   }
 
   private void initFallbackButton() {
