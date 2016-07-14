@@ -90,7 +90,7 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="oneginisdk"/>
+        <data android:scheme=""/> <!-- Intentionally Empty, SDK Configurator fills schemes from tokenserver config. -->
       </intent-filter>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
