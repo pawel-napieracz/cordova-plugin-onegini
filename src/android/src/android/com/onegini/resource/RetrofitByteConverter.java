@@ -1,14 +1,8 @@
 package com.onegini.resource;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.ClassCastException;
-import java.lang.IllegalArgumentException;
-import java.lang.RuntimeException;
 import java.lang.reflect.Type;
 
 import org.apache.commons.io.IOUtils;
