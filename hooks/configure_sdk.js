@@ -3,14 +3,12 @@ const spawn = require('child_process').spawn;
 
 module.exports = function (context) {
   const configPath = context.opts.projectRoot + "/onegini-config.zip";
-  const env = process.env.NODE_ENV || "production";
   const args = [
     '--cordova',
-    '--env', env,
     '--config', configPath,
     '--app-dir', context.opts.projectRoot
   ];
-  console.log(`Configuring Onegini SDK for ${env}`);
+  console.log(`Configuring Onegini SDK`);
 
   context.opts.platforms.forEach((platform) => {
     let platformArgs = args;
@@ -33,6 +31,7 @@ function execConfigurator(args) {
   configurator.on('close', (code) => {
     if(code !== 0) {
       console.log(`onegini-cordova-plugin: Could not configure Onegini SDK with your configuration`);
+      process.exit(code);
     }
   });
 }

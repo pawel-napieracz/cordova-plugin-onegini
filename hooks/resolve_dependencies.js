@@ -7,7 +7,7 @@ module.exports = function (context) {
     return;
   }
 
-  console.log(`${pluginId}: Resolving gradle dependenceies...`);
+  console.log(`${pluginId}: Resolving gradle dependencies...`);
 
   const options = {
     cwd: context.opts.plugin.pluginInfo.dir,
@@ -28,6 +28,7 @@ module.exports = function (context) {
       console.log(`${pluginId}: Resolved dependencies.`);
     } else {
       console.log(`${pluginId}: Error: cannot resolve dependencies! Make sure you have gradle installed and have access to the Onegini repository.`)
+      process.exit(code);
     }
   });
 };

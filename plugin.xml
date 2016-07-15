@@ -4,8 +4,10 @@
         version="1.7.3">
   <name>OneginiCordovaPlugin</name>
   <description>Cordova Device Plugin</description>
+
   <hook type="after_platform_add" src="hooks/configure_sdk.js" />
   <hook type="after_plugin_add" src="hooks/resolve_dependencies.js" />
+
   <js-module src="www/onegini.js" name="oneginiCordovaPlugin">
     <clobbers target="oneginiCordovaPlugin"/>
   </js-module>
