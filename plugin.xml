@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-onegini"
-        version="1.7.3">
+        version="1.7.4">
   <name>OneginiCordovaPlugin</name>
   <description>Cordova Device Plugin</description>
   <js-module src="www/onegini.js" name="oneginiCordovaPlugin">
@@ -107,10 +107,11 @@
       </activity>
       <activity android:name="com.onegini.dialog.FingerprintActivity"
                 android:theme="@android:style/Theme.Black.NoTitleBar"
-                android:launchMode="singleTop">
+                android:launchMode="singleTask">
       </activity>
       <activity android:name="com.onegini.dialog.PushWithFingerprintActivity"
-                android:theme="@android:style/Theme.Black.NoTitleBar">
+                android:theme="@android:style/Theme.Black.NoTitleBar"
+                android:launchMode="singleTask">
       </activity>
       <service android:name="com.onegini.gcm.GcmIntentService" />
       <receiver
