@@ -107,10 +107,11 @@
       </activity>
       <activity android:name="com.onegini.dialog.FingerprintActivity"
                 android:theme="@android:style/Theme.Black.NoTitleBar"
-                android:launchMode="singleTop">
+                android:launchMode="singleTask">
       </activity>
       <activity android:name="com.onegini.dialog.PushWithFingerprintActivity"
-                android:theme="@android:style/Theme.Black.NoTitleBar">
+                android:theme="@android:style/Theme.Black.NoTitleBar"
+                android:launchMode="singleTask">
       </activity>
       <service android:name="com.onegini.gcm.GcmIntentService" />
       <receiver
