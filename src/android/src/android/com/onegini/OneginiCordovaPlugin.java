@@ -3,8 +3,8 @@ package com.onegini;
 import static com.onegini.OneginiConstants.AUTHORIZE_ACTION;
 import static com.onegini.OneginiConstants.AWAIT_INITIALIZATION;
 import static com.onegini.OneginiConstants.CHANGE_PIN_ACTION;
-import static com.onegini.OneginiConstants.CHECK_IS_REGISTERED_ACTION;
 import static com.onegini.OneginiConstants.CHECK_FINGERPRINT_AUTHENTICATION_AVAILABLE_ACTION;
+import static com.onegini.OneginiConstants.CHECK_IS_REGISTERED_ACTION;
 import static com.onegini.OneginiConstants.CHECK_MOBILE_AUTHENTICATION_AVAILABLE_ACTION;
 import static com.onegini.OneginiConstants.CONFIRM_CURRENT_PIN_ACTION;
 import static com.onegini.OneginiConstants.CONFIRM_CURRENT_PIN_CHANGE_PIN_ACTION;
@@ -69,7 +69,7 @@ import com.onegini.model.ConfigModel;
 public class OneginiCordovaPlugin extends CordovaPlugin {
 
   private static Map<String, Class<? extends OneginiPluginAction>> actions = new HashMap<String, Class<? extends OneginiPluginAction>>();
-  private OneginiClient oneginiClient;
+  private static OneginiClient oneginiClient;
   private boolean shouldUseNativeScreens;
   private boolean useEmbeddedWebview;
 
@@ -80,7 +80,7 @@ public class OneginiCordovaPlugin extends CordovaPlugin {
     mapActions();
 
     final PluginInitializer initializer = new PluginInitializer();
-    initializer.setup(this);
+    initializer.setup(getCordova().getActivity().getApplication());
 
     preventSystemScreenshots();
     preventTextSelection();
@@ -175,11 +175,11 @@ public class OneginiCordovaPlugin extends CordovaPlugin {
     InAppBrowserControlSession.closeInAppBrowser();
   }
 
-  public void setOneginiClient(final OneginiClient oneginiClient) {
-    this.oneginiClient = oneginiClient;
+  public static void setOneginiClient(final OneginiClient oneginiClient) {
+    OneginiCordovaPlugin.oneginiClient = oneginiClient;
   }
 
-  public OneginiClient getOneginiClient() {
+  public static OneginiClient getOneginiClient() {
     if (oneginiClient == null) {
       throw new RuntimeException("client not initialized");
     }

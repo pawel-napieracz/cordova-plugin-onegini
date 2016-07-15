@@ -3,6 +3,7 @@ package com.onegini.action;
 import static com.onegini.OneginiConstants.KEYSTORE_HASH;
 
 import org.apache.cordova.Config;
+import org.apache.cordova.ConfigXmlParser;
 
 import android.app.Application;
 import android.content.Context;
@@ -28,21 +29,19 @@ public class PluginInitializer {
     return configured;
   }
 
-  public void setup(final OneginiCordovaPlugin client) {
-    final Application application = client.getCordova().getActivity().getApplication();
-
-    final ConfigModel configModel = retrieveConfiguration();
+  public void setup(final Application application) {
+    final ConfigModel configModel = retrieveConfiguration(application.getApplicationContext());
     if (configModel == null) {
       return;
     }
 
-    final int keystoreResourcePointer = client.getCordova().getActivity().getResources().getIdentifier("keystore", "raw", application.getPackageName());
+    final int keystoreResourcePointer = application.getApplicationContext().getResources().getIdentifier("keystore", "raw", application.getPackageName());
     configModel.setCertificatePinningKeyStore(keystoreResourcePointer);
     configModel.setKeyStoreHash(KEYSTORE_HASH);
 
-    final Context applicationContext = client.cordova.getActivity().getApplicationContext();
+    final Context applicationContext = application.getApplicationContext();
     final OneginiClient oneginiClient = OneginiClient.setupInstance(applicationContext, configModel);
-    client.setOneginiClient(oneginiClient);
+    OneginiCordovaPlugin.setOneginiClient(oneginiClient);
 
     final boolean shouldUseNativeScreens = configModel.useNativePinScreen();
     setupDialogs(shouldUseNativeScreens, application.getApplicationContext());
@@ -70,8 +69,10 @@ public class PluginInitializer {
     client.setConfirmationWithFingerprintDialog(new PushAuthenticateWithFingerprintDialog(context));
   }
 
-  private ConfigModel retrieveConfiguration() {
-    return ConfigModel.from(Config.getPreferences());
+  private ConfigModel retrieveConfiguration(final Context context) {
+    final ConfigXmlParser configXmlParser = new ConfigXmlParser();
+    configXmlParser.parse(context);
+    return ConfigModel.from(configXmlParser.getPreferences());
   }
 
   private void setupURLHandler(final OneginiClient client, final ConfigModel configModel) {

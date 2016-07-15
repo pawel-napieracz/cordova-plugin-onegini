@@ -4,12 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.onegini.dialog.AcceptWithPinDialog;
-import com.onegini.dialog.ConfirmationDialogSelectorHandler;
-import com.onegini.dialog.CreatePinNativeDialogHandler;
-import com.onegini.dialog.CurrentPinNativeDialogHandler;
+import com.onegini.action.PluginInitializer;
 import com.onegini.mobile.sdk.android.library.OneginiClient;
 
 public class GcmIntentService extends IntentService {
@@ -48,16 +44,14 @@ public class GcmIntentService extends IntentService {
 
   private OneginiClient getOneginiClient() {
     if (OneginiClient.getInstance() == null) {
-      OneginiClient.setupInstance(getApplicationContext());
-
-      final OneginiClient client = OneginiClient.getInstance();
-      client.setCreatePinDialog(new CreatePinNativeDialogHandler(this));
-      client.setCurrentPinDialog(new CurrentPinNativeDialogHandler(this));
-      client.setConfirmationWithPinDialog(new AcceptWithPinDialog(this));
-      client.setConfirmationDialogSelector(new ConfirmationDialogSelectorHandler(this));
-      return client;
+      initializePlugin();
     }
     return OneginiClient.getInstance();
+  }
+
+  private void initializePlugin() {
+    final PluginInitializer pluginInitializer = new PluginInitializer();
+    pluginInitializer.setup(getApplication());
   }
 
 }
