@@ -18,7 +18,7 @@ module.exports = function (context) {
 };
 
 function execConfigurator(args) {
-  const configurator = spawn('sdk-configurator', args);
+  const configurator = spawn('onegini-sdk-configurator', args);
 
   configurator.stdout.on('data', (data) => {
     process.stdout.write(data);
