@@ -39,6 +39,6 @@ def upload_folder_to_s3(source, destination, bucket):
 @task
 def documentation(ctx):
     if 'SNAPSHOT' not in version:
-        run('cd src/xcode/docs && npm install'.encode('ascii', 'ignore'))
-        run('./src/xcode/docs/node_modules/.bin/gitbook build src/xcode/docs/public')
-        upload_folder_to_s3('src/xcode/docs/public/_book/', 'msp/ios-sdk/%s' % version, 'onegini-documentation')
+        run('cd docs && npm install'.encode('ascii', 'ignore'))
+        run('./docs/node_modules/.bin/gitbook build docs/public')
+        upload_folder_to_s3('docs/public/_book/', 'msp/cordova-plugin/%s' % version, 'onegini-documentation')
