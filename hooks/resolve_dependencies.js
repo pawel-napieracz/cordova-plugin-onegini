@@ -26,8 +26,7 @@ module.exports = function (context) {
       console.log(`${pluginId}: Resolved dependencies.`);
       deferral.resolve();
     } else {
-      console.log(`${pluginId}: Error: cannot resolve dependencies! Make sure you have gradle installed and have access to the Onegini repository.`)
-      deferral.reject();
+      deferral.reject(`${pluginId}: Error: cannot resolve dependencies! Make sure you have gradle installed and have access to the Onegini repository.`);
     }
   });
 

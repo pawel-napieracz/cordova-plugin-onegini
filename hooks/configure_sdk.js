@@ -44,8 +44,7 @@ function execConfigurator(args, deferral) {
 
   configurator.on('close', (code) => {
     if (code !== 0) {
-      console.log('onegini-cordova-plugin: Could not configure Onegini SDK with your configuration');
-      deferral.reject();
+      deferral.reject('Could not configure the Onegini SDK with your configuration');
     }
 
     deferral.resolve();
