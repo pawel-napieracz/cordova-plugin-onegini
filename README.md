@@ -1,19 +1,99 @@
-# 1. Installing the plugin
+# Onegini Cordova Plugin
+
+This Cordova plugin is a wrapper around the Onegini Mobile SDK so the SDK functionalities can be used in Cordova.
+
+For detailed documentation please visit: [https://docs.onegini.com/public/cordova-plugin/](https://docs.onegini.com/public/cordova-plugin/)
+
+## Installing the plugin
 
 To install this plugin execute the following command from your Cordova application project directory.
 
-    cordova plugin add <path_to_this_plugin>
+```sh
+cordova plugin add https://github.com/Onegini/onegini-cordova-plugin
+```
 
-## Resolving dependencies
-Plugin dependencies needs to be resolved before it can be installed in your Cordova application.
+After you have installed the plugin you can add platforms to your project. The Onegini Cordova plugin uses hooks to configure the SDK. A prerequisite for this 
+is that you have installed the [Onegini SDK Configurator](https://github.com/Onegini/sdk-configurator) and it is accessible from the $PATH in your command line ]
+application.
 
-    gradle clean resolveDependencies
+In order to successfully add a platform you must also have a zip file containing the Token Server configuration for your application. This zip file can 
+be downloaded from the Token Server administration console.
+
+For every platform that you add you must provide one zip file.
+
+The plugin will look for the following files:
+- Android: onegini-config-android.zip
+- iOS: onegini-config-ios.zip
+
+Make sure that these files are placed in the root folder of your Cordova application. Now you can add a platform:
+
+```sh
+cordova platform add android
+```
+
+### Troubleshooting
+
+#### Configuration zip not found
+
+If you see the error below it means that the configurator could not find the Token Server configuration zip. Please make sure that you have placed the 
+zip in the location that is specified in the error.
+
+```
+Configuring the Onegini SDK
+===========================
+
+
+Configuring the android platform
+--------------------------------
+
+Running command: 
+onegini-sdk-configurator android --cordova --app-dir /Volumes/code/mobile-platform/cordova-app --config /Volumes/code/mobile-platform/cordova-app/onegini-config-android.zip
+
+ERROR: could not read Token Server configuration zip: open /Volumes/code/mobile-platform/cordova-app/onegini-config-android.zip: no such file or directory
+Error: Could not configure the Onegini SDK with your configuration
+```
+
+#### Onegini SDK Configurator not found
+
+If you see the error below it means that you do not have the `onegini-sdk-configurator` installed or it cannot be found in the $PATH.
+
+```
+Configuring the Onegini SDK
+===========================
+
+Configuring the android platform
+--------------------------------
+
+Running command:
+onegini-sdk-configurator android --cordova --app-dir /Volumes/code/mobile-platform/cordova-app --config /Volumes/code/mobile-platform/cordova-app/onegini-config-android.zip
+
+Error: spawn onegini-sdk-configurator ENOENT
+```
+
+The links below give you hints on how to add a folder to the $PATH. Make sure that you add the folder where you have placed the Onegini SDK Configurator to your $PATH
+- Windows:  http://www.howtogeek.com/118594/how-to-edit-your-system-path-for-easy-command-line-access/
+- Linux: http://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux/14638025#14638025
+- Mac: http://www.cyberciti.biz/faq/appleosx-bash-unix-change-set-path-environment-variable/
+
+## Updating the plugin
+
+To update the plugin you must remove the plugin and add it again. To make sure that the plugin is configured again make sure to remove and add the platforms 
+you are working on.
+
+```sh
+cordova platform remove ios android
+cordova plugin remove cordova-plugin-onegini
+cordova plugin add https://github.com/Onegini/onegini-cordova-plugin
+cordova platform add ios android
+```
+
+>**NB.** make sure that you only add / remove the platforms that you are working on. The example above uses both Android and iOS. 
 
 ## Native screen support
 
-For added security this plugin has support for some native screens. These screens are used to let the user enter sensitive data, such as a PIN.
+For added security this plugin has support for some native screens. These screens are used to let the user enter sensitive data, such as his/her PIN.
 The native screens plugin provides an example implementation of these native screens.
 
 The native screens are only available when the `cordova-onegini-native-screens` plugin is installed along with `cordova-onegini-plugin`.
 
-The `cordova-onegini-native-screens` plugin is available on [GitHub](https://github.com/Onegini/cordova-plugin-onegini-native-screens):
+The `cordova-onegini-native-screens` plugin is available on [GitHub](https://github.com/Onegini/cordova-plugin-onegini-native-screens).
