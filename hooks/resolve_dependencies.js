@@ -3,6 +3,7 @@ const spawn = require('child_process').spawn;
 
 module.exports = function (context) {
   const pluginId = 'cordova-plugin-onegini';
+  const deferral = context.requireCordovaModule('q').defer();
 
   console.log(`${pluginId}: Resolving gradle dependencies...`);
 
@@ -23,9 +24,12 @@ module.exports = function (context) {
   gradle.on('close', (code) => {
     if (code === 0) {
       console.log(`${pluginId}: Resolved dependencies.`);
+      deferral.resolve();
     } else {
       console.log(`${pluginId}: Error: cannot resolve dependencies! Make sure you have gradle installed and have access to the Onegini repository.`)
-      process.exit(code);
+      deferral.reject();
     }
   });
+
+  return deferral.promise;
 };

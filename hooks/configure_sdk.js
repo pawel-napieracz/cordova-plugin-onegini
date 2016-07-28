@@ -4,6 +4,7 @@ const fs = require('fs');
 const spawn = require('child_process').spawn;
 
 module.exports = function (context) {
+  const deferral = context.requireCordovaModule('q').defer();
   const args = [
     '--cordova',
     '--app-dir', context.opts.projectRoot
@@ -21,11 +22,13 @@ module.exports = function (context) {
     console.log(`Configuring the ${platform} platform`)
     console.log('--------------------------' + Array(platform.length).join("-"))
     console.log('')
-    execConfigurator(platformArgs);
+    execConfigurator(platformArgs, deferral);
   });
+
+  return deferral.promise;
 };
 
-function execConfigurator(args) {
+function execConfigurator(args, deferral) {
   console.log('Running command: ')
   console.log('onegini-sdk-configurator ' + args.join(' '))
   console.log('')
@@ -42,7 +45,9 @@ function execConfigurator(args) {
   configurator.on('close', (code) => {
     if (code !== 0) {
       console.log('onegini-cordova-plugin: Could not configure Onegini SDK with your configuration');
-      process.exit(code);
+      deferral.reject();
     }
+
+    deferral.resolve();
   });
 }
