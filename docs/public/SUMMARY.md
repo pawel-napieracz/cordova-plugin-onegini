@@ -4,7 +4,7 @@
 * [Native or HTML screens?](screens.md)
 * [Certificate pinning](certificate-pinning.md)
 * [Configuration](configuration.md)
-* [AppSecret generation](app-secret-generation.md)
+* [Application signature generation](app-signature.md)
 * [Release notes](release-notes/introduction.md)
     * [1.0.0](release-notes/1.0.md)
     * [1.1.0](release-notes/1.1.md)
