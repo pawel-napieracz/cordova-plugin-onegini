@@ -3,9 +3,6 @@ const spawn = require('child_process').spawn;
 
 module.exports = function (context) {
   const pluginId = 'cordova-plugin-onegini';
-  if (context.opts.plugin.id !== pluginId) {
-    return;
-  }
 
   console.log(`${pluginId}: Resolving gradle dependencies...`);
 
