@@ -20,8 +20,6 @@
       </feature>
     </config-file>
 
-    <header-file src="src/ios/OneginiCordovaPlugin/Configuration/OneginiConfigModel.h"/>
-    <source-file src="src/ios/OneginiCordovaPlugin/Configuration/OneginiConfigModel.m"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/Commons.h"/>
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/Reachability.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/Reachability.m"/>
