@@ -1,87 +1,43 @@
 # Configuration
 
-## 5.1. plugin.xml
+This chapter explains how to configure the Onegini Cordova plugin in your Cordova application.
 
-The `plugin.xml` file is used to provide properties to end-application manifest - `AndroidManifest.xml`. All configuration changes describe within this chapter should be done within `<platform name="android">` XML node.
+## Properties
 
-## 5.2. config.xml
+The Cordova plugin is mostly automatically configured by the Onegini SDK Configurator. However, a few properties need to be specified manually:
+- Native or PIN screens (`OneginiNativeScreens`) - Specifies whether native (authentication) screens or html authentication screens are used. `true` for native, 
+`false` for html. If `true` is specified you need to also install the `onegini-cordova-native-screens` plugin. See also the 
+[native or HTML Screens page](screens.md) page
+- Android GCM sender ID (`OneginiGcmSenderId`) - The Google Cloud Messaging sender ID that you received when registering an application for GCM
+- Root detection (`OneginiRootDetectionEnabled`) - Specifies whether root detection must be enabled or disabled. `true` for root detection enabled or `false` 
+for root detection disabled.
+- Debug detection (`OneginiDebugDetectionEnabled`)- Specifies whether debug detection must be enabled or disabled. `true` for debug detection enabled or 
+`false` for debug detection disabled.
 
-In Cordova the end-application can be configured by modyfing global `config.xml` file [read more](https://cordova.apache.org/docs/en/4.0.0/config_ref_index.md.html). In order to use the Onegini Cordova Plugin you need to add special properties into the config file.
+>**NB** After you have changed the `OneginiRootDetectionEnabled` or `OneginiDebugDetectionEnabled` properties you must remove and add your platforms again 
+because the SDK configurator uses these values to determine whether root or debug detection must be enabled or disabled.
 
-### 5.2.1. Plugin properties
-The Onegini Cordova Plugin depends on the Onegini Mobile SDK, which in turn requires a set of configuration parameters which must be provided. Because of that the plugin looks for a specific properties in the the end-app's `config.xml`.
-The configuration file must contain fallowing properties:
+These properties must be specified in the [Cordova application configuration](https://cordova.apache.org/docs/en/latest/config_ref/index.html) file: 
+`config.xml`. 
 
-- "kOGAppIdentifier": end application identifier, must correspond to a one configured within the Token Server
-- "kOGAppScheme": custom end application scheme, used to perform a back-to-the-app redirect
-- "kOGAppVersion": end application version, must correspond to a one configured within the Token Server
-- "kOGAppBaseURL": Token Server instance address, for secure HTTPS connection please refer to [Certificate pinning](certificate-pinning.md)
-- "kOGResourceBaseURL": Resource Server instance address, for secure HTTPS connection please refer to [Certificate pinning](certificate-pinning.md)
-- "kOGRedirectURL": redirection URL prefix which should be accepted by the SDK within authorization flow
-- "kOGgcmSenderId": GCM project identifier, substitute you own sender ID here. This is the project number you got from the API Console.
-- "kOGUseNativePinScreen": Specifies whether native (authentication) screens or html authentication screens are used. `true` for native, `false` for html. If `true` is specified you need to also install the `onegini-cordova-native-screens` plugin. See also the [native or HTML Screens page](screens.md) page
-
-The configuration file can also define optional properties:
-- "kOGMaxPinFailures": int, allowed number of PIN attempts (default value is 3)
-- "kOGUseEmbeddedWebview": boolean, indicates whenever the Cordova App should use embedded InAppBrowser for opening external URLs (true by default)
-
-
-Properties should be defined as follows:
+Below you see an example of these properties in the format required for the `config.xml` file.
 
 ```xml
-    <widget ...>
-      ...
-      <preference name="kOGAppIdentifier" value="MySecureApp"/>
-      ...
-    </widget>
+  <!-- Onegini Cordova Plugin configuration -->
+  <preference name="OneginiNativeScreens" value="true"/>
+  <preference name="OneginiGcmSenderId" value="000000000"/>
+  <preference name="OneginiRootDetectionEnabled" value="false"/>
+  <preference name="OneginiDebugDetectionEnabled" value="false"/>
 ```
 
+## iOS 9 and Xcode 7 requirements
 
-### 5.2.2. Custom application scheme
+In order to allow an application to communicate with a backend that does not support TLS 1.2 on iOS version 9.0 and greater an explicit permission needs to be 
+added to your iOS application configuration plist file.
 
-In order to perform back to the app redirection from in-app browser after following the registration process on Android application needs to declare the scheme to which it will respond. 
-
-##### Android
-
-
-```xml
-    <platform name="android">
-      …
-      <config-file target="AndroidManifest.xml" parent="application/activity">
-        <intent-filter>
-          <action android:name="android.intent.action.VIEW"/>
-          <category android:name="android.intent.category.DEFAULT"/>
-          <category android:name="android.intent.category.BROWSABLE"/>
-          <data android:scheme=“{YOUR_APPLICATION_SCHEME}“/>
-        </intent-filter>
-      </config-file>
-      …
-    </platform>
-```
-
-##### iOS
-
-
-```xml
-   <config-file platform="ios" target="*-Info.plist" parent="CFBundleURLTypes">
-     <key>CFBundleURLTypes</key>
-     <array>
-       <dict>
-         <key>CFBundleURLName</key>
-         <string>{YOUR_APPLICATION_IDENTIFIER}</string>
-         <key>CFBundleURLSchemes</key>
-         <array>
-           <string>{YOUR_APPLICATION_SCHEME}</string>
-         </array>
-       </dict>
-     </array>
-   </config-file>
-```
-
-
-### 5.2.3. iOS 9 and Xcode 7 requirements
-
-In order to allow application to communicate with backend infrastructure which doesn’t support TLS 1.2 on iOS version 9.0 and greater an explicit permission needs to be added to end-application configuration plist file.
+We recommend that you add the update platform config hook to your application. An 
+[article on Stackoverflow](http://stackoverflow.com/questions/28198983/ionic-cordova-add-intent-filter-using-config-xml) gives the hook code and describes how 
+to configure this. When you have configure the hook you can add the following code snippet to your `config.xml`.
 
 ```xml
     <config-file platform="ios" target="*-Info.plist" parent="NSAppTransportSecurity">
@@ -93,34 +49,25 @@ In order to allow application to communicate with backend infrastructure which d
     </config-file>
 ```
 
-Please also note that if you are using Xcode 7.0 version or newer you will have disable bitcode (`ENABLE_BITCODE = false`) in the .xcodeproj generated by Cordova framework.  
+Please also note that if you are using Xcode 7.0 or newer you will have disable bitcode (`ENABLE_BITCODE = false`) in the .xcodeproj generated by Cordova 
+framework.
 
-
-### 5.2.3. Sample `config.xml` file
+## Example `config.xml` file
 ```xml
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.onegini.oneginiCordovaApp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android">
-  <name>Sample app</name>
+<widget id="com.onegini.exampleApp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android">
+  <name>Example app</name>
   <description>
-    A sample to use the Onegini SDK from a Cordova app
+    A sample to configure the Onegini Cordova plugin
   </description>
   <author email="developers@onegini.com" href="http://www.onegini.com">
     Onegini B.V.
   </author>
-  <!-- Onegini Cordova Plugin config properties -->
-  <preference name="kOGAppIdentifier" value="Sample"/>
-  <preference name="kOGAppVersion" value="1.0.0"/>
-  <preference name="kOGAppScheme" value="oneginisdk"/>
-  <preference name="kOGAppBaseURL" value="https://test-token-server.onegini.com"/>
-  <preference name="kOGMaxPinFailures" value="5"/>
-  <preference name="kOGResourceBaseURL" value="https://test-token-server.onegini.com"/>
-  <preference name="kOGRedirectURL" value="oneginisdk://loginsuccess"/>
-
-  <!-- App's custom properties -->
-  <preference name="BackgroundColor" value="0xfff0f0f0"/>
-  <preference name="StatusBarOverlaysWebView" value="false"/>
-  <preference name="StatusBarStyle" value="default"/>
-  <preference name="StatusBarBackgroundColor" value="#FFFFFF"/>
+  <!-- Onegini Cordova Plugin configuration -->
+  <preference name="OneginiNativeScreens" value="true"/>
+  <preference name="OneginiGcmSenderId" value="000000000"/>
+  <preference name="OneginiRootDetectionEnabled" value="false"/>
+  <preference name="OneginiDebugDetectionEnabled" value="false"/>
 
   <content src="index.html"/>
   <icon src="www/res/icon/logo.png"/>
@@ -140,12 +87,6 @@ Please also note that if you are using Xcode 7.0 version or newer you will have 
     <splash src="www/res/icon/white.png" width="1242" height="2208"/>
     <splash src="www/res/icon/white.png" width="2208" height="1242"/>
 
-    <config-file platform="ios" target="*-Info.plist" parent="UISupportedInterfaceOrientations">
-      <array>
-        <string>UIInterfaceOrientationPortrait</string>
-      </array>
-    </config-file>
-
     <config-file platform="ios" target="*-Info.plist" parent="UISupportedInterfaceOrientations~ipad">
       <array>
         <string>UIInterfaceOrientationLandscapeLeft</string>
@@ -153,54 +94,6 @@ Please also note that if you are using Xcode 7.0 version or newer you will have 
       </array>
     </config-file>
   </platform>
-
-  <platform name="android">
-    <!-- custom app scheme declaration -->
-    <config-file target="AndroidManifest.xml" parent="application/activity">
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="oneginisdk"/>
-      </intent-filter>
-    </config-file>
-  </platform>
 </widget>
 
 ```
-
-### 5.2.4. Security controls
-In order to disable root/jailbreak or debug detection (or both), for example during development process, please follow below steps for the platform of your choice. 
-
-#### Android 
-The Android SDK uses a reflection and `Context.getPackageName()` method to search for a class called `SecurityController`. The object should contain `public static boolean` fields named `debugDetection` and/or `rootDetection`, for example:
-
-```java
-package com.onegini.oneginiCordovaApp;
-
-public final class SecurityController {
-  public static final boolean debugDetection = false;
-  public static final boolean rootDetection = false;
-}
-```
-
-The class should be provided to `./platform/android/src/{YOUR_APPLICATION_PACKAGE}` directory before compiling and starting the application. The `{YOUR_APPLICATION_PACKAGE}` is equal to `id` attribute value provided within the `config.xml` root `widget` node.
-
-#### iOS
-The iOS SDK uses `NSClassFromString` method to search for a class called `SecurityController`. The object should contain static bool method named `debugDetection` and/or `rootDetection`, and added to OneginiCordovaPlugin structure for example:
-
-```objectivec
-@implementation SecurityController
-
-+(bool)debugDetection{
-    return false;
-}
-
-+(bool)rootDetection{
-    return false;
-}
-
-@end
-```
-
-Please note that `plugin.xml` file also needs to be updated to refer `SecurityController.m` and `SecurityController.h` objects.
