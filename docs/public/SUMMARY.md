@@ -2,7 +2,6 @@
 
 * [Interface](interface.md)
 * [Native or HTML screens?](screens.md)
-* [Certificate pinning](certificate-pinning.md)
 * [Configuration](configuration.md)
 * [Application signature generation](app-signature.md)
 * [Release notes](release-notes/introduction.md)
