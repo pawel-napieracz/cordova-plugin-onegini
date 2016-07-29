@@ -1,8 +1,9 @@
 # Summary
 
-* [Interface](interface.md)
-* [Native or HTML screens?](screens.md)
+* [Installation](installation.md)
 * [Configuration](configuration.md)
+* [Native or HTML screens?](screens.md)
+* [Interface](interface.md)
 * [Application signature generation](app-signature.md)
 * [Release notes](release-notes/introduction.md)
     * [1.0.0](release-notes/1.0.md)

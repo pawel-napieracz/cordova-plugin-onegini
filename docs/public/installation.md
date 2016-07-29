@@ -1,9 +1,3 @@
-# Onegini Cordova Plugin
-
-This Cordova plugin is a wrapper around the Onegini Mobile SDK so the SDK functionalities can be used in Cordova.
-
-For detailed documentation please visit: [https://docs.onegini.com/public/cordova-plugin/](https://docs.onegini.com/public/cordova-plugin/)
-
 ## Installing the plugin
 
 Before you install the plugin make sure that you have access to the Onegini Artifactory repository. If you don't have access please contact Onegini Support. 
@@ -104,12 +98,3 @@ cordova platform add ios android
 ```
 
 >**NB.** make sure that you only add / remove the platforms that you are working on. The example above uses both Android and iOS. 
-
-## Native screen support
-
-For added security this plugin has support for some native screens. These screens are used to let the user enter sensitive data, such as his/her PIN.
-The native screens plugin provides an example implementation of these native screens.
-
-The native screens are only available when the `cordova-onegini-native-screens` plugin is installed along with `cordova-onegini-plugin`.
-
-The `cordova-onegini-native-screens` plugin is available on [GitHub](https://github.com/Onegini/cordova-plugin-onegini-native-screens).
