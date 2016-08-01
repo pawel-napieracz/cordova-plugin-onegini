@@ -32,8 +32,8 @@ The plugin will look for the following files:
 - Android: onegini-config-android.zip
 - iOS: onegini-config-ios.zip
 
->**Note:** You must remove and add your platforms (iOS & Android) again if you change the Token Server configuration zip. Changes will only be applied after 
-the SDK configurator has run again.
+>**Note:** You must remove and add your platforms (iOS & Android) again if you change the Token Server configuration zip. Configuration changes to your Cordova 
+apps will only be applied after the SDK configurator has run again.
 
 Make sure that these files are placed in the root folder of your Cordova application. Now you can add a platform:
 
@@ -97,4 +97,4 @@ cordova plugin add https://github.com/Onegini/onegini-cordova-plugin
 cordova platform add ios android
 ```
 
->**NB.** make sure that you only add / remove the platforms that you are working on. The example above uses both Android and iOS. 
+>**NB.** make sure that you only add / remove the platforms that you are working on. The example above uses both Android and iOS.

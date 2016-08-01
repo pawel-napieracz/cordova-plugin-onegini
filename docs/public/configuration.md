@@ -95,5 +95,4 @@ framework.
     </config-file>
   </platform>
 </widget>
-
 ```
