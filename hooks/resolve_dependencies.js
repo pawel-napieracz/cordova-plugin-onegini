@@ -11,7 +11,7 @@ module.exports = function (context) {
     cwd: context.opts.plugin.pluginInfo.dir,
     shell: true
   };
-  const gradle = spawn('gradle', ['clean', 'resolveDependencies'], options);
+  const gradle = spawn('./gradlew', ['clean', 'resolveDependencies'], options);
 
   gradle.stdout.on('data', (data) => {
     process.stdout.write(data);
