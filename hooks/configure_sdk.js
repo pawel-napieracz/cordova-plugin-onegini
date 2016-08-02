@@ -10,9 +10,7 @@ module.exports = function (context) {
     '--app-dir', context.opts.projectRoot
   ];
   console.log('Configuring the Onegini SDK');
-  console.log('===========================');
-  console.log('')
-  console.log('')
+  console.log('===========================\n\n');
 
   context.opts.platforms.forEach((platform) => {
     let platformArgs = args;
@@ -20,8 +18,7 @@ module.exports = function (context) {
     platformArgs.push('--config',`${context.opts.projectRoot}/onegini-config-${platform}.zip`)
 
     console.log(`Configuring the ${platform} platform`)
-    console.log('--------------------------' + Array(platform.length).join("-"))
-    console.log('')
+    console.log('--------------------------' + Array(platform.length).join("-") + '\n')
     execConfigurator(platformArgs, deferral);
   });
 
@@ -30,8 +27,7 @@ module.exports = function (context) {
 
 function execConfigurator(args, deferral) {
   console.log('Running command: ')
-  console.log('onegini-sdk-configurator ' + args.join(' '))
-  console.log('')
+  console.log('onegini-sdk-configurator ' + args.join(' ') + '\n')
   const configurator = spawn('onegini-sdk-configurator', args);
 
   configurator.stdout.on('data', (data) => {
