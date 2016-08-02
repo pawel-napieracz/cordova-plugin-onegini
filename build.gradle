@@ -59,9 +59,3 @@ task resolveDependencies(type: Copy, dependsOn: downloadLibs) {
   from tarTree(headersPackage)
   into headersDir
 }
-
-task uploadDocumentation(type:Exec) {
-  workingDir '.'
-
-  commandLine 'python', 'upload-documentation.py'
-}
