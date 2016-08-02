@@ -1,4 +1,5 @@
 const fs = require("fs");
+const platform = require('platform');
 const spawn = require('child_process').spawn;
 
 module.exports = function (context) {
@@ -11,7 +12,8 @@ module.exports = function (context) {
     cwd: context.opts.plugin.pluginInfo.dir,
     shell: true
   };
-  const gradle = spawn('./gradlew', ['clean', 'resolveDependencies'], options);
+  executable = getGradleExecutableForPlatform()
+  const gradle = spawn(executable, ['clean', 'resolveDependencies'], options);
 
   gradle.stdout.on('data', (data) => {
     process.stdout.write(data);
@@ -26,9 +28,20 @@ module.exports = function (context) {
       console.log(`${pluginId}: Resolved dependencies.`);
       deferral.resolve();
     } else {
-      deferral.reject(`${pluginId}: Error: cannot resolve dependencies! Make sure you have gradle installed and have access to the Onegini repository.`);
+      deferral.reject(`${pluginId}: Error: cannot resolve dependencies! Make sure you have gradle installed and have access to the Onegini repository. See the installation documentation for more info `);
     }
   });
 
   return deferral.promise;
 };
+
+function getGradleExecutableForPlatform() {
+  const osFamily = platform.os.family;
+
+  var executable = './gradlew';
+  if (osFamily.startsWith('Win')) {
+    executable = 'gradlew.bat';
+  }
+
+  return executable;
+}
