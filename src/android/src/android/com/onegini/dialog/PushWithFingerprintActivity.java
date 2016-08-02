@@ -16,7 +16,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class PushWithFingerprintActivity extends Activity {
+public class PushWithFingerprintActivity extends ScreenOrientationAwareActivity {
 
   public static final String EXTRA_TITLE = "title";
   public static final String EXTRA_COMMAND = "command";
@@ -34,16 +34,16 @@ public class PushWithFingerprintActivity extends Activity {
   private TextView acceptButton;
   private TextView denyButton;
 
-  private boolean firstAttemp;
+  private boolean firstAttempt;
 
   @Override
-  protected void onCreate(final Bundle savedInstanceState) {
+  public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     lockScreen();
 
     initLayout();
 
-    firstAttemp = true;
+    firstAttempt = true;
   }
 
   private void initLayout() {
@@ -64,6 +64,8 @@ public class PushWithFingerprintActivity extends Activity {
 
     initScreenTitle();
     initOnClickListeners();
+
+    lockScreenOrientation();
   }
 
   private void initOnClickListeners() {
@@ -100,7 +102,7 @@ public class PushWithFingerprintActivity extends Activity {
     if (COMMAND_SHOW.equals(command)) {
       showFingerprintIco();
     } else if  (COMMAND_RECEIVED.equals(command)) {
-      firstAttemp = false;
+      firstAttempt = false;
       hideFingerprintIco();
     } else if (COMMAND_CLOSE.equals(command)) {
       close();
@@ -112,7 +114,7 @@ public class PushWithFingerprintActivity extends Activity {
     denyButton.setVisibility(View.GONE);
 
     fingerprintMessage.setVisibility(View.VISIBLE);
-    if (firstAttemp == false) {
+    if (firstAttempt == false) {
       fingerprintMessage.setText(getMessageForKey(FINGERPRINT_TRY_AGAIN.name()));
       fingerprintMessage.startAnimation(getBlinkAnimation());
     }

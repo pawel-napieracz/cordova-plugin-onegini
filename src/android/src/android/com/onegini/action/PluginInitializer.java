@@ -1,5 +1,7 @@
 package com.onegini.action;
 
+import static com.onegini.OneginiConstants.KEYSTORE_HASH;
+
 import org.apache.cordova.Config;
 
 import android.app.Application;
@@ -27,15 +29,13 @@ public class PluginInitializer {
     return configured;
   }
 
-  public void setup(final OneginiCordovaPlugin client) {
-    final Application application = client.getCordova().getActivity().getApplication();
-
-    final OneginiCordovaPluginConfigModel oneginiCordovaPluginConfigModel = retrieveConfiguration();
+  public void setup(final Application application) {
+    final Context applicationContext = application.getApplicationContext();
+    final OneginiCordovaPluginConfigModel oneginiCordovaPluginConfigModel = retrieveConfiguration(applicationContext);
     if (oneginiCordovaPluginConfigModel == null) {
       return;
     }
 
-    final Context applicationContext = client.cordova.getActivity().getApplicationContext();
     final OneginiClient oneginiClient = OneginiClient.setupInstance(applicationContext);
     client.setOneginiClient(oneginiClient);
 
@@ -65,8 +65,10 @@ public class PluginInitializer {
     client.setConfirmationWithFingerprintDialog(new PushAuthenticateWithFingerprintDialog(context));
   }
 
-  private OneginiCordovaPluginConfigModel retrieveConfiguration() {
-    return OneginiCordovaPluginConfigModel.from(Config.getPreferences());
+  private OneginiCordovaPluginConfigModel retrieveConfiguration(final Context context) {
+    final ConfigXmlParser configXmlParser = new ConfigXmlParser();
+    configXmlParser.parse(context);
+    return ConfigModel.from(configXmlParser.getPreferences());
   }
 
   private void setupURLHandler(final OneginiClient client, final OneginiCordovaPluginConfigModel oneginiCordovaPluginConfigModel) {
