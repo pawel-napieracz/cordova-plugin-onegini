@@ -1,5 +1,12 @@
 // Main gradle build configuration used to generate cordova plugin dependencies and plugin.xml configuration.
-// TODO: remove dependencies duplications in plugin.gradle and build.gradle
+apply from: 'dependencies.gradle'
+apply plugin: 'java'
+
+def workDirectory = "build/jarjar/"
+def pluginAndroidDir = 'src/android'
+def applicationSrcDir = 'src/android'
+def applicationResDir = 'res'
+
 buildscript {
   repositories {
     mavenLocal()
@@ -10,11 +17,6 @@ buildscript {
     classpath 'com.android.tools.build:gradle:2.1.2'
   }
 }
-apply plugin: 'java'
-def workDirectory = "build/jarjar/"
-def pluginAndroidDir = 'src/android'
-def applicationSrcDir = 'src/android'
-def applicationResDir = 'res'
 
 allprojects {
   sourceCompatibility = 1.6
@@ -26,12 +28,12 @@ allprojects {
 
     def androidHome = System.getenv("ANDROID_HOME")
     maven { url "$androidHome/extras/android/m2repository/" }
-    maven { url "$androidHome/extras/google/m2repository/"}
+    maven { url "$androidHome/extras/google/m2repository/" }
 
     maven {
       url "https://repo.onegini.com/artifactory/public"
       credentials {
-        if(project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
+        if (project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
           username artifactory_user
           password artifactory_password
         }
@@ -41,23 +43,7 @@ allprojects {
 }
 
 dependencies {
-  // The onegini sdk
-  compile 'com.onegini.mobile.sdk.android:library:5.02.01:release@aar'
-//   Http Client
-  compile 'com.squareup.okhttp:okhttp:2.3.0'
-  compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
-  // Rest Client
-  compile 'com.squareup.retrofit:retrofit:1.9.0'
-  //Onegini OCRA
-  compile('com.onegini.misc:og-ocra:3') {
-    exclude module: 'junit'
-  }
-  // Spongy castle
-  compile 'com.madgag.spongycastle:core:1.51.0.0'
-  compile 'com.madgag.spongycastle:prov:1.51.0.0'
-  compile 'com.madgag.spongycastle:pg:1.51.0.0'
-  compile 'com.madgag.spongycastle:pkix:1.51.0.0'
-  compile 'com.nimbusds:nimbus-jose-jwt:3.6'
+  compile DEPENDENCIES
 }
 
 task workDirecotryExists {
@@ -86,6 +72,7 @@ task downloadAndPrepareLibs(type: Copy, dependsOn: downloadLibs) {
     }
   }
   from zipTree(aarLibrary)
+  println(workDirectory)
   into workDirectory
   include "classes.jar"
   include "libs/*.jar"
@@ -101,7 +88,6 @@ task prepareLibrares(dependsOn: 'downloadAndPrepareLibs') {
       taskdef name: "jarjar", classname: "com.tonicsystems.jarjar.JarJarTask", classpath: "lib/jarjar-1.4.jar"
       jarjar(jarfile: 'lib/plugin-dependencies.jar') {
         configurations.compile.each {
-          //println "file added $it.name"
           if (it.name.endsWith("jar")) {
             zipfileset(src: "build/jarjar/" + it.name)
           } else {
@@ -112,7 +98,7 @@ task prepareLibrares(dependsOn: 'downloadAndPrepareLibs') {
         FileTree additionalLibs = fileTree(dir: workDirectory + '/libs')
         additionalLibs.include '*.jar'
         additionalLibs.each {
-          File file -> zipfileset(src: workDirectory  + '/libs/' + file.name)
+          File file -> zipfileset(src: workDirectory + '/libs/' + file.name)
         }
       }
     }
