@@ -10,7 +10,7 @@ The Plugin allows to perform native code invocations on the Onegini SDK directly
 plugin's public API documentation see the [Interface](interface.md) chapter.
 
 The plugin uses two hooks to download the iOS SDK and configure the SDK with the given Token Server configuration.
-1. Downloading the iOS SDK - This hook is triggered after the plugin is installed (`after_plugin_install`). In order for this hook to complete successfully 
+1. Downloading the iOS SDK - This hook is triggered after the plugin is installed (`before_plugin_install`). In order for this hook to complete successfully 
 you must follow the [installation steps](installation.md).
 2. Configuring the Onegini SDK - This hook is triggered after a platform is added (`after_platform_add`). The Onegini SDK requires some initial configuration 
 for some of the security related features. To make this easy we have integrated the Cordova plugin with the 

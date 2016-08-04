@@ -6,7 +6,7 @@
   <description>Onegini Cordova Plugin</description>
 
   <hook type="after_platform_add" src="hooks/configure_sdk.js" />
-  <hook type="after_plugin_install" src="hooks/resolve_dependencies.js" />
+  <hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />
 
   <js-module src="www/onegini.js" name="oneginiCordovaPlugin">
     <clobbers target="oneginiCordovaPlugin"/>
