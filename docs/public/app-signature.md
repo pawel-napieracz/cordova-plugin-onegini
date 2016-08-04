@@ -1,4 +1,4 @@
-# App secret generation
+# Application signature generation
 
 In order to allow the application to perform successfully communicate with the Token Server a signature of the app needs to be calculated and provided to the 
 application configuration in the Token Server administration console.
