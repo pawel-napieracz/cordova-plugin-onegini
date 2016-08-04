@@ -7,6 +7,7 @@ import android.content.Context;
 import com.onegini.action.ChangePinAction;
 import com.onegini.action.InAppBrowserControlSession;
 import com.onegini.mobile.sdk.android.library.handlers.OneginiPinProvidedHandler;
+import com.onegini.mobile.sdk.android.library.model.entity.UserProfile;
 import com.onegini.mobile.sdk.android.library.utils.dialogs.OneginiCurrentPinDialog;
 
 public class CurrentPinNativeDialogHandler implements OneginiCurrentPinDialog {
@@ -20,7 +21,7 @@ public class CurrentPinNativeDialogHandler implements OneginiCurrentPinDialog {
   }
 
   @Override
-  public void getCurrentPin(final OneginiPinProvidedHandler oneginiPinProvidedHandler) {
+  public void getCurrentPin(final UserProfile userProfile, final OneginiPinProvidedHandler oneginiPinProvidedHandler) {
     InAppBrowserControlSession.closeInAppBrowser();
 
     this.oneginiPinProvidedHandler = oneginiPinProvidedHandler;
