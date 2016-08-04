@@ -1,12 +1,12 @@
 package com.onegini.dialog;
 
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.content.Context;
 import android.content.Intent;
-
+import com.onegini.mobile.sdk.android.library.model.entity.UserProfile;
 import com.onegini.mobile.sdk.android.library.utils.dialogs.ConfirmationWithPin;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class AcceptWithPinDialog implements ConfirmationWithPin {
 
@@ -18,7 +18,7 @@ public class AcceptWithPinDialog implements ConfirmationWithPin {
   }
 
   @Override
-  public void showConfirmation(final String title, final String message, final int attemptCount, final int maxAllowedAttempts,
+  public void showConfirmation(final String title, final String message,final UserProfile userProfile, final int attemptCount, final int maxAllowedAttempts,
                                final ConfirmationWithPinHandler confirmationWithPinHandler) {
 
     this.handler = confirmationWithPinHandler;

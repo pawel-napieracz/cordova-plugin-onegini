@@ -4,6 +4,7 @@ import org.apache.cordova.ConfigXmlParser;
 
 import android.app.Application;
 import android.content.Context;
+
 import com.onegini.OneginiCordovaPlugin;
 import com.onegini.dialog.AcceptWithPinDialog;
 import com.onegini.dialog.ConfirmationDialogSelectorHandler;

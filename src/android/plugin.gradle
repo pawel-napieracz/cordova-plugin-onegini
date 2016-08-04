@@ -72,7 +72,6 @@ task downloadAndPrepareLibs(type: Copy, dependsOn: downloadLibs) {
     }
   }
   from zipTree(aarLibrary)
-  println(workDirectory)
   into workDirectory
   include "classes.jar"
   include "libs/*.jar"
