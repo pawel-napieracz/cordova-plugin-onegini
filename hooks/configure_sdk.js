@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const spawn = require('child_process').spawn;
+const supportedPlatforms = ["ios", "android"];
 
 module.exports = function (context) {
   const deferral = context.requireCordovaModule('q').defer();
@@ -13,13 +14,17 @@ module.exports = function (context) {
   console.log('===========================\n\n');
 
   context.opts.platforms.forEach((platform) => {
-    let platformArgs = args;
-    platformArgs.unshift(platform);
-    platformArgs.push('--config',`${context.opts.projectRoot}/onegini-config-${platform}.zip`)
+    if (arrayContains(platform, supportedPlatforms)) {
+      let platformArgs = args;
+      platformArgs.unshift(platform);
+      platformArgs.push('--config',`${context.opts.projectRoot}/onegini-config-${platform}.zip`)
 
-    console.log(`Configuring the ${platform} platform`)
-    console.log('--------------------------' + Array(platform.length).join("-") + '\n')
-    execConfigurator(platformArgs, deferral);
+      console.log(`Configuring the ${platform} platform`)
+      console.log('--------------------------' + Array(platform.length).join("-") + '\n')
+      execConfigurator(platformArgs, deferral);
+    } else {
+      console.log(`Skipping unsupported platform: ${platform}`)
+    }
   });
 
   return deferral.promise;
@@ -45,4 +50,8 @@ function execConfigurator(args, deferral) {
 
     deferral.resolve();
   });
+}
+
+function arrayContains(needle, arrhaystack) {
+    return (arrhaystack.indexOf(needle) > -1);
 }
