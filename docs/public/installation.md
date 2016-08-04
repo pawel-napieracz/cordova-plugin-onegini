@@ -34,7 +34,8 @@ npm install platform
 
 3. Token Server configuration zip
 In order to successfully add a platform you must also have a zip file containing the Token Server configuration for your application. This zip file can be 
-downloaded from the Token Server administration console.
+[downloaded from the Token Server administration console](https://docs.onegini.com/public/token-server/topics/mobile-apps/app-delivery-lifecycle/app-delivery-lifecycle.html). 
+The zip file must be placed in the root of your Cordova application project.
 
 For every platform that you add you must provide one zip file.
 
