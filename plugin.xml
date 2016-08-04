@@ -303,5 +303,7 @@
                  target-dir="src/com/onegini/util/"/>
     <source-file src="src/android/src/android/com/onegini/util/MessageResourceReader.java"
                  target-dir="src/com/onegini/util/"/>
+    <source-file src="src/android/src/android/com/onegini/util/OneginiPluginConfigUtil.java"
+                 target-dir="src/com/onegini/util/"/>
   </platform>
 </plugin>
