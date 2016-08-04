@@ -28,7 +28,7 @@ module.exports = function (context) {
       console.log(`${pluginId}: Resolved dependencies.`);
       deferral.resolve();
     } else {
-      deferral.reject(`${pluginId}: Error: cannot resolve dependencies! Make sure you have gradle installed and have access to the Onegini repository. See the installation documentation for more info `);
+      deferral.reject(`${pluginId}: Error: cannot resolve dependencies! Make sure you have access to the Onegini repository. See the installation documentation for more info.`);
     }
   });
 
@@ -39,7 +39,7 @@ function getGradleExecutableForPlatform() {
   const osFamily = platform.os.family;
 
   var executable = './gradlew';
-  if (osFamily.startsWith('Win')) {
+  if (osFamily.toLowerCase().startsWith('win')) {
     executable = 'gradlew.bat';
   }
 
