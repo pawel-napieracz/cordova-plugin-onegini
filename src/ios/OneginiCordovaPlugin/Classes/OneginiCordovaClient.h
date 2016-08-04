@@ -15,7 +15,7 @@
 @interface OneginiCordovaClient : CDVPlugin<OGAuthorizationDelegate, OGResourceHandlerDelegate, OGPinValidationDelegate, OGChangePinDelegate, PinViewControllerDelegate, OGDisconnectDelegate, OGLogoutDelegate, OGEnrollmentHandlerDelegate, OGFingerprintDelegate>
 
 @property (strong, nonatomic) OGOneginiClient *oneginiClient;
-@property (strong, nonatomic) OGConfigModel *configModel;
+@property (strong, nonatomic) NSDictionary *oneginiConfigDictionary;
 
 @property (strong, nonatomic) PinViewController *pinViewController;
 

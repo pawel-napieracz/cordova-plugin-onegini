@@ -1,10 +1,10 @@
 # Summary
 
-* [Interface](interface.md)
-* [Native or HTML screens?](screens.md)
-* [Certificate pinning](certificate-pinning.md)
+* [Installation](installation.md)
 * [Configuration](configuration.md)
-* [AppSecret generation](app-secret-generation.md)
+* [Native or HTML screens?](screens.md)
+* [Interface](interface.md)
+* [Application signature generation](app-signature.md)
 * [Release notes](release-notes/introduction.md)
     * [1.0.0](release-notes/1.0.md)
     * [1.1.0](release-notes/1.1.md)
