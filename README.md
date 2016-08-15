@@ -1,11 +1,13 @@
-# Install the plugin
+# Onegini Cordova plugin
 
-## Resolve dependencies
+## Install the plugin
+
+### Resolve dependencies
 The dependencies of the plugin need to be resolved before you install the plugin in your Cordova application.
 
     gradle clean resolveDependencies
 
-## Add the plugin 
+### Add the plugin 
 
 To install this plugin execute the following command from your Cordova application project directory.
 
@@ -18,4 +20,4 @@ The native screens plugin provides an example implementation of these native scr
 
 The native screens are only available when the `cordova-onegini-native-screens` plugin is installed along with `cordova-onegini-plugin`.
 
-The `cordova-onegini-native-screens` plugin is available on [GitHub](https://github.com/Onegini/cordova-plugin-onegini-native-screens):
+The `cordova-onegini-native-screens` plugin is available on [GitHub](https://github.com/Onegini/cordova-plugin-onegini-native-screens).
