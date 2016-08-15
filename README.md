@@ -1,13 +1,15 @@
-# 1. Installing the plugin
+# Install the plugin
+
+## Resolve dependencies
+The dependencies of the plugin need to be resolved before you install the plugin in your Cordova application.
+
+    gradle clean resolveDependencies
+
+## Add the plugin 
 
 To install this plugin execute the following command from your Cordova application project directory.
 
     cordova plugin add <path_to_this_plugin>
-
-## Resolving dependencies
-Plugin dependencies needs to be resolved before it can be installed in your Cordova application.
-
-    gradle clean resolveDependencies
 
 ## Native screen support
 
