@@ -5,8 +5,8 @@
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
-  <hook type="after_platform_add" src="hooks/configure_sdk.js" />
-  <hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />
+  <!--<hook type="after_platform_add" src="hooks/configure_sdk.js" />-->
+  <!--<hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />-->
 
   <js-module src="www/onegini.js" name="oneginiCordovaPlugin">
     <clobbers target="oneginiCordovaPlugin"/>
@@ -127,11 +127,10 @@
     <framework src="com.google.android.gms:play-services-gcm:7.8.0" />
     <framework src="com.android.support:multidex:1.0.0" />
 
+    <!-- Build gradle -->
     <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
 
-    <!-- Onegini SDK dependencies -->
-    <source-file src="src/android/lib/plugin-dependencies.jar" target-dir="libs/"/>
-
+    <!-- Onegini Plugin -->
     <source-file src="src/android/src/android/com/onegini/OneginiConstants.java" target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiCordovaPlugin.java" target-dir="src/com/onegini/"/>
     <!-- action -->
