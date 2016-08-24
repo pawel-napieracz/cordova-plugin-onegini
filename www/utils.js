@@ -17,7 +17,7 @@ module.exports = (function() {
       return exec(successCb, failureCb, serviceName, methodName, args);
     }
     else {
-      return new Promise((resolve, reject) => {
+      return new Promise(function (resolve, reject) {
         exec(resolve, reject, serviceName, methodName, args);
       });
     }
