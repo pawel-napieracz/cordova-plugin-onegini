@@ -11,6 +11,7 @@
   <js-module src="www/onegini.js" name="oneginiCordovaPlugin">
     <clobbers target="oneginiCordovaPlugin"/>
   </js-module>
+  <js-module src="www/utils.js" name="utils" />
 
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
@@ -133,6 +134,7 @@
     <!-- Onegini Plugin -->
     <source-file src="src/android/src/android/com/onegini/OneginiConstants.java" target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiCordovaPlugin.java" target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiClient.java" target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiSDK.java" target-dir="src/com/onegini/"/>
     <!-- action -->
     <source-file src="src/android/src/android/com/onegini/action/OneginiPluginAction.java"
