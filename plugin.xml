@@ -5,8 +5,8 @@
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
-  <hook type="after_platform_add" src="hooks/configure_sdk.js" />
-  <hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />
+  <!--<hook type="after_platform_add" src="hooks/configure_sdk.js" />-->
+  <!--<hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />-->
 
   <js-module src="www/onegini.js" name="oneginiCordovaPlugin">
     <clobbers target="oneginiCordovaPlugin"/>
@@ -127,177 +127,24 @@
     <framework src="com.google.android.gms:play-services-gcm:7.8.0" />
     <framework src="com.android.support:multidex:1.0.0" />
 
+    <!-- Build gradle -->
     <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
 
-    <!-- Onegini SDK dependencies -->
-    <source-file src="src/android/lib/plugin-dependencies.jar" target-dir="libs/"/>
-
+    <!-- Onegini Plugin -->
     <source-file src="src/android/src/android/com/onegini/OneginiConstants.java" target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiCordovaPlugin.java" target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiSDK.java" target-dir="src/com/onegini/"/>
     <!-- action -->
-    <source-file src="src/android/src/android/com/onegini/action/authorization/DefaultOneginiAuthorizationHandler.java"
-                 target-dir="src/com/onegini/action/authorization/"/>
-    <source-file src="src/android/src/android/com/onegini/action/authorization/AuthorizationActionHandler.java"
-                 target-dir="src/com/onegini/action/authorization/"/>
-    <source-file src="src/android/src/android/com/onegini/action/authorization/AuthorizationActionHandlerFactory.java"
-                 target-dir="src/com/onegini/action/authorization/"/>
-    <source-file src="src/android/src/android/com/onegini/action/authorization/AuthorizationActionExecutor.java"
-                 target-dir="src/com/onegini/action/authorization/"/>
-    <source-file src="src/android/src/android/com/onegini/action/PropertyReaderAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/AuthorizeAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/ReauthorizeAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/AwaitInitialization.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/ChangePinAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/CheckIsRegisteredAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/DisconnectAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/FetchResourceAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/FetchResourceAnonymouslyAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/ForgotPinHandler.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/InAppBrowserControlSession.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/IsFingerprintAuthenticationAvailableAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/IsPushAuthenticationAvailableAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/LogoutAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/MobileAuthenticationAction.java"
-                 target-dir="src/com/onegini/action/"/>
     <source-file src="src/android/src/android/com/onegini/action/OneginiPluginAction.java"
                  target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/PinCallbackSession.java"
+    <source-file src="src/android/src/android/com/onegini/action/StartAction.java"
                  target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/PinProvidedAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/PluginInitializer.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/SetupScreenOrientationAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/URLHandler.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/ValidatePinAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/EnrollForFingerprintAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/DisableFingerprintAuthenticationAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/FingerprintAuthenticationStateAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/PinHandlerProvider.java"
-                 target-dir="src/com/onegini/action/"/>
-    <!-- dialog -->
-    <source-file src="src/android/src/android/com/onegini/dialog/AcceptWithPinDialog.java"
-                 target-dir="src/com/onegini/dialog/" />
-    <source-file src="src/android/src/android/com/onegini/dialog/ConfirmationDialog.java"
-                 target-dir="src/com/onegini/dialog/" />
-    <source-file src="src/android/src/android/com/onegini/dialog/ConfirmationDialogSelectorHandler.java"
-                 target-dir="src/com/onegini/dialog/" />
-    <source-file src="src/android/src/android/com/onegini/dialog/CreatePinNativeDialogHandler.java"
-                 target-dir="src/com/onegini/dialog/" />
-    <source-file src="src/android/src/android/com/onegini/dialog/CreatePinNonNativeDialogHandler.java"
-                 target-dir="src/com/onegini/dialog/"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/CurrentPinNativeDialogHandler.java"
-                 target-dir="src/com/onegini/dialog/" />
-    <source-file src="src/android/src/android/com/onegini/dialog/CurrentPinNonNativeDialogHandler.java"
-                 target-dir="src/com/onegini/dialog/"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/PinScreenActivity.java"
-                 target-dir="src/com/onegini/dialog"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/PushSimpleActivity.java"
-                 target-dir="src/com/onegini/dialog"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/PushWithPinActivity.java"
-                 target-dir="src/com/onegini/dialog"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/helper/PinActivityStarter.java"
-                 target-dir="src/com/onegini/dialog/helper/"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/helper/PinActivityMessageMapper.java"
-                 target-dir="src/com/onegini/dialog/helper/"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/PinKeyboard.java"
-                 target-dir="src/com/onegini/dialog"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/helper/PinKeyboardHandler.java"
-                 target-dir="src/com/onegini/dialog"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/FingerprintActivity.java"
-                 target-dir="src/com/onegini/dialog"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/FingerprintDialog.java"
-                 target-dir="src/com/onegini/dialog"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/PushAuthenticateWithFingerprintDialog.java"
-                 target-dir="src/com/onegini/dialog"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/PushWithFingerprintActivity.java"
-                 target-dir="src/com/onegini/dialog"/>
-    <source-file src="src/android/src/android/com/onegini/dialog/ScreenOrientationAwareActivity.java"
-                 target-dir="src/com/onegini/dialog"/>
-    <!-- exception -->
-    <source-file src="src/android/src/android/com/onegini/exception/PluginConfigException.java"
-                 target-dir="src/com/onegini/exception"/>
-    <!-- gcm -->
-    <source-file src="src/android/src/android/com/onegini/gcm/GcmBroadcastReceiver.java" target-dir="src/com/onegini/gcm/" />
-    <source-file src="src/android/src/android/com/onegini/gcm/GCMHelper.java" target-dir="src/com/onegini/gcm/" />
-    <source-file src="src/android/src/android/com/onegini/gcm/GcmIntentService.java" target-dir="src/com/onegini/gcm/" />
-    <!-- fingerprint -->
-    <source-file src="src/android/src/android/com/onegini/response/FingerprintResponse.java" target-dir="src/com/onegini/response/"/>
-    <!-- model -->
-    <source-file src="src/android/src/android/com/onegini/model/OneginiCordovaPluginConfigModel.java" target-dir="src/com/onegini/model/"/>
-    <source-file src="src/android/src/android/com/onegini/model/MessageKey.java" target-dir="src/com/onegini/model/"/>
-    <!-- resource -->
-    <source-file src="src/android/src/android/com/onegini/resource/RetrofitByteConverter.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <source-file src="src/android/src/android/com/onegini/resource/GetResourceRequestCommand.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <source-file src="src/android/src/android/com/onegini/resource/PostResourceRequestCommand.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <source-file src="src/android/src/android/com/onegini/resource/DeleteResourceRequestCommand.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <source-file src="src/android/src/android/com/onegini/resource/PutResourceRequestCommand.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <source-file src="src/android/src/android/com/onegini/resource/ResourceRequestCommand.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <source-file src="src/android/src/android/com/onegini/resource/ResourceRequestCallback.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <source-file src="src/android/src/android/com/onegini/resource/RequestAdapterFactory.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <source-file src="src/android/src/android/com/onegini/resource/ResourceRequestHeaderInterceptor.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <source-file src="src/android/src/android/com/onegini/resource/ResourceClientFactory.java"
-                 target-dir="src/com/onegini/resource/"/>
-      <source-file src="src/android/src/android/com/onegini/resource/ResourceRequest.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <source-file src="src/android/src/android/com/onegini/resource/RestResource.java"
-                 target-dir="src/com/onegini/resource/"/>
-    <!-- response -->
-    <source-file src="src/android/src/android/com/onegini/response/GeneralResponse.java"
-                 target-dir="src/com/onegini/response/"/>
-    <source-file src="src/android/src/android/com/onegini/response/InAppBrowserControlResponse.java"
-                 target-dir="src/com/onegini/response/"/>
-    <source-file src="src/android/src/android/com/onegini/response/MobileAuthEnrollmentResponse.java"
-                 target-dir="src/com/onegini/response/"/>
-    <source-file src="src/android/src/android/com/onegini/response/OneginiAuthorizationResponse.java"
-                 target-dir="src/com/onegini/response/"/>
-    <source-file src="src/android/src/android/com/onegini/response/OneginiPinResponse.java"
-                 target-dir="src/com/onegini/response/"/>
-    <source-file src="src/android/src/android/com/onegini/response/ResourceCallResponse.java"
-                 target-dir="src/com/onegini/response/"/>
-    <!-- scope -->
-    <source-file src="src/android/src/android/com/onegini/scope/ScopeParser.java" target-dir="src/com/onegini/scope/"/>
-    <!-- util -->
-    <source-file src="src/android/src/android/com/onegini/util/CallbackResultBuilder.java"
-                 target-dir="src/com/onegini/util/"/>
-    <source-file src="src/android/src/android/com/onegini/util/ResourcePluginResultBuilder.java"
-                 target-dir="src/com/onegini/util/"/>
-    <source-file src="src/android/src/android/com/onegini/util/HashUtil.java" target-dir="src/com/onegini/util/"/>
-    <source-file src="src/android/src/android/com/onegini/util/DeviceUtil.java" target-dir="src/com/onegini/util/"/>
-    <source-file src="src/android/src/android/com/onegini/util/JSONResourceReader.java"
-                 target-dir="src/com/onegini/util/"/>
-    <source-file src="src/android/src/android/com/onegini/util/MessageResourceReader.java"
-                 target-dir="src/com/onegini/util/"/>
-    <source-file src="src/android/src/android/com/onegini/util/OneginiPluginConfigUtil.java"
-                 target-dir="src/com/onegini/util/"/>
+    <!-- handler -->
+    <source-file src="src/android/src/android/com/onegini/handler/CreatePinRequestHandler.java"
+                 target-dir="src/com/onegini/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/handler/InitializationHandler.java"
+                 target-dir="src/com/onegini/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/handler/PinAuthenticationRequestHandler.java"
+                 target-dir="src/com/onegini/handler/"/>
   </platform>
 </plugin>
