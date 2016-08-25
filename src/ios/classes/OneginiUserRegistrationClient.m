@@ -27,8 +27,7 @@
 - (void)userClient:(ONGUserClient *)userClient didReceivePinRegistrationChallenge:(ONGCreatePinChallenge *)challenge
 {
   if (challenge.error != nil) {
-    NSString *errorMessage = [NSString stringWithFormat: @"%@\n%@", challenge.error.localizedDescription, challenge.error.localizedRecoverySuggestion];
-    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{@"description":errorMessage}] callbackId:self.callbackId];
+    [self sendErrorResultForCallbackId:self.callbackId withError:challenge.error];
     return;
   }
 
@@ -59,19 +58,14 @@
 - (void)userClient:(ONGUserClient *)userClient didFailToRegisterWithError:(NSError *)error
 {
   [self.viewController dismissViewControllerAnimated:YES completion:nil];
-
-  NSString *errorMessage = [NSString stringWithFormat: @"%@\n%@", error.localizedDescription, error.localizedRecoverySuggestion];
-  [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{@"description": errorMessage}] callbackId:self.callbackId];
-
+  [self sendErrorResultForCallbackId:self.callbackId withError:error];
 }
 
 #pragma mark - OGPinValidationDelegate
 
 - (void)pinEntryError:(NSError *)error
 {
-  // TODO (later) extract errorHandler method
-  NSString *errorMessage = [NSString stringWithFormat: @"%@\n%@", error.localizedDescription, error.localizedRecoverySuggestion];
-  [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{@"description": errorMessage}] callbackId:self.callbackId];
+  [self sendErrorResultForCallbackId:self.callbackId withError:error];
 }
 
 @end

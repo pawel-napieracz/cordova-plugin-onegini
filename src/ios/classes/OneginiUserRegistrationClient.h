@@ -1,6 +1,6 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
-#import <Cordova/CDVPlugin.h>
+#import "CDVPlugin+Onegini.h"
 #import "OneginiSDK.h"
 
 @interface OneginiUserRegistrationClient : CDVPlugin<ONGRegistrationDelegate, ONGPinValidationDelegate>
@@ -10,6 +10,5 @@
 
 - (void)startRegistration:(CDVInvokedUrlCommand *)command;
 - (void)createPIN:(CDVInvokedUrlCommand *)command;
-// TODO this would be a nice spot for 'isRegistered'
 
 @end

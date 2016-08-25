@@ -27,6 +27,8 @@
 
     <header-file src="src/ios/classes/Reachability.h"/>
     <source-file src="src/ios/classes/Reachability.m"/>
+    <header-file src="src/ios/classes/CDVPlugin+Onegini.h"/>
+    <source-file src="src/ios/classes/CDVPlugin+Onegini.m"/>
     <header-file src="src/ios/classes/OneginiClient.h"/>
     <source-file src="src/ios/classes/OneginiClient.m"/>
     <header-file src="src/ios/classes/OneginiUserRegistrationClient.h"/>

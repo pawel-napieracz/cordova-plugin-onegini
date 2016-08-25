@@ -1,6 +1,6 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
-#import <Cordova/CDVPlugin.h>
+#import "CDVPlugin+Onegini.h"
 #import "OneginiSDK.h"
 
 @interface OneginiClient : CDVPlugin
