@@ -20,6 +20,9 @@
       <feature name="OneginiClient">
         <param name="ios-package" value="OneginiClient" />
       </feature>
+      <feature name="OneginiUserRegistrationClient">
+        <param name="ios-package" value="OneginiUserRegistrationClient" />
+      </feature>
     </config-file>
 
     <header-file src="src/ios/classes/Reachability.h"/>

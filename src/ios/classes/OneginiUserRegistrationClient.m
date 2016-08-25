@@ -6,7 +6,7 @@
 
 @implementation OneginiUserRegistrationClient {}
 
-- (void)generateChallenge:(CDVInvokedUrlCommand*)command
+- (void)startRegistration:(CDVInvokedUrlCommand*)command
 {
   self.callbackId = command.callbackId;
   NSDictionary *options = [command.arguments objectAtIndex:0];
@@ -14,7 +14,7 @@
   [[ONGUserClient sharedInstance] registerUser:scopes delegate:self];
 }
 
-- (void)setPIN:(CDVInvokedUrlCommand*)command
+- (void)createPIN:(CDVInvokedUrlCommand*)command
 {
   self.callbackId = command.callbackId;
   NSDictionary *options = [command.arguments objectAtIndex:0];
