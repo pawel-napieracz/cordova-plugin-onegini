@@ -26,6 +26,8 @@
     <source-file src="src/ios/classes/Reachability.m"/>
     <header-file src="src/ios/classes/OneginiClient.h"/>
     <source-file src="src/ios/classes/OneginiClient.m"/>
+    <header-file src="src/ios/classes/OneginiUserRegistrationClient.h"/>
+    <source-file src="src/ios/classes/OneginiUserRegistrationClient.m"/>
 
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticator.h"/>

@@ -1,11 +1,16 @@
 module.exports = (function () {
   var utils = require('./utils');
 
-  function register(scopes, successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiClient', 'register', scopes, successCb, failureCb);
+  function generateRegistrationChallenge(options, successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'generateChallenge', options, successCb, failureCb);
+  }
+
+  function setPIN(options, successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'setPIN', options, successCb, failureCb);
   }
 
   return {
-    register: register
+    generateRegistrationChallenge: generateRegistrationChallenge,
+    setPIN: setPIN
   };
 })();
