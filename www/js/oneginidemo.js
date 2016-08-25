@@ -3,11 +3,22 @@ var OneginiDemo = (function() {
     start: function() {
       onegini.start(
           function() {
-            alert("Success!");
+            console.log("Onegini is ready to go!");
           },
           function(err) {
             alert("Error!\n\n" + err.description);
           }
+      );
+    },
+
+    isRegistered: function() {
+      onegini.user.isRegistered(
+        function(registered) {
+          alert(registered ? "YES" : "NO");
+        },
+        function(err) {
+          alert("Error!\n\n" + err.description);
+        }
       );
     },
 
@@ -19,7 +30,10 @@ var OneginiDemo = (function() {
           },
           function(result) {
             that.pinLength = result.pinLength;
-            alert("Success!\n\n" + JSON.stringify(result));
+            // added a little timeout so the embedded browser has time to disappear
+            setTimeout(function() {
+              alert("Success!\n\n" + JSON.stringify(result));
+            }, 300);
           },
           function(err) {
             alert("Error!\n\n" + err.description);
@@ -28,13 +42,13 @@ var OneginiDemo = (function() {
     },
 
     createPIN: function() {
-      var pin = prompt("Please enter your " + this.pinLength + " digit PIN", "12345");
+      var pin = prompt("Please enter your " + this.pinLength + " digit PIN", "12346" /* default */);
       onegini.user.createPIN(
           {
             pin: pin
           },
           function(result) {
-            alert("Success!\n\n" + JSON.stringify(result));
+            alert("Success!\n\nProfile created: " + result.profileId);
           },
           function(err) {
             alert("Error!\n\n" + err.description);

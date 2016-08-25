@@ -18,11 +18,17 @@
     <p class="event listening">Connecting to Device</p>
     <p class="event received">Device is Ready</p>
 
-    <!-- TODO we probably just want to do this ondeviceready as it's a bit silly to click it every time -->
-    <p><button onclick="OneginiDemo.start()">start (do this first!)</button></p>
+    <script>
+      // First thing to do is calling OneginiDemo.start(), but we make sure
+      // it's called after 'deviceready' fired (as any other Cordova plugin call).
+      document.addEventListener('deviceready', function() {
+        OneginiDemo.start();
+      }, false)
+    </script>
 
     <h3>Registration</h3>
     <p>
+      <button onclick="OneginiDemo.isRegistered()">is registered?</button><br/>
       <button onclick="OneginiDemo.startRegistration()">start registration</button>
       <button onclick="OneginiDemo.createPIN()">create PIN</button>
     </p>
