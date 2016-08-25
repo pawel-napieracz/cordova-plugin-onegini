@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-onegini"
-        version="1.7.5-SNAPSHOT">
+        version="2.0.0-SNAPSHOT">
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
   <!--<hook type="after_platform_add" src="hooks/configure_sdk.js" />-->
   <!--<hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />-->
 
-  <js-module src="www/onegini.js" name="oneginiCordovaPlugin">
-    <clobbers target="oneginiCordovaPlugin"/>
+  <js-module src="www/onegini.js" name="onegini">
+    <clobbers target="onegini"/>
   </js-module>
+  <js-module src="www/device.js" name="device" />
+  <js-module src="www/user.js" name="user" />
+  <js-module src="www/utils.js" name="utils" />
 
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
@@ -60,9 +63,9 @@
   </platform>
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="OneginiCordovaClient">
-        <param name="android-package" value="com.onegini.OneginiCordovaPlugin"/>
-        <param name="onload" value="true"/>
+      <feature name="OneginiClient">
+        <param name="android-package" value="com.onegini.OneginiClient"/>
+        <param name="onload" value="false"/>
       </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
@@ -82,28 +85,7 @@
         <data android:scheme=""/> <!-- Intentionally Empty, SDK Configurator fills schemes from Token Server config. -->
       </intent-filter>
     </config-file>
-    <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <activity
-          android:name="com.onegini.dialog.PinScreenActivity"
-          android:theme="@android:style/Theme.Black.NoTitleBar"
-          android:launchMode="singleTask">
-      </activity>
-      <activity
-          android:name="com.onegini.dialog.PushSimpleActivity"
-          android:theme="@android:style/Theme.Black.NoTitleBar">
-      </activity>
-      <activity
-          android:name="com.onegini.dialog.PushWithPinActivity"
-          android:theme="@android:style/Theme.Black.NoTitleBar">
-      </activity>
-      <activity android:name="com.onegini.dialog.FingerprintActivity"
-                android:theme="@android:style/Theme.Black.NoTitleBar"
-                android:launchMode="singleTask">
-      </activity>
-      <activity android:name="com.onegini.dialog.PushWithFingerprintActivity"
-                android:theme="@android:style/Theme.Black.NoTitleBar"
-                android:launchMode="singleTask">
-      </activity>
+    <!--config-file target="AndroidManifest.xml" parent="/manifest/application">
       <service android:name="com.onegini.gcm.GcmIntentService" />
       <receiver
           android:name="com.onegini.gcm.GcmBroadcastReceiver"
@@ -113,25 +95,19 @@
           <category android:name="$PACKAGE_NAME" />
         </intent-filter>
       </receiver>
-    </config-file>
+    </config-file-->
 
     <!-- Google Play Services, GCM -->
-    <framework src="com.google.android.gms:play-services-base:7.8.0" />
-    <framework src="com.google.android.gms:play-services-gcm:7.8.0" />
+    <!--<framework src="com.google.android.gms:play-services-base:7.8.0" />-->
+    <!--<framework src="com.google.android.gms:play-services-gcm:7.8.0" />-->
     <framework src="com.android.support:multidex:1.0.0" />
 
     <!-- Build gradle -->
     <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
 
     <!-- Onegini Plugin -->
-    <source-file src="src/android/src/android/com/onegini/OneginiConstants.java" target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiCordovaPlugin.java" target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiClient.java" target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiSDK.java" target-dir="src/com/onegini/"/>
-    <!-- action -->
-    <source-file src="src/android/src/android/com/onegini/action/OneginiPluginAction.java"
-                 target-dir="src/com/onegini/action/"/>
-    <source-file src="src/android/src/android/com/onegini/action/StartAction.java"
-                 target-dir="src/com/onegini/action/"/>
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/handler/CreatePinRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
