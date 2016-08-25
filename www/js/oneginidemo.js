@@ -11,12 +11,14 @@ var OneginiDemo = (function() {
       );
     },
 
-    generateRegistrationChallenge: function() {
-      onegini.user.generateRegistrationChallenge(
+    startRegistration: function() {
+      var that = this;
+      onegini.user.startRegistration(
           {
             scopes: ["read"]
           },
           function(result) {
+            that.pinLength = result.pinLength;
             alert("Success!\n\n" + JSON.stringify(result));
           },
           function(err) {
@@ -25,10 +27,11 @@ var OneginiDemo = (function() {
       );
     },
 
-    setPIN: function() {
-      onegini.user.setPIN(
+    createPIN: function() {
+      var pin = prompt("Please enter your " + this.pinLength + " digit PIN", "12345");
+      onegini.user.createPIN(
           {
-            pin: "12345"
+            pin: pin
           },
           function(result) {
             alert("Success!\n\n" + JSON.stringify(result));
