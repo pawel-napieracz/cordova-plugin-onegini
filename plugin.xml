@@ -92,28 +92,7 @@
         <data android:scheme=""/> <!-- Intentionally Empty, SDK Configurator fills schemes from Token Server config. -->
       </intent-filter>
     </config-file>
-    <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <activity
-          android:name="com.onegini.dialog.PinScreenActivity"
-          android:theme="@android:style/Theme.Black.NoTitleBar"
-          android:launchMode="singleTask">
-      </activity>
-      <activity
-          android:name="com.onegini.dialog.PushSimpleActivity"
-          android:theme="@android:style/Theme.Black.NoTitleBar">
-      </activity>
-      <activity
-          android:name="com.onegini.dialog.PushWithPinActivity"
-          android:theme="@android:style/Theme.Black.NoTitleBar">
-      </activity>
-      <activity android:name="com.onegini.dialog.FingerprintActivity"
-                android:theme="@android:style/Theme.Black.NoTitleBar"
-                android:launchMode="singleTask">
-      </activity>
-      <activity android:name="com.onegini.dialog.PushWithFingerprintActivity"
-                android:theme="@android:style/Theme.Black.NoTitleBar"
-                android:launchMode="singleTask">
-      </activity>
+    <!--config-file target="AndroidManifest.xml" parent="/manifest/application">
       <service android:name="com.onegini.gcm.GcmIntentService" />
       <receiver
           android:name="com.onegini.gcm.GcmBroadcastReceiver"
@@ -123,11 +102,11 @@
           <category android:name="$PACKAGE_NAME" />
         </intent-filter>
       </receiver>
-    </config-file>
+    </config-file-->
 
     <!-- Google Play Services, GCM -->
-    <framework src="com.google.android.gms:play-services-base:7.8.0" />
-    <framework src="com.google.android.gms:play-services-gcm:7.8.0" />
+    <!--<framework src="com.google.android.gms:play-services-base:7.8.0" />-->
+    <!--<framework src="com.google.android.gms:play-services-gcm:7.8.0" />-->
     <framework src="com.android.support:multidex:1.0.0" />
 
     <!-- Build gradle -->
