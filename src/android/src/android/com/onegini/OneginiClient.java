@@ -18,11 +18,19 @@ public class OneginiClient extends CordovaPlugin {
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    if (action.equals("start")) {
-      OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).start(new InitializationHandler(callbackContext));
+    if ("start".equals(action)) {
+      start(callbackContext);
       return true;
     }
 
     return false;
+  }
+
+  private void start(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).start(new InitializationHandler(callbackContext));
+      }
+    });
   }
 }
