@@ -6,7 +6,7 @@ var OneginiDemo = (function() {
             alert("OK!");
           },
           function(err) {
-            alert("Not OK: " + err);
+            alert("Error. Type: " + err.type + ", description: "+ err.description);
           }
       );
     },
