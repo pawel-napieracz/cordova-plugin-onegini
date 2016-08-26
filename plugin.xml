@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-onegini"
-        version="1.7.4">
+        version="1.8.0">
   <name>OneginiCordovaPlugin</name>
-  <description>Cordova Device Plugin</description>
+  <description>Onegini Cordova Plugin</description>
+
+  <hook type="after_platform_add" src="hooks/configure_sdk.js" />
+  <hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />
+
   <js-module src="www/onegini.js" name="oneginiCordovaPlugin">
     <clobbers target="oneginiCordovaPlugin"/>
   </js-module>
@@ -76,19 +80,13 @@
       <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
       <permission android:name="$PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature" />
       <uses-permission android:name="$PACKAGE_NAME.permission.C2D_MESSAGE" />
-      <receiver android:name="com.onegini.gcm.GcmReceiver" android:permission="com.google.android.c2dm.permission.SEND" >
-        <intent-filter>
-          <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-          <category android:name="$PACKAGE_NAME" />
-        </intent-filter>
-      </receiver>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="application/activity">
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="oneginisdk"/>
+        <data android:scheme=""/> <!-- Intentionally Empty, SDK Configurator fills schemes from Token Server config. -->
       </intent-filter>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -246,7 +244,7 @@
     <!-- fingerprint -->
     <source-file src="src/android/src/android/com/onegini/response/FingerprintResponse.java" target-dir="src/com/onegini/response/"/>
     <!-- model -->
-    <source-file src="src/android/src/android/com/onegini/model/ConfigModel.java" target-dir="src/com/onegini/model/"/>
+    <source-file src="src/android/src/android/com/onegini/model/OneginiCordovaPluginConfigModel.java" target-dir="src/com/onegini/model/"/>
     <source-file src="src/android/src/android/com/onegini/model/MessageKey.java" target-dir="src/com/onegini/model/"/>
     <!-- resource -->
     <source-file src="src/android/src/android/com/onegini/resource/RetrofitByteConverter.java"
@@ -298,6 +296,8 @@
     <source-file src="src/android/src/android/com/onegini/util/JSONResourceReader.java"
                  target-dir="src/com/onegini/util/"/>
     <source-file src="src/android/src/android/com/onegini/util/MessageResourceReader.java"
+                 target-dir="src/com/onegini/util/"/>
+    <source-file src="src/android/src/android/com/onegini/util/OneginiPluginConfigUtil.java"
                  target-dir="src/com/onegini/util/"/>
   </platform>
 </plugin>

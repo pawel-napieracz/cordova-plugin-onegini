@@ -1,10 +1,12 @@
 # Native or HTML screens?
 
-The Cordova plugin supports both HTML and Native screens for the authentication flows. The native screens are considered more secure and therefore recommended for apps where security really important
+The Cordova plugin supports both HTML and Native screens for the authentication flows. The native screens are considered more secure and therefore recommended 
+for apps where security really important.
 
 ## HTML screens
 
-The HTML screens and resources are located in the example Cordova application. If you want access to the example Cordova application please request this at Onegini Support.
+The HTML screens and resources are located in the example Cordova application. If you want access to the example Cordova application please request this at 
+Onegini Support.
 
 ## Native screens
 

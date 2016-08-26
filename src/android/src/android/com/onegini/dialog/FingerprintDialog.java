@@ -2,6 +2,7 @@ package com.onegini.dialog;
 
 import android.content.Context;
 import android.content.Intent;
+import com.onegini.mobile.sdk.android.library.model.entity.UserProfile;
 import com.onegini.mobile.sdk.android.library.utils.dialogs.OneginiFingerprintDialog;
 
 public class FingerprintDialog implements OneginiFingerprintDialog {
@@ -13,7 +14,7 @@ public class FingerprintDialog implements OneginiFingerprintDialog {
   }
 
   @Override
-  public void showFingerprintPopup() {
+  public void showFingerprintPopup(final UserProfile userProfile) {
     notifyActivity(FingerprintActivity.COMMAND_SHOW);
   }
 

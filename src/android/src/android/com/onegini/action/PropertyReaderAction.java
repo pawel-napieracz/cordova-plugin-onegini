@@ -2,12 +2,12 @@ package com.onegini.action;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.Config;
+import org.apache.cordova.CordovaPreferences;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.onegini.OneginiCordovaPlugin;
 import com.onegini.exception.PluginConfigException;
-import com.onegini.model.ConfigModel;
 import com.onegini.util.CallbackResultBuilder;
 
 public class PropertyReaderAction implements OneginiPluginAction {
@@ -41,10 +41,18 @@ public class PropertyReaderAction implements OneginiPluginAction {
 
   private String readProperty(final String key) {
     try {
-      return ConfigModel.getStringFromPreferences(Config.getPreferences(), key);
+      return getStringFromPreferences(Config.getPreferences(), key);
     } catch (PluginConfigException e) {
       return "";
     }
+  }
+
+  public static String getStringFromPreferences(final CordovaPreferences preferences, final String key) throws PluginConfigException {
+    final String value = preferences.getString(key, null);
+    if (value == null) {
+      throw new PluginConfigException("Missing property in config.xml file: "+key);
+    }
+    return value;
   }
 
   private void sendResult(final CallbackContext callbackContext, final String propertyValue) {

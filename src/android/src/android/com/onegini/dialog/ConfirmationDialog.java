@@ -4,6 +4,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 import android.content.Context;
 import android.content.Intent;
+import com.onegini.mobile.sdk.android.library.model.entity.UserProfile;
 import com.onegini.mobile.sdk.android.library.utils.dialogs.AlertInterface;
 
 public class ConfirmationDialog implements AlertInterface {
@@ -16,7 +17,7 @@ public class ConfirmationDialog implements AlertInterface {
   }
 
   @Override
-  public void showAlert(final String title, final String message, final String positiveButton,
+  public void showAlert(final String title, final String message, final UserProfile userProfile, final String positiveButton,
                         final String negativeButton, final AlertHandler alertHandler) {
     this.handler = alertHandler;
 

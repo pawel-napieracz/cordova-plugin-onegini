@@ -1,0 +1,18 @@
+ext {
+  ONEGINI_SDK = 'com.onegini.mobile.sdk.android:library:5.03.02:release@aar'
+  ONEGINI_OCRA = 'com.onegini.misc:og-ocra:100.00.00'
+  OK_HTTP = [
+      'com.squareup.okhttp:okhttp:2.3.0',
+      'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
+  ]
+  RETROFIT = 'com.squareup.retrofit:retrofit:1.9.0'
+  SPONGY_CASTLE = [
+      'com.madgag.spongycastle:core:1.51.0.0',
+      'com.madgag.spongycastle:prov:1.51.0.0',
+      'com.madgag.spongycastle:pg:1.51.0.0',
+      'com.madgag.spongycastle:pkix:1.51.0.0'
+  ]
+  JOSE_JWT = 'com.nimbusds:nimbus-jose-jwt:3.6'
+
+  DEPENDENCIES = [ONEGINI_SDK, ONEGINI_OCRA, OK_HTTP, RETROFIT, SPONGY_CASTLE, JOSE_JWT]
+}

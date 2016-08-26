@@ -7,6 +7,7 @@ import com.onegini.action.PinHandlerProvider;
 import com.onegini.action.ChangePinAction;
 import com.onegini.action.PinCallbackSession;
 import com.onegini.mobile.sdk.android.library.handlers.OneginiPinProvidedHandler;
+import com.onegini.mobile.sdk.android.library.model.entity.UserProfile;
 import com.onegini.mobile.sdk.android.library.utils.dialogs.OneginiCurrentPinDialog;
 import com.onegini.util.CallbackResultBuilder;
 
@@ -19,7 +20,7 @@ public class CurrentPinNonNativeDialogHandler implements OneginiCurrentPinDialog
   }
 
   @Override
-  public void getCurrentPin(final OneginiPinProvidedHandler oneginiPinProvidedHandler) {
+  public void getCurrentPin(final UserProfile userProfile, final OneginiPinProvidedHandler oneginiPinProvidedHandler) {
     PinHandlerProvider.getInstance().setOneginiPinProvidedHandler(oneginiPinProvidedHandler);
 
     if (isChangePinFlow()) {

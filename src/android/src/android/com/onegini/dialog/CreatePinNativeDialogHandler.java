@@ -20,6 +20,7 @@ import com.onegini.action.InAppBrowserControlSession;
 import com.onegini.mobile.sdk.android.library.OneginiClient;
 import com.onegini.mobile.sdk.android.library.exception.OneginiClientNotValidatedException;
 import com.onegini.mobile.sdk.android.library.handlers.OneginiPinProvidedHandler;
+import com.onegini.mobile.sdk.android.library.model.entity.UserProfile;
 import com.onegini.mobile.sdk.android.library.utils.dialogs.OneginiCreatePinDialog;
 
 public class CreatePinNativeDialogHandler implements OneginiCreatePinDialog {
@@ -54,7 +55,7 @@ public class CreatePinNativeDialogHandler implements OneginiCreatePinDialog {
   }
 
   @Override
-  public void createPin(final OneginiPinProvidedHandler oneginiPinProvidedHandler) {
+  public void createPin(final UserProfile userProfile, final OneginiPinProvidedHandler oneginiPinProvidedHandler) {
     InAppBrowserControlSession.closeInAppBrowser();
 
     if (ChangePinAction.isChangePinFlow()) {

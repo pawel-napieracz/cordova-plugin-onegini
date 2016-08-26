@@ -27,8 +27,4 @@ public class OneginiConstants {
   public static final String DISABLE_FINGEPRINT_AUTHENITCATION = "disableFingerprintAuthentication";
   public static final String FINGERPRINT_AUTHENTICATION_STATE = "checkFingerpringAuthenticationState";
   public static final String READ_CONFIG_PROPERTY_ACTION = "readConfigProperty";
-
-  // Values
-  public static final String KEYSTORE_HASH = "";
-
 }

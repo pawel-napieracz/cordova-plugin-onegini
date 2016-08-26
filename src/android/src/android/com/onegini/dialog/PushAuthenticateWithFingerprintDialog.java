@@ -8,6 +8,7 @@ import static com.onegini.dialog.PushWithFingerprintActivity.EXTRA_TITLE;
 
 import android.content.Context;
 import android.content.Intent;
+import com.onegini.mobile.sdk.android.library.model.entity.UserProfile;
 import com.onegini.mobile.sdk.android.library.utils.dialogs.ConfirmationWithFingerprint;
 
 public class PushAuthenticateWithFingerprintDialog implements ConfirmationWithFingerprint {
@@ -21,7 +22,7 @@ public class PushAuthenticateWithFingerprintDialog implements ConfirmationWithFi
   }
 
   @Override
-  public void showConfirmation(final String title, final ConfirmationWithFingerprintHandler confirmationWithFingerprintHandler) {
+  public void showConfirmation(final String title, final UserProfile userProfile, final ConfirmationWithFingerprintHandler confirmationWithFingerprintHandler) {
     handler = confirmationWithFingerprintHandler;
 
     final Intent intent = new Intent(context, PushWithFingerprintActivity.class);

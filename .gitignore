@@ -4,10 +4,10 @@
 cordova/
 *.orig
 .gradle/
-gradle
 build/
 **/*.iml
 local.properties
+docs/node_modules
 **/*--
 
 # iOS specific
