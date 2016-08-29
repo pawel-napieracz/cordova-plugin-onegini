@@ -5,12 +5,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.onegini.mobile.android.sdk.handlers.OneginiInitializationHandler;
 import com.onegini.mobile.android.sdk.handlers.error.OneginiInitializationError;
 import com.onegini.mobile.android.sdk.model.entity.UserProfile;
+import com.onegini.util.PluginResultBuilder;
 
 public class InitializationHandler implements OneginiInitializationHandler {
 
