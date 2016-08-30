@@ -98,7 +98,7 @@ public class PluginResultBuilder {
     this.status = ERROR;
 
     Map<String, String> payload = new HashMap<String, String>();
-    payload.put("err", "OneginiPlugin: Internal error: " + e.getMessage());
+    payload.put("description", "OneginiPlugin: Internal error: " + e.getMessage());
     this.payload = new JSONObject(payload);
   }
 
