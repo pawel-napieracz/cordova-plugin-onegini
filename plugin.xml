@@ -35,6 +35,9 @@
     <source-file src="src/ios/classes/OneginiUserRegistrationClient.m"/>
     <header-file src="src/ios/classes/OneginiUserAuthenticationClient.h"/>
     <source-file src="src/ios/classes/OneginiUserAuthenticationClient.m"/>
+    <header-file src="src/ios/classes/WebBrowserViewController.h"/>
+    <source-file src="src/ios/classes/WebBrowserViewController.m"/>
+    <resource-file src="src/ios/classes/WebBrowserViewController.xib"/>
 
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticator.h"/>
