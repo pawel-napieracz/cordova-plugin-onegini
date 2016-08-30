@@ -10,6 +10,6 @@
 
 - (void)startRegistration:(CDVInvokedUrlCommand *)command;
 - (void)createPIN:(CDVInvokedUrlCommand *)command;
-- (void)getRegisteredUsers:(CDVInvokedUrlCommand *)command;
+- (void)getUserProfiles:(CDVInvokedUrlCommand *)command;
 
 @end

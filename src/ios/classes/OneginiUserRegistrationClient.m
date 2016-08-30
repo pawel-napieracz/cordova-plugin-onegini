@@ -27,7 +27,7 @@ static NSString *const ONGPluginKeyPinLength = @"pinLength";
   [self.challenge.sender respondWithCreatedPin:pin challenge:self.challenge];
 }
 
-- (void)getRegisteredUsers:(CDVInvokedUrlCommand*)command
+- (void)getUserProfiles:(CDVInvokedUrlCommand*)command
 {
   NSArray<ONGUserProfile *> *profiles = [[ONGUserClient sharedInstance] userProfiles].allObjects;
 

@@ -12,14 +12,13 @@ module.exports = (function () {
     utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'createPin', options.pin, successCb, failureCb);
   }
 
-  function getRegisteredUsers(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'getRegisteredUsers', [], successCb, failureCb);
+  function getUserProfiles(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'getUserProfiles', [], successCb, failureCb);
   }
 
   return {
     startRegistration: startRegistration,
-    createPIN: createPIN,
-    getRegisteredUsers: getRegisteredUsers
-    createPin: createPin
+    createPin: createPin,
+    getUserProfiles: getUserProfiles
   };
 })();
