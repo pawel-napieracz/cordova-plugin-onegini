@@ -41,9 +41,12 @@ var OneginiDemo = (function () {
       );
     },
 
-    createPIN: function () {
-      var pin = prompt("Please enter your " + this.pinLength + " digit PIN", "12346" /* default */);
-      onegini.user.createPIN(
+    createPin: function () {
+      var pin = prompt("Please enter your " + this.pinLength + " digit Pin", "12346" /* default */);
+      if (!pin) {
+        return;
+      }
+      onegini.user.createPin(
           {
             pin: pin
           },
@@ -56,10 +59,10 @@ var OneginiDemo = (function () {
       );
     },
 
-    getRegisteredUsers: function () {
-      onegini.user.getRegisteredUsers(
+    getUserProfiles: function() {
+      onegini.user.getUserProfiles(
           function (result) {
-            alert("Success!\n\Registered Users:\n" + JSON.stringify(result));
+          alert("Success!\n\User profiles:\n" + JSON.stringify(result));
           },
           function (err) {
             alert("Error!\n\n" + err.description);
