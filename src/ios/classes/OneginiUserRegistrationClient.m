@@ -24,7 +24,7 @@ static NSString *const ONGPluginKeyPinLength = @"pinLength";
   self.callbackId = command.callbackId;
   NSDictionary *options = [command.arguments objectAtIndex:0];
   NSString *pin = options[ONGPluginKeyPin];
-  [self.challenge.sender respondWithCreatedPin:pin challenge:self.challenge];
+  [self.createPinChallenge.sender respondWithCreatedPin:pin challenge:self.createPinChallenge];
 }
 
 - (void)getUserProfiles:(CDVInvokedUrlCommand*)command
@@ -48,13 +48,10 @@ static NSString *const ONGPluginKeyPinLength = @"pinLength";
     return;
   }
 
-  // remember for later
-  self.challenge = challenge;
-
-  // dismiss controller
+  self.createPinChallenge = challenge;
   [self.viewController dismissViewControllerAnimated:YES completion:nil];
 
-  NSDictionary *result = @{ONGPluginKeyPinLength:@5};
+  NSDictionary *result = @{ONGPluginKeyPinLength:@(challenge.pinLength)};
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:self.callbackId];
 }
 
