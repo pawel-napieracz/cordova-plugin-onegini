@@ -4,13 +4,18 @@
 #import "AppDelegate.h"
 #import "WebBrowserViewController.h"
 
+static NSString *const ONGPluginKeyProfileId = @"profileId";
+static NSString *const ONGPluginKeyScopes = @"scopes";
+static NSString *const ONGPluginKeyPin = @"pin";
+static NSString *const ONGPluginKeyPinLength = @"pinLength";
+
 @implementation OneginiUserRegistrationClient {}
 
 - (void)startRegistration:(CDVInvokedUrlCommand*)command
 {
   self.callbackId = command.callbackId;
   NSDictionary *options = [command.arguments objectAtIndex:0];
-  NSArray *scopes = options[@"scopes"];
+  NSArray *scopes = options[ONGPluginKeyScopes];
   [[ONGUserClient sharedInstance] registerUser:scopes delegate:self];
 }
 
@@ -18,8 +23,20 @@
 {
   self.callbackId = command.callbackId;
   NSDictionary *options = [command.arguments objectAtIndex:0];
-  NSString *pin = options[@"pin"];
+  NSString *pin = options[ONGPluginKeyPin];
   [self.challenge.sender respondWithCreatedPin:pin challenge:self.challenge];
+}
+
+- (void)getRegisteredUsers:(CDVInvokedUrlCommand*)command
+{
+  NSArray<ONGUserProfile *> *profiles = [[ONGUserClient sharedInstance] userProfiles].allObjects;
+
+  NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:profiles.count];
+  for (ONGUserProfile *profile in profiles) {
+    [result addObject:@{ONGPluginKeyProfileId: profile.profileId}];
+  }
+
+  [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
 }
 
 #pragma mark - ONGRegistrationDelegate
@@ -37,7 +54,7 @@
   // dismiss controller
   [self.viewController dismissViewControllerAnimated:YES completion:nil];
 
-  NSDictionary *result = @{@"pinLength":@5};
+  NSDictionary *result = @{ONGPluginKeyPinLength:@5};
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:self.callbackId];
 }
 
@@ -51,7 +68,7 @@
 
 - (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile
 {
-  NSDictionary *result = @{@"profileId":userProfile.profileId};
+  NSDictionary *result = @{ONGPluginKeyProfileId: userProfile.profileId};
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:self.callbackId];
 }
 

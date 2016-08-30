@@ -12,8 +12,13 @@ module.exports = (function () {
     utils.promiseOrCallbackExec('OneginiUserClient', 'createPIN', options.pin, successCb, failureCb);
   }
 
+  function getRegisteredUsers(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'getRegisteredUsers', [], successCb, failureCb);
+  }
+
   return {
     startRegistration: startRegistration,
-    createPIN: createPIN
+    createPIN: createPIN,
+    getRegisteredUsers: getRegisteredUsers
   };
 })();
