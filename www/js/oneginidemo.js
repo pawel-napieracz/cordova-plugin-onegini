@@ -68,6 +68,39 @@ var OneginiDemo = (function () {
             alert("Error!\n\n" + err.description);
           }
       );
+    },
+
+    startAuthentication: function() {
+      var that = this;
+      onegini.user.startAuthentication(
+        {
+          profileId: 'W45LM3' // TODO pick from list - this is the hardcoded returnvalue of 'createPin'
+        },
+        function(result) {
+          alert("Success!\n\n" + JSON.stringify(result));
+        },
+        function(err) {
+          alert("Error!\n\n" + err.description);
+        }
+      );
+    },
+
+    checkPin: function() {
+      var pin = prompt("Please enter your Pin", "12346" /* default */);
+      if (!pin) {
+        return;
+      }
+      onegini.user.checkPin(
+        {
+          pin: pin
+        },
+        function(result) {
+          alert("Authentication succeeded!");
+        },
+        function(err) {
+          alert("Error!\n\n" + JSON.stringify(err));
+        }
+      );
     }
   }
 })();
