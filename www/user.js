@@ -2,7 +2,7 @@ module.exports = (function () {
   var utils = require('./utils');
 
   function startRegistration(options, successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'startRegistration', options.scopes, successCb, failureCb);
+    return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'startRegistration', options, successCb, failureCb);
   }
 
   function createPin(options, successCb, failureCb) {
@@ -10,7 +10,7 @@ module.exports = (function () {
       throw new TypeError("Onegini: missing argument for createPin: no success callback provided");
     }
     // no promise possible as this may be called more than once
-    utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'createPin', options.pin, successCb, failureCb);
+    utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'createPin', options, successCb, failureCb);
   }
 
   function getUserProfiles(successCb, failureCb) {
