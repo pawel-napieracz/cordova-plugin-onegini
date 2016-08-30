@@ -18,11 +18,6 @@ import com.onegini.util.PluginResultBuilder;
 public class OneginiUserClient extends CordovaPlugin {
 
   @Override
-  public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
-    super.initialize(cordova, webView);
-  }
-
-  @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if ("startRegistration".equals(action)) {
       startRegistration(args, callbackContext);
@@ -30,6 +25,7 @@ public class OneginiUserClient extends CordovaPlugin {
     }
     else if("createPIN".equals(action)) {
       createPIN(args, callbackContext);
+      return true;
     }
 
     return false;

@@ -12,11 +12,6 @@ import com.onegini.handler.InitializationHandler;
 public class OneginiClient extends CordovaPlugin {
 
   @Override
-  public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
-    super.initialize(cordova, webView);
-  }
-
-  @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if ("start".equals(action)) {
       start(callbackContext);
