@@ -78,6 +78,10 @@
         <param name="android-package" value="com.onegini.OneginiUserClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiUserRegistrationClient">
+        <param name="android-package" value="com.onegini.OneginiUserRegistrationClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -117,13 +121,21 @@
     <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
 
     <!-- Onegini Plugin -->
-    <source-file src="src/android/src/android/com/onegini/OneginiClient.java" target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiUserClient.java" target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/RegistrationHandler.java" target-dir="src/com/onegini/handler"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiSDK.java" target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiClient.java"
+                 target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiUserClient.java"
+                 target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiUserRegistrationClient.java"
+                 target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiSDK.java"
+                 target-dir="src/com/onegini/"/>
+
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
+
     <!-- handler -->
+    <source-file src="src/android/src/android/com/onegini/handler/RegistrationHandler.java"
+                 target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/CreatePinRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/InitializationHandler.java"
