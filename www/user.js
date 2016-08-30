@@ -14,6 +14,6 @@ module.exports = (function () {
 
   return {
     startRegistration: startRegistration,
-    createPIN: createPIN
+    createPin: createPin
   };
 })();
