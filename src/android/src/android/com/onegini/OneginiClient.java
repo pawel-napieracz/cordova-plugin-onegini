@@ -7,6 +7,8 @@ import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.content.Intent;
+import android.net.Uri;
 import com.onegini.handler.InitializationHandler;
 
 public class OneginiClient extends CordovaPlugin {
@@ -19,6 +21,19 @@ public class OneginiClient extends CordovaPlugin {
     }
 
     return false;
+  }
+
+  @Override
+  public void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    handleRedirection(intent.getData());
+  }
+
+  private void handleRedirection(final Uri uri) {
+    final com.onegini.mobile.android.sdk.client.OneginiClient client = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext());
+    if (uri != null && client.getConfigModel().getRedirectUri().startsWith(uri.getScheme())) {
+      client.getUserClient().handleAuthorizationCallback(uri);
+    }
   }
 
   private void start(final CallbackContext callbackContext) {
