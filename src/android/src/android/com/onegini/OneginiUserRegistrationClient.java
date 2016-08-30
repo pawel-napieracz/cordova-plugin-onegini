@@ -1,5 +1,7 @@
 package com.onegini;
 
+import java.util.Set;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
@@ -9,6 +11,7 @@ import org.json.JSONException;
 import com.onegini.handler.CreatePinRequestHandler;
 import com.onegini.handler.RegistrationHandler;
 import com.onegini.mobile.android.sdk.handlers.request.callback.OneginiPinCallback;
+import com.onegini.mobile.android.sdk.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
 public class OneginiUserRegistrationClient extends CordovaPlugin {
@@ -20,6 +23,9 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
       return true;
     } else if ("createPin".equals(action)) {
       createPin(args, callbackContext);
+      return true;
+    } else if ("getUserProfiles".equals(action)) {
+      getUserProfiles(callbackContext);
       return true;
     }
 
@@ -53,5 +59,21 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
     } else {
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
+  }
+
+  public void getUserProfiles(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+       Set<UserProfile> userProfiles = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
+            .getUserProfiles();
+
+        final PluginResult pluginResult = new PluginResultBuilder()
+            .withSuccess()
+            .addUserProfiles(userProfiles)
+            .build();
+
+        callbackContext.sendPluginResult(pluginResult);
+      }
+    });
   }
 }
