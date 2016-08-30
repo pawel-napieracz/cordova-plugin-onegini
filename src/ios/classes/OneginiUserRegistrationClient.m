@@ -19,7 +19,7 @@ static NSString *const ONGPluginKeyPinLength = @"pinLength";
   [[ONGUserClient sharedInstance] registerUser:scopes delegate:self];
 }
 
-- (void)createPIN:(CDVInvokedUrlCommand*)command
+- (void)createPin:(CDVInvokedUrlCommand*)command
 {
   self.callbackId = command.callbackId;
   NSDictionary *options = [command.arguments objectAtIndex:0];
