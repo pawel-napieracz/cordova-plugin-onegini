@@ -21,10 +21,10 @@ public class InitializationHandler implements OneginiInitializationHandler {
   }
 
   @Override
-  public void onSuccess(final Set<UserProfile> set) {
+  public void onSuccess(final Set<UserProfile> userProfiles) {
     final JSONArray payload = new JSONArray();
 
-    for (final UserProfile userProfile : set) {
+    for (final UserProfile userProfile : userProfiles) {
       final Map<String, Object> userProfileMap = new HashMap<String, Object>();
       userProfileMap.put("id", userProfile.getProfileId());
       userProfileMap.put("isDefault", userProfile.isDefault());

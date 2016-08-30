@@ -17,7 +17,7 @@ public class OneginiSDK {
 
   private static OneginiClient buildSDK(final Context context) {
     final Context applicationContext = context.getApplicationContext();
-    final CreatePinRequestHandler createPinRequestHandler = new CreatePinRequestHandler();
+    final CreatePinRequestHandler createPinRequestHandler = CreatePinRequestHandler.getInstance();
     final PinAuthenticationRequestHandler pinAuthenticationRequestHandler = new PinAuthenticationRequestHandler();
 
     return new OneginiClientBuilder(applicationContext, createPinRequestHandler, pinAuthenticationRequestHandler)

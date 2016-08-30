@@ -9,7 +9,7 @@ module.exports = (function() {
     if (!args) {
       args = [];
     }
-    else if (!utils.isArray(args)) {
+    else if (!isArray(args)) {
       args = [args];
     }
 

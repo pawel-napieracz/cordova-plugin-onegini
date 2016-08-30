@@ -4,7 +4,7 @@ module.exports = (function () {
   var utils = require('./utils');
 
   function start(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiClient', 'start', false, successCb, failureCb);
+    return utils.promiseOrCallbackExec('OneginiClient', 'start', [], successCb, failureCb);
   }
 
   return {
