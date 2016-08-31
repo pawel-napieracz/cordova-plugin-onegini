@@ -24,9 +24,10 @@ public class InitializationHandler implements OneginiInitializationHandler {
   public void onSuccess(final Set<UserProfile> userProfiles) {
     final JSONArray payload = new JSONArray();
 
+    // TODO do we really need to pass the user profiles with the success cb? If so: add to iOS as well
     for (final UserProfile userProfile : userProfiles) {
       final Map<String, Object> userProfileMap = new HashMap<String, Object>();
-      userProfileMap.put("id", userProfile.getProfileId());
+      userProfileMap.put("profileId", userProfile.getProfileId());
       userProfileMap.put("isDefault", userProfile.isDefault());
       payload.put(new JSONObject(userProfileMap));
     }
