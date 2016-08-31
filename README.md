@@ -144,3 +144,12 @@ The native screens plugin provides an example implementation of these native scr
 The native screens are only available when the `cordova-onegini-native-screens` plugin is installed along with `cordova-onegini-plugin`.
 
 The `cordova-onegini-native-screens` plugin is available on [GitHub](https://github.com/Onegini/cordova-plugin-onegini-native-screens).
+
+## Testing the plugin
+This plugin has an embedded test plugin which can be added to your project
+as any other Cordova plugin.
+- From a local folder: `cordova plugin add <path>/cordova-plugin-onegini/tests`
+- From a remote repo: `cordova plugin add http://<url>/cordova-plugin-onegini.git#:/tests`
+
+Deploy to your device and load the page `cdvtests/index.html`, or to make it permanent
+change the `config.xml`: `<content src="cdvtests/index.html"/>`.
