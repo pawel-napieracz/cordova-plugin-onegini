@@ -4,18 +4,25 @@ import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.cordova.PluginResult;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.onegini.mobile.android.sdk.model.entity.UserProfile;
 
 public class PluginResultBuilder {
 
-  private HashMap<String, String> payload;
+  private JSONObject payload;
   private PluginResult.Status status;
-  private boolean shouldKeepCallback = false;
+  private boolean shouldKeepCallback;
 
   public PluginResultBuilder() {
-    payload = new HashMap<String, String>();
+    payload = new JSONObject();
+    shouldKeepCallback = false;
   }
 
   public PluginResultBuilder withSuccess() {
@@ -30,7 +37,13 @@ public class PluginResultBuilder {
 
   public PluginResultBuilder withErrorDescription(final String description) {
     status = ERROR;
-    payload.put("description", description);
+
+    try {
+      payload.put("description", description);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
     return this;
   }
 
@@ -41,12 +54,56 @@ public class PluginResultBuilder {
 
   public PluginResultBuilder withErrorType(final int errorType) {
     status = ERROR;
-    payload.put("errorType", Integer.toString(errorType));
+
+    try {
+      payload.put("errorType", errorType);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
     return this;
   }
 
+  public PluginResultBuilder addUserProfile(final UserProfile userProfile) {
+    try {
+      JSONArray userProfilesJSON;
+      if (payload.has("userProfiles")) {
+        userProfilesJSON = payload.getJSONArray("userProfiles");
+      } else {
+        userProfilesJSON = new JSONArray();
+      }
+
+      JSONObject userProfileJSON = new JSONObject();
+      userProfileJSON.put("profileId", userProfile.getProfileId());
+      userProfileJSON.put("isDefault", userProfile.isDefault());
+
+      userProfilesJSON.put(userProfileJSON);
+      payload.put("userProfiles", userProfilesJSON);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder addUserProfiles(final Set<UserProfile> userProfiles) {
+    for (final UserProfile userProfile : userProfiles) {
+      this.addUserProfile(userProfile);
+    }
+
+    return this;
+  }
+
+  private void handleException(JSONException e) {
+    this.status = ERROR;
+
+    Map<String, String> payload = new HashMap<String, String>();
+    payload.put("description", "OneginiPlugin: Internal error: " + e.getMessage());
+    this.payload = new JSONObject(payload);
+  }
+
   public PluginResult build() {
-    PluginResult pluginResult = new PluginResult(status, new JSONObject(payload));
+    PluginResult pluginResult = new PluginResult(status, payload);
     pluginResult.setKeepCallback(shouldKeepCallback);
     return pluginResult;
   }

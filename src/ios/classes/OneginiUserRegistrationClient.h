@@ -9,6 +9,7 @@
 @property (nonatomic) ONGCreatePinChallenge *challenge;
 
 - (void)startRegistration:(CDVInvokedUrlCommand *)command;
-- (void)createPIN:(CDVInvokedUrlCommand *)command;
+- (void)createPin:(CDVInvokedUrlCommand *)command;
+- (void)getUserProfiles:(CDVInvokedUrlCommand *)command;
 
 @end

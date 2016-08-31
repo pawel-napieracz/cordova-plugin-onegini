@@ -1,16 +1,14 @@
 package com.onegini.handler;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.cordova.CallbackContext;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.android.sdk.handlers.OneginiInitializationHandler;
 import com.onegini.mobile.android.sdk.handlers.error.OneginiInitializationError;
 import com.onegini.mobile.android.sdk.model.entity.UserProfile;
+import com.onegini.util.PluginResultBuilder;
 
 public class InitializationHandler implements OneginiInitializationHandler {
 
@@ -22,24 +20,22 @@ public class InitializationHandler implements OneginiInitializationHandler {
 
   @Override
   public void onSuccess(final Set<UserProfile> userProfiles) {
-    final JSONArray payload = new JSONArray();
+    final PluginResult pluginResult = new PluginResultBuilder()
+        .withSuccess()
+        .addUserProfiles(userProfiles)
+        .build();
 
-    for (final UserProfile userProfile : userProfiles) {
-      final Map<String, Object> userProfileMap = new HashMap<String, Object>();
-      userProfileMap.put("id", userProfile.getProfileId());
-      userProfileMap.put("isDefault", userProfile.isDefault());
-      payload.put(new JSONObject(userProfileMap));
-    }
-
-    callbackContext.success(payload);
+    callbackContext.sendPluginResult(pluginResult);
   }
 
   @Override
   public void onError(final OneginiInitializationError oneginiInitializationError) {
-    final Map<String, Object> payload = new HashMap<String, Object>();
-    payload.put("type", oneginiInitializationError.getErrorType());
-    payload.put("description", oneginiInitializationError.getErrorDescription());
+    final PluginResult pluginResult = new PluginResultBuilder()
+        .withError()
+        .withErrorType(oneginiInitializationError.getErrorType())
+        .withErrorDescription(oneginiInitializationError.getErrorDescription())
+        .build();
 
-    callbackContext.error(new JSONObject(payload));
+    callbackContext.sendPluginResult(pluginResult);
   }
 }
