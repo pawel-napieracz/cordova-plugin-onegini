@@ -60,9 +60,11 @@ var OneginiDemo = (function () {
     },
 
     getUserProfiles: function() {
+      var that = this;
       onegini.user.getUserProfiles(
           function (result) {
-          alert("Success!\n\User profiles:\n" + JSON.stringify(result));
+            that.userProfiles = result;
+            alert("Success!\n\User profiles:\n" + JSON.stringify(result));
           },
           function (err) {
             alert("Error!\n\n" + err.description);
@@ -71,10 +73,11 @@ var OneginiDemo = (function () {
     },
 
     startAuthentication: function() {
-      var that = this;
+      var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
+      profileId = prompt("Please enter the profileId", profileId);
       onegini.user.startAuthentication(
         {
-          profileId: 'W45LM3' // TODO pick from list - this is the hardcoded returnvalue of 'createPin'
+          profileId: profileId
         },
         function(result) {
           alert("Success!\n\n" + JSON.stringify(result));
