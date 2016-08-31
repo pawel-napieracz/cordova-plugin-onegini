@@ -147,9 +147,11 @@ The `cordova-onegini-native-screens` plugin is available on [GitHub](https://git
 
 ## Testing the plugin
 This plugin has an embedded test plugin which can be added to your project
-as any other Cordova plugin.
+like any other Cordova plugin.
 - From a local folder: `cordova plugin add <path>/cordova-plugin-onegini/tests`
 - From a remote repo: `cordova plugin add http://<url>/cordova-plugin-onegini.git#:/tests`
 
-Deploy to your device and load the page `cdvtests/index.html`, or to make it permanent
+You'll also need to add the [Cordova Plugin Test Framework](https://github.com/apache/cordova-plugin-test-framework): `cordova plugin add http://git-wip-us.apache.org/repos/asf/cordova-plugin-test-framework.git`
+
+Now deploy the app to your device/simulator and load the page `cdvtests/index.html`, or to make it permanent
 change the `config.xml`: `<content src="cdvtests/index.html"/>`.
