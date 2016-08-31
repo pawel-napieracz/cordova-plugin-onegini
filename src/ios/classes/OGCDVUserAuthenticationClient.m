@@ -16,11 +16,6 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
   NSDictionary *options = [command.arguments objectAtIndex:0];
   NSString *profileId = options[OGCDVPluginKeyProfileId];
 
-  if (!profileId) {
-    [self sendErrorResultForCallbackId:command.callbackId withMessage:[NSString stringWithFormat: @"No %@ passed.", OGCDVPluginKeyProfileId]];
-    return;
-  }
-
   ONGUserProfile *profile = [self getRegisteredUserProfile:profileId];
   if (profile == nil) {
     [self sendErrorResultForCallbackId:command.callbackId withMessage:[NSString stringWithFormat: @"No registered user found for the provided %@.", OGCDVPluginKeyProfileId]];
