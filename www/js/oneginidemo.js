@@ -29,10 +29,10 @@ var OneginiDemo = (function () {
             scopes: ["read"]
           },
           function (result) {
-            that.pinLength = result.pinLength;
+            console.log("startRegistration success, now calling createPin. " + JSON.stringify(result));
             // added a little timeout so the embedded browser has time to disappear
             setTimeout(function () {
-              alert("Success!\n\n" + JSON.stringify(result));
+              that.createPin(result.pinLength);
             }, 900);
           },
           function (err) {
@@ -41,8 +41,8 @@ var OneginiDemo = (function () {
       );
     },
 
-    createPin: function () {
-      var pin = prompt("Please enter your " + this.pinLength + " digit Pin", "12346" /* default */);
+    createPin: function (pinLength) {
+      var pin = prompt("Please enter your " + pinLength + " digit Pin", "12346" /* default */);
       if (!pin) {
         return;
       }
@@ -75,16 +75,21 @@ var OneginiDemo = (function () {
     startAuthentication: function() {
       var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
       profileId = prompt("Please enter the profileId", profileId);
+      if (!profileId) {
+        return;
+      }
+      var that = this;
       onegini.user.startAuthentication(
-        {
-          profileId: profileId
-        },
-        function(result) {
-          alert("Success!\n\n" + JSON.stringify(result));
-        },
-        function(err) {
-          alert("Error!\n\n" + err.description);
-        }
+          {
+            profileId: profileId
+          },
+          function(result) {
+            console.log("startAuthentication success, now calling createPin. " + JSON.stringify(result));
+            that.checkPin(result.pinLength);
+          },
+          function(err) {
+            alert("Error!\n\n" + err.description);
+          }
       );
     },
 
@@ -94,15 +99,15 @@ var OneginiDemo = (function () {
         return;
       }
       onegini.user.checkPin(
-        {
-          pin: pin
-        },
-        function(result) {
-          alert("Authentication succeeded!");
-        },
-        function(err) {
-          alert("Error!\n\n" + JSON.stringify(err));
-        }
+          {
+            pin: pin
+          },
+          function(result) {
+            alert("Authentication succeeded!");
+          },
+          function(err) {
+            alert("Error!\n\n" + JSON.stringify(err));
+          }
       );
     }
   }
