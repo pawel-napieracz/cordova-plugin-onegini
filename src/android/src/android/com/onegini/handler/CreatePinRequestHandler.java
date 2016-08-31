@@ -40,6 +40,7 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
 
     PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
+        .shouldKeepCallback()
         .build();
 
     sendPluginResult(pluginResult);
