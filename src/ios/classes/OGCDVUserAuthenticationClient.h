@@ -1,9 +1,9 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
-#import "CDVPlugin+Onegini.h"
+#import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
-@interface OneginiUserAuthenticationClient : CDVPlugin<ONGAuthenticationDelegate>
+@interface OGCDVUserAuthenticationClient : CDVPlugin<ONGAuthenticationDelegate>
 
 @property (nonatomic, copy) NSString *startAuthenticationCallbackId;
 @property (nonatomic, copy) NSString *checkPinCallbackId;

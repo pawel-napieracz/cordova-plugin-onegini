@@ -21,23 +21,26 @@
         <param name="ios-package" value="OneginiClient" />
       </feature>
       <feature name="OneginiUserRegistrationClient">
-        <param name="ios-package" value="OneginiUserRegistrationClient" />
+        <param name="ios-package" value="OGCDVUserRegistrationClient" />
+      </feature>
+      <feature name="OneginiUserAuthenticationClient">
+        <param name="ios-package" value="OGCDVUserAuthenticationClient" />
       </feature>
     </config-file>
 
     <header-file src="src/ios/classes/Reachability.h"/>
     <source-file src="src/ios/classes/Reachability.m"/>
-    <header-file src="src/ios/classes/CDVPlugin+Onegini.h"/>
-    <source-file src="src/ios/classes/CDVPlugin+Onegini.m"/>
-    <header-file src="src/ios/classes/OneginiClient.h"/>
-    <source-file src="src/ios/classes/OneginiClient.m"/>
-    <header-file src="src/ios/classes/OneginiUserRegistrationClient.h"/>
-    <source-file src="src/ios/classes/OneginiUserRegistrationClient.m"/>
-    <header-file src="src/ios/classes/OneginiUserAuthenticationClient.h"/>
-    <source-file src="src/ios/classes/OneginiUserAuthenticationClient.m"/>
-    <header-file src="src/ios/classes/WebBrowserViewController.h"/>
-    <source-file src="src/ios/classes/WebBrowserViewController.m"/>
-    <resource-file src="src/ios/classes/WebBrowserViewController.xib"/>
+    <header-file src="src/ios/classes/CDVPlugin+OGCDV.h"/>
+    <source-file src="src/ios/classes/CDVPlugin+OGCDV.m"/>
+    <header-file src="src/ios/classes/OGCDVClient.h"/>
+    <source-file src="src/ios/classes/OGCDVClient.m"/>
+    <header-file src="src/ios/classes/OGCDVUserRegistrationClient.h"/>
+    <source-file src="src/ios/classes/OGCDVUserRegistrationClient.m"/>
+    <header-file src="src/ios/classes/OGCDVUserAuthenticationClient.h"/>
+    <source-file src="src/ios/classes/OGCDVUserAuthenticationClient.m"/>
+    <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
+    <source-file src="src/ios/classes/OGCDVWebBrowserViewController.m"/>
+    <resource-file src="src/ios/classes/OGCDVWebBrowserViewController.xib"/>
 
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticator.h"/>

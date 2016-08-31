@@ -1,8 +1,8 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
-#import "OneginiClient.h"
+#import "OGCDVClient.h"
 
-@implementation OneginiClient {}
+@implementation OGCDVClient {}
 
 - (void)start:(CDVInvokedUrlCommand*)command
 {

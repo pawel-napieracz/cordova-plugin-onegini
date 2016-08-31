@@ -1,9 +1,9 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
-#import "CDVPlugin+Onegini.h"
+#import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
-@interface OneginiClient : CDVPlugin
+@interface OGCDVClient : CDVPlugin
 
 - (void)start:(CDVInvokedUrlCommand *)command;
 

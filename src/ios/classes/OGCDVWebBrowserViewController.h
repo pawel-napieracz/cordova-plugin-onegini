@@ -2,7 +2,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WebBrowserViewController : UIViewController
+@interface OGCDVWebBrowserViewController : UIViewController
 
 @property (nonatomic) NSURL *url;
 @property (nonatomic) void (^completionBlock)(NSURL *url);

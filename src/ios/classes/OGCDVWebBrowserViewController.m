@@ -1,15 +1,15 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
-#import "WebBrowserViewController.h"
+#import "OGCDVWebBrowserViewController.h"
 #import "OneginiSDK.h"
 
-@interface WebBrowserViewController ()
+@interface OGCDVWebBrowserViewController ()
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @end
 
-@implementation WebBrowserViewController
+@implementation OGCDVWebBrowserViewController
 
 - (void)viewDidLoad
 {
