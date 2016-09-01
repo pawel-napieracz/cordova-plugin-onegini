@@ -74,5 +74,49 @@ exports.defineAutoTests = function () {
         expect(onegini.user.checkPin).toBeDefined();
       });
     });
+
+    describe('onegini.user.deregister', function () {
+      it("onegini.user.deregister should exist", function () {
+        expect(onegini.user.deregister).toBeDefined();
+      });
+
+      it("onegini.user.deregister 'profileId' argument mandatory", function () {
+        expect(function () {
+          onegini.user.deregister({}, function () {
+          }, function () {
+          });
+        }).toThrow(new TypeError("Onegini: missing 'profileId' argument for deregister"));
+      });
+
+      it("onegini.user.deregister no user found for profileId", function (done) {
+        onegini.user.deregister(
+            {
+              profileId: "UNKNOWN"
+            },
+            function (result) {
+              expect(result).toBeUndefined();
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              expect(err.description).toBe("Onegini: No registered user found for the provided profileId.");
+              done();
+            });
+      });
+
+      it("onegini.user.deregister should succees with correct profileId", function (done) {
+        onegini.user.deregister(
+            {
+              profileId: "TODO" // TODO use internally cached profileId
+            },
+            function (result) {
+              expect(result).toBeDefined();
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+    });
+
   });
 };

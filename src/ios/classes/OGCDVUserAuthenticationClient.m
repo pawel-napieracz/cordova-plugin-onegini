@@ -1,6 +1,7 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
 #import "OGCDVUserAuthenticationClient.h"
+#import "OGCDVUserClientHelper.h"
 #import "AppDelegate.h"
 
 static NSString *const OGCDVPluginKeyProfileId = @"profileId";
@@ -23,11 +24,11 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
 
   self.startAuthenticationCallbackId = command.callbackId;
 
-  ONGUserProfile *profile = [self getRegisteredUserProfile:profileId];
-  if (profile == nil) {
-    [self sendErrorResultForCallbackId:command.callbackId withMessage:[NSString stringWithFormat: @"No registered user found for the provided %@.", OGCDVPluginKeyProfileId]];
+  ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
+  if (user == nil) {
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:[NSString stringWithFormat: @"Onegini: No registered user found for the provided %@.", OGCDVPluginKeyProfileId]];
   } else {
-    [[ONGUserClient sharedInstance] authenticateUser:profile delegate:self];
+    [[ONGUserClient sharedInstance] authenticateUser:user delegate:self];
   }
 }
 
@@ -42,18 +43,6 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
   NSDictionary *options = [command.arguments objectAtIndex:0];
   NSString *pin = options[OGCDVPluginKeyPin];
   [self.pinChallenge.sender respondWithPin:pin challenge:self.pinChallenge];
-}
-
-#pragma mark - Helper functions
-- (ONGUserProfile*) getRegisteredUserProfile:(NSString*)profileId
-{
-  NSArray<ONGUserProfile *> *profiles = [[ONGUserClient sharedInstance] userProfiles].allObjects;
-  for (ONGUserProfile *profile in profiles) {
-    if ([profile.profileId isEqualToString:profileId]) {
-      return profile;
-    }
-  }
-  return nil;
 }
 
 #pragma mark - ONGAuthenticationDelegate
@@ -77,11 +66,11 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
 
   // Let's make sure the profile is no longer registered (there may be other (future) cases
   // when this delegate method is invoked..
-  ONGUserProfile *profile = [self getRegisteredUserProfile:userProfile.profileId];
+  ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:userProfile.profileId];
 
   NSDictionary *result = @{
                            @"description": error.localizedDescription,
-                           @"deregistered": profile == nil ? @(YES) : @(NO)
+                           @"deregistered": user == nil ? @(YES) : @(NO)
                            };
 
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result] callbackId:self.checkPinCallbackId];

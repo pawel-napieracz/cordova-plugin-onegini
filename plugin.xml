@@ -23,6 +23,9 @@
       <feature name="OneginiUserRegistrationClient">
         <param name="ios-package" value="OGCDVUserRegistrationClient" />
       </feature>
+      <feature name="OneginiUserDeregistrationClient">
+        <param name="ios-package" value="OGCDVUserDeregistrationClient" />
+      </feature>
       <feature name="OneginiUserAuthenticationClient">
         <param name="ios-package" value="OGCDVUserAuthenticationClient" />
       </feature>
@@ -34,8 +37,12 @@
     <source-file src="src/ios/classes/CDVPlugin+OGCDV.m"/>
     <header-file src="src/ios/classes/OGCDVClient.h"/>
     <source-file src="src/ios/classes/OGCDVClient.m"/>
+    <header-file src="src/ios/classes/OGCDVUserClientHelper.h"/>
+    <source-file src="src/ios/classes/OGCDVUserClientHelper.m"/>
     <header-file src="src/ios/classes/OGCDVUserRegistrationClient.h"/>
     <source-file src="src/ios/classes/OGCDVUserRegistrationClient.m"/>
+    <header-file src="src/ios/classes/OGCDVUserDeregistrationClient.h"/>
+    <source-file src="src/ios/classes/OGCDVUserDeregistrationClient.m"/>
     <header-file src="src/ios/classes/OGCDVUserAuthenticationClient.h"/>
     <source-file src="src/ios/classes/OGCDVUserAuthenticationClient.m"/>
     <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
