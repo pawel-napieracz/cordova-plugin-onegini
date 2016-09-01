@@ -13,7 +13,9 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
 
   private static CreatePinRequestHandler instance = null;
   private OneginiPinCallback pinCallback = null;
-  private CallbackContext cordovaCallback;
+  private CallbackContext registrationCallback;
+  private CallbackContext createPinCallback;
+  private UserProfile userProfile;
 
   protected CreatePinRequestHandler() {
   }
@@ -30,20 +32,24 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
     return pinCallback;
   }
 
-  public void setCordovaCallback(final CallbackContext cordovaCallback) {
-    this.cordovaCallback = cordovaCallback;
+  public void setRegistrationCallback(final CallbackContext registrationCallback) {
+    this.registrationCallback = registrationCallback;
+  }
+
+  public void setCreatePinCallback(final CallbackContext createPinCallback) {
+    this.createPinCallback = createPinCallback;
   }
 
   @Override
   public void startPinCreation(final UserProfile userProfile, final OneginiPinCallback oneginiPinCallback) {
     this.pinCallback = oneginiPinCallback;
+    this.userProfile = userProfile;
 
     PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .shouldKeepCallback()
         .build();
 
-    sendPluginResult(pluginResult);
+    sendRegistrationResult(pluginResult);
   }
 
   @Override
@@ -54,22 +60,29 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
         .shouldKeepCallback()
         .build();
 
-    sendPluginResult(pluginResult);
+    sendCreatePinResult(pluginResult);
   }
 
   @Override
   public void finishPinCreation() {
-    pinCallback = null;
-    PluginResult pluginResult = new PluginResultBuilder()
+    sendCreatePinResult(new PluginResultBuilder()
         .withSuccess()
-        .build();
+        .withProfileId(userProfile)
+        .build());
 
-    sendPluginResult(pluginResult);
+    pinCallback = null;
+    userProfile = null;
   }
 
-  private void sendPluginResult(final PluginResult pluginResult) {
-    if (cordovaCallback != null) {
-      cordovaCallback.sendPluginResult(pluginResult);
+  private void sendRegistrationResult(final PluginResult pluginResult) {
+    if (registrationCallback != null) {
+      registrationCallback.sendPluginResult(pluginResult);
+    }
+  }
+
+  private void sendCreatePinResult(final PluginResult pluginResult) {
+    if (createPinCallback != null) {
+      createPinCallback.sendPluginResult(pluginResult);
     }
   }
 }
