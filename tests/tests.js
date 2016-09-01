@@ -37,18 +37,21 @@ exports.defineAutoTests = function () {
         expect(onegini.user.register.createPin).toBeDefined();
       });
 
-      it("onegini.user.register.createPin success cb mandatory", function () {
-        expect(function () {
-          onegini.user.register.createPin([]);
-        }).toThrow(new TypeError("Onegini: missing argument for method. 'createPin' requires a Success Callback"));
-      });
-
       it("onegini.user.register.createPin 'pin' argument mandatory", function () {
         expect(function () {
           onegini.user.register.createPin({}, function () {
           }, function () {
           });
         }).toThrow(new TypeError("Onegini: missing 'pin' argument for createPin"));
+      });
+
+      it("onegini.user.register.createPin success cb mandatory", function () {
+        expect(function () {
+          onegini.user.register.createPin(
+              {
+                pin: '12346'
+              });
+        }).toThrow(new TypeError("Onegini: missing argument for method. 'createPin' requires a Success Callback"));
       });
 
       it("onegini.user.register.createPin can't be called before 'start' is called", function (done) {
