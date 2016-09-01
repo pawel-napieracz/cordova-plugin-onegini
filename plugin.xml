@@ -18,7 +18,7 @@
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
       <feature name="OneginiClient">
-        <param name="ios-package" value="OneginiClient" />
+        <param name="ios-package" value="OGCDVClient" />
       </feature>
       <feature name="OneginiUserRegistrationClient">
         <param name="ios-package" value="OGCDVUserRegistrationClient" />
