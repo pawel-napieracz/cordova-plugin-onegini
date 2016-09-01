@@ -9,11 +9,11 @@ module.exports = (function () {
       return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'startAuthentication', options, successCb, failureCb);
     },
 
-    createPin: function (options, successCb, failureCb) {
+    providePin: function(options, successCb, failureCb) {
       if (!options || !options.pin) {
-        throw new TypeError("Onegini: missing 'pin' argument for createPin");
+        throw new TypeError("Onegini: missing 'pin' argument for providePin");
       }
-      utils.callbackExec('OneginiUserRegistrationClient', 'createPin', options, successCb, failureCb);
+      utils.callbackExec('OneginiUserAuthenticationClient', 'providePin', options, successCb, failureCb);
     }
   };
 
@@ -22,11 +22,11 @@ module.exports = (function () {
       return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'start', options, successCb, failureCb);
     },
 
-    providePin: function(options, successCb, failureCb) {
+    createPin: function (options, successCb, failureCb) {
       if (!options || !options.pin) {
-        throw new TypeError("Onegini: missing 'pin' argument for providePin");
+        throw new TypeError("Onegini: missing 'pin' argument for createPin");
       }
-      utils.callbackExec('OneginiUserAuthenticationClient', 'providePin', options, successCb, failureCb);
+      utils.callbackExec('OneginiUserRegistrationClient', 'createPin', options, successCb, failureCb);
     }
   };
 
