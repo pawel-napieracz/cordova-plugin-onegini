@@ -12,9 +12,16 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
 
 - (void)startAuthentication:(CDVInvokedUrlCommand *)command
 {
-  self.startAuthenticationCallbackId = command.callbackId;
   NSDictionary *options = [command.arguments objectAtIndex:0];
   NSString *profileId = options[OGCDVPluginKeyProfileId];
+
+  ONGUserProfile *authenticatedUserProfile = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+  if (authenticatedUserProfile && [authenticatedUserProfile.profileId isEqualToString:profileId]) {
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:[NSString stringWithFormat: @"Onegini: User already authenticated for the provided %@.", OGCDVPluginKeyProfileId]];
+    return;
+  }
+
+  self.startAuthenticationCallbackId = command.callbackId;
 
   ONGUserProfile *profile = [self getRegisteredUserProfile:profileId];
   if (profile == nil) {
