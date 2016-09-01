@@ -149,6 +149,8 @@
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/RegistrationHandler.java"
                  target-dir="src/com/onegini/handler"/>
+    <source-file src="src/android/src/android/com/onegini/handler/DeregistrationHandler.java"
+                 target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/CreatePinRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/InitializationHandler.java"
