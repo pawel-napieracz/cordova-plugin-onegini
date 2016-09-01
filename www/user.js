@@ -6,9 +6,6 @@ module.exports = (function () {
   }
 
   function createPin(options, successCb, failureCb) {
-    if (!successCb) {
-      throw new TypeError("Onegini: missing success callback for createPin");
-    }
     if (!options || !options.pin) {
       throw new TypeError("Onegini: missing 'pin' argument for createPin");
     }
@@ -28,9 +25,6 @@ module.exports = (function () {
   }
 
   function checkPin(options, successCb, failureCb) {
-    if (!successCb) {
-      throw new TypeError("Onegini: missing argument for checkPin: no success callback provided");
-    }
     if (!options || !options.pin) {
       throw new TypeError("Onegini: missing 'pin' argument for checkPin");
     }
