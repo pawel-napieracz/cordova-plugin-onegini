@@ -64,6 +64,36 @@ public class PluginResultBuilder {
     return this;
   }
 
+  public PluginResultBuilder withRemainingFailureCount(int remainingFailureCount) {
+    try {
+      payload.put("remainingFailureCount", remainingFailureCount);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withMaxFailureCount(int maxFailureCount) {
+    try {
+      payload.put("maxFailureCount", maxFailureCount);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withPinLength(int pinLength) {
+    try {
+      payload.put("pinLength", pinLength);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
   public PluginResultBuilder addUserProfile(final UserProfile userProfile) {
     try {
       JSONArray userProfilesJSON;

@@ -51,9 +51,13 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
 
   @Override
   public void onNextAuthenticationAttempt(final int failedAttempts, final int maxAttempts) {
+    final int remainingAttempts = maxAttempts - failedAttempts;
+
     sendCheckPinResult(new PluginResultBuilder()
         .withError()
         .withErrorDescription("OneginiPlugin: next authentication attempt")
+        .withMaxFailureCount(maxAttempts)
+        .withRemainingFailureCount(remainingAttempts)
         .shouldKeepCallback()
         .build());
   }

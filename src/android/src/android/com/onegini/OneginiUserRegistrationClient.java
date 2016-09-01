@@ -18,7 +18,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    if ("startRegistration".equals(action)) {
+    if ("start".equals(action)) {
       startRegistration(args, callbackContext);
       return true;
     } else if ("createPin".equals(action)) {
@@ -33,8 +33,16 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   }
 
   private void startRegistration(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final JSONArray scopesJSON = args.getJSONObject(0).getJSONArray("scopes");
-    final String[] scopes = new String[scopesJSON.length()];
+    final String[] scopes;
+    JSONArray scopesJSON;
+
+    try {
+      scopesJSON = args.getJSONObject(0).getJSONArray("scopes");
+    } catch (JSONException e) {
+      scopesJSON = new JSONArray();
+    }
+
+    scopes = new String[scopesJSON.length()];
     for (int i = 0; i < scopesJSON.length(); i++) {
       scopes[i] = scopesJSON.getString(i);
     }
@@ -54,7 +62,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
 
     if (pinCallback == null) {
       final PluginResult pluginResult = new PluginResultBuilder()
-          .withErrorDescription("OneginiPlugin: No pending pincode requests.")
+          .withErrorDescription("Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?")
           .build();
       callbackContext.sendPluginResult(pluginResult);
     } else {
@@ -65,7 +73,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   public void getUserProfiles(final CallbackContext callbackContext) {
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
-       Set<UserProfile> userProfiles = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
+        Set<UserProfile> userProfiles = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
             .getUserProfiles();
 
         final PluginResult pluginResult = new PluginResultBuilder()

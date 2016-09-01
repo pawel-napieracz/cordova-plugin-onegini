@@ -11,6 +11,7 @@ import com.onegini.mobile.android.sdk.handlers.OneginiRegistrationHandler;
 import com.onegini.mobile.android.sdk.handlers.error.OneginiAuthenticationError;
 import com.onegini.mobile.android.sdk.handlers.error.OneginiRegistrationError;
 import com.onegini.mobile.android.sdk.model.entity.UserProfile;
+import com.onegini.util.PluginResultBuilder;
 
 public class RegistrationHandler implements OneginiRegistrationHandler {
 
@@ -23,9 +24,10 @@ public class RegistrationHandler implements OneginiRegistrationHandler {
   //TODO Rework to use new builder util
   @Override
   public void onSuccess(final UserProfile userProfile) {
-    final Map<String, Object> userProfileMap = new HashMap<String, Object>();
-    userProfileMap.put("profileId", userProfile.getProfileId());
-    final JSONObject payload = new JSONObject(userProfileMap);
+    final Map<String, Object> payloadMap = new HashMap<String, Object>();
+    payloadMap.put("profileId", userProfile.getProfileId());
+    payloadMap.put("pinLength", 5);
+    final JSONObject payload = new JSONObject(payloadMap);
     callbackContext.success(payload);
   }
 

@@ -19,7 +19,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    if ("startAuthentication".equals(action)) {
+    if ("start".equals(action)) {
       startAuthentication(args, callbackContext);
       return true;
     } else if ("checkPin".equals(action)) {
@@ -38,7 +38,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     } catch (JSONException e) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription("Argument Provided is not a valid profile object")
+          .withErrorDescription("Onegini: Argument Provided is not a valid profile object")
           .build());
 
       return;
@@ -47,7 +47,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     if (userProfile == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription("No such profile registered")
+          .withErrorDescription("Onegini: No such profile registered")
           .build());
 
       return;
@@ -56,7 +56,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     if (userProfile == getOneginiClient().getUserClient().getAuthenticatedUserProfile()) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription("User already authenticated")
+          .withErrorDescription("Onegini: User already authenticated")
           .build());
     }
 
@@ -77,7 +77,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
     if (pinCallback == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription("OneginiPlugin: No pending pincode requests.")
+          .withErrorDescription("Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?")
           .build());
     } else {
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
