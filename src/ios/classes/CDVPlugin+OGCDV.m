@@ -1,6 +1,6 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
-#import "CDVPlugin+Onegini.h"
+#import "CDVPlugin+OGCDV.h"
 
 @implementation CDVPlugin (Onegini)
 
