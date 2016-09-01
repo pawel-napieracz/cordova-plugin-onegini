@@ -6,7 +6,7 @@ module.exports = (function () {
       if (!options || !options.profileId) {
         throw new TypeError("Onegini: missing 'profileId' argument for register.start");
       }
-      return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'startAuthentication', options, successCb, failureCb);
+      return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'start', options, successCb, failureCb);
     },
 
     providePin: function(options, successCb, failureCb) {
