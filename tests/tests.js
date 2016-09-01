@@ -7,54 +7,98 @@ exports.defineAutoTests = function () {
     });
 
     describe('onegini.start', function () {
-      it("onegini.start should exist", function () {
+      it("should exist", function () {
         expect(onegini.start).toBeDefined();
+      });
+
+      it("should run ok", function (done) {
+        onegini.start(function () {
+              expect(true).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
       });
     });
   });
 
   describe('onegini.user', function () {
-    it("onegini.user should exist", function () {
+    it("should exist", function () {
       expect(onegini.user).toBeDefined();
     });
 
-    describe('onegini.user.startRegistration', function () {
-      it("onegini.user.startRegistration should exist", function () {
-        expect(onegini.user.startRegistration).toBeDefined();
-      });
-    });
-
-    describe('onegini.user.createPin', function () {
-      it("onegini.user.createPin should exist", function () {
-        expect(onegini.user.createPin).toBeDefined();
+    describe("register", function () {
+      it("should have a start method", function () {
+        expect(onegini.user.register.start).toBeDefined();
       });
 
-      it("onegini.user.createPin success cb mandatory", function () {
-        expect(function () {
-          onegini.user.createPin([]);
-        }).toThrow(new TypeError("Onegini: missing success callback for createPin"));
+      it("should have a createPin method", function () {
+        expect(onegini.user.register.createPin).toBeDefined();
       });
 
-      it("onegini.user.createPin 'pin' argument mandatory", function () {
-        expect(function () {
-          onegini.user.createPin([], function(){}, function(){});
-        }).toThrow(new TypeError("Onegini: missing 'pin' argument for createPin"));
-      });
-
-      /* This is an example of checking error callbacks, which we'll prolly need in the future
-      it("onegini.user.createPin empty pin invokes error cb", function (done) {
-        onegini.user.createPin(
-            [],
-            function (msg) {
-              expect(msg).toBeUndefined();
-            },
-            function (err) {
-              expect(err).toBeDefined();
-              expect(err.description).toBe("pin is mandatory");
-              done();
+      describe("createPin", function () {
+        it("should require a pincode argument", function () {
+          expect(function () {
+            onegini.user.register.createPin({}, function () {
+            }, function () {
             });
+          }).toThrow(new TypeError("Onegini: missing 'pin' argument for createPin"));
+        });
+
+        it("should require a success callback", function () {
+          expect(function () {
+            onegini.user.register.createPin({
+              pin: "12356"
+            })
+          }).toThrow(new TypeError("Onegini: missing argument for method. 'createPin' requires a Success Callback"));
+        });
+
+        it("can't be called before 'start' method", function (done) {
+          onegini.user.register.createPin(
+              {
+                pin: '12346'
+              },
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?");
+                done();
+              });
+        });
       });
-      */
+
+      describe('start', function () {
+        it("should return pinlength of '5'", function (done) {
+          onegini.user.register.start(
+              undefined,
+              function (result) {
+                expect(result).toBeDefined();
+                expect(result.pinLength).toBe(5);
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+              });
+        });
+
+        it("register.createPin should return a profileId", function (done) {
+          onegini.user.register.createPin(
+              {
+                pin: '12346'
+              },
+              function (result) {
+                expect(result).toBeDefined();
+                expect(result.profileId).toBeDefined();
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+              });
+        });
+      })
     });
 
     describe('onegini.user.getUserProfiles', function () {
@@ -63,15 +107,15 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe('onegini.user.startAuthentication', function () {
-      it("onegini.user.startAuthentication should exist", function () {
-        expect(onegini.user.startAuthentication).toBeDefined();
+    describe('onegini.user.authenticate.start', function () {
+      it("onegini.user.authenticate.start should exist", function () {
+        expect(onegini.user.authenticate.start).toBeDefined();
       });
     });
 
-    describe('onegini.user.checkPin', function () {
-      it("onegini.user.checkPin should exist", function () {
-        expect(onegini.user.checkPin).toBeDefined();
+    describe('onegini.user.authenticate.providePin', function () {
+      it("onegini.user.authenticate.providePin should exist", function () {
+        expect(onegini.user.authenticate.providePin).toBeDefined();
       });
     });
 

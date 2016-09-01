@@ -8,7 +8,7 @@
 @property (nonatomic, copy) NSString *callbackId;
 @property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
 
-- (void)startRegistration:(CDVInvokedUrlCommand *)command;
+- (void)start:(CDVInvokedUrlCommand *)command;
 - (void)createPin:(CDVInvokedUrlCommand *)command;
 - (void)getUserProfiles:(CDVInvokedUrlCommand *)command;
 

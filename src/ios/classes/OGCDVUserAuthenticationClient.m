@@ -11,7 +11,7 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
 
 @implementation OGCDVUserAuthenticationClient {}
 
-- (void)startAuthentication:(CDVInvokedUrlCommand *)command
+- (void)start:(CDVInvokedUrlCommand *)command
 {
   NSDictionary *options = [command.arguments objectAtIndex:0];
   NSString *profileId = options[OGCDVPluginKeyProfileId];
@@ -32,10 +32,10 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
   }
 }
 
-- (void)checkPin:(CDVInvokedUrlCommand *)command
+- (void)providePin:(CDVInvokedUrlCommand *)command
 {
   if (!self.pinChallenge) {
-    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Please call 'startAuthentication' first."];
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: please invoke 'onegini.user.authenticate.start' first."];
     return;
   }
 

@@ -11,12 +11,15 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
 
 @implementation OGCDVUserRegistrationClient {}
 
-- (void)startRegistration:(CDVInvokedUrlCommand*)command
+- (void)start:(CDVInvokedUrlCommand*)command
 {
   self.callbackId = command.callbackId;
-  NSDictionary *options = [command.arguments objectAtIndex:0];
-  NSArray *scopes = options[OGCDVPluginKeyScopes];
-  [[ONGUserClient sharedInstance] registerUser:scopes delegate:self];
+  NSArray *optionalScopes = nil;
+  if (command.arguments.count > 0) {
+    NSDictionary *options = [command.arguments objectAtIndex:0];
+    optionalScopes = options[OGCDVPluginKeyScopes];
+  }
+  [[ONGUserClient sharedInstance] registerUser:optionalScopes delegate:self];
 }
 
 - (void)createPin:(CDVInvokedUrlCommand*)command
@@ -24,7 +27,12 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
   self.callbackId = command.callbackId;
   NSDictionary *options = [command.arguments objectAtIndex:0];
   NSString *pin = options[OGCDVPluginKeyPin];
-  [self.createPinChallenge.sender respondWithCreatedPin:pin challenge:self.createPinChallenge];
+
+  if (self.createPinChallenge) {
+    [self.createPinChallenge.sender respondWithCreatedPin:pin challenge:self.createPinChallenge];
+  } else {
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?"];
+  }
 }
 
 - (void)getUserProfiles:(CDVInvokedUrlCommand*)command
