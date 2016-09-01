@@ -10,6 +10,5 @@ public interface OneginiCordovaPluginConstants {
 
   // Json params
   String PARAM_SCOPES = "scopes";
-
   String PARAM_PROFILE_ID = "profileId";
 }
