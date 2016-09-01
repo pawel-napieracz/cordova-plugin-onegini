@@ -1,5 +1,10 @@
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ACTION_CREATE_PIN;
+import static com.onegini.OneginiCordovaPluginConstants.ACTION_GET_USER_PROFILES;
+import static com.onegini.OneginiCordovaPluginConstants.ACTION_START;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_SCOPES;
+
 import java.util.Set;
 
 import org.apache.cordova.CallbackContext;
@@ -18,13 +23,13 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    if ("start".equals(action)) {
+    if (ACTION_START.equals(action)) {
       startRegistration(args, callbackContext);
       return true;
-    } else if ("createPin".equals(action)) {
+    } else if (ACTION_CREATE_PIN.equals(action)) {
       createPin(args, callbackContext);
       return true;
-    } else if ("getUserProfiles".equals(action)) {
+    } else if (ACTION_GET_USER_PROFILES.equals(action)) {
       getUserProfiles(callbackContext);
       return true;
     }
@@ -37,7 +42,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
     JSONArray scopesJSON;
 
     try {
-      scopesJSON = args.getJSONObject(0).getJSONArray("scopes");
+      scopesJSON = args.getJSONObject(0).getJSONArray(PARAM_SCOPES);
     } catch (JSONException e) {
       scopesJSON = new JSONArray();
     }

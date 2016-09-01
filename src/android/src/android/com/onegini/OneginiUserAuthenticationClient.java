@@ -1,5 +1,9 @@
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ACTION_CHECK_PIN;
+import static com.onegini.OneginiCordovaPluginConstants.ACTION_START;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
+
 import java.util.Set;
 
 import org.apache.cordova.CallbackContext;
@@ -17,12 +21,17 @@ import com.onegini.util.PluginResultBuilder;
 
 public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
+  public static final String ERROR_ARGIMENT_IS_NOT_A_VALID_PROFILE_OBJECT = "Onegini: Argument Provided is not a valid profile object";
+  public static final String ERROR_PROFILE_NOT_REGISTERED = "Onegini: No such profile registered";
+  public static final String ERROR_USER_ALREADY_AUTHENTICATED = "Onegini: User already authenticated";
+  public static final String ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = "Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?";
+
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    if ("start".equals(action)) {
+    if (ACTION_START.equals(action)) {
       startAuthentication(args, callbackContext);
       return true;
-    } else if ("checkPin".equals(action)) {
+    } else if (ACTION_CHECK_PIN.equals(action)) {
       checkPin(args, callbackContext);
       return true;
     }
@@ -34,11 +43,11 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     final UserProfile userProfile;
 
     try {
-      userProfile = findUserProfileById(args.getJSONObject(0).getString("profileId"));
+      userProfile = findUserProfileById(args.getJSONObject(0).getString(PARAM_PROFILE_ID));
     } catch (JSONException e) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription("Onegini: Argument Provided is not a valid profile object")
+          .withErrorDescription(ERROR_ARGIMENT_IS_NOT_A_VALID_PROFILE_OBJECT)
           .build());
 
       return;
@@ -47,7 +56,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     if (userProfile == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription("Onegini: No such profile registered")
+          .withErrorDescription(ERROR_PROFILE_NOT_REGISTERED)
           .build());
 
       return;
@@ -56,7 +65,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     if (userProfile == getOneginiClient().getUserClient().getAuthenticatedUserProfile()) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription("Onegini: User already authenticated")
+          .withErrorDescription(ERROR_USER_ALREADY_AUTHENTICATED)
           .build());
     }
 
@@ -77,7 +86,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
     if (pinCallback == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription("Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?")
+          .withErrorDescription(ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS)
           .build());
     } else {
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
