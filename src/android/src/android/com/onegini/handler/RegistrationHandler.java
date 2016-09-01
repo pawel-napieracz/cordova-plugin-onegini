@@ -25,7 +25,6 @@ public class RegistrationHandler implements OneginiRegistrationHandler {
   public void onSuccess(final UserProfile userProfile) {
     final Map<String, Object> userProfileMap = new HashMap<String, Object>();
     userProfileMap.put("profileId", userProfile.getProfileId());
-    userProfileMap.put("isDefault", userProfile.isDefault());
     final JSONObject payload = new JSONObject(userProfileMap);
     callbackContext.success(payload);
   }

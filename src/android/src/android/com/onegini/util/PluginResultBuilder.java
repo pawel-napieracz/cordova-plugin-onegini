@@ -75,7 +75,6 @@ public class PluginResultBuilder {
 
       JSONObject userProfileJSON = new JSONObject();
       userProfileJSON.put("profileId", userProfile.getProfileId());
-      userProfileJSON.put("isDefault", userProfile.isDefault());
 
       userProfilesJSON.put(userProfileJSON);
       payload.put("userProfiles", userProfilesJSON);
