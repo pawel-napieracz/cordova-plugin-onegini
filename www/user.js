@@ -34,13 +34,6 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'getUserProfiles', [], successCb, failureCb);
   }
 
-  function startAuthentication(options, successCb, failureCb) {
-    if (!options || !options.profileId) {
-      throw new TypeError("Onegini: missing 'profileId' argument for createPin");
-    }
-    return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'startAuthentication', options, successCb, failureCb);
-  }
-
   return {
     authenticate: authenticate,
     register: register,
