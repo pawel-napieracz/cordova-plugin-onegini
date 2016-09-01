@@ -20,6 +20,7 @@ public class RegistrationHandler implements OneginiRegistrationHandler {
     this.callbackContext = callbackContext;
   }
 
+  //TODO Rework to use new builder util
   @Override
   public void onSuccess(final UserProfile userProfile) {
     final Map<String, Object> userProfileMap = new HashMap<String, Object>();
@@ -29,6 +30,7 @@ public class RegistrationHandler implements OneginiRegistrationHandler {
     callbackContext.success(payload);
   }
 
+  //TODO Rework to use new builder util
   @Override
   public void onError(final OneginiRegistrationError oneginiRegistrationError) {
     final Map<String, Object> errorMap = new HashMap<String, Object>();

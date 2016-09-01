@@ -33,9 +33,10 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   }
 
   private void startRegistration(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final String[] scopes = new String[args.length()];
-    for (int i = 0; i < args.length(); i++) {
-      scopes[i] = args.getString(i);
+    final JSONArray scopesJSON = args.getJSONObject(0).getJSONArray("scopes");
+    final String[] scopes = new String[scopesJSON.length()];
+    for (int i = 0; i < scopesJSON.length(); i++) {
+      scopes[i] = scopesJSON.getString(i);
     }
 
     cordova.getThreadPool().execute(new Runnable() {
@@ -53,7 +54,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
 
     if (pinCallback == null) {
       final PluginResult pluginResult = new PluginResultBuilder()
-          .withErrorDescription("Plugin: No pincallback set")
+          .withErrorDescription("OneginiPlugin: No pending pincode requests.")
           .build();
       callbackContext.sendPluginResult(pluginResult);
     } else {

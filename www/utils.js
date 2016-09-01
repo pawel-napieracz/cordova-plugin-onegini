@@ -6,12 +6,7 @@ module.exports = (function() {
   }
 
   function promiseOrCallbackExec(serviceName, methodName, args, successCb, failureCb) {
-    if (!args) {
-      args = [];
-    }
-    else if (!isArray(args)) {
-      args = [args];
-    }
+    args = sanitizeCordovaArgs(args);
 
     if (successCb) {
       return exec(successCb, failureCb, serviceName, methodName, args);
@@ -23,8 +18,29 @@ module.exports = (function() {
     }
   }
 
+  function callbackExec(serviceName, methodName, args, successCb, failureCb) {
+    if (!successCb) {
+      throw new TypeError("Onegini: missing argument for method. '" + methodName + "' requires a Success Callback");
+    }
+
+    args = sanitizeCordovaArgs(args);
+    return exec(successCb, failureCb, serviceName, methodName, args);
+  }
+
+  function sanitizeCordovaArgs(args) {
+    if (!args) {
+      args = [];
+    }
+    else if (!isArray(args)) {
+      args = [args];
+    }
+
+    return args;
+  }
+
   return {
     isArray: isArray,
-    promiseOrCallbackExec: promiseOrCallbackExec
+    promiseOrCallbackExec: promiseOrCallbackExec,
+    callbackExec: callbackExec
   };
 })();

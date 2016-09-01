@@ -1,12 +1,12 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
-#import "CDVPlugin+Onegini.h"
+#import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
-@interface OneginiUserRegistrationClient : CDVPlugin<ONGRegistrationDelegate, ONGPinValidationDelegate>
+@interface OGCDVUserRegistrationClient : CDVPlugin<ONGRegistrationDelegate, ONGPinValidationDelegate>
 
 @property (nonatomic, copy) NSString *callbackId;
-@property (nonatomic) ONGCreatePinChallenge *challenge;
+@property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
 
 - (void)startRegistration:(CDVInvokedUrlCommand *)command;
 - (void)createPin:(CDVInvokedUrlCommand *)command;

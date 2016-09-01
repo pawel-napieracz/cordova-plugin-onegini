@@ -2,7 +2,7 @@
 
 #import <Cordova/CDVPlugin.h>
 
-@interface CDVPlugin (Onegini)
+@interface CDVPlugin (OGCDV)
 
 - (void) sendErrorResultForCallbackId:(NSString *)callbackId withError:(NSError *)error;
 - (void) sendErrorResultForCallbackId:(NSString *)callbackId withMessage:(NSString *)errorMessage;
