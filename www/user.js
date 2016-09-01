@@ -6,11 +6,7 @@ module.exports = (function () {
   }
 
   function createPin(options, successCb, failureCb) {
-    if (!successCb) {
-      throw new TypeError("Onegini: missing argument for createPin: no success callback provided");
-    }
-    // not returning a promise as this function may return more than once
-    utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'createPin', options, successCb, failureCb);
+    utils.callbackExec('OneginiUserRegistrationClient', 'createPin', options, successCb, failureCb);
   }
 
   function getUserProfiles(successCb, failureCb) {
@@ -22,11 +18,7 @@ module.exports = (function () {
   }
 
   function checkPin(options, successCb, failureCb) {
-    if (!successCb) {
-      throw new TypeError("Onegini: missing argument for checkPin: no success callback provided");
-    }
-    // not returning a promise as this function may return more than once
-    utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'checkPin', options, successCb, failureCb);
+    utils.callbackExec('OneginiUserAuthenticationClient', 'checkPin', options, successCb, failureCb);
   }
 
   return {
