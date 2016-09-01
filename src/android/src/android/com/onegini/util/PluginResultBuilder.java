@@ -94,6 +94,16 @@ public class PluginResultBuilder {
     return this;
   }
 
+  public PluginResultBuilder withProfileId(UserProfile userProfile) {
+    try {
+      payload.put("profileId", userProfile.getProfileId());
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
   public PluginResultBuilder addUserProfile(final UserProfile userProfile) {
     try {
       JSONArray userProfilesJSON;
