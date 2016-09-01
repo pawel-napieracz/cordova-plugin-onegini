@@ -52,6 +52,8 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
       scopes[i] = scopesJSON.getString(i);
     }
 
+    CreatePinRequestHandler.getInstance().setRegistrationCallback(callbackContext);
+
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
         OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
@@ -61,8 +63,8 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   }
 
   private void createPin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final String pin = args.getString(0);
-    CreatePinRequestHandler.getInstance().setCordovaCallback(callbackContext);
+    final String pin = args.getJSONObject(0).getString("pin");
+    CreatePinRequestHandler.getInstance().setCreatePinCallback(callbackContext);
     OneginiPinCallback pinCallback = CreatePinRequestHandler.getInstance().getPinCallback();
 
     if (pinCallback == null) {
