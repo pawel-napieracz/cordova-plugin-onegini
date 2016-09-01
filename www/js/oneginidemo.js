@@ -24,12 +24,12 @@ var OneginiDemo = (function () {
 
     startRegistration: function () {
       var that = this;
-      onegini.user.startRegistration(
+      onegini.user.register.start(
           {
-            scopes: ["read"]
+            //scopes: ["read"]
           },
           function (result) {
-            console.log("startRegistration success, now calling createPin. " + JSON.stringify(result));
+            console.log("onegini.user.register.start success, now calling onegini.user.register.createPin. " + JSON.stringify(result));
             // added a little timeout so the embedded browser has time to disappear
             setTimeout(function () {
               that.createPin(result.pinLength);
@@ -46,7 +46,7 @@ var OneginiDemo = (function () {
       if (!pin) {
         return;
       }
-      onegini.user.createPin(
+      onegini.user.register.createPin(
           {
             pin: pin
           },
@@ -79,13 +79,13 @@ var OneginiDemo = (function () {
         return;
       }
       var that = this;
-      onegini.user.startAuthentication(
+      onegini.user.authenticate.start(
           {
             profileId: profileId
           },
           function(result) {
-            console.log("startAuthentication success, now calling createPin. " + JSON.stringify(result));
-            that.checkPin(result.pinLength);
+          console.log("onegini.user.authenticate.start success, now calling onegini.user.authenticate.providePin. " + JSON.stringify(result));
+          that.providePin(result.pinLength);
           },
           function(err) {
             alert("Error!\n\n" + err.description);
@@ -93,12 +93,12 @@ var OneginiDemo = (function () {
       );
     },
 
-    checkPin: function() {
+    providePin: function() {
       var pin = prompt("Please enter your Pin", "12346" /* default */);
       if (!pin) {
         return;
       }
-      onegini.user.checkPin(
+      onegini.user.authenticate.providePin(
           {
             pin: pin
           },

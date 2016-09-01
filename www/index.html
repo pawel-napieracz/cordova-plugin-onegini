@@ -13,10 +13,9 @@
 </head>
 <body>
 <div class="app">
-  <h1>Onegini demo</h1>
   <div id="deviceready" class="blink">
     <p class="event listening">Connecting to Device</p>
-    <p class="event received">Device is Ready</p>
+    <p class="event received">Onegini SDK is Ready</p>
 
     <script>
       // First thing to do is calling OneginiDemo.start(), but we make sure
@@ -26,19 +25,22 @@
       }, false)
     </script>
 
+    <button onclick="window.location='cdvtests/index.html'">Run Jasmine tests</button>
+
     <h3>Registration</h3>
     <p>
       <button onclick="OneginiDemo.getUserProfiles()">get user profiles</button>
-      <button onclick="OneginiDemo.isRegistered()">is registered?</button>
+      <!--      <button onclick="OneginiDemo.isRegistered()">is registered?</button>-->
       <br/>
-      <button onclick="OneginiDemo.startRegistration()">start registration</button>
-      <button onclick="OneginiDemo.createPin()">create Pin</button>
+      <button onclick="OneginiDemo.startRegistration()">register</button>
+      <button onclick="OneginiDemo.deregister()">deregister</button>
+      <!--      <button onclick="OneginiDemo.createPin()">create Pin</button>-->
     </p>
 
     <h3>Authentication</h3>
     <p>
-    <button onclick="OneginiDemo.startAuthentication()">start authentication</button>
-    <button onclick="OneginiDemo.checkPin()">check Pin</button>
+      <button onclick="OneginiDemo.startAuthentication()">authenticate</button>
+      <!--    <button onclick="OneginiDemo.checkPin()">check Pin</button>-->
     </p>
   </div>
 </div>
