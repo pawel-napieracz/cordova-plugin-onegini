@@ -9,7 +9,6 @@ module.exports = (function () {
     if (!options || !options.pin) {
       throw new TypeError("Onegini: missing 'pin' argument for createPin");
     }
-    // not returning a promise as this function may return more than once
     utils.callbackExec('OneginiUserRegistrationClient', 'createPin', options, successCb, failureCb);
   }
 

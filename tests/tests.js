@@ -40,7 +40,7 @@ exports.defineAutoTests = function () {
       it("onegini.user.register.createPin success cb mandatory", function () {
         expect(function () {
           onegini.user.register.createPin([]);
-        }).toThrow(new TypeError("Onegini: missing success callback for createPin"));
+        }).toThrow(new TypeError("Onegini: missing argument for method. 'createPin' requires a Success Callback"));
       });
 
       it("onegini.user.register.createPin 'pin' argument mandatory", function () {
@@ -51,7 +51,7 @@ exports.defineAutoTests = function () {
         }).toThrow(new TypeError("Onegini: missing 'pin' argument for createPin"));
       });
 
-      it("onegini.user.register.createPin must run after 'start'", function (done) {
+      it("onegini.user.register.createPin can't be called before 'start' is called", function (done) {
         onegini.user.register.createPin(
             {
               pin: '12346'
@@ -61,14 +61,14 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeDefined();
-              expect(err.description).toBe("Onegini: please invoke 'onegini.user.register.start' first.");
+              expect(err.description).toBe("Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?");
               done();
             });
       });
 
       it("onegini.user.register.start should return pinLength 5", function (done) {
         onegini.user.register.start(
-            null, // scopes are optional, so checking that as well
+            undefined, // scopes are optional, so checking that as well
             function (result) {
               expect(result).toBeDefined();
               expect(result.pinLength).toBe(5);
@@ -101,13 +101,13 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe('onegini.user.startAuthentication', function () {
+    describe('onegini.user.authenticate.start', function () {
       it("onegini.user.authenticate.start should exist", function () {
         expect(onegini.user.authenticate.start).toBeDefined();
       });
     });
 
-    describe('onegini.user.checkPin', function () {
+    describe('onegini.user.authenticate.providePin', function () {
       it("onegini.user.authenticate.providePin should exist", function () {
         expect(onegini.user.authenticate.providePin).toBeDefined();
       });
