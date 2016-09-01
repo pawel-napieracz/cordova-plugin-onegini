@@ -16,11 +16,14 @@ public class RegistrationHandler implements OneginiRegistrationHandler {
     this.callbackContext = callbackContext;
   }
 
+  public void setCallbackContext(final CallbackContext callbackContext) {
+    this.callbackContext = callbackContext;
+  }
+
   @Override
   public void onSuccess(final UserProfile userProfile) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .withPinLength(5)
         .withProfileId(userProfile)
         .build();
 

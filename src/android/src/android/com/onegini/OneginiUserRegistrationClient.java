@@ -21,6 +21,8 @@ import com.onegini.util.PluginResultBuilder;
 
 public class OneginiUserRegistrationClient extends CordovaPlugin {
 
+  private RegistrationHandler registrationHandler;
+
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if (ACTION_START.equals(action)) {
@@ -37,7 +39,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
     return false;
   }
 
-  private void startRegistration(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+  private void startRegistration(final JSONArray args, final CallbackContext startRegistrationCallbackContext) throws JSONException {
     final String[] scopes;
     JSONArray scopesJSON;
 
@@ -52,20 +54,21 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
       scopes[i] = scopesJSON.getString(i);
     }
 
-    CreatePinRequestHandler.getInstance().setRegistrationCallback(callbackContext);
+    CreatePinRequestHandler.getInstance().setRegistrationCallbackContext(startRegistrationCallbackContext);
+    registrationHandler = new RegistrationHandler(startRegistrationCallbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
         OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
-            .registerUser(scopes, new RegistrationHandler(callbackContext));
+            .registerUser(scopes, registrationHandler);
       }
     });
   }
 
   private void createPin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String pin = args.getJSONObject(0).getString("pin");
-    CreatePinRequestHandler.getInstance().setCreatePinCallback(callbackContext);
     OneginiPinCallback pinCallback = CreatePinRequestHandler.getInstance().getPinCallback();
+    CreatePinRequestHandler.getInstance().setCreatePinCallback(callbackContext);
 
     if (pinCallback == null) {
       final PluginResult pluginResult = new PluginResultBuilder()
@@ -73,6 +76,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
           .build();
       callbackContext.sendPluginResult(pluginResult);
     } else {
+      registrationHandler.setCallbackContext(callbackContext);
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
   }
