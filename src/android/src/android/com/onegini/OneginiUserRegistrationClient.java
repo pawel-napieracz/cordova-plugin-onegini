@@ -10,8 +10,8 @@ import org.json.JSONException;
 
 import com.onegini.handler.CreatePinRequestHandler;
 import com.onegini.handler.RegistrationHandler;
-import com.onegini.mobile.android.sdk.handlers.request.callback.OneginiPinCallback;
-import com.onegini.mobile.android.sdk.model.entity.UserProfile;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
+import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
 public class OneginiUserRegistrationClient extends CordovaPlugin {

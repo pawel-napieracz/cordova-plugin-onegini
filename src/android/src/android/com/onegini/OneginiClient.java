@@ -1,9 +1,7 @@
 package com.onegini;
 
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -30,9 +28,9 @@ public class OneginiClient extends CordovaPlugin {
   }
 
   private void handleRedirection(final Uri uri) {
-    final com.onegini.mobile.android.sdk.client.OneginiClient client = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext());
+    final com.onegini.mobile.sdk.android.client.OneginiClient client = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext());
     if (uri != null && client.getConfigModel().getRedirectUri().startsWith(uri.getScheme())) {
-      client.getUserClient().handleAuthorizationCallback(uri);
+      client.getUserClient().handleRegistrationCallback(uri);
     }
   }
 

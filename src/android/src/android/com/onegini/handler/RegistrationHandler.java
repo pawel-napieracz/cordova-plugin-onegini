@@ -6,12 +6,9 @@ import java.util.Map;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONObject;
 
-import com.onegini.mobile.android.sdk.handlers.OneginiAuthenticationHandler;
-import com.onegini.mobile.android.sdk.handlers.OneginiRegistrationHandler;
-import com.onegini.mobile.android.sdk.handlers.error.OneginiAuthenticationError;
-import com.onegini.mobile.android.sdk.handlers.error.OneginiRegistrationError;
-import com.onegini.mobile.android.sdk.model.entity.UserProfile;
-import com.onegini.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.android.handlers.OneginiRegistrationHandler;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiRegistrationError;
+import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 
 public class RegistrationHandler implements OneginiRegistrationHandler {
 

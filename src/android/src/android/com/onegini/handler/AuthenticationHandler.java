@@ -3,9 +3,9 @@ package com.onegini.handler;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
-import com.onegini.mobile.android.sdk.handlers.OneginiAuthenticationHandler;
-import com.onegini.mobile.android.sdk.handlers.error.OneginiAuthenticationError;
-import com.onegini.mobile.android.sdk.model.entity.UserProfile;
+import com.onegini.mobile.sdk.android.handlers.OneginiAuthenticationHandler;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiAuthenticationError;
+import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
 public class AuthenticationHandler implements OneginiAuthenticationHandler {
