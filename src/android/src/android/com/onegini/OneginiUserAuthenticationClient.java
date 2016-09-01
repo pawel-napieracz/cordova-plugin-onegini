@@ -11,20 +11,15 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import android.support.annotation.Nullable;
 import com.onegini.handler.AuthenticationHandler;
 import com.onegini.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
+import com.onegini.util.UserProfileUtil;
 
 public class OneginiUserAuthenticationClient extends CordovaPlugin {
-
-  public static final String ERROR_ARGIMENT_IS_NOT_A_VALID_PROFILE_OBJECT = "Onegini: Argument Provided is not a valid profile object";
-  public static final String ERROR_PROFILE_NOT_REGISTERED = "Onegini: No such profile registered";
-  public static final String ERROR_USER_ALREADY_AUTHENTICATED = "Onegini: User already authenticated";
-  public static final String ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = "Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -43,11 +38,12 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     final UserProfile userProfile;
 
     try {
-      userProfile = findUserProfileById(args.getJSONObject(0).getString(PARAM_PROFILE_ID));
+      userProfile = getUserProfile(args);
+
     } catch (JSONException e) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription(ERROR_ARGIMENT_IS_NOT_A_VALID_PROFILE_OBJECT)
+          .withErrorDescription(OneginiCordovaPluginConstants.ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT)
           .build());
 
       return;
@@ -56,7 +52,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     if (userProfile == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription(ERROR_PROFILE_NOT_REGISTERED)
+          .withErrorDescription(OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED)
           .build());
 
       return;
@@ -65,7 +61,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     if (userProfile == getOneginiClient().getUserClient().getAuthenticatedUserProfile()) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription(ERROR_USER_ALREADY_AUTHENTICATED)
+          .withErrorDescription(OneginiCordovaPluginConstants.ERROR_USER_ALREADY_AUTHENTICATED)
           .build());
     }
 
@@ -79,6 +75,13 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     });
   }
 
+  private UserProfile getUserProfile(final JSONArray args) throws JSONException {
+    String profileId = args.getJSONObject(0).getString(PARAM_PROFILE_ID);
+    Set<UserProfile> registeredUserProfiles = getOneginiClient().getUserClient().getUserProfiles();
+
+    return UserProfileUtil.findUserProfileById(profileId, registeredUserProfiles);
+  }
+
   private void checkPin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String pin = args.getString(0);
     final OneginiPinCallback pinCallback = PinAuthenticationRequestHandler.getInstance().getPinCallback();
@@ -86,23 +89,11 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
     if (pinCallback == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS)
+          .withErrorDescription(OneginiCordovaPluginConstants.ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS)
           .build());
     } else {
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
-  }
-
-  @Nullable
-  private UserProfile findUserProfileById(final String id) {
-    Set<UserProfile> userProfiles = getOneginiClient().getUserClient().getUserProfiles();
-    for (UserProfile userProfile : userProfiles) {
-      if (id.equals(userProfile.getProfileId())) {
-        return userProfile;
-      }
-    }
-
-    return null;
   }
 
   private OneginiClient getOneginiClient() {

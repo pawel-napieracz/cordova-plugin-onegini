@@ -131,6 +131,8 @@
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiUserRegistrationClient.java"
                  target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiUserDeregistrationClient.java"
+                 target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiUserAuthenticationClient.java"
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiSDK.java"
@@ -140,6 +142,7 @@
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java" target-dir="src/com/onegini/util"/>
 
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/handler/AuthenticationHandler.java"
