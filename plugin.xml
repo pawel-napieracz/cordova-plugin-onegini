@@ -101,6 +101,10 @@
         <param name="android-package" value="com.onegini.OneginiUserRegistrationClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiUserDeregistrationClient">
+        <param name="android-package" value="com.onegini.OneginiUserDeregistrationClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
