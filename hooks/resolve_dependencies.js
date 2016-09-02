@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require('path');
 const platform = require('platform');
 const spawn = require('child_process').spawn;
 
@@ -8,8 +9,9 @@ module.exports = function (context) {
 
   console.log(`${pluginId}: Resolving gradle dependencies...`);
 
+  const cwd = path.join(context.opts.plugin.pluginInfo.dir, 'src/ios');
   const options = {
-    cwd: context.opts.plugin.pluginInfo.dir,
+    cwd: cwd,
     shell: true
   };
   executable = getGradleExecutableForPlatform()
