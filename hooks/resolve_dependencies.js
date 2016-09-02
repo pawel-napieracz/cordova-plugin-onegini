@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require('path');
-const platform = require('platform');
+const os = require('os');
 const spawn = require('child_process').spawn;
 
 module.exports = function (context) {
@@ -38,7 +38,7 @@ module.exports = function (context) {
 };
 
 function getGradleExecutableForPlatform() {
-  const osFamily = platform.os.family;
+  const osFamily = os.platform();
 
   var executable = './gradlew';
   if (osFamily.toLowerCase().startsWith('win')) {
