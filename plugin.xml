@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-onegini"
-        version="1.8.0">
+        version="1.8.1">
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
@@ -46,20 +46,27 @@
     <header-file src="src/ios/OneginiCordovaPlugin/Classes/UIColor+OGNHex.h"/>
     <source-file src="src/ios/OneginiCordovaPlugin/Classes/UIColor+OGNHex.m"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGAuthorizationDelegate.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/OGAuthenticationDelegate.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/OGClientAuthenticationDelegate.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/OGMobileAuthenticationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGConfigModel.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGChangePinDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGDisconnectDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGLogoutDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGEnrollmentHandlerDelegate.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/OGDeregistrationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGOneginiClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGPublicCommons.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGPinValidationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGResourceHandlerDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGFingerprintDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGCustomizationDelegate.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/OGPinConfirmation.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/OGNewPinConfirmation.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/OGUserProfile.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
-    <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-4.09.00-Release-fat-binary.a" framework="true"/>
+    <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-4.10.02-Release-fat-binary.a" framework="true"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
