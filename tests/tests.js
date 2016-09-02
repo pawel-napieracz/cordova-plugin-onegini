@@ -6,7 +6,7 @@ exports.defineAutoTests = function () {
       expect(window.onegini).toBeDefined();
     });
 
-    describe('onegini.start', function () {
+    describe('start', function () {
       it("should exist", function () {
         expect(onegini.start).toBeDefined();
       });
@@ -84,7 +84,10 @@ exports.defineAutoTests = function () {
               });
         });
 
-        it("register.createPin should return a profileId", function (done) {
+      });
+
+      describe('createPin', function () {
+        it("should return a profileId", function (done) {
           onegini.user.register.createPin(
               {
                 pin: '12346'
@@ -98,7 +101,8 @@ exports.defineAutoTests = function () {
                 expect(err).toBeUndefined();
               });
         });
-      })
+      });
+
     });
 
     describe('onegini.user.getUserProfiles', function () {
