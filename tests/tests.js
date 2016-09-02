@@ -1,6 +1,8 @@
 /* jshint jasmine: true */
 
 exports.defineAutoTests = function () {
+  this.registeredProfileId;
+
   describe('onegini', function () {
     it("onegini should exist", function () {
       expect(window.onegini).toBeDefined();
@@ -95,6 +97,8 @@ exports.defineAutoTests = function () {
               function (result) {
                 expect(result).toBeDefined();
                 expect(result.profileId).toBeDefined();
+
+                this.registeredProfileId = result.profileId
                 done();
               },
               function (err) {
@@ -151,10 +155,10 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it("onegini.user.deregister should succees with correct profileId", function (done) {
+      it("onegini.user.deregister should succeed with correct profileId", function (done) {
         onegini.user.deregister(
             {
-              profileId: "TODO" // TODO use internally cached profileId
+              profileId: registeredProfileId
             },
             function (result) {
               expect(result).toBeDefined();
