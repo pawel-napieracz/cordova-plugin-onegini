@@ -110,12 +110,12 @@ exports.defineAutoTests = function () {
 
     });
 
-    describe('onegini.user.getUserProfiles (1/2)', function () {
-      it("onegini.user.getUserProfiles should exist", function () {
+    describe('getUserProfiles (1/2)', function () {
+      it("should exist", function () {
         expect(onegini.user.getUserProfiles).toBeDefined();
       });
 
-      it("onegini.user.getUserProfiles should not be empty", function (done) {
+      it("should not be empty", function (done) {
         onegini.user.getUserProfiles(
             function (result) {
               expect(result).toBeDefined();
@@ -129,24 +129,24 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe('onegini.user.authenticate.start', function () {
-      it("onegini.user.authenticate.start should exist", function () {
+    describe('authenticate.start', function () {
+      it("should exist", function () {
         expect(onegini.user.authenticate.start).toBeDefined();
       });
     });
 
-    describe('onegini.user.authenticate.providePin', function () {
-      it("onegini.user.authenticate.providePin should exist", function () {
+    describe('authenticate.providePin', function () {
+      it("should exist", function () {
         expect(onegini.user.authenticate.providePin).toBeDefined();
       });
     });
 
-    describe('onegini.user.deregister', function () {
-      it("onegini.user.deregister should exist", function () {
+    describe('deregister', function () {
+      it("should exist", function () {
         expect(onegini.user.deregister).toBeDefined();
       });
 
-      it("onegini.user.deregister 'profileId' argument mandatory", function () {
+      it("'profileId' argument mandatory", function () {
         expect(function () {
           onegini.user.deregister({}, function () {
           }, function () {
@@ -154,7 +154,7 @@ exports.defineAutoTests = function () {
         }).toThrow(new TypeError("Onegini: missing 'profileId' argument for deregister"));
       });
 
-      it("onegini.user.deregister no user found for profileId", function (done) {
+      it("no user found for profileId", function (done) {
         onegini.user.deregister(
             {
               profileId: "UNKNOWN"
@@ -169,7 +169,7 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it("onegini.user.deregister should succeed with correct profileId", function (done) {
+      it("should succeed with correct profileId", function (done) {
         onegini.user.deregister(
             {
               profileId: registeredProfileId
@@ -184,8 +184,8 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe('onegini.user.getUserProfiles (2/2)', function () {
-      it("onegini.user.getUserProfiles should be one less", function (done) {
+    describe('getUserProfiles (2/2)', function () {
+      it("should be one less", function (done) {
         onegini.user.getUserProfiles(
             function (result) {
               expect(result).toBeDefined();
