@@ -56,6 +56,17 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
   [self.pinChallenge.sender respondWithPin:pin challenge:self.pinChallenge];
 }
 
+- (void)logout:(CDVInvokedUrlCommand *)command
+{
+  [[ONGUserClient sharedInstance] logoutUser:^(ONGUserProfile * _Nonnull userProfile, NSError * _Nullable error) {
+    if (error != nil) {
+      [self sendErrorResultForCallbackId:command.callbackId withError:error];
+    } else {
+      [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+    }
+  }];
+}
+
 #pragma mark - ONGAuthenticationDelegate
 
 -(void)userClient:(ONGUserClient *)userClient didAuthenticateUser:(ONGUserProfile *)userProfile
@@ -97,7 +108,7 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
                                    } mutableCopy];
 
   if (challenge.error != nil) {
-    [result setValue:[NSString stringWithFormat:@"Incorrect Pin. Check the %@ and %@ properties for details.", OGCDVPluginKeyMaxFailureCount, OGCDVPluginKeyRemainingFailureCount] forKey:@"description"];
+    [result setValue:[NSString stringWithFormat:@"Onegini: Incorrect Pin. Check the %@ and %@ properties for details.", OGCDVPluginKeyMaxFailureCount, OGCDVPluginKeyRemainingFailureCount] forKey:@"description"];
     [result setValue:@(NO) forKey:@"deregistered"];
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result];
     [pluginResult setKeepCallbackAsBool:YES];

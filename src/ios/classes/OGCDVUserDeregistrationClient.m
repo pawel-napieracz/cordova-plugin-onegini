@@ -26,6 +26,9 @@ static NSString *const OGCDVPluginKeyProfileId = @"profileId";
 
 - (void)deregistrationSuccessful:(ONGUserProfile *)userProfile
 {
+  // TODO there's a bug in the iOS SDK where deregistration doesn't log out the user, so until that's fixed we need this line
+  [[ONGUserClient sharedInstance] logoutUser:nil];
+
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.callbackId];
 }
 
