@@ -1,5 +1,6 @@
 const fs = require("fs");
-const platform = require('platform');
+const path = require('path');
+const os = require('os');
 const spawn = require('child_process').spawn;
 
 module.exports = function (context) {
@@ -8,8 +9,9 @@ module.exports = function (context) {
 
   console.log(`${pluginId}: Resolving gradle dependencies...`);
 
+  const cwd = path.join(context.opts.plugin.pluginInfo.dir, 'src/ios');
   const options = {
-    cwd: context.opts.plugin.pluginInfo.dir,
+    cwd: cwd,
     shell: true
   };
   executable = getGradleExecutableForPlatform()
@@ -36,7 +38,7 @@ module.exports = function (context) {
 };
 
 function getGradleExecutableForPlatform() {
-  const osFamily = platform.os.family;
+  const osFamily = os.platform();
 
   var executable = './gradlew';
   if (osFamily.toLowerCase().startsWith('win')) {
