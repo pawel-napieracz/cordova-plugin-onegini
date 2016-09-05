@@ -16,7 +16,7 @@ static NSString *const OGCDVPluginKeyProfileId = @"profileId";
   ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
 
   if (user == nil) {
-    [self sendErrorResultForCallbackId:command.callbackId withMessage:[NSString stringWithFormat: @"Onegini: No registered user found for the provided %@.", OGCDVPluginKeyProfileId]];
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No registered user found."];
   } else {
     [[ONGUserClient sharedInstance] deregisterUser:user delegate:self];
   }

@@ -45,7 +45,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeDefined();
-              expect(err.description).toBe("Onegini: No user authenticated");
+              expect(err.description).toBe("Onegini: No user authenticated.");
               done();
             });
       });
@@ -316,7 +316,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeDefined();
-              expect(err.description).toBe("Onegini: No user authenticated");
+              expect(err.description).toBe("Onegini: No user authenticated.");
               done();
             });
       });
