@@ -9,6 +9,7 @@
 @property (nonatomic, copy) NSString *checkPinCallbackId;
 @property (nonatomic) ONGPinChallenge *pinChallenge;
 
+- (void)getAuthenticatedUserProfile:(CDVInvokedUrlCommand *)command;
 - (void)start:(CDVInvokedUrlCommand *)command;
 - (void)providePin:(CDVInvokedUrlCommand *)command;
 

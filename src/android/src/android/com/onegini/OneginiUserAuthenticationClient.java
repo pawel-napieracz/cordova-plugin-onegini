@@ -2,6 +2,7 @@ package com.onegini;
 
 import static com.onegini.OneginiCordovaPluginConstants.ACTION_CHECK_PIN;
 import static com.onegini.OneginiCordovaPluginConstants.ACTION_START;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
 import java.util.Set;
@@ -21,13 +22,18 @@ import com.onegini.util.UserProfileUtil;
 
 public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
+  private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
+
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if (ACTION_START.equals(action)) {
       startAuthentication(args, callbackContext);
       return true;
     } else if (ACTION_CHECK_PIN.equals(action)) {
-      checkPin(args, callbackContext);
+      providePin(args, callbackContext);
+      return true;
+    } else if (ACTION_GET_AUTHENTICATED_USER_PROFILE.equals(action)) {
+      getAuthenticatedUserProfile(callbackContext);
       return true;
     }
 
@@ -82,18 +88,40 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     return UserProfileUtil.findUserProfileById(profileId, registeredUserProfiles);
   }
 
-  private void checkPin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+  private void providePin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String pin = args.getString(0);
     final OneginiPinCallback pinCallback = PinAuthenticationRequestHandler.getInstance().getPinCallback();
     PinAuthenticationRequestHandler.getInstance().setCheckPinCordovaCallback(callbackContext);
 
     if (pinCallback == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(OneginiCordovaPluginConstants.ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS)
+          .withErrorDescription(OneginiCordovaPluginConstants.ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS)
           .build());
     } else {
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
+  }
+
+  private void getAuthenticatedUserProfile(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        final UserProfile authenticatedUserProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
+
+        PluginResultBuilder pluginResultBuilder = new PluginResultBuilder();
+        if (authenticatedUserProfile == null) {
+          pluginResultBuilder
+              .withError()
+              .withErrorDescription(ERROR_NO_USER_AUTHENTICATED);
+        } else {
+          pluginResultBuilder
+              .withSuccess()
+              .withProfileId(authenticatedUserProfile);
+        }
+
+        callbackContext.sendPluginResult(pluginResultBuilder.build());
+      }
+    });
   }
 
   private OneginiClient getOneginiClient() {

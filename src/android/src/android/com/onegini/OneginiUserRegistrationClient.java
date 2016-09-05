@@ -3,6 +3,7 @@ package com.onegini;
 import static com.onegini.OneginiCordovaPluginConstants.ACTION_CREATE_PIN;
 import static com.onegini.OneginiCordovaPluginConstants.ACTION_GET_USER_PROFILES;
 import static com.onegini.OneginiCordovaPluginConstants.ACTION_START;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_SCOPES;
 
 import java.util.Set;
@@ -72,7 +73,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
 
     if (pinCallback == null) {
       final PluginResult pluginResult = new PluginResultBuilder()
-          .withErrorDescription("Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?")
+          .withErrorDescription(ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS)
           .build();
       callbackContext.sendPluginResult(pluginResult);
     } else {
@@ -84,15 +85,10 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   public void getUserProfiles(final CallbackContext callbackContext) {
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
-        Set<UserProfile> userProfiles = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
+        final Set<UserProfile> userProfiles = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
             .getUserProfiles();
-
-        final PluginResult pluginResult = new PluginResultBuilder()
-            .withSuccess()
-            .addUserProfiles(userProfiles)
-            .build();
-
-        callbackContext.sendPluginResult(pluginResult);
+        final JSONArray resultPayload = new JSONArray(userProfiles);
+        callbackContext.success(resultPayload);
       }
     });
   }

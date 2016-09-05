@@ -23,7 +23,6 @@ public class InitializationHandler implements OneginiInitializationHandler {
     // TODO do we really need to pass the user profiles with the success cb? If so: add to iOS as well
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .addUserProfiles(userProfiles)
         .build();
 
     callbackContext.sendPluginResult(pluginResult);
