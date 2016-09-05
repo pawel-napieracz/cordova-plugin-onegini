@@ -1,7 +1,5 @@
 package com.onegini;
 
-import static com.onegini.OneginiCordovaPluginConstants.ACTION_START;
-
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
@@ -12,6 +10,8 @@ import android.net.Uri;
 import com.onegini.handler.InitializationHandler;
 
 public class OneginiClient extends CordovaPlugin {
+
+  private static final String ACTION_START = "start";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {

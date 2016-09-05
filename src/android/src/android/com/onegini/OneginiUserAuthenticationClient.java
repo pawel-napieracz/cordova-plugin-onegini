@@ -1,7 +1,5 @@
 package com.onegini;
 
-import static com.onegini.OneginiCordovaPluginConstants.ACTION_CHECK_PIN;
-import static com.onegini.OneginiCordovaPluginConstants.ACTION_START;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
@@ -22,6 +20,8 @@ import com.onegini.util.UserProfileUtil;
 
 public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
+  private static final String ACTION_START = "start";
+  private static final String ACTION_PROVIDE_PIN = "checkPin";
   private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
 
   @Override
@@ -29,7 +29,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     if (ACTION_START.equals(action)) {
       startAuthentication(args, callbackContext);
       return true;
-    } else if (ACTION_CHECK_PIN.equals(action)) {
+    } else if (ACTION_PROVIDE_PIN.equals(action)) {
       providePin(args, callbackContext);
       return true;
     } else if (ACTION_GET_AUTHENTICATED_USER_PROFILE.equals(action)) {
