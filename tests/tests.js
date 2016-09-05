@@ -172,30 +172,27 @@ exports.defineAutoTests = function () {
           }).toThrow(new TypeError("Onegini: missing 'profileId' argument for authenticate.start"));
         });
 
+        // TODO once 'logout' has been added we can test the authentication happy flow (because register already logs you in)
+        it('should fail', function (done) {
+          onegini.user.authenticate.start(
+              {
+                profileId: registeredProfileId
+              },
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: User already authenticated for the provided profileId.");
+                done();
+              });
+        });
       });
 
       describe('providePin', function () {
         it("should exist", function () {
           expect(onegini.user.authenticate.providePin).toBeDefined();
         });
-      });
-    });
-
-    describe('authenticate', function () {
-      it('should return the authenticated user profile', function (done) {
-        onegini.user.authenticate.start(
-            {
-              profileId: registeredProfileId
-            },
-            function (result) {
-              expect(result).toBeDefined();
-              expect(result.profileId).toEqual(registeredProfileId);
-              done();
-            },
-            function (err) {
-              expect(err).toBeUndefined();
-              done();
-            });
       });
     });
 
