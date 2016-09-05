@@ -59,7 +59,7 @@ var OneginiDemo = (function () {
       );
     },
 
-    getUserProfiles: function() {
+    getUserProfiles: function () {
       var that = this;
       onegini.user.getUserProfiles(
           function (result) {
@@ -72,7 +72,7 @@ var OneginiDemo = (function () {
       );
     },
 
-    deregister: function() {
+    deregister: function () {
       var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
       profileId = prompt("Please enter the profileId", profileId);
       if (!profileId) {
@@ -91,7 +91,7 @@ var OneginiDemo = (function () {
       );
     },
 
-    startAuthentication: function() {
+    startAuthentication: function () {
       var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
       profileId = prompt("Please enter the profileId", profileId);
       if (!profileId) {
@@ -102,17 +102,17 @@ var OneginiDemo = (function () {
           {
             profileId: profileId
           },
-          function(result) {
+          function (result) {
             console.log("onegini.user.authenticate.start success, now calling onegini.user.authenticate.providePin. " + JSON.stringify(result));
             that.providePin(result.pinLength);
           },
-          function(err) {
+          function (err) {
             alert("Error!\n\n" + err.description);
           }
       );
     },
 
-    providePin: function() {
+    providePin: function () {
       var pin = prompt("Please enter your Pin", "12346" /* default */);
       if (!pin) {
         return;
@@ -121,21 +121,42 @@ var OneginiDemo = (function () {
           {
             pin: pin
           },
-          function(result) {
+          function (result) {
             alert("Authentication succeeded!");
           },
-          function(err) {
+          function (err) {
             alert("Error!\n\n" + JSON.stringify(err));
           }
       );
     },
 
-    getAuthenticatedUser: function() {
-      onegini.user.getAuthenticatedUser(
-          function(result) {
+    reauthenticate: function () {
+      var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
+      profileId = prompt("Please enter the profileId", profileId);
+      if (!profileId) {
+        return;
+      }
+      var that = this;
+      onegini.user.reauthenticate.start(
+          {
+            profileId: profileId
+          },
+          function (result) {
+            console.log("onegini.user.reauthenticate.start success, now calling onegini.user.reauthenticate.providePin. " + JSON.stringify(result));
+            that.providePin(result.pinLength);
+          },
+          function (err) {
+            alert("Error!\n\n" + err.description);
+          }
+      );
+    },
+
+    getAuthenticatedUserProfile: function () {
+      onegini.user.getAuthenticatedUserProfile(
+          function (result) {
             alert("Success!\n\ProfileId: " + result.profileId);
           },
-          function(err) {
+          function (err) {
             alert(err.description);
           }
       );
