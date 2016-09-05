@@ -160,6 +160,17 @@ var OneginiDemo = (function () {
             alert(err.description);
           }
       );
+    },
+
+    logout: function () {
+      onegini.user.logout(
+          function () {
+            alert("Logout success!");
+          },
+          function (err) {
+            alert(err.description);
+          }
+      );
     }
   }
 })();
