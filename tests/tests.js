@@ -257,7 +257,7 @@ exports.defineAutoTests = function () {
               },
               function (err) {
                 expect(err).toBeDefined();
-                expect(err.description).toBe("Onegini: User already authenticated for the provided profileId.");
+                expect(err.description).toBe("Onegini: User already authenticated.");
                 done();
               });
         });
@@ -287,7 +287,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeDefined();
-              expect(err.description).toBe("Onegini: No registered user found for the provided profileId.");
+              expect(err.description).toBe("Onegini: No registered user found.");
               done();
             });
       });
