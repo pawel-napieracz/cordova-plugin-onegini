@@ -11,6 +11,17 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
 
 @implementation OGCDVUserAuthenticationClient {}
 
+- (void)getAuthenticatedUserProfile:(CDVInvokedUrlCommand *)command
+{
+  ONGUserProfile *authenticatedUserProfile = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+  if (authenticatedUserProfile == nil) {
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No user authenticated"];
+  } else {
+    NSDictionary *result = @{OGCDVPluginKeyProfileId: authenticatedUserProfile.profileId};
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:command.callbackId];
+  }
+}
+
 - (void)start:(CDVInvokedUrlCommand *)command
 {
   NSDictionary *options = [command.arguments objectAtIndex:0];

@@ -104,35 +104,6 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder addUserProfile(final UserProfile userProfile) {
-    try {
-      JSONArray userProfilesJSON;
-      if (payload.has("userProfiles")) {
-        userProfilesJSON = payload.getJSONArray("userProfiles");
-      } else {
-        userProfilesJSON = new JSONArray();
-      }
-
-      JSONObject userProfileJSON = new JSONObject();
-      userProfileJSON.put("profileId", userProfile.getProfileId());
-
-      userProfilesJSON.put(userProfileJSON);
-      payload.put("userProfiles", userProfilesJSON);
-    } catch (JSONException e) {
-      handleException(e);
-    }
-
-    return this;
-  }
-
-  public PluginResultBuilder addUserProfiles(final Set<UserProfile> userProfiles) {
-    for (final UserProfile userProfile : userProfiles) {
-      this.addUserProfile(userProfile);
-    }
-
-    return this;
-  }
-
   private void handleException(JSONException e) {
     this.status = ERROR;
 
