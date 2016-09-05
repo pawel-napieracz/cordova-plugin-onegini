@@ -3,9 +3,9 @@ package com.onegini.handler;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
-import com.onegini.mobile.android.sdk.handlers.request.OneginiPinAuthenticationRequestHandler;
-import com.onegini.mobile.android.sdk.handlers.request.callback.OneginiPinCallback;
-import com.onegini.mobile.android.sdk.model.entity.UserProfile;
+import com.onegini.mobile.sdk.android.handlers.request.OneginiPinAuthenticationRequestHandler;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
+import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
 public class PinAuthenticationRequestHandler implements OneginiPinAuthenticationRequestHandler {
@@ -51,9 +51,13 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
 
   @Override
   public void onNextAuthenticationAttempt(final int failedAttempts, final int maxAttempts) {
+    final int remainingAttempts = maxAttempts - failedAttempts;
+
     sendCheckPinResult(new PluginResultBuilder()
         .withError()
         .withErrorDescription("OneginiPlugin: next authentication attempt")
+        .withMaxFailureCount(maxAttempts)
+        .withRemainingFailureCount(remainingAttempts)
         .shouldKeepCallback()
         .build());
   }

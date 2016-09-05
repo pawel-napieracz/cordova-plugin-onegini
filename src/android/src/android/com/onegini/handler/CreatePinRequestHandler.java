@@ -3,17 +3,18 @@ package com.onegini.handler;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
-import com.onegini.mobile.android.sdk.handlers.error.OneginiPinValidationError;
-import com.onegini.mobile.android.sdk.handlers.request.OneginiCreatePinRequestHandler;
-import com.onegini.mobile.android.sdk.handlers.request.callback.OneginiPinCallback;
-import com.onegini.mobile.android.sdk.model.entity.UserProfile;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiPinValidationError;
+import com.onegini.mobile.sdk.android.handlers.request.OneginiCreatePinRequestHandler;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
+import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
 public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
 
   private static CreatePinRequestHandler instance = null;
   private OneginiPinCallback pinCallback = null;
-  private CallbackContext cordovaCallback;
+  private CallbackContext registrationCallback;
+  private CallbackContext createPinCallback;
 
   protected CreatePinRequestHandler() {
   }
@@ -30,8 +31,12 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
     return pinCallback;
   }
 
-  public void setCordovaCallback(final CallbackContext cordovaCallback) {
-    this.cordovaCallback = cordovaCallback;
+  public void setRegistrationCallbackContext(final CallbackContext registrationCallback) {
+    this.registrationCallback = registrationCallback;
+  }
+
+  public void setCreatePinCallback(final CallbackContext createPinCallback) {
+    this.createPinCallback = createPinCallback;
   }
 
   @Override
@@ -40,10 +45,10 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
 
     PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .shouldKeepCallback()
+        .withPinLength(5)
         .build();
 
-    sendPluginResult(pluginResult);
+    sendStartRegistrationResult(pluginResult);
   }
 
   @Override
@@ -54,22 +59,24 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
         .shouldKeepCallback()
         .build();
 
-    sendPluginResult(pluginResult);
+    sendCreatePinResult(pluginResult);
   }
 
   @Override
   public void finishPinCreation() {
-    pinCallback = null;
-    PluginResult pluginResult = new PluginResultBuilder()
-        .withSuccess()
-        .build();
-
-    sendPluginResult(pluginResult);
+    this.pinCallback = null;
+    this.registrationCallback = null;
   }
 
-  private void sendPluginResult(final PluginResult pluginResult) {
-    if (cordovaCallback != null) {
-      cordovaCallback.sendPluginResult(pluginResult);
+  private void sendStartRegistrationResult(final PluginResult pluginResult) {
+    if (registrationCallback != null) {
+      registrationCallback.sendPluginResult(pluginResult);
+    }
+  }
+
+  private void sendCreatePinResult(final PluginResult pluginResult) {
+    if (createPinCallback != null) {
+      createPinCallback.sendPluginResult(pluginResult);
     }
   }
 }

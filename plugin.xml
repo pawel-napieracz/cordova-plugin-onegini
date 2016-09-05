@@ -18,7 +18,7 @@
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
       <feature name="OneginiClient">
-        <param name="ios-package" value="OneginiClient" />
+        <param name="ios-package" value="OGCDVClient" />
       </feature>
       <feature name="OneginiUserRegistrationClient">
         <param name="ios-package" value="OGCDVUserRegistrationClient" />
@@ -127,6 +127,8 @@
     <source-file src="src/android/src/android/com/onegini/OneginiUserAuthenticationClient.java"
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiSDK.java"
+                 target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiCordovaPluginConstants.java"
                  target-dir="src/com/onegini/"/>
 
     <!-- util -->

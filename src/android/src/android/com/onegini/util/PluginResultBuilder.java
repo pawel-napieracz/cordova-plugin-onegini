@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.onegini.mobile.android.sdk.model.entity.UserProfile;
+import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 
 public class PluginResultBuilder {
 
@@ -64,6 +64,46 @@ public class PluginResultBuilder {
     return this;
   }
 
+  public PluginResultBuilder withRemainingFailureCount(int remainingFailureCount) {
+    try {
+      payload.put("remainingFailureCount", remainingFailureCount);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withMaxFailureCount(int maxFailureCount) {
+    try {
+      payload.put("maxFailureCount", maxFailureCount);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withPinLength(int pinLength) {
+    try {
+      payload.put("pinLength", pinLength);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withProfileId(UserProfile userProfile) {
+    try {
+      payload.put("profileId", userProfile.getProfileId());
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
   public PluginResultBuilder addUserProfile(final UserProfile userProfile) {
     try {
       JSONArray userProfilesJSON;
@@ -75,7 +115,6 @@ public class PluginResultBuilder {
 
       JSONObject userProfileJSON = new JSONObject();
       userProfileJSON.put("profileId", userProfile.getProfileId());
-      userProfileJSON.put("isDefault", userProfile.isDefault());
 
       userProfilesJSON.put(userProfileJSON);
       payload.put("userProfiles", userProfilesJSON);

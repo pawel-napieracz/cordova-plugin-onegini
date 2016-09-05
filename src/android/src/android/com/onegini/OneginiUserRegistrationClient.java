@@ -1,5 +1,10 @@
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ACTION_CREATE_PIN;
+import static com.onegini.OneginiCordovaPluginConstants.ACTION_GET_USER_PROFILES;
+import static com.onegini.OneginiCordovaPluginConstants.ACTION_START;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_SCOPES;
+
 import java.util.Set;
 
 import org.apache.cordova.CallbackContext;
@@ -10,21 +15,23 @@ import org.json.JSONException;
 
 import com.onegini.handler.CreatePinRequestHandler;
 import com.onegini.handler.RegistrationHandler;
-import com.onegini.mobile.android.sdk.handlers.request.callback.OneginiPinCallback;
-import com.onegini.mobile.android.sdk.model.entity.UserProfile;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
+import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
 public class OneginiUserRegistrationClient extends CordovaPlugin {
 
+  private RegistrationHandler registrationHandler;
+
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    if ("startRegistration".equals(action)) {
+    if (ACTION_START.equals(action)) {
       startRegistration(args, callbackContext);
       return true;
-    } else if ("createPin".equals(action)) {
+    } else if (ACTION_CREATE_PIN.equals(action)) {
       createPin(args, callbackContext);
       return true;
-    } else if ("getUserProfiles".equals(action)) {
+    } else if (ACTION_GET_USER_PROFILES.equals(action)) {
       getUserProfiles(callbackContext);
       return true;
     }
@@ -32,32 +39,44 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
     return false;
   }
 
-  private void startRegistration(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final JSONArray scopesJSON = args.getJSONObject(0).getJSONArray("scopes");
-    final String[] scopes = new String[scopesJSON.length()];
+  private void startRegistration(final JSONArray args, final CallbackContext startRegistrationCallbackContext) throws JSONException {
+    final String[] scopes;
+    JSONArray scopesJSON;
+
+    try {
+      scopesJSON = args.getJSONObject(0).getJSONArray(PARAM_SCOPES);
+    } catch (JSONException e) {
+      scopesJSON = new JSONArray();
+    }
+
+    scopes = new String[scopesJSON.length()];
     for (int i = 0; i < scopesJSON.length(); i++) {
       scopes[i] = scopesJSON.getString(i);
     }
 
+    CreatePinRequestHandler.getInstance().setRegistrationCallbackContext(startRegistrationCallbackContext);
+    registrationHandler = new RegistrationHandler(startRegistrationCallbackContext);
+
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
         OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
-            .registerUser(scopes, new RegistrationHandler(callbackContext));
+            .registerUser(scopes, registrationHandler);
       }
     });
   }
 
   private void createPin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final String pin = args.getString(0);
-    CreatePinRequestHandler.getInstance().setCordovaCallback(callbackContext);
+    final String pin = args.getJSONObject(0).getString("pin");
     OneginiPinCallback pinCallback = CreatePinRequestHandler.getInstance().getPinCallback();
+    CreatePinRequestHandler.getInstance().setCreatePinCallback(callbackContext);
 
     if (pinCallback == null) {
       final PluginResult pluginResult = new PluginResultBuilder()
-          .withErrorDescription("OneginiPlugin: No pending pincode requests.")
+          .withErrorDescription("Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?")
           .build();
       callbackContext.sendPluginResult(pluginResult);
     } else {
+      registrationHandler.setCallbackContext(callbackContext);
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
   }
@@ -65,7 +84,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   public void getUserProfiles(final CallbackContext callbackContext) {
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
-       Set<UserProfile> userProfiles = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
+        Set<UserProfile> userProfiles = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
             .getUserProfiles();
 
         final PluginResult pluginResult = new PluginResultBuilder()
