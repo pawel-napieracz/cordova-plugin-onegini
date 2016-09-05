@@ -1,7 +1,8 @@
 /* jshint jasmine: true */
 
 exports.defineAutoTests = function () {
-  this.registeredProfileId;
+  var registeredProfileId,
+      nrOfUserProfiles;
 
   describe('onegini', function () {
     it("onegini should exist", function () {
@@ -81,7 +82,7 @@ exports.defineAutoTests = function () {
               },
               function (err) {
                 expect(err).toBeDefined();
-                expect(err.description).toBe("Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?");
+                expect(err.description).toBe("Onegini: createPin called, but no registration in progress. Did you call 'onegini.user.register.start'?");
                 done();
               });
         });
@@ -124,30 +125,43 @@ exports.defineAutoTests = function () {
 
     });
 
-    describe('onegini.user.getUserProfiles', function () {
-      it("onegini.user.getUserProfiles should exist", function () {
+    describe('getUserProfiles (1/2)', function () {
+      it("should exist", function () {
         expect(onegini.user.getUserProfiles).toBeDefined();
+      });
+
+      it("should not be empty", function (done) {
+        onegini.user.getUserProfiles(
+            function (result) {
+              expect(result).toBeDefined();
+              nrOfUserProfiles = result.length;
+              expect(nrOfUserProfiles).toBeGreaterThan(0);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
       });
     });
 
-    describe('onegini.user.authenticate.start', function () {
-      it("onegini.user.authenticate.start should exist", function () {
+    describe('authenticate.start', function () {
+      it("should exist", function () {
         expect(onegini.user.authenticate.start).toBeDefined();
       });
     });
 
-    describe('onegini.user.authenticate.providePin', function () {
-      it("onegini.user.authenticate.providePin should exist", function () {
+    describe('authenticate.providePin', function () {
+      it("should exist", function () {
         expect(onegini.user.authenticate.providePin).toBeDefined();
       });
     });
 
-    describe('onegini.user.deregister', function () {
-      it("onegini.user.deregister should exist", function () {
+    describe('deregister', function () {
+      it("should exist", function () {
         expect(onegini.user.deregister).toBeDefined();
       });
 
-      it("onegini.user.deregister 'profileId' argument mandatory", function () {
+      it("'profileId' argument mandatory", function () {
         expect(function () {
           onegini.user.deregister({}, function () {
           }, function () {
@@ -155,7 +169,7 @@ exports.defineAutoTests = function () {
         }).toThrow(new TypeError("Onegini: missing 'profileId' argument for deregister"));
       });
 
-      it("onegini.user.deregister no user found for profileId", function (done) {
+      it("no user found for profileId", function (done) {
         onegini.user.deregister(
             {
               profileId: "UNKNOWN"
@@ -170,7 +184,7 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it("onegini.user.deregister should succeed with correct profileId", function (done) {
+      it("should succeed with correct profileId", function (done) {
         onegini.user.deregister(
             {
               profileId: registeredProfileId
@@ -197,6 +211,20 @@ exports.defineAutoTests = function () {
               expect(err).toBeUndefined();
             }
         )
+      });
+    });
+
+    describe('getUserProfiles (2/2)', function () {
+      it("should be one less", function (done) {
+        onegini.user.getUserProfiles(
+            function (result) {
+              expect(result).toBeDefined();
+              expect(result.length).toBeLessThan(nrOfUserProfiles);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
       });
     });
 

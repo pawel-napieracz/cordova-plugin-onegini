@@ -32,13 +32,8 @@ prerequisites to this:
 You must have the [Onegini SDK Configurator](https://github.com/Onegini/sdk-configurator) installed and it must be accessible from the $PATH in your command line
 application.
 
-2. Node module
-The node 'platform' module must be installed. execute:
-```sh
-npm install platform
-```
 
-3. Token Server configuration zip
+2. Token Server configuration zip
 In order to successfully add a platform you must also have a zip file containing the Token Server configuration for your application. This zip file can be 
 [downloaded from the Token Server administration console](https://docs.onegini.com/public/token-server/topics/mobile-apps/app-delivery-lifecycle/app-delivery-lifecycle.html). 
 The zip file must be placed in the root of your Cordova application project.
@@ -59,26 +54,6 @@ cordova platform add android
 ```
 
 ### Troubleshooting
-
-#### Node module 'platform' not installed
-
-If you see the error below it means that you haven't installed the node platform module. Make sure that you follow the installation instructions to install this 
-module.
-
-```
-Failed to install 'cordova-plugin-onegini':Error: Cannot find module 'platform'
-    at Function.Module._resolveFilename (module.js:339:15)
-    at Function.Module._load (module.js:290:25)
-    at Module.require (module.js:367:17)
-    at require (internal/module.js:16:19)
-    at Object.<anonymous> (/Volumes/code/mobile-platform/cordova-app/plugins/cordova-plugin-onegini/hooks/resolve_dependencies.js:2:18)
-    at Module._compile (module.js:413:34)
-    at Object.Module._extensions..js (module.js:422:10)
-    at Module.load (module.js:357:32)
-    at Function.Module._load (module.js:314:12)
-    at Module.require (module.js:367:17)
-Error: Cannot find module 'platform'
-```
 
 #### Configuration zip not found
 
