@@ -1,7 +1,8 @@
 /* jshint jasmine: true */
 
 exports.defineAutoTests = function () {
-  this.registeredProfileId;
+  var registeredProfileId,
+      nrOfUserProfiles;
 
   describe('onegini', function () {
     it("onegini should exist", function () {
@@ -66,7 +67,7 @@ exports.defineAutoTests = function () {
               },
               function (err) {
                 expect(err).toBeDefined();
-                expect(err.description).toBe("Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?");
+                expect(err.description).toBe("Onegini: createPin called, but no registration in progress. Did you call 'onegini.user.register.start'?");
                 done();
               });
         });
@@ -98,7 +99,7 @@ exports.defineAutoTests = function () {
                 expect(result).toBeDefined();
                 expect(result.profileId).toBeDefined();
 
-                this.registeredProfileId = result.profileId
+                registeredProfileId = result.profileId;
                 done();
               },
               function (err) {
@@ -109,9 +110,22 @@ exports.defineAutoTests = function () {
 
     });
 
-    describe('onegini.user.getUserProfiles', function () {
+    describe('onegini.user.getUserProfiles (1/2)', function () {
       it("onegini.user.getUserProfiles should exist", function () {
         expect(onegini.user.getUserProfiles).toBeDefined();
+      });
+
+      it("onegini.user.getUserProfiles should not be empty", function (done) {
+        onegini.user.getUserProfiles(
+            function (result) {
+              expect(result).toBeDefined();
+              nrOfUserProfiles = result.length;
+              expect(nrOfUserProfiles).toBeGreaterThan(0);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
       });
     });
 
@@ -162,6 +176,20 @@ exports.defineAutoTests = function () {
             },
             function (result) {
               expect(result).toBeDefined();
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+    });
+
+    describe('onegini.user.getUserProfiles (2/2)', function () {
+      it("onegini.user.getUserProfiles should be one less", function (done) {
+        onegini.user.getUserProfiles(
+            function (result) {
+              expect(result).toBeDefined();
+              expect(result.length).toBeLessThan(nrOfUserProfiles);
               done();
             },
             function (err) {
