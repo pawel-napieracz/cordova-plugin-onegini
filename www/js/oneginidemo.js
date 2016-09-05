@@ -104,7 +104,7 @@ var OneginiDemo = (function () {
           },
           function (result) {
             console.log("onegini.user.authenticate.start success, now calling onegini.user.authenticate.providePin. " + JSON.stringify(result));
-            that.providePin(result.pinLength);
+            that.providePin();
           },
           function (err) {
             alert("Error!\n\n" + err.description);
