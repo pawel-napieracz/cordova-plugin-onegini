@@ -681,7 +681,7 @@ module.exports = {
   invalidateSessionState: function () {
     var length = sessionStorage.length;
     while (length--) {
-      var key = sessionStorage.key(i);
+      var key = sessionStorage.key(length);
       sessionStorage.removeItem(key);
     }
     oneginiCordovaPlugin.shouldRestoreSessionData = false;
