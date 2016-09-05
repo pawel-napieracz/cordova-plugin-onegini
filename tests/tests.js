@@ -30,6 +30,21 @@ exports.defineAutoTests = function () {
       expect(onegini.user).toBeDefined();
     });
 
+    describe("getAuthenticatedUserProfile", function () {
+      it("fails when no user is authenticated", function (done) {
+        onegini.user.getAuthenticatedUserProfile(
+            function (result) {
+              expect(result).toBeUndefined();
+              done()
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              expect(err.description).toBe("Onegini: No user authenticated")
+            }
+        )
+      });
+    });
+
     describe("register", function () {
       it("should have a start method", function () {
         expect(onegini.user.register.start).toBeDefined();
@@ -98,7 +113,7 @@ exports.defineAutoTests = function () {
                 expect(result).toBeDefined();
                 expect(result.profileId).toBeDefined();
 
-                this.registeredProfileId = result.profileId
+                this.registeredProfileId = result.profileId;
                 done();
               },
               function (err) {
@@ -167,6 +182,21 @@ exports.defineAutoTests = function () {
             function (err) {
               expect(err).toBeUndefined();
             });
+      });
+    });
+
+    describe("getAuthenticatedUserProfile", function () {
+      it("returns the authenticated profile", function (done) {
+        onegini.user.getAuthenticatedUserProfile(
+            function (result) {
+              expect(result).toBeDefined();
+              expect(result.profileId).toEqual(registeredProfileId);
+              done()
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            }
+        )
       });
     });
 
