@@ -72,6 +72,25 @@ var OneginiDemo = (function () {
       );
     },
 
+    deregister: function() {
+      var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
+      profileId = prompt("Please enter the profileId", profileId);
+      if (!profileId) {
+        return;
+      }
+      onegini.user.deregister(
+          {
+            profileId: profileId
+          },
+          function () {
+            alert("Deregister success!");
+          },
+          function (err) {
+            alert("Error!\n\n" + err.description);
+          }
+      );
+    },
+
     startAuthentication: function() {
       var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
       profileId = prompt("Please enter the profileId", profileId);
