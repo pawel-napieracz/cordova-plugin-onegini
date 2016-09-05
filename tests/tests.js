@@ -40,6 +40,7 @@ exports.defineAutoTests = function () {
         onegini.user.getAuthenticatedUserProfile(
             function (result) {
               expect(result).toBeUndefined();
+              done()
             },
             function (err) {
               expect(err).toBeDefined();
@@ -64,7 +65,7 @@ exports.defineAutoTests = function () {
             onegini.user.register.createPin({}, function () {
             }, function () {
             });
-          }).toThrow(new TypeError("Onegini: missing 'pin' argument for createPin"));
+          }).toThrow(new TypeError("Onegini: missing 'pin' argument for register.createPin"));
         });
 
         it("should require a success callback", function () {
@@ -149,7 +150,8 @@ exports.defineAutoTests = function () {
         onegini.user.getUserProfiles(
             function (result) {
               expect(result).toBeDefined();
-              nrOfUserProfiles = result.length;
+              //TODO: Return userprofiles array as result root
+              nrOfUserProfiles = result.userProfiles.length;
               expect(nrOfUserProfiles).toBeGreaterThan(0);
               done();
             },
@@ -159,15 +161,42 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe('authenticate.start', function () {
-      it("should exist", function () {
-        expect(onegini.user.authenticate.start).toBeDefined();
+    describe('authenticate', function () {
+      describe('start', function () {
+        it("should exist", function () {
+          expect(onegini.user.authenticate.start).toBeDefined();
+        });
+
+        it("should require a profileId", function () {
+          expect(function() {
+            onegini.user.authenticate.start()
+          }).toThrow(new TypeError("Onegini: missing 'profileId' argument for authenticate.start"));
+        });
+
+      });
+
+      describe('providePin', function () {
+        it("should exist", function () {
+          expect(onegini.user.authenticate.providePin).toBeDefined();
+        });
       });
     });
 
-    describe('authenticate.providePin', function () {
-      it("should exist", function () {
-        expect(onegini.user.authenticate.providePin).toBeDefined();
+    describe('authenticate', function () {
+      it('should return the authenticated user profile', function (done) {
+        onegini.user.authenticate.start(
+            {
+              profileId: registeredProfileId
+            },
+            function (result) {
+              expect(result).toBeDefined();
+              expect(result.profileId).toEqual(registeredProfileId);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+              done();
+            });
       });
     });
 
@@ -222,22 +251,8 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeDefined();
-              expect(err.description).toBe("Onegini: No authenticated user found.");
+              expect(err.description).toBe("Onegini: No user authenticated");
               done();
-            });
-      });
-    });
-
-    describe('getUserProfiles (2/2)', function () {
-      it("should be one less", function (done) {
-        onegini.user.getUserProfiles(
-            function (result) {
-              expect(result).toBeDefined();
-              expect(result.length).toBeLessThan(nrOfUserProfiles);
-              done();
-            },
-            function (err) {
-              expect(err).toBeUndefined();
             });
       });
     });
