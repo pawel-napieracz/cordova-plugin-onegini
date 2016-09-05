@@ -153,6 +153,7 @@ exports.defineAutoTests = function () {
               expect(result).toBeDefined();
               nrOfUserProfiles = result.length;
               expect(nrOfUserProfiles).toBeGreaterThan(0);
+              expect(result[0].profileId).toBeDefined();
               done();
             },
             function (err) {
