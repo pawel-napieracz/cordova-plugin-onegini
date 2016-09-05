@@ -16,8 +16,8 @@ exports.defineAutoTests = function () {
       });
 
       it("should run ok", function (done) {
-        onegini.start(function () {
-              expect(true).toBe(true);
+        onegini.start(function (result) {
+              expect(result).toBeNull();
               done();
             },
             function (err) {
@@ -196,9 +196,7 @@ exports.defineAutoTests = function () {
                 profileId: registeredProfileId
               },
               function (result) {
-                expect(result).toBeDefined();
-                expect(result.maxFailureCount).toBeDefined();
-                expect(result.remainingFailureCount).toBeDefined();
+                expect(result).toBeNull();
                 done();
               },
               function (err) {
@@ -239,8 +237,8 @@ exports.defineAutoTests = function () {
                 {
                   pin: pin
                 },
-                function () {
-                  expect(true).toBe(true);
+                function (result) {
+                  expect(result).toBeNull();
                   done();
                 },
                 function (err) {
