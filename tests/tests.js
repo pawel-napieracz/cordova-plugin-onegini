@@ -211,6 +211,12 @@ exports.defineAutoTests = function () {
             expect(onegini.user.authenticate.providePin).toBeDefined();
           });
 
+          it("should require a pin", function () {
+            expect(function () {
+              onegini.user.authenticate.providePin()
+            }).toThrow(new TypeError("Onegini: missing 'pin' argument for authenticate.providePin"));
+          });
+
           it('should fail with incorrect pin', function (done) {
             onegini.user.authenticate.providePin(
                 {
