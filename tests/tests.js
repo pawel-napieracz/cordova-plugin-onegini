@@ -1,6 +1,8 @@
 /* jshint jasmine: true */
 
 exports.defineAutoTests = function () {
+  this.registeredProfileId;
+
   describe('onegini', function () {
     it("onegini should exist", function () {
       expect(window.onegini).toBeDefined();
@@ -95,6 +97,8 @@ exports.defineAutoTests = function () {
               function (result) {
                 expect(result).toBeDefined();
                 expect(result.profileId).toBeDefined();
+
+                this.registeredProfileId = result.profileId
                 done();
               },
               function (err) {
@@ -122,5 +126,49 @@ exports.defineAutoTests = function () {
         expect(onegini.user.authenticate.providePin).toBeDefined();
       });
     });
+
+    describe('onegini.user.deregister', function () {
+      it("onegini.user.deregister should exist", function () {
+        expect(onegini.user.deregister).toBeDefined();
+      });
+
+      it("onegini.user.deregister 'profileId' argument mandatory", function () {
+        expect(function () {
+          onegini.user.deregister({}, function () {
+          }, function () {
+          });
+        }).toThrow(new TypeError("Onegini: missing 'profileId' argument for deregister"));
+      });
+
+      it("onegini.user.deregister no user found for profileId", function (done) {
+        onegini.user.deregister(
+            {
+              profileId: "UNKNOWN"
+            },
+            function (result) {
+              expect(result).toBeUndefined();
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              expect(err.description).toBe("Onegini: No registered user found for the provided profileId.");
+              done();
+            });
+      });
+
+      it("onegini.user.deregister should succeed with correct profileId", function (done) {
+        onegini.user.deregister(
+            {
+              profileId: registeredProfileId
+            },
+            function (result) {
+              expect(result).toBeDefined();
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+    });
+
   });
 };

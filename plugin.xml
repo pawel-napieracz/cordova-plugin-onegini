@@ -23,6 +23,9 @@
       <feature name="OneginiUserRegistrationClient">
         <param name="ios-package" value="OGCDVUserRegistrationClient" />
       </feature>
+      <feature name="OneginiUserDeregistrationClient">
+        <param name="ios-package" value="OGCDVUserDeregistrationClient" />
+      </feature>
       <feature name="OneginiUserAuthenticationClient">
         <param name="ios-package" value="OGCDVUserAuthenticationClient" />
       </feature>
@@ -34,8 +37,12 @@
     <source-file src="src/ios/classes/CDVPlugin+OGCDV.m"/>
     <header-file src="src/ios/classes/OGCDVClient.h"/>
     <source-file src="src/ios/classes/OGCDVClient.m"/>
+    <header-file src="src/ios/classes/OGCDVUserClientHelper.h"/>
+    <source-file src="src/ios/classes/OGCDVUserClientHelper.m"/>
     <header-file src="src/ios/classes/OGCDVUserRegistrationClient.h"/>
     <source-file src="src/ios/classes/OGCDVUserRegistrationClient.m"/>
+    <header-file src="src/ios/classes/OGCDVUserDeregistrationClient.h"/>
+    <source-file src="src/ios/classes/OGCDVUserDeregistrationClient.m"/>
     <header-file src="src/ios/classes/OGCDVUserAuthenticationClient.h"/>
     <source-file src="src/ios/classes/OGCDVUserAuthenticationClient.m"/>
     <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
@@ -94,6 +101,10 @@
         <param name="android-package" value="com.onegini.OneginiUserRegistrationClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiUserDeregistrationClient">
+        <param name="android-package" value="com.onegini.OneginiUserDeregistrationClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -124,6 +135,8 @@
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiUserRegistrationClient.java"
                  target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiUserDeregistrationClient.java"
+                 target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiUserAuthenticationClient.java"
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiSDK.java"
@@ -133,11 +146,14 @@
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java" target-dir="src/com/onegini/util"/>
 
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/handler/AuthenticationHandler.java"
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/RegistrationHandler.java"
+                 target-dir="src/com/onegini/handler"/>
+    <source-file src="src/android/src/android/com/onegini/handler/DeregistrationHandler.java"
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/CreatePinRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>

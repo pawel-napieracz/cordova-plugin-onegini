@@ -30,6 +30,13 @@ module.exports = (function () {
     }
   };
 
+  function deregister(options, successCb, failureCb) {
+    if (!options || !options.profileId) {
+      throw new TypeError("Onegini: missing 'profileId' argument for deregister");
+    }
+    return utils.promiseOrCallbackExec('OneginiUserDeregistrationClient', 'deregister', options, successCb, failureCb);
+  }
+
   function getUserProfiles(successCb, failureCb) {
     return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'getUserProfiles', [], successCb, failureCb);
   }
@@ -37,6 +44,7 @@ module.exports = (function () {
   return {
     authenticate: authenticate,
     register: register,
+    deregister: deregister,
     getUserProfiles: getUserProfiles
   };
 })();
