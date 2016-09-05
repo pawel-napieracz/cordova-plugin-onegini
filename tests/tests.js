@@ -150,8 +150,7 @@ exports.defineAutoTests = function () {
         onegini.user.getUserProfiles(
             function (result) {
               expect(result).toBeDefined();
-              //TODO: Return userprofiles array as result root
-              nrOfUserProfiles = result.userProfiles.length;
+              nrOfUserProfiles = result.length;
               expect(nrOfUserProfiles).toBeGreaterThan(0);
               done();
             },
