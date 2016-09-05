@@ -103,8 +103,8 @@ var OneginiDemo = (function () {
             profileId: profileId
           },
           function(result) {
-          console.log("onegini.user.authenticate.start success, now calling onegini.user.authenticate.providePin. " + JSON.stringify(result));
-          that.providePin(result.pinLength);
+            console.log("onegini.user.authenticate.start success, now calling onegini.user.authenticate.providePin. " + JSON.stringify(result));
+            that.providePin(result.pinLength);
           },
           function(err) {
             alert("Error!\n\n" + err.description);
@@ -126,6 +126,17 @@ var OneginiDemo = (function () {
           },
           function(err) {
             alert("Error!\n\n" + JSON.stringify(err));
+          }
+      );
+    },
+
+    getAuthenticatedUser: function() {
+      onegini.user.getAuthenticatedUser(
+          function(result) {
+            alert("Success!\n\ProfileId: " + result.profileId);
+          },
+          function(err) {
+            alert(err.description);
           }
       );
     }
