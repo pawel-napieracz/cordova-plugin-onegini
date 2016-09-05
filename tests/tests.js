@@ -151,6 +151,7 @@ exports.defineAutoTests = function () {
         onegini.user.getUserProfiles(
             function (result) {
               expect(result).toBeDefined();
+              expect(result[0]).toBeDefined();
               nrOfUserProfiles = result.length;
               expect(nrOfUserProfiles).toBeGreaterThan(0);
               expect(result[0].profileId).toBeDefined();

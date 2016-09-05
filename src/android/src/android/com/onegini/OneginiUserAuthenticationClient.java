@@ -4,6 +4,7 @@ import static com.onegini.OneginiCordovaPluginConstants.ACTION_CHECK_PIN;
 import static com.onegini.OneginiCordovaPluginConstants.ACTION_START;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_PIN;
 
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.onegini.handler.AuthenticationHandler;
+import com.onegini.handler.LogoutHandler;
 import com.onegini.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
@@ -22,6 +24,7 @@ import com.onegini.util.UserProfileUtil;
 
 public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
+  private final static String ACTION_LOGOUT = "logout";
   private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
 
   @Override
@@ -34,6 +37,9 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return true;
     } else if (ACTION_GET_AUTHENTICATED_USER_PROFILE.equals(action)) {
       getAuthenticatedUserProfile(callbackContext);
+      return true;
+    } else if (ACTION_LOGOUT.equals(action)) {
+      logout(callbackContext);
       return true;
     }
 
@@ -64,7 +70,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return;
     }
 
-    if (userProfile == getOneginiClient().getUserClient().getAuthenticatedUserProfile()) {
+    if (userProfile.equals(getOneginiClient().getUserClient().getAuthenticatedUserProfile())) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
           .withErrorDescription(OneginiCordovaPluginConstants.ERROR_USER_ALREADY_AUTHENTICATED)
@@ -89,7 +95,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
   }
 
   private void providePin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final String pin = args.getString(0);
+    final String pin = args.getJSONObject(0).getString(PARAM_PIN);
     final OneginiPinCallback pinCallback = PinAuthenticationRequestHandler.getInstance().getPinCallback();
     PinAuthenticationRequestHandler.getInstance().setCheckPinCordovaCallback(callbackContext);
 
@@ -100,6 +106,16 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     } else {
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
+  }
+
+  private void logout(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        getOneginiClient().getUserClient()
+            .logout(new LogoutHandler(callbackContext));
+      }
+    });
   }
 
   private void getAuthenticatedUserProfile(final CallbackContext callbackContext) {

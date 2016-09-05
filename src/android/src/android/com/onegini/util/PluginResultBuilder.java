@@ -2,13 +2,12 @@ package com.onegini.util;
 
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.cordova.PluginResult;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -108,12 +107,19 @@ public class PluginResultBuilder {
     this.status = ERROR;
 
     Map<String, String> payload = new HashMap<String, String>();
-    payload.put("description", "OneginiPlugin: Internal error: " + e.getMessage());
+    payload.put("description", ERROR_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
     this.payload = new JSONObject(payload);
   }
 
   public PluginResult build() {
-    PluginResult pluginResult = new PluginResult(status, payload);
+    PluginResult pluginResult;
+
+    if (payload.length() == 0) {
+      pluginResult = new PluginResult(status);
+    } else {
+      pluginResult = new PluginResult(status, payload);
+    }
+
     pluginResult.setKeepCallback(shouldKeepCallback);
     return pluginResult;
   }
