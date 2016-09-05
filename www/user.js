@@ -17,6 +17,22 @@ module.exports = (function () {
     }
   };
 
+  var reauthenticate = {
+    start: function (options, successCb, failureCb) {
+      if (!options || !options.profileId) {
+        throw new TypeError("Onegini: missing 'profileId' argument for reauthenticate.start");
+      }
+      return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'reauthenticate', options, successCb, failureCb);
+    },
+
+    providePin: function (options, successCb, failureCb) {
+      if (!options || !options.pin) {
+        throw new TypeError("Onegini: missing 'pin' argument for reauthenticate.providePin");
+      }
+      utils.callbackExec('OneginiUserAuthenticationClient', 'providePin', options, successCb, failureCb);
+    }
+  };
+
   var register = {
     start: function (options, successCb, failureCb) {
       return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'start', options, successCb, failureCb);
@@ -43,6 +59,7 @@ module.exports = (function () {
 
   return {
     authenticate: authenticate,
+    reauthenticate: reauthenticate,
     register: register,
     deregister: deregister,
     getUserProfiles: getUserProfiles
