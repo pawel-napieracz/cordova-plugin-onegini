@@ -31,7 +31,7 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
   if (self.createPinChallenge) {
     [self.createPinChallenge.sender respondWithCreatedPin:pin challenge:self.createPinChallenge];
   } else {
-    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: createPin called, but no registration in process. Did you call 'onegini.user.register.start'?"];
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: createPin called, but no registration in progress. Did you call 'onegini.user.register.start'?"];
   }
 }
 
@@ -73,6 +73,7 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
 
 - (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile
 {
+  self.createPinChallenge = nil;
   NSDictionary *result = @{OGCDVPluginKeyProfileId: userProfile.profileId};
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:self.callbackId];
 }
