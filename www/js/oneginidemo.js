@@ -182,6 +182,17 @@ var OneginiDemo = (function () {
       );
     },
 
+    enrollForMobileAuthentication: function () {
+      onegini.user.enrollForMobileAuthentication(
+          function () {
+            alert("Success!");
+          },
+          function (err) {
+            alert(err.description);
+          }
+      );
+    },
+
     logout: function () {
       onegini.user.logout(
           function () {
