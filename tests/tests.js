@@ -336,6 +336,48 @@ exports.defineAutoTests = function () {
       });
     });
 
+    describe('isUserRegistered', function () {
+      it("should exist", function () {
+        expect(onegini.user.isUserRegistered).toBeDefined();
+      });
+
+      it("'profileId' argument mandatory", function () {
+        expect(function () {
+          onegini.user.isUserRegistered({}, function () {
+          }, function () {
+          });
+        }).toThrow(new TypeError("Onegini: missing 'profileId' argument for isUserRegistered"));
+      });
+
+      it("should succeed with correct profileId", function (done) {
+        onegini.user.isUserRegistered(
+            {
+              profileId: registeredProfileId
+            },
+            function (result) {
+              expect(result).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+
+      it("should fail with incorrect profileId", function (done) {
+        onegini.user.isUserRegistered(
+            {
+              profileId: "UNKNOWN"
+            },
+            function (result) {
+              expect(result).toBe(false);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+    });
+
     describe('deregister', function () {
       it("should exist", function () {
         expect(onegini.user.deregister).toBeDefined();

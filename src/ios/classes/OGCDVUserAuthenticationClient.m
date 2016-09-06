@@ -65,7 +65,7 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
 
   ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
   if (user == nil) {
-    [self sendErrorResultForCallbackId:command.callbackId withMessage:[NSString stringWithFormat: @"Onegini: No registered user found for the provided %@.", OGCDVPluginKeyProfileId]];
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No registered user found."];
   } else {
     [[ONGUserClient sharedInstance] reauthenticateUser:user delegate:self];
   }
@@ -131,7 +131,7 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
     return;
   }
 
-  CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+  CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
   self.authenticationCallbackId = nil;
 }
