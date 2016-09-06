@@ -1,6 +1,12 @@
 package com.onegini.util;
 
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
+
 import java.util.Set;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.support.annotation.Nullable;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
@@ -18,4 +24,14 @@ public class UserProfileUtil {
     return null;
   }
 
+  public static JSONArray ProfileSetToJSONArray(final Set<UserProfile> userProfileSet) throws JSONException {
+    JSONArray userProfileJSONArray = new JSONArray();
+    for (final UserProfile userProfile : userProfileSet) {
+      final JSONObject userProfileJSON = new JSONObject();
+      userProfileJSON.put(PARAM_PROFILE_ID, userProfile.getProfileId());
+      userProfileJSONArray.put(userProfileJSON);
+    }
+
+    return userProfileJSONArray;
+  }
 }

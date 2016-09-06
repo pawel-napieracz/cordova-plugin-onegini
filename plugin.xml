@@ -151,6 +151,8 @@
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/handler/AuthenticationHandler.java"
                  target-dir="src/com/onegini/handler"/>
+    <source-file src="src/android/src/android/com/onegini/handler/LogoutHandler.java"
+                 target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/RegistrationHandler.java"
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/DeregistrationHandler.java"

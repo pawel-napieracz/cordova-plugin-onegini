@@ -13,5 +13,6 @@
 - (void)start:(CDVInvokedUrlCommand *)command;
 - (void)providePin:(CDVInvokedUrlCommand *)command;
 - (void)reauthenticate:(CDVInvokedUrlCommand *)command;
+- (void)logout:(CDVInvokedUrlCommand *)command;
 
 @end

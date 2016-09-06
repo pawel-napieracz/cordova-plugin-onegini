@@ -1,6 +1,7 @@
 package com.onegini;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_SCOPES;
 
 import java.util.Set;
@@ -13,9 +14,11 @@ import org.json.JSONException;
 
 import com.onegini.handler.CreatePinRequestHandler;
 import com.onegini.handler.RegistrationHandler;
+import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
+import com.onegini.util.UserProfileUtil;
 
 public class OneginiUserRegistrationClient extends CordovaPlugin {
 
@@ -61,7 +64,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
 
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
-        OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
+        getOneginiClient().getUserClient()
             .registerUser(scopes, registrationHandler);
       }
     });
@@ -86,11 +89,22 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   public void getUserProfiles(final CallbackContext callbackContext) {
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
-        final Set<UserProfile> userProfiles = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getUserClient()
-            .getUserProfiles();
-        final JSONArray resultPayload = new JSONArray(userProfiles);
+        final Set<UserProfile> userProfiles = getOneginiClient().getUserClient().getUserProfiles();
+        final JSONArray resultPayload;
+
+        try {
+          resultPayload = UserProfileUtil.ProfileSetToJSONArray(userProfiles);
+        } catch (JSONException e) {
+          callbackContext.error(ERROR_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
+          return;
+        }
+
         callbackContext.success(resultPayload);
       }
     });
+  }
+
+  private OneginiClient getOneginiClient() {
+    return OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext());
   }
 }

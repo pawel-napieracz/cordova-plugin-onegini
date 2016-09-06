@@ -61,12 +61,17 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'getAuthenticatedUserProfile', [], successCb, failureCb);
   }
 
+  function logout(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'logout', [], successCb, failureCb);
+  }
+
   return {
     authenticate: authenticate,
     reauthenticate: reauthenticate,
     register: register,
     deregister: deregister,
     getUserProfiles: getUserProfiles,
-    getAuthenticatedUserProfile: getAuthenticatedUserProfile
+    getAuthenticatedUserProfile: getAuthenticatedUserProfile,
+    logout: logout
   };
 })();

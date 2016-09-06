@@ -1,5 +1,7 @@
 package com.onegini.handler;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_INCORRECT_PIN;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
@@ -44,8 +46,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
     this.pinCallback = oneginiPinCallback;
 
     sendAuthenticationResult(new PluginResultBuilder()
-        .withError()
-        .withErrorDescription("Pin required")
+        .withSuccess()
         .build());
   }
 
@@ -55,7 +56,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
 
     sendCheckPinResult(new PluginResultBuilder()
         .withError()
-        .withErrorDescription("OneginiPlugin: next authentication attempt")
+        .withErrorDescription(ERROR_INCORRECT_PIN)
         .withMaxFailureCount(maxAttempts)
         .withRemainingFailureCount(remainingAttempts)
         .shouldKeepCallback()
