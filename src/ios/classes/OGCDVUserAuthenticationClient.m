@@ -26,12 +26,6 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
   NSDictionary *options = [command.arguments objectAtIndex:0];
   NSString *profileId = options[OGCDVPluginKeyProfileId];
 
-  ONGUserProfile *authenticatedUserProfile = [[ONGUserClient sharedInstance] authenticatedUserProfile];
-  if (authenticatedUserProfile && [authenticatedUserProfile.profileId isEqualToString:profileId]) {
-    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: User already authenticated."];
-    return;
-  }
-
   self.authenticationCallbackId = command.callbackId;
 
   ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
