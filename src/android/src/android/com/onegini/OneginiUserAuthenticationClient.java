@@ -3,6 +3,7 @@ package com.onegini;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_USER_ALREADY_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PIN;
 
@@ -65,6 +66,13 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
           .build());
 
       return;
+    }
+
+    if (userProfile.equals(getOneginiClient().getUserClient().getAuthenticatedUserProfile())) {
+      startAuthenticationCallbackContext.sendPluginResult(new PluginResultBuilder()
+          .withError()
+          .withErrorDescription(ERROR_USER_ALREADY_AUTHENTICATED)
+          .build());
     }
 
     PinAuthenticationRequestHandler.getInstance().setAuthenticationCordovaCallback(startAuthenticationCallbackContext);

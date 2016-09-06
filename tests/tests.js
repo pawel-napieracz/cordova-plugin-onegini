@@ -233,7 +233,7 @@ exports.defineAutoTests = function () {
                 });
           });
 
-          it('should succeed', function (done) {
+          it('should succeed with correct pin', function (done) {
             onegini.user.authenticate.providePin(
                 {
                   pin: pin
@@ -248,7 +248,7 @@ exports.defineAutoTests = function () {
           });
         });
 
-        it('should fail', function (done) {
+        it('should fail when user is already authenticated', function (done) {
           onegini.user.authenticate.start(
               {
                 profileId: registeredProfileId
