@@ -319,7 +319,7 @@ exports.defineAutoTests = function () {
                 });
           });
 
-          it('should succeed', function (done) {
+          it('should succeed with correct pin', function (done) {
             onegini.user.reauthenticate.providePin(
                 {
                   pin: pin

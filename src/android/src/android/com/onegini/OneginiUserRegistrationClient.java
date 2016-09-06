@@ -70,18 +70,18 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
     });
   }
 
-  private void createPin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+  private void createPin(final JSONArray args, final CallbackContext createPinCallbackContext) throws JSONException {
     final String pin = args.getJSONObject(0).getString("pin");
     OneginiPinCallback pinCallback = CreatePinRequestHandler.getInstance().getPinCallback();
-    CreatePinRequestHandler.getInstance().setCreatePinCallback(callbackContext);
+    CreatePinRequestHandler.getInstance().setCreatePinCallback(createPinCallbackContext);
 
     if (pinCallback == null) {
       final PluginResult pluginResult = new PluginResultBuilder()
           .withErrorDescription(ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS)
           .build();
-      callbackContext.sendPluginResult(pluginResult);
+      createPinCallbackContext.sendPluginResult(pluginResult);
     } else {
-      registrationHandler.setCallbackContext(callbackContext);
+      registrationHandler.setCallbackContext(createPinCallbackContext);
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
   }

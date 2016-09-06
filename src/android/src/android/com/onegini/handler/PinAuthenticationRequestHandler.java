@@ -66,9 +66,6 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   @Override
   public void finishAuthentication() {
     pinCallback = null;
-    sendCheckPinResult(new PluginResultBuilder()
-        .withSuccess()
-        .build());
   }
 
   private void sendCheckPinResult(final PluginResult pluginResult) {
