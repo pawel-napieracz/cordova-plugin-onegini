@@ -46,6 +46,22 @@ module.exports = (function () {
     }
   };
 
+  var changePin = {
+    start: function (options, successCb, failureCb) {
+      if (!options || !options.pin) {
+        throw new TypeError("Onegini: missing 'pin' argument for changePin.start");
+      }
+      return utils.promiseOrCallbackExec('OneginiChangePinClient', 'start', options, successCb, failureCb);
+    },
+
+    createPin: function (options, successCb, failureCb) {
+      if (!options || !options.pin) {
+        throw new TypeError("Onegini: missing 'pin' argument for changePin.createPin");
+      }
+      utils.callbackExec('OneginiChangePinClient', 'createPin', options, successCb, failureCb);
+    }
+  };
+
   function deregister(options, successCb, failureCb) {
     if (!options || !options.profileId) {
       throw new TypeError("Onegini: missing 'profileId' argument for deregister");
@@ -76,6 +92,7 @@ module.exports = (function () {
     authenticate: authenticate,
     reauthenticate: reauthenticate,
     register: register,
+    changePin: changePin,
     deregister: deregister,
     isUserRegistered: isUserRegistered,
     getUserProfiles: getUserProfiles,

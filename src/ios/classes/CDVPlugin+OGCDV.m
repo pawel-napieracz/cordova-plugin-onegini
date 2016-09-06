@@ -2,7 +2,7 @@
 
 #import "CDVPlugin+OGCDV.h"
 
-@implementation CDVPlugin (Onegini)
+@implementation CDVPlugin (OGCDV)
 
 - (void) sendErrorResultForCallbackId:(NSString *)callbackId withMessage:(NSString *)errorMessage
 {
@@ -11,7 +11,12 @@
 
 - (void) sendErrorResultForCallbackId:(NSString *)callbackId withError:(NSError *)error
 {
-  NSString *errorMessage = [NSString stringWithFormat: @"%@\n%@", error.localizedDescription, error.localizedRecoverySuggestion];
+  NSString *errorMessage;
+  if (error == nil) {
+    errorMessage = @"An unknown error occurred.";
+  } else {
+    errorMessage = [NSString stringWithFormat: @"%@\n%@", error.localizedDescription, error.localizedRecoverySuggestion];
+  }
   [self sendErrorResultForCallbackId:callbackId withMessage:errorMessage];
 }
 

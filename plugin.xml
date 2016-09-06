@@ -29,6 +29,9 @@
       <feature name="OneginiUserAuthenticationClient">
         <param name="ios-package" value="OGCDVUserAuthenticationClient" />
       </feature>
+      <feature name="OneginiChangePinClient">
+        <param name="ios-package" value="OGCDVChangePinClient" />
+      </feature>
     </config-file>
 
     <header-file src="src/ios/classes/Reachability.h"/>
@@ -45,6 +48,8 @@
     <source-file src="src/ios/classes/OGCDVUserDeregistrationClient.m"/>
     <header-file src="src/ios/classes/OGCDVUserAuthenticationClient.h"/>
     <source-file src="src/ios/classes/OGCDVUserAuthenticationClient.m"/>
+    <header-file src="src/ios/classes/OGCDVChangePinClient.h"/>
+    <source-file src="src/ios/classes/OGCDVChangePinClient.m"/>
     <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
     <source-file src="src/ios/classes/OGCDVWebBrowserViewController.m"/>
     <resource-file src="src/ios/classes/OGCDVWebBrowserViewController.xib"/>

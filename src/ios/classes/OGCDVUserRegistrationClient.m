@@ -1,7 +1,6 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
 #import "OGCDVUserRegistrationClient.h"
-#import "AppDelegate.h"
 #import "OGCDVWebBrowserViewController.h"
 #import "OGCDVUserClientHelper.h"
 
