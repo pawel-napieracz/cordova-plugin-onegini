@@ -265,6 +265,93 @@ exports.defineAutoTests = function () {
       });
     });
 
+    describe('changePin', function () {
+      describe('start', function () {
+        it("should exist", function () {
+          expect(onegini.user.changePin.start).toBeDefined();
+        });
+
+        it("should require a pin", function () {
+          expect(function () {
+            onegini.user.changePin.start()
+          }).toThrow(new TypeError("Onegini: missing 'pin' argument for changePin.start"));
+        });
+      });
+
+      describe('createPin', function () {
+        it("should exist", function () {
+          expect(onegini.user.changePin.createPin).toBeDefined();
+        });
+
+        it("should require a pin", function () {
+          expect(function () {
+            onegini.user.changePin.createPin()
+          }).toThrow(new TypeError("Onegini: missing 'pin' argument for changePin.createPin"));
+        });
+      });
+
+      it('should fail with incorrect current pin', function (done) {
+        onegini.user.changePin.start(
+            {
+              pin: "incorrect"
+            },
+            function (result) {
+              expect(result).toBeUndefined();
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              expect(err.maxFailureCount).toBeDefined();
+              expect(err.remainingFailureCount).toBeDefined();
+              expect(err.description).toBe("Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.");
+              done();
+            });
+      });
+
+      it("should return pinlength of '5'", function (done) {
+        onegini.user.changePin.start(
+            {
+              pin: pin
+            },
+            function (result) {
+              expect(result).toBeDefined();
+              expect(result.pinLength).toBe(5);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+
+      it('should fail with incorrect new pin', function (done) {
+        onegini.user.changePin.createPin(
+            {
+              pin: "incorrect"
+            },
+            function (result) {
+              expect(result).toBeUndefined();
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              expect(err.description).toBeDefined();
+              done();
+            });
+      });
+
+      it('should succeed', function (done) {
+        onegini.user.changePin.createPin(
+            {
+              pin: pin
+            },
+            function () {
+              expect(true).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(result).toBeUndefined();
+            });
+      });
+    });
+
     describe('reauthenticate', function () {
       describe('start', function () {
         it("should exist", function () {
