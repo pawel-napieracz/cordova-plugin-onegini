@@ -151,6 +151,26 @@ var OneginiDemo = (function () {
       );
     },
 
+    isUserRegistered: function () {
+      var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
+      profileId = prompt("Please enter the profileId", profileId);
+      if (!profileId) {
+        return;
+      }
+      var that = this;
+      onegini.user.isUserRegistered(
+          {
+            profileId: profileId
+          },
+          function (registered) {
+            alert("Registered? " + (registered ? "Yes" : "No"));
+          },
+          function (err) {
+            alert("Error!\n\n" + err.description);
+          }
+      );
+    },
+
     getAuthenticatedUserProfile: function () {
       onegini.user.getAuthenticatedUserProfile(
           function (result) {
