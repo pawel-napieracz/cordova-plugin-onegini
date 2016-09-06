@@ -29,10 +29,15 @@
       <feature name="OneginiUserAuthenticationClient">
         <param name="ios-package" value="OGCDVUserAuthenticationClient" />
       </feature>
+      <feature name="OneginiMobileAuthenticationClient">
+        <param name="ios-package" value="OGCDVMobileAuthenticationClient" />
+      </feature>
     </config-file>
 
     <header-file src="src/ios/classes/Reachability.h"/>
     <source-file src="src/ios/classes/Reachability.m"/>
+    <header-file src="src/ios/classes/AppDelegate+OGCDV.h"/>
+    <source-file src="src/ios/classes/AppDelegate+OGCDV.m"/>
     <header-file src="src/ios/classes/CDVPlugin+OGCDV.h"/>
     <source-file src="src/ios/classes/CDVPlugin+OGCDV.m"/>
     <header-file src="src/ios/classes/OGCDVClient.h"/>
@@ -45,6 +50,8 @@
     <source-file src="src/ios/classes/OGCDVUserDeregistrationClient.m"/>
     <header-file src="src/ios/classes/OGCDVUserAuthenticationClient.h"/>
     <source-file src="src/ios/classes/OGCDVUserAuthenticationClient.m"/>
+    <header-file src="src/ios/classes/OGCDVMobileAuthenticationClient.h"/>
+    <source-file src="src/ios/classes/OGCDVMobileAuthenticationClient.m"/>
     <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
     <source-file src="src/ios/classes/OGCDVWebBrowserViewController.m"/>
     <resource-file src="src/ios/classes/OGCDVWebBrowserViewController.xib"/>

@@ -65,6 +65,10 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'logout', [], successCb, failureCb);
   }
 
+  function enrollForMobileAuthentication(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
+  }
+
   return {
     authenticate: authenticate,
     reauthenticate: reauthenticate,
@@ -72,6 +76,8 @@ module.exports = (function () {
     deregister: deregister,
     getUserProfiles: getUserProfiles,
     getAuthenticatedUserProfile: getAuthenticatedUserProfile,
-    logout: logout
+    logout: logout,
+    // TODO location of this method
+    enrollForMobileAuthentication: enrollForMobileAuthentication
   };
 })();
