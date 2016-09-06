@@ -28,16 +28,18 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
 
 - (void)createPin:(CDVInvokedUrlCommand*)command
 {
-  [self.commandDelegate runInBackground:^{
-    if (!self.createPinChallenge) {
-      [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: please invoke 'onegini.user.changePin.start' first."];
-      return;
-    }
+  self.startCallbackId = nil;
 
-    self.createPinCallbackId = command.callbackId;
+  if (!self.createPinChallenge) {
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: please invoke 'onegini.user.changePin.start' first."];
+    return;
+  }
+
+  self.createPinCallbackId = command.callbackId;
+
+  [self.commandDelegate runInBackground:^{
     NSDictionary *options = [command.arguments objectAtIndex:0];
     NSString *pin = options[OGCDVPluginKeyPin];
-
     [self.createPinChallenge.sender respondWithCreatedPin:pin challenge:self.createPinChallenge];
   }];
 }
@@ -67,7 +69,7 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
 - (void)userClient:(ONGUserClient *)userClient didReceiveCreatePinChallenge:(ONGCreatePinChallenge *)challenge
 {
   if (challenge.error != nil) {
-    [self sendErrorResultForCallbackId:self.startCallbackId withError:challenge.error];
+    [self sendErrorResultForCallbackId:self.startCallbackId != nil ? self.startCallbackId : self.createPinCallbackId withError:challenge.error];
     return;
   }
 
@@ -79,13 +81,14 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
 
 - (void)userClient:(ONGUserClient *)userClient didChangePinForUser:(ONGUserProfile *)userProfile
 {
-  self.createPinChallenge = nil;
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.createPinCallbackId];
+  self.createPinChallenge = nil;
+  self.createPinCallbackId = nil;
 }
 
 - (void)userClient:(ONGUserClient *)userClient didFailToChangePinForUser:(ONGUserProfile *)userProfile error:(NSError *)error
 {
-  [self sendErrorResultForCallbackId:self.createPinCallbackId withError:error];
+  [self sendErrorResultForCallbackId:self.startCallbackId != nil ? self.startCallbackId : self.createPinCallbackId withError:error];
 }
 
 @end
