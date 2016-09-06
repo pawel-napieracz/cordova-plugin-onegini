@@ -33,7 +33,7 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
     return;
   }
 
-  self.startAuthenticationCallbackId = command.callbackId;
+  self.authenticationCallbackId = command.callbackId;
 
   ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
   if (user == nil) {
@@ -56,6 +56,21 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
   [self.pinChallenge.sender respondWithPin:pin challenge:self.pinChallenge];
 }
 
+- (void)reauthenticate:(CDVInvokedUrlCommand *)command
+{
+  NSDictionary *options = [command.arguments objectAtIndex:0];
+  NSString *profileId = options[OGCDVPluginKeyProfileId];
+
+  self.authenticationCallbackId = command.callbackId;
+
+  ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
+  if (user == nil) {
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:[NSString stringWithFormat: @"Onegini: No registered user found for the provided %@.", OGCDVPluginKeyProfileId]];
+  } else {
+    [[ONGUserClient sharedInstance] reauthenticateUser:user delegate:self];
+  }
+}
+
 #pragma mark - ONGAuthenticationDelegate
 
 -(void)userClient:(ONGUserClient *)userClient didAuthenticateUser:(ONGUserProfile *)userProfile
@@ -70,8 +85,8 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
   // 'startAuthentication' twice (which is incorrect usage).
   // But this is why we have the 'deregistered' property and the check on 'self.startAuthenticationCallbackId'.
 
-  if (self.startAuthenticationCallbackId) {
-    [self sendErrorResultForCallbackId:self.startAuthenticationCallbackId withMessage:@"Don't call 'startAuthentication' twice, call 'checkPin' instead."];
+  if (self.authenticationCallbackId) {
+    [self sendErrorResultForCallbackId:self.authenticationCallbackId withMessage:@"Don't call 'startAuthentication' twice, call 'checkPin' instead."];
     return;
   }
 
@@ -106,8 +121,8 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
   }
 
   CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
-  [self.commandDelegate sendPluginResult:pluginResult callbackId:self.startAuthenticationCallbackId];
-  self.startAuthenticationCallbackId = nil;
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
+  self.authenticationCallbackId = nil;
 }
 
 @end

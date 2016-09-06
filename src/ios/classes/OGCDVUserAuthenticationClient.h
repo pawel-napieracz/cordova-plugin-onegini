@@ -5,12 +5,13 @@
 
 @interface OGCDVUserAuthenticationClient : CDVPlugin<ONGAuthenticationDelegate>
 
-@property (nonatomic, copy) NSString *startAuthenticationCallbackId;
+@property (nonatomic, copy) NSString *authenticationCallbackId;
 @property (nonatomic, copy) NSString *checkPinCallbackId;
 @property (nonatomic) ONGPinChallenge *pinChallenge;
 
 - (void)getAuthenticatedUserProfile:(CDVInvokedUrlCommand *)command;
 - (void)start:(CDVInvokedUrlCommand *)command;
 - (void)providePin:(CDVInvokedUrlCommand *)command;
+- (void)reauthenticate:(CDVInvokedUrlCommand *)command;
 
 @end

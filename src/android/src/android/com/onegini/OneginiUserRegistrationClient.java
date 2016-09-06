@@ -1,8 +1,5 @@
 package com.onegini;
 
-import static com.onegini.OneginiCordovaPluginConstants.ACTION_CREATE_PIN;
-import static com.onegini.OneginiCordovaPluginConstants.ACTION_GET_USER_PROFILES;
-import static com.onegini.OneginiCordovaPluginConstants.ACTION_START;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_SCOPES;
 
@@ -21,6 +18,10 @@ import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
 public class OneginiUserRegistrationClient extends CordovaPlugin {
+
+  private static final String ACTION_START = "start";
+  private static final String ACTION_CREATE_PIN = "createPin";
+  private static final String ACTION_GET_USER_PROFILES = "getUserProfiles";
 
   private RegistrationHandler registrationHandler;
 

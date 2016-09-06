@@ -1,8 +1,8 @@
 package com.onegini;
 
-import static com.onegini.OneginiCordovaPluginConstants.ACTION_CHECK_PIN;
-import static com.onegini.OneginiCordovaPluginConstants.ACTION_START;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
 import java.util.Set;
@@ -22,6 +22,9 @@ import com.onegini.util.UserProfileUtil;
 
 public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
+  private static final String ACTION_START = "start";
+  private static final String ACTION_PROVIDE_PIN = "checkPin";
+  private static final String ACTION_REAUTHENTICATE = "reauthenticate";
   private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
 
   @Override
@@ -29,11 +32,14 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     if (ACTION_START.equals(action)) {
       startAuthentication(args, callbackContext);
       return true;
-    } else if (ACTION_CHECK_PIN.equals(action)) {
+    } else if (ACTION_PROVIDE_PIN.equals(action)) {
       providePin(args, callbackContext);
       return true;
     } else if (ACTION_GET_AUTHENTICATED_USER_PROFILE.equals(action)) {
       getAuthenticatedUserProfile(callbackContext);
+      return true;
+    } else if (ACTION_REAUTHENTICATE.equals(action)) {
+      reauthenticate(args, callbackContext);
       return true;
     }
 
@@ -44,34 +50,15 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     final UserProfile userProfile;
 
     try {
-      userProfile = getUserProfile(args);
-
-    } catch (JSONException e) {
+      userProfile = getUserProfileForAuthentication(args, callbackContext);
+    } catch (Exception e) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription(OneginiCordovaPluginConstants.ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT)
+          .withErrorDescription(e.getMessage())
           .build());
 
       return;
     }
-
-    if (userProfile == null) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withError()
-          .withErrorDescription(OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED)
-          .build());
-
-      return;
-    }
-
-    if (userProfile == getOneginiClient().getUserClient().getAuthenticatedUserProfile()) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withError()
-          .withErrorDescription(OneginiCordovaPluginConstants.ERROR_USER_ALREADY_AUTHENTICATED)
-          .build());
-    }
-
-    PinAuthenticationRequestHandler.getInstance().setAuthenticationCordovaCallback(callbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
@@ -79,6 +66,48 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
             .authenticateUser(userProfile, new AuthenticationHandler(callbackContext));
       }
     });
+  }
+
+  private void reauthenticate(final JSONArray args, final CallbackContext callbackContext) {
+    final UserProfile userProfile;
+
+    try {
+      userProfile = getUserProfileForAuthentication(args, callbackContext);
+    } catch (Exception e) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withError()
+          .withErrorDescription(e.getMessage())
+          .build());
+
+      return;
+    }
+
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        getOneginiClient().getUserClient()
+            .reauthenticateUser(userProfile, new AuthenticationHandler(callbackContext));
+      }
+    });
+  }
+
+  private UserProfile getUserProfileForAuthentication(final JSONArray args, final CallbackContext callbackContext) throws Exception {
+    final UserProfile userProfile;
+
+    try {
+      userProfile = getUserProfile(args);
+
+    } catch (JSONException e) {
+      throw new Exception(ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT);
+    }
+
+    if (userProfile == null) {
+      throw new Exception(ERROR_PROFILE_NOT_REGISTERED);
+    }
+
+    PinAuthenticationRequestHandler.getInstance().setAuthenticationCordovaCallback(callbackContext);
+
+    return userProfile;
   }
 
   private UserProfile getUserProfile(final JSONArray args) throws JSONException {
