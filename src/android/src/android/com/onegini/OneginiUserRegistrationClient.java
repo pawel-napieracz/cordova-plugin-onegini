@@ -1,7 +1,9 @@
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_SCOPES;
 
 import java.util.Set;
@@ -25,6 +27,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   private static final String ACTION_START = "start";
   private static final String ACTION_CREATE_PIN = "createPin";
   private static final String ACTION_GET_USER_PROFILES = "getUserProfiles";
+  private static final String ACTION_IS_USER_REGISTERED = "isUserRegistered";
 
   private RegistrationHandler registrationHandler;
 
@@ -39,6 +42,8 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
     } else if (ACTION_GET_USER_PROFILES.equals(action)) {
       getUserProfiles(callbackContext);
       return true;
+    } else if (ACTION_IS_USER_REGISTERED.equals(action)) {
+      isUserRegistered(args, callbackContext);
     }
 
     return false;
@@ -84,6 +89,28 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
       registrationHandler.setCallbackContext(callbackContext);
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
+  }
+
+  private void isUserRegistered(final JSONArray args, final CallbackContext callbackContext) {
+    final Set<UserProfile> userProfiles = getOneginiClient().getUserClient().getUserProfiles();
+    final String userProfileId;
+    final PluginResult pluginResult;
+    final boolean userIsRegistered;
+
+    try {
+      userProfileId = args.getJSONObject(0).getString(PARAM_PROFILE_ID);
+    } catch (JSONException e) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withError()
+          .withErrorDescription(ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT)
+          .build());
+
+      return;
+    }
+
+    userIsRegistered = UserProfileUtil.findUserProfileById(userProfileId, userProfiles) != null;
+    pluginResult = new PluginResult(PluginResult.Status.OK, userIsRegistered);
+    callbackContext.sendPluginResult(pluginResult);
   }
 
   public void getUserProfiles(final CallbackContext callbackContext) {
