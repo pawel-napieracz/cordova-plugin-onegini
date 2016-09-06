@@ -151,6 +151,7 @@ exports.defineAutoTests = function () {
         onegini.user.getUserProfiles(
             function (result) {
               expect(result).toBeDefined();
+              nrOfUserProfiles = result.length;
               expect(result[0]).toBeDefined();
               expect(result[0].profileId).toBeDefined();
               done();
@@ -261,6 +262,8 @@ exports.defineAutoTests = function () {
                 done();
               });
         });
+      });
+    });
 
     describe('reauthenticate', function () {
       describe('start', function () {
@@ -281,8 +284,6 @@ exports.defineAutoTests = function () {
               },
               function (result) {
                 expect(result).toBeDefined();
-                expect(result.maxFailureCount).toBeDefined();
-                expect(result.remainingFailureCount).toBeDefined();
                 done();
               },
               function (err) {
@@ -295,7 +296,6 @@ exports.defineAutoTests = function () {
             expect(onegini.user.reauthenticate.providePin).toBeDefined();
           });
 
-          // TODO add this one to the 'authenticate' tests as well
           it("should require a pin", function () {
             expect(function () {
               onegini.user.reauthenticate.providePin()
@@ -322,8 +322,7 @@ exports.defineAutoTests = function () {
           it('should succeed', function (done) {
             onegini.user.reauthenticate.providePin(
                 {
-                  // TODO use constant
-                  pin: "12346"
+                  pin: pin
                 },
                 function () {
                   expect(true).toBe(true);
