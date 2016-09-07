@@ -2,7 +2,6 @@
 
 #import "OGCDVUserDeregistrationClient.h"
 #import "OGCDVUserClientHelper.h"
-#import "AppDelegate.h"
 
 static NSString *const OGCDVPluginKeyProfileId = @"profileId";
 

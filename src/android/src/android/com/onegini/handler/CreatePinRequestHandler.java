@@ -1,5 +1,7 @@
 package com.onegini.handler;
 
+import static com.onegini.OneginiCordovaPluginConstants.PIN_LENGTH;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
@@ -45,7 +47,7 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
 
     PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .withPinLength(5)
+        .withPinLength(PIN_LENGTH)
         .build();
 
     sendStartRegistrationResult(pluginResult);

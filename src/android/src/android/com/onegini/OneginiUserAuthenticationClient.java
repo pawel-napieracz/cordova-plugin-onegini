@@ -3,6 +3,7 @@ package com.onegini;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_USER_ALREADY_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PIN;
 
@@ -62,6 +63,15 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       startAuthenticationCallbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
           .withErrorDescription(e.getMessage())
+          .build());
+
+      return;
+    }
+
+    if (userProfile.equals(getOneginiClient().getUserClient().getAuthenticatedUserProfile())) {
+      startAuthenticationCallbackContext.sendPluginResult(new PluginResultBuilder()
+          .withError()
+          .withErrorDescription(ERROR_USER_ALREADY_AUTHENTICATED)
           .build());
 
       return;
@@ -131,7 +141,6 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
   private void providePin(final JSONArray args, final CallbackContext providePinCallbackContext) throws JSONException {
     final String pin = args.getJSONObject(0).getString(PARAM_PIN);
     final OneginiPinCallback pinCallback = PinAuthenticationRequestHandler.getInstance().getPinCallback();
-    PinAuthenticationRequestHandler.getInstance().setCheckPinCordovaCallback(providePinCallbackContext);
     authenticationHandler.setCallbackContext(providePinCallbackContext);
 
     if (pinCallback == null) {
@@ -139,8 +148,10 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
           .withErrorDescription(OneginiCordovaPluginConstants.ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS)
           .build());
     } else {
+      PinAuthenticationRequestHandler.getInstance().setCheckPinCordovaCallback(providePinCallbackContext);
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
+
   }
 
   private void logout(final CallbackContext callbackContext) {

@@ -29,6 +29,9 @@
       <feature name="OneginiUserAuthenticationClient">
         <param name="ios-package" value="OGCDVUserAuthenticationClient" />
       </feature>
+      <feature name="OneginiChangePinClient">
+        <param name="ios-package" value="OGCDVChangePinClient" />
+      </feature>
     </config-file>
 
     <header-file src="src/ios/classes/Reachability.h"/>
@@ -45,6 +48,8 @@
     <source-file src="src/ios/classes/OGCDVUserDeregistrationClient.m"/>
     <header-file src="src/ios/classes/OGCDVUserAuthenticationClient.h"/>
     <source-file src="src/ios/classes/OGCDVUserAuthenticationClient.m"/>
+    <header-file src="src/ios/classes/OGCDVChangePinClient.h"/>
+    <source-file src="src/ios/classes/OGCDVChangePinClient.m"/>
     <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
     <source-file src="src/ios/classes/OGCDVWebBrowserViewController.m"/>
     <resource-file src="src/ios/classes/OGCDVWebBrowserViewController.xib"/>
@@ -105,6 +110,10 @@
         <param name="android-package" value="com.onegini.OneginiUserDeregistrationClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiChangePinClient">
+        <param name="android-package" value="com.onegini.OneginiChangePinClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -143,6 +152,8 @@
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiCordovaPluginConstants.java"
                  target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiChangePinClient.java"
+                 target-dir="src/com/onegini/"/>
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
@@ -162,6 +173,8 @@
     <source-file src="src/android/src/android/com/onegini/handler/InitializationHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/PinAuthenticationRequestHandler.java"
+                 target-dir="src/com/onegini/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/handler/ChangePinHandler.java"
                  target-dir="src/com/onegini/handler/"/>
   </platform>
 </plugin>
