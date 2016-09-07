@@ -591,14 +591,4 @@ exports.defineAutoTests = function () {
     });
 
   });
-
-
-  /******** onegini.device *********/
-
-  describe('onegini.device', function () {
-    it("should exist", function () {
-      expect(onegini.device).toBeDefined();
-    });
-  });
-
 };
