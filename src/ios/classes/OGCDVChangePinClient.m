@@ -29,6 +29,7 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
 - (void)createPin:(CDVInvokedUrlCommand*)command
 {
   self.startCallbackId = nil;
+  self.currentPinChallenge = nil;
 
   if (!self.createPinChallenge) {
     [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: please invoke 'onegini.user.changePin.start' first."];
