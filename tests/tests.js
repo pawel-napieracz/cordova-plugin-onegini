@@ -72,7 +72,7 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it("should succeed with if pin is compliant to policy", function (done) {
+      it("should succeed if pin is compliant to policy", function (done) {
         onegini.user.validatePinWithPolicy(
             {
               pin: pin
