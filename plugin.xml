@@ -40,7 +40,7 @@
     <header-file src="src/ios/classes/Reachability.h"/>
     <source-file src="src/ios/classes/Reachability.m"/>
     <header-file src="src/ios/classes/OGCDVConstants.h"/>
-    <header-file src="src/ios/classes/OGCDVConstants.m"/>
+    <source-file src="src/ios/classes/OGCDVConstants.m"/>
     <header-file src="src/ios/classes/CDVPlugin+OGCDV.h"/>
     <source-file src="src/ios/classes/CDVPlugin+OGCDV.m"/>
     <header-file src="src/ios/classes/OGCDVClient.h"/>
