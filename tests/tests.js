@@ -5,6 +5,9 @@ exports.defineAutoTests = function () {
       nrOfUserProfiles,
       pin = "12356";
 
+
+  /******** onegini *********/
+
   describe('onegini', function () {
     it("onegini should exist", function () {
       expect(window.onegini).toBeDefined();
@@ -26,6 +29,9 @@ exports.defineAutoTests = function () {
       });
     });
   });
+
+
+  /******** onegini.user *********/
 
   describe('onegini.user', function () {
     it("should exist", function () {
@@ -537,4 +543,48 @@ exports.defineAutoTests = function () {
     });
 
   });
+
+
+  /******** onegini.device *********/
+
+  describe('onegini.device', function () {
+    it("should exist", function () {
+      expect(onegini.device).toBeDefined();
+    });
+
+    describe("authenticate", function () {
+      it("should exist", function () {
+        expect(onegini.device.authenticate).toBeDefined();
+      });
+
+      it('should fail with invalid scopes', function (done) {
+        onegini.device.authenticate(
+            {
+              scopes: ["incorrect"]
+            },
+            function () {
+              expect(true).toBe(false);
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              done();
+            });
+      });
+
+      it('should succeed', function (done) {
+        onegini.device.authenticate(
+            {
+              scopes: ["read"]
+            },
+            function () {
+              expect(true).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+    });
+  });
+
 };
