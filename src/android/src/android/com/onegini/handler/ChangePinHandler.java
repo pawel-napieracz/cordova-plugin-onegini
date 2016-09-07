@@ -1,9 +1,10 @@
 package com.onegini.handler;
 
+import static com.onegini.OneginiCordovaPluginConstants.PIN_LENGTH;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
-import android.util.Log;
 import com.onegini.mobile.sdk.android.handlers.OneginiChangePinHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiChangePinError;
 import com.onegini.util.PluginResultBuilder;
@@ -19,7 +20,7 @@ public class ChangePinHandler implements OneginiChangePinHandler {
   public void onSuccess() {
     sendPluginResult(new PluginResultBuilder()
         .withSuccess()
-        .withPinLength(5)
+        .withPinLength(PIN_LENGTH)
         .build());
   }
 
