@@ -20,6 +20,9 @@
       <feature name="OneginiClient">
         <param name="ios-package" value="OGCDVClient" />
       </feature>
+      <feature name="OneginiUserClient">
+        <param name="ios-package" value="OGCDVUserClient" />
+      </feature>
       <feature name="OneginiUserRegistrationClient">
         <param name="ios-package" value="OGCDVUserRegistrationClient" />
       </feature>
@@ -40,6 +43,8 @@
     <source-file src="src/ios/classes/CDVPlugin+OGCDV.m"/>
     <header-file src="src/ios/classes/OGCDVClient.h"/>
     <source-file src="src/ios/classes/OGCDVClient.m"/>
+    <header-file src="src/ios/classes/OGCDVUserClient.h"/>
+    <source-file src="src/ios/classes/OGCDVUserClient.m"/>
     <header-file src="src/ios/classes/OGCDVUserClientHelper.h"/>
     <source-file src="src/ios/classes/OGCDVUserClientHelper.m"/>
     <header-file src="src/ios/classes/OGCDVUserRegistrationClient.h"/>
