@@ -619,7 +619,7 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it('should succeed', function (done) {
+      it('should succeed with valid scopes', function (done) {
         onegini.device.authenticate(
             {
               scopes: ["read"]
