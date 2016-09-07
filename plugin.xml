@@ -181,5 +181,7 @@
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/ChangePinHandler.java"
                  target-dir="src/com/onegini/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/handler/PinValidationHandler.java"
+                 target-dir="src/com/onegini/handler/"/>
   </platform>
 </plugin>

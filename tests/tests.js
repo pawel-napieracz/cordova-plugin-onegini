@@ -46,7 +46,7 @@ exports.defineAutoTests = function () {
       it("should fail because of an incorrect length", function (done) {
         onegini.user.validatePinWithPolicy(
             {
-              pin: "incorrect",
+              pin: "incorrect"
             },
             function (result) {
               expect(result).toBeUndefined();
@@ -61,7 +61,7 @@ exports.defineAutoTests = function () {
       it("should fail because of repeating numbers", function (done) {
         onegini.user.validatePinWithPolicy(
             {
-              pin: "11111",
+              pin: "11111"
             },
             function (result) {
               expect(result).toBeUndefined();
@@ -72,10 +72,10 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it("should succeed because of an correct pin", function (done) {
+      it("should succeed with if pin is compliant to policy", function (done) {
         onegini.user.validatePinWithPolicy(
             {
-              pin: pin,
+              pin: pin
             },
             function () {
               expect(true).toBe(true);
