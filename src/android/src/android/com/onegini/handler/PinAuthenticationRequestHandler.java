@@ -16,6 +16,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   private OneginiPinCallback pinCallback = null;
   private CallbackContext checkPinCordovaCallback;
   private CallbackContext authenticationCordovaCallback;
+  private CallbackContext onFinishCallback;
 
   protected PinAuthenticationRequestHandler() {
 
@@ -39,6 +40,10 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
 
   public void setAuthenticationCordovaCallback(final CallbackContext authenticationCordovaCallback) {
     this.authenticationCordovaCallback = authenticationCordovaCallback;
+  }
+
+  public void setOnFinishCallback(final CallbackContext onFinishCallback) {
+    this.onFinishCallback = onFinishCallback;
   }
 
   @Override
@@ -66,6 +71,10 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   @Override
   public void finishAuthentication() {
     pinCallback = null;
+    sendOnFinishResult(new PluginResultBuilder()
+        .withSuccess()
+        .withPinLength(5)
+        .build());
   }
 
   private void sendCheckPinResult(final PluginResult pluginResult) {
@@ -77,6 +86,12 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   private void sendAuthenticationResult(final PluginResult pluginResult) {
     if (authenticationCordovaCallback != null) {
       authenticationCordovaCallback.sendPluginResult(pluginResult);
+    }
+  }
+
+  private void sendOnFinishResult(final PluginResult pluginResult) {
+    if (onFinishCallback != null && !onFinishCallback.isFinished()) {
+      onFinishCallback.sendPluginResult(pluginResult);
     }
   }
 }
