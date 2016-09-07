@@ -88,6 +88,13 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'logout', [], successCb, failureCb);
   }
 
+  function validatePinWithPolicy(options, successCb, failureCb) {
+    if (!options || !options.pin) {
+      throw new TypeError("Onegini: missing 'pin' argument for validatePinWithPolicy");
+    }
+    return utils.promiseOrCallbackExec('OneginiUserClient', 'validatePinWithPolicy', options, successCb, failureCb);
+  }
+
   return {
     authenticate: authenticate,
     reauthenticate: reauthenticate,
@@ -97,6 +104,7 @@ module.exports = (function () {
     isUserRegistered: isUserRegistered,
     getUserProfiles: getUserProfiles,
     getAuthenticatedUserProfile: getAuthenticatedUserProfile,
-    logout: logout
+    logout: logout,
+    validatePinWithPolicy: validatePinWithPolicy
   };
 })();

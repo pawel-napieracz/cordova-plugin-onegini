@@ -5,6 +5,9 @@ exports.defineAutoTests = function () {
       nrOfUserProfiles,
       pin = "12356";
 
+
+  /******** onegini *********/
+
   describe('onegini', function () {
     it("onegini should exist", function () {
       expect(window.onegini).toBeDefined();
@@ -27,9 +30,61 @@ exports.defineAutoTests = function () {
     });
   });
 
+
+  /******** onegini.user *********/
+
   describe('onegini.user', function () {
     it("should exist", function () {
       expect(onegini.user).toBeDefined();
+    });
+
+    describe("validatePinWithPolicy", function () {
+      it("should exist", function () {
+        expect(onegini.user.validatePinWithPolicy).toBeDefined();
+      });
+
+      it("should fail because of an incorrect length", function (done) {
+        onegini.user.validatePinWithPolicy(
+            {
+              pin: "incorrect"
+            },
+            function (result) {
+              expect(result).toBeUndefined();
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              done();
+            });
+      });
+
+
+      it("should fail because of repeating numbers", function (done) {
+        onegini.user.validatePinWithPolicy(
+            {
+              pin: "11111"
+            },
+            function (result) {
+              expect(result).toBeUndefined();
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              done();
+            });
+      });
+
+      it("should succeed if pin is compliant to policy", function (done) {
+        onegini.user.validatePinWithPolicy(
+            {
+              pin: pin
+            },
+            function () {
+              expect(true).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
     });
 
     describe("getAuthenticatedUserProfile (1/3)", function () {
@@ -41,7 +96,6 @@ exports.defineAutoTests = function () {
         onegini.user.getAuthenticatedUserProfile(
             function (result) {
               expect(result).toBeUndefined();
-              done()
             },
             function (err) {
               expect(err).toBeDefined();
