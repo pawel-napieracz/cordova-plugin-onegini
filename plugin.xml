@@ -106,6 +106,10 @@
         <param name="android-package" value="com.onegini.OneginiUserClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiDeviceAuthenticationClient">
+        <param name="android-package" value="com.onegini.OneginiDeviceAuthenticationClient"/>
+        <param name="onload" value="false"/>
+      </feature>
       <feature name="OneginiUserAuthenticationClient">
         <param name="android-package" value="com.onegini.OneginiUserAuthenticationClient"/>
         <param name="onload" value="false"/>
@@ -162,10 +166,13 @@
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiChangePinClient.java"
                  target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiDeviceAuthenticationClient.java"
+                 target-dir="src/com/onegini/"/>
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
     <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/ScopesUtil.java" target-dir="src/com/onegini/util"/>
 
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/handler/AuthenticationHandler.java"
@@ -183,6 +190,8 @@
     <source-file src="src/android/src/android/com/onegini/handler/PinAuthenticationRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/ChangePinHandler.java"
+                 target-dir="src/com/onegini/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/handler/DeviceAuthenticationHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/PinValidationHandler.java"
                  target-dir="src/com/onegini/handler/"/>
