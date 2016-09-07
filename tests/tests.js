@@ -361,7 +361,7 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it("should return pinlength of '5'", function (done) {
+      it("should return pinlength of '5' when correct pin is supplied", function (done) {
         onegini.user.changePin.start(
             {
               pin: pin
@@ -376,13 +376,13 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it('should fail with incorrect new pin', function (done) {
+      it('should fail with new pin non-compliant with pin policy', function (done) {
         onegini.user.changePin.createPin(
             {
               pin: "incorrect"
             },
-            function (result) {
-              expect(result).toBeUndefined();
+            function () {
+              fail("Success callback was called while action should have failed");
             },
             function (err) {
               expect(err).toBeDefined();
@@ -391,7 +391,7 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it('should succeed', function (done) {
+      it('should succeed with new pin compliant to pin policy', function (done) {
         onegini.user.changePin.createPin(
             {
               pin: pin
@@ -401,7 +401,7 @@ exports.defineAutoTests = function () {
               done();
             },
             function (err) {
-              expect(result).toBeUndefined();
+              fail("Error callback was called while action should have succeeded");
             });
       });
     });
