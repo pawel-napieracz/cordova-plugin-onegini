@@ -2,11 +2,7 @@
 
 #import "OGCDVUserAuthenticationClient.h"
 #import "OGCDVUserClientHelper.h"
-
-static NSString *const OGCDVPluginKeyProfileId = @"profileId";
-static NSString *const OGCDVPluginKeyPin = @"pin";
-static NSString *const OGCDVPluginKeyMaxFailureCount = @"maxFailureCount";
-static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureCount";
+#import "OGCDVConstants.h"
 
 @implementation OGCDVUserAuthenticationClient {}
 

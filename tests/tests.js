@@ -5,9 +5,6 @@ exports.defineAutoTests = function () {
       nrOfUserProfiles,
       pin = "12356";
 
-
-  /******** onegini *********/
-
   describe('onegini', function () {
     it("onegini should exist", function () {
       expect(window.onegini).toBeDefined();
@@ -29,9 +26,6 @@ exports.defineAutoTests = function () {
       });
     });
   });
-
-
-  /******** onegini.user *********/
 
   describe('onegini.user', function () {
     it("should exist", function () {
