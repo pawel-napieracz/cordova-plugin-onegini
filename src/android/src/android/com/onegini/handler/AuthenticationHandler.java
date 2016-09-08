@@ -36,7 +36,6 @@ public class AuthenticationHandler implements OneginiAuthenticationHandler {
       pluginResultBuilder.withRemainingFailureCount(0);
     }
 
-
     sendPluginResult(pluginResultBuilder.build());
   }
 

@@ -20,17 +20,21 @@ public class InitializationHandler implements OneginiInitializationHandler {
 
   @Override
   public void onSuccess(final Set<UserProfile> userProfiles) {
-    callbackContext.sendPluginResult(new PluginResultBuilder()
+    final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .build());
+        .build();
+
+    callbackContext.sendPluginResult(pluginResult);
   }
 
   @Override
   public void onError(final OneginiInitializationError oneginiInitializationError) {
-    callbackContext.sendPluginResult(new PluginResultBuilder()
+    final PluginResult pluginResult = new PluginResultBuilder()
         .withError()
         .withErrorType(oneginiInitializationError.getErrorType())
         .withErrorDescription(oneginiInitializationError.getErrorDescription())
-        .build());
+        .build();
+
+    callbackContext.sendPluginResult(pluginResult);
   }
 }

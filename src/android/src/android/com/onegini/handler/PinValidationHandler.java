@@ -1,6 +1,7 @@
 package com.onegini.handler;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.sdk.android.handlers.OneginiPinValidationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiPinValidationError;
@@ -16,14 +17,20 @@ public class PinValidationHandler implements OneginiPinValidationHandler {
 
   @Override
   public void onSuccess() {
-    callbackContext.success();
+    final PluginResult pluginResult = new PluginResultBuilder()
+        .withSuccess()
+        .build();
+
+    callbackContext.sendPluginResult(pluginResult);
   }
 
   @Override
   public void onError(final OneginiPinValidationError oneginiPinValidationError) {
-    callbackContext.sendPluginResult(new PluginResultBuilder()
+    final PluginResult pluginResult = new PluginResultBuilder()
         .withErrorType(oneginiPinValidationError.getErrorType())
         .withErrorDescription(oneginiPinValidationError.getErrorDescription())
-        .build());
+        .build();
+
+    callbackContext.sendPluginResult(pluginResult);
   }
 }
