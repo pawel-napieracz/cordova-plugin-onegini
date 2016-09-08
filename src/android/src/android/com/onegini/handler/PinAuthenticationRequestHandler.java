@@ -15,9 +15,9 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
 
   private static PinAuthenticationRequestHandler instance = null;
   private OneginiPinCallback pinCallback = null;
-  private CallbackContext checkPinCordovaCallback;
-  private CallbackContext authenticationCordovaCallback;
-  private CallbackContext onFinishCallback;
+  private CallbackContext onNextAuthenticationAttemptCallback;
+  private CallbackContext startAuthenticationCallback;
+  private CallbackContext finishAuthenticationCallback;
 
   protected PinAuthenticationRequestHandler() {
 
@@ -35,23 +35,23 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
     return pinCallback;
   }
 
-  public void setCheckPinCordovaCallback(final CallbackContext checkPinCordovaCallback) {
-    this.checkPinCordovaCallback = checkPinCordovaCallback;
+  public void setOnNextAuthenticationAttemptCallback(final CallbackContext onNextAuthenticationAttemptCallback) {
+    this.onNextAuthenticationAttemptCallback = onNextAuthenticationAttemptCallback;
   }
 
-  public void setAuthenticationCordovaCallback(final CallbackContext authenticationCordovaCallback) {
-    this.authenticationCordovaCallback = authenticationCordovaCallback;
+  public void setStartAuthenticationCallback(final CallbackContext startAuthenticationCallback) {
+    this.startAuthenticationCallback = startAuthenticationCallback;
   }
 
-  public void setOnFinishCallback(final CallbackContext onFinishCallback) {
-    this.onFinishCallback = onFinishCallback;
+  public void setFinishAuthenticationCallback(final CallbackContext finishAuthenticationCallback) {
+    this.finishAuthenticationCallback = finishAuthenticationCallback;
   }
 
   @Override
   public void startAuthentication(final UserProfile userProfile, final OneginiPinCallback oneginiPinCallback) {
     this.pinCallback = oneginiPinCallback;
 
-    sendAuthenticationResult(new PluginResultBuilder()
+    sendStartAuthenticationResult(new PluginResultBuilder()
         .withSuccess()
         .build());
   }
@@ -60,7 +60,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   public void onNextAuthenticationAttempt(final int failedAttempts, final int maxAttempts) {
     final int remainingAttempts = maxAttempts - failedAttempts;
 
-    sendCheckPinResult(new PluginResultBuilder()
+    sendOnNextAuthenticationAttemptResult(new PluginResultBuilder()
         .withError()
         .withErrorDescription(ERROR_INCORRECT_PIN)
         .withMaxFailureCount(maxAttempts)
@@ -72,27 +72,27 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   @Override
   public void finishAuthentication() {
     pinCallback = null;
-    sendOnFinishResult(new PluginResultBuilder()
+    sendFinishAuthenticationResult(new PluginResultBuilder()
         .withSuccess()
         .withPinLength(PIN_LENGTH)
         .build());
   }
 
-  private void sendCheckPinResult(final PluginResult pluginResult) {
-    if (checkPinCordovaCallback != null) {
-      checkPinCordovaCallback.sendPluginResult(pluginResult);
+  private void sendOnNextAuthenticationAttemptResult(final PluginResult pluginResult) {
+    if (onNextAuthenticationAttemptCallback != null) {
+      onNextAuthenticationAttemptCallback.sendPluginResult(pluginResult);
     }
   }
 
-  private void sendAuthenticationResult(final PluginResult pluginResult) {
-    if (authenticationCordovaCallback != null) {
-      authenticationCordovaCallback.sendPluginResult(pluginResult);
+  private void sendStartAuthenticationResult(final PluginResult pluginResult) {
+    if (startAuthenticationCallback != null) {
+      startAuthenticationCallback.sendPluginResult(pluginResult);
     }
   }
 
-  private void sendOnFinishResult(final PluginResult pluginResult) {
-    if (onFinishCallback != null && !onFinishCallback.isFinished()) {
-      onFinishCallback.sendPluginResult(pluginResult);
+  private void sendFinishAuthenticationResult(final PluginResult pluginResult) {
+    if (finishAuthenticationCallback != null && !finishAuthenticationCallback.isFinished()) {
+      finishAuthenticationCallback.sendPluginResult(pluginResult);
     }
   }
 }

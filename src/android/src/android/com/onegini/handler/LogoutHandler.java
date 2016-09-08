@@ -17,21 +17,17 @@ public class LogoutHandler implements OneginiLogoutHandler{
 
   @Override
   public void onSuccess() {
-    final PluginResult pluginResult = new PluginResultBuilder()
+    callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
-        .build();
-
-    callbackContext.sendPluginResult(pluginResult);
+        .build());
 
   }
 
   @Override
   public void onError(final OneginiLogoutError oneginiLogoutError) {
-    final PluginResult pluginResult = new PluginResultBuilder()
+    callbackContext.sendPluginResult(new PluginResultBuilder()
         .withError()
         .withErrorDescription(oneginiLogoutError.getErrorDescription())
-        .build();
-
-    callbackContext.sendPluginResult(pluginResult);
+        .build());
   }
 }

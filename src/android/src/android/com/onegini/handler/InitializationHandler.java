@@ -20,22 +20,17 @@ public class InitializationHandler implements OneginiInitializationHandler {
 
   @Override
   public void onSuccess(final Set<UserProfile> userProfiles) {
-    // TODO do we really need to pass the user profiles with the success cb? If so: add to iOS as well
-    final PluginResult pluginResult = new PluginResultBuilder()
+    callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
-        .build();
-
-    callbackContext.sendPluginResult(pluginResult);
+        .build());
   }
 
   @Override
   public void onError(final OneginiInitializationError oneginiInitializationError) {
-    final PluginResult pluginResult = new PluginResultBuilder()
+    callbackContext.sendPluginResult(new PluginResultBuilder()
         .withError()
         .withErrorType(oneginiInitializationError.getErrorType())
         .withErrorDescription(oneginiInitializationError.getErrorDescription())
-        .build();
-
-    callbackContext.sendPluginResult(pluginResult);
+        .build());
   }
 }

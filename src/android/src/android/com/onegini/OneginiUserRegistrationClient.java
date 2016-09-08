@@ -19,7 +19,7 @@ import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
-import com.onegini.util.ScopesUtil;
+import com.onegini.util.ActionArgumentsUtil;
 import com.onegini.util.UserProfileUtil;
 
 public class OneginiUserRegistrationClient extends CordovaPlugin {
@@ -50,9 +50,9 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   }
 
   private void startRegistration(final JSONArray args, final CallbackContext startRegistrationCallbackContext) throws JSONException {
-    final String[] scopes = ScopesUtil.getScopesFromActionArguments(args);
+    final String[] scopes = ActionArgumentsUtil.getScopesFromArguments(args);
 
-    CreatePinRequestHandler.getInstance().setRegistrationCallbackContext(startRegistrationCallbackContext);
+    CreatePinRequestHandler.getInstance().setOnStartPinCreationCallback(startRegistrationCallbackContext);
     registrationHandler = new RegistrationHandler(startRegistrationCallbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
@@ -64,9 +64,9 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   }
 
   private void createPin(final JSONArray args, final CallbackContext createPinCallbackContext) throws JSONException {
-    final String pin = args.getJSONObject(0).getString("pin");
-    OneginiPinCallback pinCallback = CreatePinRequestHandler.getInstance().getPinCallback();
-    CreatePinRequestHandler.getInstance().setCreatePinCallback(createPinCallbackContext);
+    final String pin = ActionArgumentsUtil.getPinFromArguments(args);
+    OneginiPinCallback pinCallback = CreatePinRequestHandler.getInstance().getOneginiPinCallback();
+    CreatePinRequestHandler.getInstance().setOnNextPinCreationAttemptCallback(createPinCallbackContext);
 
     if (pinCallback == null) {
       final PluginResult pluginResult = new PluginResultBuilder()

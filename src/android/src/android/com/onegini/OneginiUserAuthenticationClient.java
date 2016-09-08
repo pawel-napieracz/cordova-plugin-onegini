@@ -20,6 +20,7 @@ import com.onegini.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
+import com.onegini.util.ActionArgumentsUtil;
 import com.onegini.util.PluginResultBuilder;
 import com.onegini.util.UserProfileUtil;
 
@@ -77,7 +78,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return;
     }
 
-    PinAuthenticationRequestHandler.getInstance().setAuthenticationCordovaCallback(startAuthenticationCallbackContext);
+    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(startAuthenticationCallbackContext);
     authenticationHandler = new AuthenticationHandler(startAuthenticationCallbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
@@ -102,7 +103,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return;
     }
 
-    PinAuthenticationRequestHandler.getInstance().setAuthenticationCordovaCallback(reauthenticateCallbackContext);
+    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(reauthenticateCallbackContext);
     authenticationHandler = new AuthenticationHandler(reauthenticateCallbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
@@ -139,7 +140,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
   }
 
   private void providePin(final JSONArray args, final CallbackContext providePinCallbackContext) throws JSONException {
-    final String pin = args.getJSONObject(0).getString(PARAM_PIN);
+    final String pin = ActionArgumentsUtil.getPinFromArguments(args);
     final OneginiPinCallback pinCallback = PinAuthenticationRequestHandler.getInstance().getPinCallback();
     authenticationHandler.setCallbackContext(providePinCallbackContext);
 
@@ -148,7 +149,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
           .withErrorDescription(OneginiCordovaPluginConstants.ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS)
           .build());
     } else {
-      PinAuthenticationRequestHandler.getInstance().setCheckPinCordovaCallback(providePinCallbackContext);
+      PinAuthenticationRequestHandler.getInstance().setOnNextAuthenticationAttemptCallback(providePinCallbackContext);
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
 

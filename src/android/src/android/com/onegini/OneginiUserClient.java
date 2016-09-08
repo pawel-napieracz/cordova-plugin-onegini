@@ -6,8 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.onegini.handler.PinValidationHandler;
-import com.onegini.mobile.sdk.android.client.*;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
+import com.onegini.util.ActionArgumentsUtil;
 
 public class OneginiUserClient extends CordovaPlugin {
 
@@ -24,7 +24,7 @@ public class OneginiUserClient extends CordovaPlugin {
   }
 
   private void validatePinWithPolicy(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final String pin = args.getJSONObject(0).getString("pin");
+    final String pin = ActionArgumentsUtil.getPinFromArguments(args);
     final PinValidationHandler pinValidationHandler = new PinValidationHandler(callbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
