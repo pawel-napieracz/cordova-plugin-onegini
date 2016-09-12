@@ -93,15 +93,15 @@ var OneginiDemo = (function () {
 
     startDeviceAuthentication: function () {
       onegini.device.authenticate(
-        {
-          scopes: ["read"] // optional
-        },
-        function () {
-          alert("Success!");
-        },
-        function (err) {
-          alert("Error!\n\n" + err.description);
-        }
+          {
+            scopes: ["read"] // optional
+          },
+          function () {
+            alert("Success!");
+          },
+          function (err) {
+            alert("Error!\n\n" + err.description);
+          }
       );
     },
 
@@ -203,16 +203,16 @@ var OneginiDemo = (function () {
       }
       var that = this;
       onegini.user.changePin.start(
-        {
-          pin: pin
-        },
-        function (result) {
-          console.log("onegini.user.changePin.start success, now calling onegini.user.changePin.createPin. " + JSON.stringify(result));
-          that.changePinCreatePin(result.pinLength);
-        },
-        function (err) {
-          alert("Error!\n\n" + err.description + "\n\n" + JSON.stringify(err));
-        }
+          {
+            pin: pin
+          },
+          function (result) {
+            console.log("onegini.user.changePin.start success, now calling onegini.user.changePin.createPin. " + JSON.stringify(result));
+            that.changePinCreatePin(result.pinLength);
+          },
+          function (err) {
+            alert("Error!\n\n" + err.description + "\n\n" + JSON.stringify(err));
+          }
       );
     },
 
@@ -222,15 +222,37 @@ var OneginiDemo = (function () {
         return;
       }
       onegini.user.changePin.createPin(
-        {
-          pin: pin
-        },
-        function (result) {
-          alert("Success!\n\nPin changed");
-        },
-        function (err) {
-          alert("Error!\n\n" + err.description);
-        }
+          {
+            pin: pin
+          },
+          function (result) {
+            alert("Success!\n\nPin changed");
+          },
+          function (err) {
+            alert("Error!\n\n" + err.description);
+          }
+      );
+    },
+
+    getRegisteredAuthenticators: function () {
+      onegini.user.authenticators.getRegistered(
+          function (result) {
+            alert("Success!\n\n" + JSON.stringify(result));
+          },
+          function (err) {
+            alert("Error!\n\n" + err.description);
+          }
+      );
+    },
+
+    getNotRegisteredAuthenticators: function () {
+      onegini.user.authenticators.getNotRegistered(
+          function (result) {
+            alert("Success!\n\n" + JSON.stringify(result));
+          },
+          function (err) {
+            alert("Error!\n\n" + err.description);
+          }
       );
     },
 
