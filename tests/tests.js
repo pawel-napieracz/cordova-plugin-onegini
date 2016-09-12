@@ -336,7 +336,7 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe('getRegisteredAuthenticators (2/2', function () {
+    describe('getRegisteredAuthenticators (2/2)', function () {
       it("should contain a PIN authenticator", function (done) {
         onegini.user.getRegisteredAuthenticators(
             function (result) {
