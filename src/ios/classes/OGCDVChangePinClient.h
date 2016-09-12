@@ -12,7 +12,6 @@
 @property (nonatomic) ONGPinChallenge *currentPinChallenge;
 
 @property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
-@property (nonatomic, copy) NSString *createPin;
 
 - (void)start:(CDVInvokedUrlCommand *)command;
 - (void)createPin:(CDVInvokedUrlCommand *)command;

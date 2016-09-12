@@ -6,5 +6,6 @@
 @interface OGCDVUserClient : CDVPlugin
 
 - (void)validatePinWithPolicy:(CDVInvokedUrlCommand *)command;
+- (void)getRegisteredAuthenticators:(CDVInvokedUrlCommand *)command;
 
 @end

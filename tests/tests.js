@@ -233,6 +233,23 @@ exports.defineAutoTests = function () {
       });
     });
 
+    describe('getRegisteredAuthenticators (1/2)', function () {
+      it("should exist", function () {
+        expect(onegini.user.getRegisteredAuthenticators).toBeDefined();
+      });
+
+      it("should be empty when not logged in", function (done) {
+        onegini.user.getRegisteredAuthenticators(
+            function (result) {
+              expect(result.length).toBe(0);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+    });
+
     describe('authenticate', function () {
       describe('start', function () {
         it("should exist", function () {
@@ -316,6 +333,31 @@ exports.defineAutoTests = function () {
                 done();
               });
         });
+      });
+    });
+
+    describe('getRegisteredAuthenticators (2/2', function () {
+      it("should contain a PIN authenticator", function (done) {
+        onegini.user.getRegisteredAuthenticators(
+            function (result) {
+              expect(result).toBeDefined();
+              var nrOfAuthenticators = result.length;
+              expect(nrOfAuthenticators).toBeGreaterThan(0);
+
+              for (var r in result) {
+                var authenticator = result[r];
+                expect(authenticator.id).toBeDefined();
+                if (authenticator.id === "com.onegini.authenticator.PIN") {
+                  done();
+                  return;
+                }
+              }
+              expect(false).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
       });
     });
 

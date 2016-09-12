@@ -14,7 +14,7 @@
 
     NSArray<NSString*> *optionalScopes = nil;
     if (command.arguments.count > 0) {
-      NSDictionary *options = [command.arguments objectAtIndex:0];
+      NSDictionary *options = command.arguments[0];
       optionalScopes = options[OGCDVPluginKeyScopes];
     }
 

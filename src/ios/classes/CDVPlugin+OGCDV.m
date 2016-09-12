@@ -1,7 +1,6 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
 #import "CDVPlugin+OGCDV.h"
-#import "ONGErrors.h"
 
 @implementation CDVPlugin (OGCDV)
 

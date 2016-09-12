@@ -12,7 +12,7 @@
   self.callbackId = command.callbackId;
   NSArray *optionalScopes = nil;
   if (command.arguments.count > 0) {
-    NSDictionary *options = [command.arguments objectAtIndex:0];
+    NSDictionary *options = command.arguments[0];
     optionalScopes = options[OGCDVPluginKeyScopes];
   }
   [[ONGUserClient sharedInstance] registerUser:optionalScopes delegate:self];
@@ -22,7 +22,7 @@
 {
   [self.commandDelegate runInBackground:^{
     self.callbackId = command.callbackId;
-    NSDictionary *options = [command.arguments objectAtIndex:0];
+    NSDictionary *options = command.arguments[0];
     NSString *pin = options[OGCDVPluginKeyPin];
 
     if (self.createPinChallenge) {
@@ -47,7 +47,7 @@
 
 - (void)isUserRegistered:(CDVInvokedUrlCommand*)command
 {
-  NSDictionary *options = [command.arguments objectAtIndex:0];
+  NSDictionary *options = command.arguments[0];
   NSString *profileId = options[OGCDVPluginKeyProfileId];
 
   BOOL isRegistered = [OGCDVUserClientHelper getRegisteredUserProfile:profileId] != nil;
@@ -89,13 +89,6 @@
 - (void)userClient:(ONGUserClient *)userClient didFailToRegisterWithError:(NSError *)error
 {
   [self.viewController dismissViewControllerAnimated:YES completion:nil];
-  [self sendErrorResultForCallbackId:self.callbackId withError:error];
-}
-
-#pragma mark - OGPinValidationDelegate
-
-- (void)pinEntryError:(NSError *)error
-{
   [self sendErrorResultForCallbackId:self.callbackId withError:error];
 }
 
