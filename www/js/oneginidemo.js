@@ -32,7 +32,7 @@ var OneginiDemo = (function () {
             console.log("onegini.user.register.start success, now calling onegini.user.register.createPin. " + JSON.stringify(result));
             // added a little timeout so the embedded browser has time to disappear
             setTimeout(function () {
-              that.createPin(result.pinLength);
+              that.registrationCreatePin(result.pinLength);
             }, 900);
           },
           function (err) {
@@ -41,7 +41,7 @@ var OneginiDemo = (function () {
       );
     },
 
-    createPin: function (pinLength) {
+    registrationCreatePin: function (pinLength) {
       var pin = prompt("Please enter your " + pinLength + " digit Pin", "12346" /* default */);
       if (!pin) {
         return;
@@ -91,7 +91,21 @@ var OneginiDemo = (function () {
       );
     },
 
-    startAuthentication: function () {
+    startDeviceAuthentication: function () {
+      onegini.device.authenticate(
+        {
+          scopes: ["read"] // optional
+        },
+        function () {
+          alert("Success!");
+        },
+        function (err) {
+          alert("Error!\n\n" + err.description);
+        }
+      );
+    },
+
+    startUserAuthentication: function () {
       var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
       profileId = prompt("Please enter the profileId", profileId);
       if (!profileId) {
@@ -179,6 +193,44 @@ var OneginiDemo = (function () {
           function (err) {
             alert(err.description);
           }
+      );
+    },
+
+    startChangePin: function () {
+      var pin = prompt("Please enter your current Pin", "12346" /* default */);
+      if (!pin) {
+        return;
+      }
+      var that = this;
+      onegini.user.changePin.start(
+        {
+          pin: pin
+        },
+        function (result) {
+          console.log("onegini.user.changePin.start success, now calling onegini.user.changePin.createPin. " + JSON.stringify(result));
+          that.changePinCreatePin(result.pinLength);
+        },
+        function (err) {
+          alert("Error!\n\n" + err.description + "\n\n" + JSON.stringify(err));
+        }
+      );
+    },
+
+    changePinCreatePin: function (pinLength) {
+      var pin = prompt("Please enter your " + pinLength + " digit NEW Pin", "12346" /* default */);
+      if (!pin) {
+        return;
+      }
+      onegini.user.changePin.createPin(
+        {
+          pin: pin
+        },
+        function (result) {
+          alert("Success!\n\nPin changed");
+        },
+        function (err) {
+          alert("Error!\n\n" + err.description);
+        }
       );
     },
 

@@ -27,28 +27,38 @@
 
     <button onclick="window.location='cdvtests/index.html'">Run Jasmine tests</button>
 
-    <h3>Registration</h3>
+    <h3>User Registration</h3>
     <p>
       <button onclick="OneginiDemo.getUserProfiles()">get user profiles</button>
       <button onclick="OneginiDemo.isUserRegistered()">is user registered?</button>
       <br/>
       <button onclick="OneginiDemo.startRegistration()">register</button>
       <button onclick="OneginiDemo.deregister()">deregister</button>
-      <!--      <button onclick="OneginiDemo.createPin()">create Pin</button>-->
+      <!--      <button onclick="OneginiDemo.registrationCreatePin(5)">create Pin</button>-->
     </p>
 
-    <h3>Authentication</h3>
+    <h3>Device Authentication</h3>
     <p>
-      <button onclick="OneginiDemo.startAuthentication()">authenticate</button>
+      <button onclick="OneginiDemo.startDeviceAuthentication()">authenticate</button>
+    </p>
+
+    <h3>User Authentication</h3>
+    <p>
+      <button onclick="OneginiDemo.startUserAuthentication()">authenticate</button>
       <button onclick="OneginiDemo.providePin()">(provide Pin)</button>
       <button onclick="OneginiDemo.getAuthenticatedUserProfile()">get authenticated user profile</button>
       <button onclick="OneginiDemo.reauthenticate()">reauthenticate</button>
       <button onclick="OneginiDemo.logout()">logout</button>
     </p>
+    <h3>Change Pin</h3>
+    <p>
+      <button onclick="OneginiDemo.startChangePin()">start change pin</button>
+      <button onclick="OneginiDemo.changePinCreatePin(5)">create new pin</button>
+    </p>
     <!--h3>Mobile Authentication</h3>
     <p>
-      <button onclick="OneginiDemo.enrollForMobileAuthentication()">enroll</button>
-  </div-->
+    <button onclick="OneginiDemo.enrollForMobileAuthentication()">enroll</button-->
+  </div>
   <br/><br/>
 </div>
 <script type="text/javascript" src="cordova.js"></script>
