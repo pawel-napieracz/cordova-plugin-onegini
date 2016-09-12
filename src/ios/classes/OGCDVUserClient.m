@@ -26,6 +26,11 @@ NSString *const OGCDVPluginKeyAuthenticatorId = @"id";
 - (void)getRegisteredAuthenticators:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
+      if ([[ONGUserClient sharedInstance] authenticatedUserProfile] == nil) {
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No user authenticated."];
+        return;
+      }
+
       NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticators];
       NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:registeredAuthenticators.count];
       for (ONGAuthenticator *authenticator in registeredAuthenticators) {
@@ -38,6 +43,11 @@ NSString *const OGCDVPluginKeyAuthenticatorId = @"id";
 - (void)getNotRegisteredAuthenticators:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
+      if ([[ONGUserClient sharedInstance] authenticatedUserProfile] == nil) {
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No user authenticated."];
+        return;
+      }
+
       [[ONGUserClient sharedInstance] fetchNonRegisteredAuthenticators:^(NSSet<ONGAuthenticator *> *authenticators, NSError *error) {
           if (error != nil) {
             [self sendErrorResultForCallbackId:command.callbackId withError:error];

@@ -238,14 +238,33 @@ exports.defineAutoTests = function () {
         expect(onegini.user.getRegisteredAuthenticators).toBeDefined();
       });
 
-      it("should be empty when not logged in", function (done) {
+        it("should return an error when not logged in", function (done) {
         onegini.user.getRegisteredAuthenticators(
             function (result) {
-              expect(result.length).toBe(0);
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No user authenticated.");
               done();
+              });
+        });
+      });
+
+      describe('getNotRegisteredAuthenticators (1/2)', function () {
+        it("should exist", function () {
+          expect(onegini.user.getNotRegisteredAuthenticators).toBeDefined();
+        });
+
+        it("should return an error when not logged in", function (done) {
+          onegini.user.getNotRegisteredAuthenticators(
+              function (result) {
+                expect(result).toBeUndefined();
             },
             function (err) {
-              expect(err).toBeUndefined();
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No user authenticated.");
+                done();
             });
       });
     });
@@ -361,7 +380,7 @@ exports.defineAutoTests = function () {
       });
     });
 
-      describe('getNotRegisteredAuthenticators', function () {
+      describe('getNotRegisteredAuthenticators (2/2)', function () {
         it("should succeed", function (done) {
           onegini.user.getNotRegisteredAuthenticators(
               function (result) {
