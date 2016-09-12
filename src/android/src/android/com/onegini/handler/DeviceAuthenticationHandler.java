@@ -1,6 +1,7 @@
 package com.onegini.handler;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.sdk.android.handlers.error.OneginiDeviceAuthenticationError;
 import com.onegini.mobile.sdk.android.internal.handlers.OneginiDeviceAuthenticationHandler;
@@ -16,15 +17,21 @@ public class DeviceAuthenticationHandler implements OneginiDeviceAuthenticationH
 
   @Override
   public void onSuccess() {
-    callbackContext.success();
+    final PluginResult pluginResult = new PluginResultBuilder()
+        .withSuccess()
+        .build();
+
+    callbackContext.sendPluginResult(pluginResult);
   }
 
   @Override
   public void onError(final OneginiDeviceAuthenticationError oneginiDeviceAuthenticationError) {
-    callbackContext.sendPluginResult(new PluginResultBuilder()
+    final PluginResult pluginResult = new PluginResultBuilder()
         .withError()
         .withErrorType(oneginiDeviceAuthenticationError.getErrorType())
         .withErrorDescription(oneginiDeviceAuthenticationError.getErrorDescription())
-        .build());
+        .build();
+
+    callbackContext.sendPluginResult(pluginResult);
   }
 }

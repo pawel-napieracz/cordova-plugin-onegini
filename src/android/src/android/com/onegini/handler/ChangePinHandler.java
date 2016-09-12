@@ -18,18 +18,22 @@ public class ChangePinHandler implements OneginiChangePinHandler {
 
   @Override
   public void onSuccess() {
-    sendPluginResult(new PluginResultBuilder()
+    final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .withPinLength(PIN_LENGTH)
-        .build());
+        .build();
+
+    sendPluginResult(pluginResult);
   }
 
   @Override
   public void onError(final OneginiChangePinError oneginiChangePinError) {
-    sendPluginResult(new PluginResultBuilder()
+    final PluginResult pluginResult= new PluginResultBuilder()
         .withError()
         .withErrorDescription(oneginiChangePinError.getErrorDescription())
-        .build());
+        .build();
+
+    sendPluginResult(pluginResult);
   }
 
   public void setCallbackContext(final CallbackContext callbackContext) {

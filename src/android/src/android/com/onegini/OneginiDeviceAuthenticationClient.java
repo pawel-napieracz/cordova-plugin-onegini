@@ -7,7 +7,7 @@ import org.json.JSONException;
 
 import com.onegini.handler.DeviceAuthenticationHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
-import com.onegini.util.ScopesUtil;
+import com.onegini.util.ActionArgumentsUtil;
 
 public class OneginiDeviceAuthenticationClient extends CordovaPlugin {
 
@@ -25,7 +25,7 @@ public class OneginiDeviceAuthenticationClient extends CordovaPlugin {
 
   private void authenticate(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final DeviceAuthenticationHandler deviceAuthenticationHandler = new DeviceAuthenticationHandler(callbackContext);
-    final String[] scopes = ScopesUtil.getScopesFromActionArguments(args);
+    final String[] scopes = ActionArgumentsUtil.getScopesFromArguments(args);
 
     cordova.getThreadPool().execute(new Runnable() {
       @Override

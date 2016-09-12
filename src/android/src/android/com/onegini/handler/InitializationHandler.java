@@ -20,7 +20,6 @@ public class InitializationHandler implements OneginiInitializationHandler {
 
   @Override
   public void onSuccess(final Set<UserProfile> userProfiles) {
-    // TODO do we really need to pass the user profiles with the success cb? If so: add to iOS as well
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .build();
