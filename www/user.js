@@ -62,6 +62,16 @@ module.exports = (function () {
     }
   };
 
+  var authenticators = {
+    getRegistered: function (successCb, failureCb) {
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getRegistered', [], successCb, failureCb);
+    },
+
+    getNotRegistered: function (successCb, failureCb) {
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getNotRegistered', [], successCb, failureCb);
+    }
+  };
+
   function deregister(options, successCb, failureCb) {
     if (!options || !options.profileId) {
       throw new TypeError("Onegini: missing 'profileId' argument for deregister");
@@ -108,6 +118,7 @@ module.exports = (function () {
     reauthenticate: reauthenticate,
     register: register,
     changePin: changePin,
+    authenticators: authenticators,
     deregister: deregister,
     isUserRegistered: isUserRegistered,
     getUserProfiles: getUserProfiles,
