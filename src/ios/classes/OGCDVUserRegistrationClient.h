@@ -3,7 +3,7 @@
 #import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
-@interface OGCDVUserRegistrationClient : CDVPlugin<ONGRegistrationDelegate, ONGPinValidationDelegate>
+@interface OGCDVUserRegistrationClient : CDVPlugin<ONGRegistrationDelegate>
 
 @property (nonatomic, copy) NSString *callbackId;
 @property (nonatomic) ONGCreatePinChallenge *createPinChallenge;

@@ -2,12 +2,7 @@
 
 #import "OGCDVChangePinClient.h"
 #import "OGCDVUserClientHelper.h"
-
-static NSString *const OGCDVPluginKeyProfileId = @"profileId";
-static NSString *const OGCDVPluginKeyPin = @"pin";
-static NSString *const OGCDVPluginKeyMaxFailureCount = @"maxFailureCount";
-static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureCount";
-static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
+#import "OGCDVConstants.h"
 
 @implementation OGCDVChangePinClient {}
 
@@ -69,12 +64,12 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveCreatePinChallenge:(ONGCreatePinChallenge *)challenge
 {
+  self.createPinChallenge = challenge;
+
   if (challenge.error != nil) {
     [self sendErrorResultForCallbackId:self.startCallbackId != nil ? self.startCallbackId : self.createPinCallbackId withError:challenge.error];
     return;
   }
-
-  self.createPinChallenge = challenge;
 
   NSDictionary *result = @{OGCDVPluginKeyPinLength:@(challenge.pinLength)};
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:self.startCallbackId];

@@ -3,11 +3,7 @@
 #import "OGCDVUserRegistrationClient.h"
 #import "OGCDVWebBrowserViewController.h"
 #import "OGCDVUserClientHelper.h"
-
-static NSString *const OGCDVPluginKeyProfileId = @"profileId";
-static NSString *const OGCDVPluginKeyScopes = @"scopes";
-static NSString *const OGCDVPluginKeyPin = @"pin";
-static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
+#import "OGCDVConstants.h"
 
 @implementation OGCDVUserRegistrationClient {}
 
@@ -75,7 +71,7 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:self.callbackId];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didReceiveAuthenticationCodeRequestWithUrl:(NSURL *)url
+- (void)userClient:(ONGUserClient *)userClient didReceiveRegistrationRequestWithUrl:(NSURL *)url
 {
   OGCDVWebBrowserViewController *webBrowserViewController = [OGCDVWebBrowserViewController new];
   webBrowserViewController.url = url;
