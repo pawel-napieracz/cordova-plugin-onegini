@@ -361,6 +361,19 @@ exports.defineAutoTests = function () {
       });
     });
 
+      describe('getNotRegisteredAuthenticators', function () {
+        it("should succeed", function (done) {
+          onegini.user.getNotRegisteredAuthenticators(
+              function (result) {
+                expect(result).toBeDefined();
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+              });
+        });
+      });
+
     describe('changePin', function () {
       describe('start', function () {
         it("should exist", function () {

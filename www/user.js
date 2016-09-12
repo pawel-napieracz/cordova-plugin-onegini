@@ -99,6 +99,10 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserClient', 'getRegisteredAuthenticators', [], successCb, failureCb);
   }
 
+  function getNotRegisteredAuthenticators(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiUserClient', 'getNotRegisteredAuthenticators', [], successCb, failureCb);
+  }
+
   return {
     authenticate: authenticate,
     reauthenticate: reauthenticate,
@@ -110,6 +114,7 @@ module.exports = (function () {
     getAuthenticatedUserProfile: getAuthenticatedUserProfile,
     logout: logout,
     validatePinWithPolicy: validatePinWithPolicy,
-    getRegisteredAuthenticators: getRegisteredAuthenticators
+    getRegisteredAuthenticators: getRegisteredAuthenticators,
+    getNotRegisteredAuthenticators: getNotRegisteredAuthenticators
   };
 })();

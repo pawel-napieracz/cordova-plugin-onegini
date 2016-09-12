@@ -35,4 +35,21 @@ NSString *const OGCDVPluginKeyAuthenticatorId = @"id";
   }];
 }
 
+- (void)getNotRegisteredAuthenticators:(CDVInvokedUrlCommand *)command
+{
+  [self.commandDelegate runInBackground:^{
+      [[ONGUserClient sharedInstance] fetchNonRegisteredAuthenticators:^(NSSet<ONGAuthenticator *> *authenticators, NSError *error) {
+          if (error != nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withError:error];
+          } else {
+            NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:authenticators.count];
+            for (ONGAuthenticator *authenticator in authenticators) {
+              [result addObject:@{OGCDVPluginKeyAuthenticatorId: authenticator.identifier}];
+            }
+            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
+          }
+      }];
+  }];
+}
+
 @end
