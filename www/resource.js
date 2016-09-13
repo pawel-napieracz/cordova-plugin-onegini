@@ -27,6 +27,10 @@ module.exports = (function (open) {
     };
   }
 
+  function disable() {
+    XMLHttpRequest.prototype.open = open;
+  }
+
   function interceptXhr(xhr, method, url) {
     xhr._requestHeaders = {};
     xhr._responseHeaders = {};
@@ -39,13 +43,12 @@ module.exports = (function (open) {
         url: xhr._url,
         headers: xhr._requestHeaders,
         body: body
-      }, function (result) {
-        defineProperty(xhr, 'readyState', 4);
-        defineProperty(xhr, 'responseText', result.body);
-        defineProperty(xhr, 'status', result.status);
-        defineProperty(xhr, 'statusText', result.statusText);
-        xhr._responseHeaders = result.headers;
+      }, function (successResult) {
+        populateXhrWithFetchResult(xhr, successResult);
         triggerEvent(xhr, 'load');
+      }, function (failureResult) {
+        populateXhrWithFetchResult(xhr, failureResult);
+        triggerEvent(xhr, 'error');
       });
     };
 
@@ -66,6 +69,14 @@ module.exports = (function (open) {
     xhr.setRequestHeader = function (header, value) {
       xhr._requestHeaders[header] = value;
     };
+  }
+
+  function populateXhrWithFetchResult(xhr, result) {
+    defineProperty(xhr, 'readyState', 4);
+    defineProperty(xhr, 'responseText', result.body);
+    defineProperty(xhr, 'status', result.status);
+    defineProperty(xhr, 'statusText', result.statusText);
+    xhr._responseHeaders = result.headers;
   }
 
   function triggerEvent(xhr, eventName) {
@@ -90,7 +101,8 @@ module.exports = (function (open) {
 
   return {
     fetch: fetch,
-    init: init
+    init: init,
+    disable: disable
   };
 
 })(XMLHttpRequest.prototype.open);

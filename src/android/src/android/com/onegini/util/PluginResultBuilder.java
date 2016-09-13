@@ -7,6 +7,7 @@ import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ER
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,55 +111,23 @@ public class PluginResultBuilder {
   }
 
   public PluginResultBuilder withRetrofitResponse(Response response) {
-    this.status = OK;
+    final int responseStatus = response.getStatus();
+    if (responseStatus == HttpURLConnection.HTTP_OK) {
+      this.status = OK;
+    } else {
+      this.status = ERROR;
+    }
 
     try {
-      payload.put("body", getBodyStringFromRetrofitResponse(response));
-      payload.put("status", response.getStatus());
+      payload.put("body", RetrofitResponseUtil.getBodyStringFromRetrofitResponse(response));
+      payload.put("status", responseStatus);
       payload.put("statusText", response.getReason());
-      payload.put("headers", getJsonHeadersFromRetrofitResponse(response));
+      payload.put("headers", RetrofitResponseUtil.getJsonHeadersFromRetrofitResponse(response));
     } catch (JSONException e) {
       handleException(e);
     }
 
     return this;
-  }
-
-  private JSONObject getJsonHeadersFromRetrofitResponse(Response response) throws JSONException {
-    final JSONObject result = new JSONObject();
-
-    for (Header header : response.getHeaders()) {
-      result.put(header.getName(), header.getValue());
-    }
-
-    return result;
-  }
-
-  private String getBodyStringFromRetrofitResponse(Response response) {
-    final BufferedReader reader;
-    final StringBuilder stringBuilder = new StringBuilder();
-
-    if (response.getBody() == null) {
-      return "";
-    }
-
-    try {
-      reader = new BufferedReader(new InputStreamReader(response.getBody().in()));
-      String line;
-
-      try {
-        while ((line = reader.readLine()) != null) {
-          stringBuilder.append(line);
-        }
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-
-    return stringBuilder.toString();
   }
 
   public PluginResultBuilder withOneginiConfigModel(final OneginiClientConfigModel configModel) {
