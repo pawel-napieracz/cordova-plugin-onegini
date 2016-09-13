@@ -1,6 +1,8 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
 #import "OGCDVClient.h"
+#import "OGCDVConstants.h"
+#import "OneginiConfigModel.h"
 
 @implementation OGCDVClient {}
 
@@ -20,7 +22,8 @@
           [self sendErrorResultForCallbackId:command.callbackId withMessage:@"The operating system that you use is no longer valid, please update your OS."];
         }
       } else {
-        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+        NSDictionary *result = @{OGCDVPluginKeyResourceBaseURL: OneginiConfigModel.configuration[ONGResourceBaseURL]};
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:command.callbackId];
       }
     }];
   }];

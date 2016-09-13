@@ -6,3 +6,4 @@ extern NSString *const OGCDVPluginKeyPinLength;
 extern NSString *const OGCDVPluginKeyProfileId;
 extern NSString *const OGCDVPluginKeyRemainingFailureCount;
 extern NSString *const OGCDVPluginKeyScopes;
+extern NSString *const OGCDVPluginKeyResourceBaseURL;
