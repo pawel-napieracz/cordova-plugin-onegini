@@ -223,8 +223,8 @@ exports.defineAutoTests = function () {
 
       it("should succeed", function (done) {
         onegini.user.logout(
-            function (result) {
-              expect(result).toBeDefined();
+            function () {
+              expect(true).toBe(true);
               done();
             },
             function (err) {

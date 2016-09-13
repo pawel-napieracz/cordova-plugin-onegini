@@ -1,4 +1,4 @@
-# User registration
+# Registration
 
 Registering a user is a two-step process: first the user needs to perform an OAuth, then he needs to configure a Pin. These steps are reflected by the plugin API. Just take these steps in this order:
 
@@ -28,7 +28,7 @@ onegini.user.register.start(
 );
 ```
 
-The success callback returns an object with these properties:
+The success callback contains an object with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
