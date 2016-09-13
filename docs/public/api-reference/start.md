@@ -10,7 +10,7 @@ This function takes an optional first argument with the following properties:
 
 | Property | Default | Description |
 | --- | --- | --- |
-| `secureFetch` | `true` | Allow the plugin to intercept XHR GET/POST/.. webview requests and route them through the plugin for added security
+| `secureXhr` | `true` | Allow the plugin to intercept XHR GET/POST/.. webview requests and route them through the plugin for added security
 
 
 ```js
@@ -18,7 +18,7 @@ This function takes an optional first argument with the following properties:
 document.addEventListener('deviceready', function () {
   onegini.start(
       {
-        secureFetch: false
+        secureXhr: false
       },
 
       // success callback
