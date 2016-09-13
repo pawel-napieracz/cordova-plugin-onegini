@@ -1,7 +1,7 @@
 {
   "gitbook": "2.x.x",
-  "title": "Onegini Token Server",
-  "description": "Onegini is a complete solution for managing your customer’s authorizations. It provides a comprehensive security token server that integrates with enterprise identity and access management systems based on the latest Web and API security standards such as OAuth 2.0. With Onegini, companies and users can interact by securely sharing data between different applications, and allow users to approve applications to act on their behalf without sharing passwords.",
+  "title": "Onegini Cordova plugin",
+  "description": "The official documentation of the Onegini Cordova plugin.",
   "plugins": [
     "expandable-chapters",
     "toc",

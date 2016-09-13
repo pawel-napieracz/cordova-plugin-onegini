@@ -22,7 +22,7 @@ onegini.user.authenticate.start(
 
   // success callback
   function () {
-    console.log("The provided Profile Id is allowed to authenticate ");
+    console.log("The provided Profile Id is allowed to authenticate");
   },
 
   // error callback
