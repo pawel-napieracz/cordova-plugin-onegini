@@ -4,6 +4,9 @@ import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +14,10 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
+import retrofit.client.Header;
+import retrofit.client.Response;
 
 public class PluginResultBuilder {
 
@@ -96,6 +102,68 @@ public class PluginResultBuilder {
   public PluginResultBuilder withProfileId(UserProfile userProfile) {
     try {
       payload.put("profileId", userProfile.getProfileId());
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withRetrofitResponse(Response response) {
+    this.status = OK;
+
+    try {
+      payload.put("body", getBodyStringFromRetrofitResponse(response));
+      payload.put("status", response.getStatus());
+      payload.put("statusText", response.getReason());
+      payload.put("headers", getJsonHeadersFromRetrofitResponse(response));
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  private JSONObject getJsonHeadersFromRetrofitResponse(Response response) throws JSONException {
+    final JSONObject result = new JSONObject();
+
+    for (Header header : response.getHeaders()) {
+      result.put(header.getName(), header.getValue());
+    }
+
+    return result;
+  }
+
+  private String getBodyStringFromRetrofitResponse(Response response) {
+    final BufferedReader reader;
+    final StringBuilder stringBuilder = new StringBuilder();
+
+    if (response.getBody() == null) {
+      return "";
+    }
+
+    try {
+      reader = new BufferedReader(new InputStreamReader(response.getBody().in()));
+      String line;
+
+      try {
+        while ((line = reader.readLine()) != null) {
+          stringBuilder.append(line);
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+
+    return stringBuilder.toString();
+  }
+
+  public PluginResultBuilder withOneginiConfigModel(final OneginiClientConfigModel configModel) {
+    try {
+      payload.put("resourceBaseURL", configModel.getResourceBaseUrl());
     } catch (JSONException e) {
       handleException(e);
     }

@@ -635,4 +635,18 @@ exports.defineAutoTests = function () {
     });
   });
 
+  /******** onegini.resource *********/
+
+  describe('onegini.resource', function () {
+    it('should exist', function () {
+      expect(onegini.resource).toBeDefined();
+    });
+
+    describe('fetch', function() {
+      it('should exist', function(){
+        expect(onegini.user.fetch).toBeDefined();
+      });
+    });
+  });
+
 };

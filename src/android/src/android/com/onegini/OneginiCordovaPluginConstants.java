@@ -6,6 +6,10 @@ public interface OneginiCordovaPluginConstants {
   String PARAM_SCOPES = "scopes";
   String PARAM_PROFILE_ID = "profileId";
   String PARAM_PIN = "pin";
+  String PARAM_URL = "url";
+  String PARAM_METHOD = "method";
+  String PARAM_HEADERS = "headers";
+  String PARAM_BODY = "body";
 
   // Errors
   String ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT = "Onegini: Argument Provided is not a valid profile object";
