@@ -319,6 +319,61 @@ exports.defineAutoTests = function () {
       });
     });
 
+  });
+
+  describe('onegini.resource', function () {
+    it('should exist', function () {
+      expect(onegini.resource).toBeDefined();
+    });
+
+    describe('fetch', function () {
+      it('should exist', function () {
+        expect(onegini.resource.fetch).toBeDefined();
+      });
+
+      it('should fetch a non-anonymous resource', function (done) {
+        onegini.resource.fetch(
+            {
+              url: 'https://demo-msp.onegini.com/resources/devices',
+              headers: {
+                'x-test-string': 'foobar',
+                'x-test-int': 1337
+              }
+            },
+            function (response) {
+              expect(response).toBeDefined();
+              expect(response.body).toBeDefined();
+              expect(response.headers).toBeDefined();
+              expect(response.status).toEqual(200);
+              expect(response.statusText).toEqual('OK');
+              done();
+            }, function (err) {
+              expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded')
+            });
+      });
+
+
+
+      it('should return error context when request fails', function (done) {
+        onegini.resource.fetch({
+              method: 'POST',
+              url: 'https://demo-msp.onegini.com/resources/devices'
+            }, function (response) {
+              expect(response).toBeUndefined();
+              fail('Success callback called, but method should have failed');
+            },
+            function (response) {
+              expect(response).toBeDefined();
+              expect(response.status).toEqual(405);
+              expect(response.statusText).toEqual('Not Allowed');
+              done();
+            })
+      });
+    });
+  });
+
+  describe('onegini.user', function () {
     describe('changePin', function () {
       describe('start', function () {
         it("should exist", function () {
@@ -634,19 +689,5 @@ exports.defineAutoTests = function () {
       });
     });
   });
-
-  /******** onegini.resource *********/
-
-  describe('onegini.resource', function () {
-    it('should exist', function () {
-      expect(onegini.resource).toBeDefined();
-    });
-
-    describe('fetch', function() {
-      it('should exist', function(){
-        expect(onegini.user.fetch).toBeDefined();
-      });
-    });
-  });
-
-};
+}
+;

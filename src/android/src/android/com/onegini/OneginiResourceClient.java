@@ -28,8 +28,18 @@ public class OneginiResourceClient extends CordovaPlugin {
   }
 
   private void fetch(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final Request request = ActionArgumentsUtil.getRequestFromArguments(args);
+    final Request request;
     final boolean isAnonymous = ActionArgumentsUtil.isFetchAnonymous(args);
+
+    try {
+      request = ActionArgumentsUtil.getRequestFromArguments(args);
+    } catch (IllegalArgumentException e) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withErrorDescription(e.getMessage())
+          .build());
+
+      return;
+    }
 
     cordova.getThreadPool().execute(new Runnable() {
       @Override

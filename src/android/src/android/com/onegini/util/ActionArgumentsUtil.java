@@ -44,7 +44,11 @@ public class ActionArgumentsUtil {
     return args.getJSONObject(0).getString(PARAM_PIN);
   }
 
-  public static Request getRequestFromArguments(final JSONArray args) throws JSONException {
+  public static boolean isFetchAnonymous(final JSONArray args) throws JSONException {
+    return args.getJSONObject(0).getBoolean("anonymous");
+  }
+
+  public static Request getRequestFromArguments(final JSONArray args) throws JSONException, IllegalArgumentException {
     final String method = getMethodFromArguments(args);
     final String url = getURLFromArguments(args);
     final List<Header> headers = getHeadersFromArguments(args);
@@ -74,10 +78,6 @@ public class ActionArgumentsUtil {
     }
 
     return headersList;
-  }
-
-  public static boolean isFetchAnonymous(final JSONArray args) throws JSONException {
-    return args.getJSONObject(0).getBoolean("anonymous");
   }
 
   @Nullable
