@@ -76,6 +76,10 @@ public class ActionArgumentsUtil {
     return headersList;
   }
 
+  public static boolean isFetchAnonymous(final JSONArray args) throws JSONException {
+    return args.getJSONObject(0).getBoolean("anonymous");
+  }
+
   @Nullable
   private static TypedString getBodyFromArguments(final JSONArray args) {
     final TypedString body;

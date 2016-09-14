@@ -182,9 +182,14 @@
                  target-dir="src/com/onegini/"/>
 
     <!-- util -->
-    <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java" target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/ActionArgumentsUtil.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java"
+                 target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java"
+                 target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/ActionArgumentsUtil.java"
+                 target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/RetrofitResponseUtil.java"
+                 target-dir="src/com/onegini/util"/>
 
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/handler/AuthenticationHandler.java"

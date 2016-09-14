@@ -29,12 +29,19 @@ public class OneginiResourceClient extends CordovaPlugin {
 
   private void fetch(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final Request request = ActionArgumentsUtil.getRequestFromArguments(args);
+    final boolean isAnonymous = ActionArgumentsUtil.isFetchAnonymous(args);
 
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        final OkClient okClient = getOneginiClient().getUserClient().getResourceRetrofitClient();
+        final OkClient okClient;
         final Response response;
+
+        if (isAnonymous) {
+          okClient = getOneginiClient().getDeviceClient().getRetrofitClient();
+        } else {
+          okClient = getOneginiClient().getUserClient().getResourceRetrofitClient();
+        }
 
         try {
           response = okClient.execute(request);
