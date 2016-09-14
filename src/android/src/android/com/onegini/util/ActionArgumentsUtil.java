@@ -1,5 +1,6 @@
 package com.onegini.util;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_METHOD_REQUIRES_REQUEST_BODY;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_BODY;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_HEADERS;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_METHOD;
@@ -16,9 +17,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.support.annotation.Nullable;
+import com.squareup.okhttp.internal.http.HttpMethod;
 import retrofit.client.Header;
 import retrofit.client.Request;
-import retrofit.http.Body;
 import retrofit.mime.TypedString;
 
 public class ActionArgumentsUtil {
@@ -52,9 +53,17 @@ public class ActionArgumentsUtil {
     final String method = getMethodFromArguments(args);
     final String url = getURLFromArguments(args);
     final List<Header> headers = getHeadersFromArguments(args);
-    final TypedString body = getBodyFromArguments(args);
+    TypedString body = getBodyFromArguments(args);
+
+    if (methodDoesNotPermitRequestBody(method)) {
+      body = null;
+    }
 
     return new Request(method, url, headers, body);
+  }
+
+  private static boolean methodDoesNotPermitRequestBody(final String method) {
+    return !HttpMethod.permitsRequestBody(method);
   }
 
   private static String getURLFromArguments(final JSONArray args) throws JSONException {
@@ -80,18 +89,13 @@ public class ActionArgumentsUtil {
     return headersList;
   }
 
-  @Nullable
   private static TypedString getBodyFromArguments(final JSONArray args) {
-    final TypedString body;
+    TypedString body;
 
     try {
       body = new TypedString(args.getJSONObject(0).getString(PARAM_BODY));
     } catch (JSONException e) {
-      return null;
-    }
-
-    if (new TypedString("").equals(body)) {
-      return null;
+      body = new TypedString("");
     }
 
     return body;

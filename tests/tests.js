@@ -19,7 +19,11 @@ exports.defineAutoTests = function () {
       });
 
       it("should run ok", function (done) {
-        onegini.start(function () {
+        onegini.start(
+            {
+              secureXhr: true
+            },
+            function () {
               expect(true).toBe(true);
               done();
             },
@@ -31,7 +35,7 @@ exports.defineAutoTests = function () {
   });
 
 
-  /******** onegini.user *********/
+  /******** onegini.user (1/2) *********/
 
   describe('onegini.user', function () {
     it("should exist", function () {
@@ -321,6 +325,8 @@ exports.defineAutoTests = function () {
 
   });
 
+  /******** onegini.resource (1/2) *********/
+
   describe('onegini.resource', function () {
     it('should exist', function () {
       expect(onegini.resource).toBeDefined();
@@ -347,10 +353,11 @@ exports.defineAutoTests = function () {
               expect(JSON.parse(body).devices).toBeDefined();
               expect(response.headers).toBeDefined();
               expect(response.status).toEqual(200);
+              expect(response.statusText).toBeDefined();
               done();
             }, function (err) {
               expect(err).toBeUndefined();
-              fail('Error callback called, but method should have succeeded')
+              fail('Error callback called, but method should have succeeded');
             });
       });
 
@@ -374,8 +381,22 @@ exports.defineAutoTests = function () {
               done();
             })
       });
+
+      it('should intercept XMLHttpRequests', function (done) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://demo-msp.onegini.com/resources/devices');
+        xhr.onload = function () {
+          expect(this.readyState).toEqual(4);
+          expect(this.status).toBe(200);
+          expect(JSON.parse(this.responseText).devices).toBeDefined();
+          done();
+        };
+        xhr.send();
+      });
     });
   });
+
+  /******** onegini.user (2/2) *********/
 
   describe('onegini.user', function () {
     describe('changePin', function () {
@@ -681,7 +702,7 @@ exports.defineAutoTests = function () {
       it('should succeed with valid scopes', function (done) {
         onegini.device.authenticate(
             {
-              scopes: ["read"]
+              scopes: ["read", "application-details"]
             },
             function () {
               expect(true).toBe(true);
@@ -693,5 +714,26 @@ exports.defineAutoTests = function () {
       });
     });
   });
-}
-;
+
+  /******** onegini.resource (2/2) *********/
+
+  describe('onegini.resource', function () {
+    it('should fetch an anonymous resource', function (done) {
+      onegini.resource.fetch({
+            url: 'https://demo-msp.onegini.com/resources/application-details',
+            anonymous: true
+          },
+          function (response) {
+            expect(response).toBeDefined();
+            expect(response.body).toBeDefined();
+            expect(response.headers).toBeDefined();
+            expect(response.status).toEqual(200);
+            expect(response.statusText).toBeDefined();
+          },
+          function (errResponse) {
+            expect(errResponse).toBeUndefined();
+            fail('Error response called, but method should have succeeded');
+          })
+    })
+  });
+};

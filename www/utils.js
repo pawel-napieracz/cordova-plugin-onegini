@@ -29,7 +29,7 @@ module.exports = (function () {
 
   function shiftActionArgsForOptional(args) {
     if (typeof(args[0]) === 'function') {
-      for(var i = getObjectSize(args); i > 0; i--) {
+      for (var i = getObjectSize(args); i > 0; i--) {
         args[i] = args[i - 1];
       }
 
@@ -51,10 +51,9 @@ module.exports = (function () {
       options = {};
       options[firstArg] = value;
     }
-    else {
-      for (key in defaults) {
-        options[key] = options[key] || defaults[key];
-      }
+
+    for (key in defaults) {
+      options[key] = options[key] || defaults[key];
     }
 
     return options;
