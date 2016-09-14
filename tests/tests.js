@@ -354,7 +354,11 @@ exports.defineAutoTests = function () {
             });
       });
 
-
+      it("should require a url", function () {
+        expect(function () {
+          onegini.resource.fetch();
+        }).toThrow(new TypeError("Onegini: missing 'url' argument for fetch"));
+      });
 
       it('should return error context when request fails', function (done) {
         onegini.resource.fetch({

@@ -2,6 +2,10 @@ module.exports = (function (open) {
   var utils = require('./utils');
 
   function fetch(options, successCb, failureCb) {
+    if (!options || !options.url) {
+      throw new TypeError("Onegini: missing 'url' argument for fetch");
+    }
+
     options = utils.getOptionsWithDefaults(options, {
       method: 'GET',
       headers: {},
