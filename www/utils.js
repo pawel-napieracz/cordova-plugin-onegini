@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (function () {
   var exec = require('cordova/exec');
 
   function isArray(obj) {
@@ -27,6 +27,39 @@ module.exports = (function() {
     return exec(successCb, failureCb, serviceName, methodName, args);
   }
 
+  function shiftActionArgsForOptional(args) {
+    if (typeof(args[0]) === 'function') {
+      for(var i = getObjectSize(args); i > 0; i--) {
+        args[i] = args[i - 1];
+      }
+
+      args[0] = {};
+    }
+
+    return args;
+  }
+
+  function getObjectSize(object) {
+    return Object.keys(object).length;
+  }
+
+  function getOptionsWithDefaults(options, defaults, firstArg) {
+    options = options || {};
+
+    if (typeof(options) !== 'object' && firstArg) {
+      var value = options;
+      options = {};
+      options[firstArg] = value;
+    }
+    else {
+      for (key in defaults) {
+        options[key] = options[key] || defaults[key];
+      }
+    }
+
+    return options;
+  }
+
   function sanitizeCordovaArgs(args) {
     if (!args) {
       args = [];
@@ -41,6 +74,8 @@ module.exports = (function() {
   return {
     isArray: isArray,
     promiseOrCallbackExec: promiseOrCallbackExec,
-    callbackExec: callbackExec
+    callbackExec: callbackExec,
+    getOptionsWithDefaults: getOptionsWithDefaults,
+    shiftActionArgsForOptional: shiftActionArgsForOptional
   };
 })();

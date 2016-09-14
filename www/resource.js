@@ -2,17 +2,12 @@ module.exports = (function (open) {
   var utils = require('./utils');
 
   function fetch(options, successCb, failureCb) {
-    options = options || {};
-
-    if (typeof(options) === 'string') {
-      options = {
-        url: options
-      }
-    }
-
-    options.method = options.method || 'GET';
-    options.headers = options.headers || {};
-    options.body = options.body || '';
+    options = utils.getOptionsWithDefaults(options, {
+      method: 'GET',
+      headers: {},
+      body: '',
+      anonymous: false
+    }, 'url');
 
     return utils.promiseOrCallbackExec('OneginiResourceClient', 'fetch', options, successCb, failureCb);
   }
@@ -46,8 +41,8 @@ module.exports = (function (open) {
       }, function (successResult) {
         populateXhrWithFetchResult(xhr, successResult);
         triggerEvent(xhr, 'load');
-      }, function (failureResult) {
-        populateXhrWithFetchResult(xhr, failureResult);
+      }, function (errorResult) {
+        populateXhrWithFetchResult(xhr, errorResult);
         triggerEvent(xhr, 'error');
       });
     };

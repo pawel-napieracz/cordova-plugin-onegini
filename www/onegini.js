@@ -7,13 +7,10 @@ module.exports = (function () {
   function start(options, successCb, failureCb) {
     var promise, callbackResult;
 
-    if (typeof (options) === 'function') {
-      failureCb = successCb;
-      successCb = options;
-      options = undefined;
-    }
-
-    options = options || {};
+    arguments = utils.shiftActionArgsForOptional(arguments);
+    options = utils.getOptionsWithDefaults(options, {
+      secureXhr: false
+    });
 
     if (!successCb) {
       promise = new Promise(function (resolve, reject) {
