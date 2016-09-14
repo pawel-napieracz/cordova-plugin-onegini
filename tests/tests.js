@@ -342,10 +342,11 @@ exports.defineAutoTests = function () {
             },
             function (response) {
               expect(response).toBeDefined();
-              expect(response.body).toBeDefined();
+              var body = response.body;
+              expect(body).toBeDefined();
+              expect(JSON.parse(body).devices).toBeDefined();
               expect(response.headers).toBeDefined();
               expect(response.status).toEqual(200);
-              expect(response.statusText).toEqual('OK');
               done();
             }, function (err) {
               expect(err).toBeUndefined();
@@ -366,7 +367,6 @@ exports.defineAutoTests = function () {
             function (response) {
               expect(response).toBeDefined();
               expect(response.status).toEqual(405);
-              expect(response.statusText).toEqual('Not Allowed');
               done();
             })
       });
