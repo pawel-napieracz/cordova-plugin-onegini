@@ -10,9 +10,9 @@
 {
   [self.commandDelegate runInBackground:^{
 
-    [[ONGClientBuilder new] build];
+    ONGClient *client = [[ONGClientBuilder new] build];
 
-    [[ONGClient sharedInstance] start:^(BOOL result, NSError *error) {
+    [client start:^(BOOL result, NSError *error) {
       if (error != nil) {
         if (ONGGenericErrorOutdatedApplication == error.code) {
           [self sendErrorResultForCallbackId:command.callbackId withMessage:@"The application version is no longer valid, please visit the app store to update your application."];
