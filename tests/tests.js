@@ -729,6 +729,7 @@ exports.defineAutoTests = function () {
             expect(response.headers).toBeDefined();
             expect(response.status).toEqual(200);
             expect(response.statusText).toBeDefined();
+            done();
           },
           function (errResponse) {
             expect(errResponse).toBeUndefined();
