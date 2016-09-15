@@ -69,47 +69,37 @@ module.exports = (function (XMLHttpRequest) {
     this.xhr.open.apply(this.xhr, arguments);
   };
 
-  OneginiXMLHttpRequest.prototype.addEventListener = function (type, listener, options) {
+  OneginiXMLHttpRequest.prototype.addEventListener = function (type, listener) {
     this._eventListeners[type] = this._eventListeners[type] || [];
     this._eventListeners[type].push(listener);
-    return this.xhr.addEventListener.apply(this.xhr, arguments);
   };
 
   OneginiXMLHttpRequest.prototype.removeEventListener = function (type, listener) {
-    var stack = this._eventListeners[type];
+    var listeners = this._eventListeners[type];
 
-    if (stack) {
-      for (var i = 0, l = stack.length; i < l; i++) {
-        if (stack[i] === listener) {
-          stack.splice(i, 1);
-          return this.removeEventListener(type, listener);
-        }
+    for (var i = 0, l = listeners.length; i < l; i++) {
+      if (listeners[i] === listener) {
+        listeners.splice(i, 1);
+        return this.removeEventListener(type, listener);
       }
     }
-
-    return this.xhr.removeEventListener.apply(this.xhr, arguments);
   };
 
   OneginiXMLHttpRequest.prototype.dispatchEvent = function (event) {
-    var stack = this._eventListeners[event.type];
-    var dispatchNative = true;
+    var listeners = this._eventListeners[event.type];
 
     if (this['on' + event.type]) {
-      dispatchNative = false;
       this['on' + event.type].call(this);
     }
 
-    if (stack && stack.length !== 0) {
-      dispatchNative = false;
+    if (listeners && listeners.length !== 0) {
       event.target = this;
-      for (var i = 0, l = stack.length; i < l; i++) {
-        stack[i].call(this, event);
+      for (var i = 0, l = listeners.length; i < l; i++) {
+        listeners[i].call(this, event);
       }
     }
 
-    if (dispatchNative) {
-      return this.xhr.dispatchEvent.apply(this.xhr, arguments);
-    } else if (this.onreadystatechange) {
+    if (this.onreadystatechange) {
       this.onreadystatechange();
     }
   };
