@@ -382,7 +382,7 @@ exports.defineAutoTests = function () {
             })
       });
 
-      it('should intercept XMLHttpRequests', function (done) {
+      it('should intercept an XMLHttpRequest', function (done) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', 'https://demo-msp.onegini.com/resources/devices');
         xhr.onload = function () {
