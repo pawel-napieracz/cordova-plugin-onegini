@@ -1,5 +1,5 @@
-module.exports = (function (XMLHttpRequest) {
-  var utils = require('./utils');
+resource = (function (XMLHttpRequest) {
+  // var utils = require('./utils');
   var ResourceBaseURL;
   var nativeXhrProperties = [
     'onabort',
@@ -72,6 +72,8 @@ module.exports = (function (XMLHttpRequest) {
   OneginiXMLHttpRequest.prototype.addEventListener = function (type, listener) {
     this._eventListeners[type] = this._eventListeners[type] || [];
     this._eventListeners[type].push(listener);
+
+    this.xhr.addEventListener.apply(this.xhr, arguments);
   };
 
   OneginiXMLHttpRequest.prototype.removeEventListener = function (type, listener) {
@@ -83,6 +85,8 @@ module.exports = (function (XMLHttpRequest) {
         return this.removeEventListener(type, listener);
       }
     }
+
+    this.xhr.removeEventListener.apply(this.xhr, arguments);
   };
 
   OneginiXMLHttpRequest.prototype.dispatchEvent = function (event) {
