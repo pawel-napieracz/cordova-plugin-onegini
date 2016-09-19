@@ -39,6 +39,9 @@
       <feature name="OneginiAuthenticatorsClient">
         <param name="ios-package" value="OGCDVAuthenticatorsClient" />
       </feature>
+      <feature name="OneginiAuthenticatorRegistrationClient">
+        <param name="ios-package" value="OGCDVAuthenticatorRegistrationClient" />
+      </feature>
       <feature name="OneginiDeviceAuthenticationClient">
         <param name="ios-package" value="OGCDVDeviceAuthenticationClient" />
       </feature>
@@ -69,6 +72,8 @@
     <source-file src="src/ios/classes/OGCDVChangePinClient.m"/>
     <header-file src="src/ios/classes/OGCDVAuthenticatorsClient.h"/>
     <source-file src="src/ios/classes/OGCDVAuthenticatorsClient.m"/>
+    <header-file src="src/ios/classes/OGCDVAuthenticatorRegistrationClient.h"/>
+    <source-file src="src/ios/classes/OGCDVAuthenticatorRegistrationClient.m"/>
     <header-file src="src/ios/classes/OGCDVDeviceAuthenticationClient.h"/>
     <source-file src="src/ios/classes/OGCDVDeviceAuthenticationClient.m"/>
     <header-file src="src/ios/classes/OGCDVResourceClient.h"/>
