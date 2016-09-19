@@ -33,7 +33,7 @@ module.exports = (function () {
         args[i] = args[i - 1];
       }
 
-      args[0] = {};
+      args[0] = undefined;
     }
 
     return args;

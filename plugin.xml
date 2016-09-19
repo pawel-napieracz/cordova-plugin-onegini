@@ -154,6 +154,10 @@
         <param name="android-package" value="com.onegini.OneginiResourceClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiAuthenticatorsClient">
+        <param name="android-package" value="com.onegini.OneginiAuthenticatorsClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -178,6 +182,8 @@
     <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
 
     <!-- Onegini Plugin -->
+    <source-file src="src/android/src/android/com/onegini/OneginiAuthenticatorsClient.java"
+                 target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiClient.java"
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiUserClient.java"
@@ -200,15 +206,12 @@
                  target-dir="src/com/onegini/"/>
 
     <!-- util -->
-    <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java"
-                 target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java"
-                 target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/ActionArgumentsUtil.java"
-                 target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/ActionArgumentsUtil.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/AuthenticatorUtil.java" target-dir="src/com/onegini/util"/>
     <source-file src="src/android/src/android/com/onegini/util/RetrofitResponseUtil.java"
                  target-dir="src/com/onegini/util"/>
-
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/handler/AuthenticationHandler.java"
                  target-dir="src/com/onegini/handler"/>
