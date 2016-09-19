@@ -35,6 +35,7 @@ module.exports = (function () {
 
   var register = {
     start: function (options, successCb, failureCb) {
+      arguments = utils.shiftActionArgsForOptional(arguments);
       return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'start', options, successCb, failureCb);
     },
 
