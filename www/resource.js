@@ -1,5 +1,5 @@
-resource = (function (XMLHttpRequest) {
-  // var utils = require('./utils');
+module.exports = (function (XMLHttpRequest) {
+  var utils = require('./utils');
   var ResourceBaseURL;
   var nativeXhrProperties = [
     'onabort',
