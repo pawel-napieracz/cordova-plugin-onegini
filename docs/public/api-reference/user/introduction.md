@@ -12,3 +12,7 @@ This section describes the API's that are available on the global `onegini.user`
   * [Get User Profiles: `onegini.user.getUserProfiles`](get-user-profiles.md)
   * [Get Authenticated User Profile: `onegini.user.getAuthenticatedUserProfile`](get-authenticated-user-profile.md)
   * [Logout: `onegini.user.logout`](logout.md)
+
+TODO:
+  * Authenticators-related functions
+  * Mobile auth-related functions
