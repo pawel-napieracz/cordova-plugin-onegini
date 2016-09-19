@@ -35,6 +35,7 @@ module.exports = (function () {
 
   var register = {
     start: function (options, successCb, failureCb) {
+      arguments = utils.shiftActionArgsForOptional(arguments);
       return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'start', options, successCb, failureCb);
     },
 
@@ -59,6 +60,16 @@ module.exports = (function () {
         throw new TypeError("Onegini: missing 'pin' argument for changePin.createPin");
       }
       utils.callbackExec('OneginiChangePinClient', 'createPin', options, successCb, failureCb);
+    }
+  };
+
+  var authenticators = {
+    getRegistered: function (successCb, failureCb) {
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getRegistered', [], successCb, failureCb);
+    },
+
+    getNotRegistered: function (successCb, failureCb) {
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getNotRegistered', [], successCb, failureCb);
     }
   };
 
@@ -95,16 +106,27 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserClient', 'validatePinWithPolicy', options, successCb, failureCb);
   }
 
+  function getRegisteredAuthenticators(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiUserClient', 'getRegisteredAuthenticators', [], successCb, failureCb);
+  }
+
+  function getNotRegisteredAuthenticators(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiUserClient', 'getNotRegisteredAuthenticators', [], successCb, failureCb);
+  }
+
   return {
     authenticate: authenticate,
     reauthenticate: reauthenticate,
     register: register,
     changePin: changePin,
+    authenticators: authenticators,
     deregister: deregister,
     isUserRegistered: isUserRegistered,
     getUserProfiles: getUserProfiles,
     getAuthenticatedUserProfile: getAuthenticatedUserProfile,
     logout: logout,
-    validatePinWithPolicy: validatePinWithPolicy
+    validatePinWithPolicy: validatePinWithPolicy,
+    getRegisteredAuthenticators: getRegisteredAuthenticators,
+    getNotRegisteredAuthenticators: getNotRegisteredAuthenticators
   };
 })();

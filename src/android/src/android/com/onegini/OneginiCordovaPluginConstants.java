@@ -6,6 +6,7 @@ public interface OneginiCordovaPluginConstants {
   String PARAM_SCOPES = "scopes";
   String PARAM_PROFILE_ID = "profileId";
   String PARAM_PIN = "pin";
+  String PARAM_ID = "id";
   String PARAM_URL = "url";
   String PARAM_METHOD = "method";
   String PARAM_HEADERS = "headers";

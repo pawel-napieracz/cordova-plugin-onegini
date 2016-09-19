@@ -19,7 +19,7 @@
 
 - (void)start:(CDVInvokedUrlCommand *)command
 {
-  NSDictionary *options = [command.arguments objectAtIndex:0];
+  NSDictionary *options = command.arguments[0];
   NSString *profileId = options[OGCDVPluginKeyProfileId];
 
   ONGUserProfile *authenticatedUserProfile = [[ONGUserClient sharedInstance] authenticatedUserProfile];
@@ -46,14 +46,14 @@
   }
 
   self.checkPinCallbackId = command.callbackId;
-  NSDictionary *options = [command.arguments objectAtIndex:0];
+  NSDictionary *options = command.arguments[0];
   NSString *pin = options[OGCDVPluginKeyPin];
   [self.pinChallenge.sender respondWithPin:pin challenge:self.pinChallenge];
 }
 
 - (void)reauthenticate:(CDVInvokedUrlCommand *)command
 {
-  NSDictionary *options = [command.arguments objectAtIndex:0];
+  NSDictionary *options = command.arguments[0];
   NSString *profileId = options[OGCDVPluginKeyProfileId];
 
   self.authenticationCallbackId = command.callbackId;

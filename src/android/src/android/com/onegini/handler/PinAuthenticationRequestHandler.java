@@ -8,6 +8,7 @@ import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.sdk.android.handlers.request.OneginiPinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
+import com.onegini.mobile.sdk.android.model.entity.AuthenticationAttemptCounter;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
@@ -48,7 +49,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   }
 
   @Override
-  public void startAuthentication(final UserProfile userProfile, final OneginiPinCallback oneginiPinCallback) {
+  public void startAuthentication(final UserProfile userProfile, final OneginiPinCallback oneginiPinCallback, final AuthenticationAttemptCounter authenticationAttemptCounter) {
     this.pinCallback = oneginiPinCallback;
 
     final PluginResult pluginResult = new PluginResultBuilder()
@@ -59,14 +60,12 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   }
 
   @Override
-  public void onNextAuthenticationAttempt(final int failedAttempts, final int maxAttempts) {
-    final int remainingAttempts = maxAttempts - failedAttempts;
-
+  public void onNextAuthenticationAttempt(final AuthenticationAttemptCounter authenticationAttemptCounter) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withError()
         .withErrorDescription(ERROR_INCORRECT_PIN)
-        .withMaxFailureCount(maxAttempts)
-        .withRemainingFailureCount(remainingAttempts)
+        .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
+        .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
         .shouldKeepCallback()
         .build();
 

@@ -154,7 +154,6 @@ exports.defineAutoTests = function () {
       describe('start', function () {
         it("should return pinlength of '5'", function (done) {
           onegini.user.register.start(
-              undefined,
               function (result) {
                 expect(result).toBeDefined();
                 expect(result.pinLength).toBe(5);
@@ -234,6 +233,44 @@ exports.defineAutoTests = function () {
             function (err) {
               expect(err).toBeUndefined();
             });
+      });
+    });
+
+    describe("authenticators (1/2)", function () {
+      it("should have a getRegistered method", function () {
+        expect(onegini.user.authenticators.getRegistered).toBeDefined();
+      });
+
+      it("should have a getNotRegistered method", function () {
+        expect(onegini.user.authenticators.getNotRegistered).toBeDefined();
+      });
+
+      describe("getRegistered", function () {
+        it("should return an error when not logged in", function (done) {
+          onegini.user.authenticators.getRegistered(
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No user authenticated.");
+                done();
+              });
+        });
+      });
+
+      describe('getNotRegistered', function () {
+        it("should return an error when not logged in", function (done) {
+          onegini.user.authenticators.getNotRegistered(
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No user authenticated.");
+                done();
+              });
+        });
       });
     });
 
@@ -318,6 +355,46 @@ exports.defineAutoTests = function () {
                 expect(err).toBeDefined();
                 expect(err.description).toBe("Onegini: User already authenticated.");
                 done();
+              });
+        });
+      });
+    });
+
+    describe("authenticators (2/2)", function () {
+      describe('getRegistered', function () {
+        it("should contain a PIN authenticator", function (done) {
+          onegini.user.authenticators.getRegistered(
+              function (result) {
+                expect(result).toBeDefined();
+                var nrOfAuthenticators = result.length;
+                expect(nrOfAuthenticators).toBeGreaterThan(0);
+
+                for (var r in result) {
+                  var authenticator = result[r];
+                  expect(authenticator.id).toBeDefined();
+                  if (authenticator.id === "com.onegini.authenticator.PIN") {
+                    done();
+                    return;
+                  }
+                }
+                fail("Expected PIN Authenticator not found");
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+              });
+        });
+      });
+
+      describe('getNotRegistered', function () {
+        it("should succeed", function (done) {
+          onegini.user.authenticators.getNotRegistered(
+              function (result) {
+                expect(result).toBeDefined();
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
               });
         });
       });
