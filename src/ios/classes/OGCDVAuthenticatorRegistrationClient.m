@@ -6,7 +6,7 @@
 @implementation OGCDVAuthenticatorRegistrationClient {
 }
 
-- (void)start:(CDVInvokedUrlCommand *)command
+- (void)registerNew:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
       ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
@@ -22,7 +22,7 @@
       for (ONGAuthenticator *authenticator in nonRegisteredAuthenticators) {
         if ([authenticator.identifier isEqualToString:authenticatorId]) {
           [[ONGUserClient sharedInstance] registerAuthenticator:authenticator delegate:self];
-          break;
+          return;
         }
       }
       [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No authenticator found."];
