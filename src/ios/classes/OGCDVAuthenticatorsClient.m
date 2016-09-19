@@ -1,8 +1,7 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
 #import "OGCDVAuthenticatorsClient.h"
-
-NSString *const OGCDVPluginKeyAuthenticatorId = @"id";
+#import "OGCDVConstants.h"
 
 @implementation OGCDVAuthenticatorsClient {
 }
@@ -10,15 +9,16 @@ NSString *const OGCDVPluginKeyAuthenticatorId = @"id";
 - (void)getRegistered:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
-      if ([[ONGUserClient sharedInstance] authenticatedUserProfile] == nil) {
+      ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+      if (user == nil) {
         [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No user authenticated."];
         return;
       }
 
-      NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticators];
+      NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
       NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:registeredAuthenticators.count];
       for (ONGAuthenticator *authenticator in registeredAuthenticators) {
-        [result addObject:@{OGCDVPluginKeyAuthenticatorId: authenticator.identifier}];
+        [result addObject:@{OGCDVPluginKeyId: authenticator.identifier}];
       }
       [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
   }];
@@ -27,22 +27,18 @@ NSString *const OGCDVPluginKeyAuthenticatorId = @"id";
 - (void)getNotRegistered:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
-      if ([[ONGUserClient sharedInstance] authenticatedUserProfile] == nil) {
+      ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+      if (user == nil) {
         [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No user authenticated."];
         return;
       }
 
-      [[ONGUserClient sharedInstance] fetchNonRegisteredAuthenticators:^(NSSet<ONGAuthenticator *> *authenticators, NSError *error) {
-          if (error != nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withError:error];
-          } else {
-            NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:authenticators.count];
-            for (ONGAuthenticator *authenticator in authenticators) {
-              [result addObject:@{OGCDVPluginKeyAuthenticatorId: authenticator.identifier}];
-            }
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
-          }
-      }];
+      NSSet<ONGAuthenticator *> *nonRegisteredAuthenticators = [[ONGUserClient sharedInstance] nonRegisteredAuthenticatorsForUser:user];
+      NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:nonRegisteredAuthenticators.count];
+      for (ONGAuthenticator *authenticator in nonRegisteredAuthenticators) {
+        [result addObject:@{OGCDVPluginKeyId: authenticator.identifier}];
+      }
+      [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
   }];
 }
 

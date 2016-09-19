@@ -9,3 +9,5 @@ NSString *const OGCDVPluginKeyProfileId = @"profileId";
 NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureCount";
 NSString *const OGCDVPluginKeyScopes = @"scopes";
 NSString *const OGCDVPluginKeyResourceBaseURL = @"resourceBaseURL";
+NSString *const OGCDVPluginKeyId = @"id";
+NSString *const OGCDVPluginKeyAuthenticatorId = @"authenticatorId";
