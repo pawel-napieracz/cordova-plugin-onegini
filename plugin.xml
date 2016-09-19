@@ -14,6 +14,7 @@
   <js-module src="www/device.js" name="device" />
   <js-module src="www/user.js" name="user" />
   <js-module src="www/utils.js" name="utils" />
+  <js-module src="www/resource.js" name="resource" />
 
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
@@ -37,6 +38,9 @@
       </feature>
       <feature name="OneginiDeviceAuthenticationClient">
         <param name="ios-package" value="OGCDVDeviceAuthenticationClient" />
+      </feature>
+      <feature name="OneginiResourceClient">
+        <param name="ios-package" value="OGCDVResourceClient" />
       </feature>
     </config-file>
 
@@ -62,6 +66,8 @@
     <source-file src="src/ios/classes/OGCDVChangePinClient.m"/>
     <header-file src="src/ios/classes/OGCDVDeviceAuthenticationClient.h"/>
     <source-file src="src/ios/classes/OGCDVDeviceAuthenticationClient.m"/>
+    <header-file src="src/ios/classes/OGCDVResourceClient.h"/>
+    <source-file src="src/ios/classes/OGCDVResourceClient.m"/>
     <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
     <source-file src="src/ios/classes/OGCDVWebBrowserViewController.m"/>
     <resource-file src="src/ios/classes/OGCDVWebBrowserViewController.xib"/>
@@ -126,6 +132,10 @@
         <param name="android-package" value="com.onegini.OneginiChangePinClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiResourceClient">
+        <param name="android-package" value="com.onegini.OneginiResourceClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -168,11 +178,18 @@
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiDeviceAuthenticationClient.java"
                  target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiResourceClient.java"
+                 target-dir="src/com/onegini/"/>
 
     <!-- util -->
-    <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java" target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/ActionArgumentsUtil.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java"
+                 target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java"
+                 target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/ActionArgumentsUtil.java"
+                 target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/RetrofitResponseUtil.java"
+                 target-dir="src/com/onegini/util"/>
 
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/handler/AuthenticationHandler.java"

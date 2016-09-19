@@ -4,6 +4,10 @@ import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +15,10 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
+import retrofit.client.Header;
+import retrofit.client.Response;
 
 public class PluginResultBuilder {
 
@@ -96,6 +103,36 @@ public class PluginResultBuilder {
   public PluginResultBuilder withProfileId(UserProfile userProfile) {
     try {
       payload.put("profileId", userProfile.getProfileId());
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withRetrofitResponse(Response response) {
+    final int responseStatus = response.getStatus();
+    if (responseStatus == HttpURLConnection.HTTP_OK) {
+      this.status = OK;
+    } else {
+      this.status = ERROR;
+    }
+
+    try {
+      payload.put("body", RetrofitResponseUtil.getBodyStringFromRetrofitResponse(response));
+      payload.put("status", responseStatus);
+      payload.put("statusText", response.getReason());
+      payload.put("headers", RetrofitResponseUtil.getJsonHeadersFromRetrofitResponse(response));
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withOneginiConfigModel(final OneginiClientConfigModel configModel) {
+    try {
+      payload.put("resourceBaseURL", configModel.getResourceBaseUrl());
     } catch (JSONException e) {
       handleException(e);
     }
