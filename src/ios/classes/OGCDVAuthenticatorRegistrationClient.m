@@ -6,7 +6,7 @@
 @implementation OGCDVAuthenticatorRegistrationClient {
 }
 
-- (void)start:(CDVInvokedUrlCommand *)command
+- (void)registerNew:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
       ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
