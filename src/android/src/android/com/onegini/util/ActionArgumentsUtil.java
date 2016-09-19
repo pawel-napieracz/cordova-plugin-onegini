@@ -1,6 +1,6 @@
 package com.onegini.util;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_METHOD_REQUIRES_REQUEST_BODY;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_BODY;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_HEADERS;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_METHOD;
@@ -11,12 +11,14 @@ import static com.onegini.OneginiCordovaPluginConstants.PARAM_URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.support.annotation.Nullable;
+import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
 import com.squareup.okhttp.internal.http.HttpMethod;
 import retrofit.client.Header;
 import retrofit.client.Request;
@@ -47,6 +49,21 @@ public class ActionArgumentsUtil {
 
   public static boolean isFetchAnonymous(final JSONArray args) throws JSONException {
     return args.getJSONObject(0).getBoolean("anonymous");
+  }
+
+  @Nullable
+  public static OneginiAuthenticator getAuthenticatorFromArguments(final JSONArray args,
+                                                                   final Set<OneginiAuthenticator> availableAuthenticators) throws JSONException {
+    final String authenticatorId = args.getJSONObject(0).getString(PARAM_AUTHENTICATOR_ID);
+
+    for (OneginiAuthenticator authenticator : availableAuthenticators) {
+      final String id = "com.onegini.authenticator." + authenticator.getName();
+      if (id.equals(authenticatorId)) {
+        return authenticator;
+      }
+    }
+
+    return null;
   }
 
   public static Request getRequestFromArguments(final JSONArray args) throws JSONException, IllegalArgumentException {

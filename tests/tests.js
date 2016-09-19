@@ -434,7 +434,7 @@ exports.defineAutoTests = function () {
           it("should succeed", function (done) {
             onegini.user.authenticators.registerNew(
                 {
-                  authenticatorId: 2 // TODO
+                  authenticatorId: "com.onegini.authenticator.Fingerprint"
                 },
                 function (result) {
                   expect(result).toBeDefined();
@@ -442,6 +442,7 @@ exports.defineAutoTests = function () {
                 },
                 function (err) {
                   expect(err).toBeUndefined();
+                  fail("Error callback called, but method should have succeeded");
                 });
           });
         });
