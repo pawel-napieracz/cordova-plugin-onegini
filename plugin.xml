@@ -78,6 +78,8 @@
     <source-file src="src/ios/classes/OGCDVDeviceAuthenticationClient.m"/>
     <header-file src="src/ios/classes/OGCDVResourceClient.h"/>
     <source-file src="src/ios/classes/OGCDVResourceClient.m"/>
+    <header-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.h"/>
+    <source-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.m"/>
     <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
     <source-file src="src/ios/classes/OGCDVWebBrowserViewController.m"/>
     <resource-file src="src/ios/classes/OGCDVWebBrowserViewController.xib"/>
