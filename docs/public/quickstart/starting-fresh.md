@@ -1,4 +1,4 @@
-# Starting fresh?
+# Starting fresh
 
 Let's grab the example app from GitHub..
 

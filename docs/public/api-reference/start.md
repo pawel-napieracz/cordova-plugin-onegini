@@ -4,13 +4,11 @@ The first thing you'll want to do when your app starts is initializing the Onegi
 
 ## `onegini.start`
 
-<!-- TODO verify error return object param names & options.secureFetch as well -->
-
 This function takes an optional first argument with the following properties:
 
 | Property | Default | Description |
 | --- | --- | --- |
-| `secureXhr` | `true` | Allow the plugin to intercept XHR GET/POST/.. webview requests and route them through the plugin for added security
+| `secureXhr` | `false` | Allow the plugin to intercept XHR GET/POST/.. webview requests and route them through the plugin for added security
 
 
 ```js
@@ -18,7 +16,7 @@ This function takes an optional first argument with the following properties:
 document.addEventListener('deviceready', function () {
   onegini.start(
       {
-        secureXhr: false
+        secureXhr: true
       },
 
       // success callback

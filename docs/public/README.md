@@ -14,4 +14,5 @@ to allow the use of Onegini's native SDK's to create Cordova / PhoneGap applicat
 
 The plugin documentation has been split into several chapters:
 - [Installation](installation/introduction.md) section guides you through the steps to install the plugin and provides you with the prerequisites.
-- [API reference](reference/introduction.md) contains the API description and code snippets on how to use the plugin.
+- [Quick start](quickstart/introduction.md) contains the API description and code snippets on how to use the plugin.
+- [API reference](api-reference/introduction.md) contains the API description and code snippets on how to use the plugin.

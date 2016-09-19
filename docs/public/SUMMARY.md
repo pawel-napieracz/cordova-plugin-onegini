@@ -4,7 +4,7 @@
     * [Requirements](installation/requirements.md)
     * [Instructions](installation/instructions.md)
 * [Quick start](quickstart/introduction.md)
-    * [Adding to an existing app](quickstart/already-have-an-app.md)
+    * [Adding to an existing app](quickstart/adding-to-an-existing-app.md)
     * [Starting fresh](quickstart/starting-fresh.md)
 * [API Reference](api-reference/introduction.md)
     * [Bootstrapping](api-reference/start.md)
