@@ -69,6 +69,20 @@ module.exports = (function () {
 
     getNotRegistered: function (successCb, failureCb) {
       return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getNotRegistered', [], successCb, failureCb);
+    },
+
+    registerNew: function (options, successCb, failureCb) {
+      if (!options || !options.authenticatorId) {
+        throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew");
+      }
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorRegistrationClient', 'start', options, successCb, failureCb);
+    },
+
+    providePin: function (options, successCb, failureCb) {
+      if (!options || !options.pin) {
+        throw new TypeError("Onegini: missing 'pin' argument for authenticators.providePin");
+      }
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorRegistrationClient', 'providePin', options, successCb, failureCb);
     }
   };
 

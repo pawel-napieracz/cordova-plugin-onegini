@@ -246,6 +246,14 @@ exports.defineAutoTests = function () {
         expect(onegini.user.authenticators.getNotRegistered).toBeDefined();
       });
 
+        it("should have a registerNew method", function () {
+          expect(onegini.user.authenticators.registerNew).toBeDefined();
+        });
+
+        it("should have a providePin method", function () {
+          expect(onegini.user.authenticators.providePin).toBeDefined();
+        });
+
       describe("getRegistered", function () {
         it("should return an error when not logged in", function (done) {
           onegini.user.authenticators.getRegistered(
@@ -273,6 +281,29 @@ exports.defineAutoTests = function () {
               });
         });
       });
+
+        describe("registerNew", function () {
+          it("should require an authenticatorId", function () {
+            expect(function () {
+              onegini.user.authenticators.registerNew()
+            }).toThrow(new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew"));
+          });
+
+          it("should return an error when not logged in", function (done) {
+            onegini.user.authenticators.registerNew(
+                {
+                  authenticatorId: 1
+                },
+                function (result) {
+                  expect(result).toBeUndefined();
+                },
+                function (err) {
+                  expect(err).toBeDefined();
+                  expect(err.description).toBe("Onegini: No user authenticated.");
+                  done();
+                });
+          });
+        });
     });
 
     describe('authenticate', function () {
@@ -399,6 +430,61 @@ exports.defineAutoTests = function () {
               });
         });
       });
+
+        describe("registerNew", function () {
+          it("should succeed", function (done) {
+            onegini.user.authenticators.registerNew(
+                {
+                  authenticatorId: 2 // TODO
+                },
+                function (result) {
+                  expect(result).toBeDefined();
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                });
+          });
+        });
+
+        describe("providePin", function () {
+          it("should require a pin", function () {
+            expect(function () {
+              onegini.user.authenticators.providePin()
+            }).toThrow(new TypeError("Onegini: missing 'pin' argument for authenticators.providePin"));
+          });
+
+          it("should fail with incorrect pin", function (done) {
+            onegini.user.authenticators.providePin(
+                {
+                  pin: "incorrect"
+                },
+                function (result) {
+                  expect(result).toBeUndefined();
+                },
+                function (err) {
+                  expect(err).toBeDefined();
+                  expect(err.maxFailureCount).toBeDefined();
+                  expect(err.remainingFailureCount).toBeDefined();
+                  expect(err.description).toBe("Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.");
+                  done();
+                });
+          });
+
+          it("should succeed with correct pin", function (done) {
+            onegini.user.authenticators.providePin(
+                {
+                  pin: pin
+                },
+                function () {
+                  expect(true).toBe(true);
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                });
+          });
+        });
     });
 
   });
