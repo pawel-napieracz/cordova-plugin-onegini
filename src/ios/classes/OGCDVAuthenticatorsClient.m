@@ -11,7 +11,7 @@
   [self.commandDelegate runInBackground:^{
       ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
       if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No user authenticated."];
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
         return;
       }
 
@@ -29,7 +29,7 @@
   [self.commandDelegate runInBackground:^{
       ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
       if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No user authenticated."];
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
         return;
       }
 
@@ -39,6 +39,31 @@
         [result addObject:@{OGCDVPluginKeyId: authenticator.identifier}];
       }
       [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
+  }];
+}
+
+- (void)setPreferred:(CDVInvokedUrlCommand *)command
+{
+  [self.commandDelegate runInBackground:^{
+      ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+      if (user == nil) {
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+        return;
+      }
+
+      NSDictionary *options = command.arguments[0];
+      NSString *authenticatorId = options[OGCDVPluginKeyAuthenticatorId];
+
+      NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
+      for (ONGAuthenticator *authenticator in registeredAuthenticators) {
+        if ([authenticator.identifier isEqualToString:authenticatorId]) {
+          [[ONGUserClient sharedInstance] setPreferredAuthenticator:authenticator];
+          [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+          return;
+        }
+      }
+
+      [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Authenticator not found."];
   }];
 }
 

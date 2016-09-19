@@ -245,6 +245,10 @@ exports.defineAutoTests = function () {
         expect(onegini.user.authenticators.getNotRegistered).toBeDefined();
       });
 
+        it("should have a setPreferred method", function () {
+          expect(onegini.user.authenticators.setPreferred).toBeDefined();
+        });
+
         it("should have a registerNew method", function () {
           expect(onegini.user.authenticators.registerNew).toBeDefined();
         });

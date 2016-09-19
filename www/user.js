@@ -72,6 +72,13 @@ module.exports = (function () {
       return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getNotRegistered', [], successCb, failureCb);
     },
 
+    setPreferred: function (options, successCb, failureCb) {
+      if (!options || !options.authenticatorId) {
+        throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.setPreferred");
+      }
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'setPreferred', options, successCb, failureCb);
+    },
+
     registerNew: function (options, successCb, failureCb) {
       if (!options || !options.authenticatorId) {
         throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew");

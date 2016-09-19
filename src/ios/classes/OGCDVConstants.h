@@ -9,3 +9,5 @@ extern NSString *const OGCDVPluginKeyScopes;
 extern NSString *const OGCDVPluginKeyResourceBaseURL;
 extern NSString *const OGCDVPluginKeyId;
 extern NSString *const OGCDVPluginKeyAuthenticatorId;
+
+extern NSString *const OGCDVPluginErrorKeyNoUserAuthenticated;

@@ -11,3 +11,5 @@ NSString *const OGCDVPluginKeyScopes = @"scopes";
 NSString *const OGCDVPluginKeyResourceBaseURL = @"resourceBaseURL";
 NSString *const OGCDVPluginKeyId = @"id";
 NSString *const OGCDVPluginKeyAuthenticatorId = @"authenticatorId";
+
+NSString *const OGCDVPluginErrorKeyNoUserAuthenticated = @"Onegini: No user authenticated.";
