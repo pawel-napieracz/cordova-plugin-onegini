@@ -402,8 +402,8 @@ exports.defineAutoTests = function () {
 
                 for (var r in result) {
                   var authenticator = result[r];
-                  expect(authenticator.id).toBeDefined();
-                  if (authenticator.id === "com.onegini.authenticator.PIN") {
+                  expect(authenticator.authenticatorId).toBeDefined();
+                  if (authenticator.authenticatorId === "com.onegini.authenticator.PIN") {
                     done();
                     return;
                   }
