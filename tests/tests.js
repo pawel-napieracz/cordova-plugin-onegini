@@ -2,7 +2,10 @@
 
 exports.defineAutoTests = function () {
   var config = {
-    testForMultipleAuthenticators: true
+    testForMultipleAuthenticators: true,
+    get fingerPrintAuthenticatorID() {
+      return navigator.userAgent.indexOf("Android") > -1 ? "com.onegini.authenticator.Fingerprint" : "com.onegini.authenticator.TouchID"
+    }
   };
 
   var registeredProfileId,
@@ -442,7 +445,7 @@ exports.defineAutoTests = function () {
           it("should succeed", function (done) {
             onegini.user.authenticators.registerNew(
                 {
-                  authenticatorId: "com.onegini.authenticator.Fingerprint"
+                  authenticatorId: config.fingerPrintAuthenticatorID
                 },
                 function (result) {
                   expect(result).toBeDefined();
