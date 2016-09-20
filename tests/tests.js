@@ -67,7 +67,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeDefined();
-              expect(err.errorType).toBe(9014);
+              expect(err.code).toBe(9014);
               done();
             });
       });
@@ -83,7 +83,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeDefined();
-              expect(err.errorType).toBe(9013);
+              expect(err.code).toBe(9013);
               done();
             });
       });
@@ -659,7 +659,7 @@ exports.defineAutoTests = function () {
             function (err) {
               expect(err).toBeDefined();
               expect(err.description).toBeDefined();
-              expect(err.errorType).toBe(9014);
+              expect(err.code).toBe(9014);
               done();
             });
       });

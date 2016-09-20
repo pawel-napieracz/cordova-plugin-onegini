@@ -12,7 +12,7 @@
 - (void) sendErrorResultForCallbackId:(NSString *)callbackId withErrorCode:(long)code andMessage:(NSString *)errorMessage
 {
   NSDictionary *result = @{
-      @"errorType": @(code),
+      @"code": @(code),
       @"description": errorMessage
   };
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result] callbackId:callbackId];
