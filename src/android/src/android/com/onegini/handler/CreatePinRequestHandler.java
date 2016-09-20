@@ -1,5 +1,7 @@
 package com.onegini.handler;
 
+import static com.onegini.OneginiCordovaPluginConstants.PIN_LENGTH;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
@@ -12,9 +14,9 @@ import com.onegini.util.PluginResultBuilder;
 public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
 
   private static CreatePinRequestHandler instance = null;
-  private OneginiPinCallback pinCallback = null;
-  private CallbackContext registrationCallback;
-  private CallbackContext createPinCallback;
+  private OneginiPinCallback oneginiPinCallback = null;
+  private CallbackContext onStartPinCreationCallback;
+  private CallbackContext onNextPinCreationAttemptCallback;
 
   protected CreatePinRequestHandler() {
   }
@@ -27,28 +29,28 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
     return instance;
   }
 
-  public OneginiPinCallback getPinCallback() {
-    return pinCallback;
+  public OneginiPinCallback getOneginiPinCallback() {
+    return oneginiPinCallback;
   }
 
-  public void setRegistrationCallbackContext(final CallbackContext registrationCallback) {
-    this.registrationCallback = registrationCallback;
+  public void setOnStartPinCreationCallback(final CallbackContext registrationCallback) {
+    this.onStartPinCreationCallback = registrationCallback;
   }
 
-  public void setCreatePinCallback(final CallbackContext createPinCallback) {
-    this.createPinCallback = createPinCallback;
+  public void setOnNextPinCreationAttemptCallback(final CallbackContext createPinCallback) {
+    this.onNextPinCreationAttemptCallback = createPinCallback;
   }
 
   @Override
   public void startPinCreation(final UserProfile userProfile, final OneginiPinCallback oneginiPinCallback) {
-    this.pinCallback = oneginiPinCallback;
+    this.oneginiPinCallback = oneginiPinCallback;
 
     PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .withPinLength(5)
+        .withPinLength(PIN_LENGTH)
         .build();
 
-    sendStartRegistrationResult(pluginResult);
+    sendStartPinCreationResult(pluginResult);
   }
 
   @Override
@@ -59,24 +61,24 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
         .shouldKeepCallback()
         .build();
 
-    sendCreatePinResult(pluginResult);
+    sendOnNextPinCreationAttemptResult(pluginResult);
   }
 
   @Override
   public void finishPinCreation() {
-    this.pinCallback = null;
-    this.registrationCallback = null;
+    this.oneginiPinCallback = null;
+    this.onStartPinCreationCallback = null;
   }
 
-  private void sendStartRegistrationResult(final PluginResult pluginResult) {
-    if (registrationCallback != null) {
-      registrationCallback.sendPluginResult(pluginResult);
+  private void sendStartPinCreationResult(final PluginResult pluginResult) {
+    if (onStartPinCreationCallback != null) {
+      onStartPinCreationCallback.sendPluginResult(pluginResult);
     }
   }
 
-  private void sendCreatePinResult(final PluginResult pluginResult) {
-    if (createPinCallback != null) {
-      createPinCallback.sendPluginResult(pluginResult);
+  private void sendOnNextPinCreationAttemptResult(final PluginResult pluginResult) {
+    if (onNextPinCreationAttemptCallback != null) {
+      onNextPinCreationAttemptCallback.sendPluginResult(pluginResult);
     }
   }
 }

@@ -46,11 +46,40 @@ module.exports = (function () {
     }
   };
 
+  var changePin = {
+    start: function (options, successCb, failureCb) {
+      if (!options || !options.pin) {
+        throw new TypeError("Onegini: missing 'pin' argument for changePin.start");
+      }
+      return utils.promiseOrCallbackExec('OneginiChangePinClient', 'start', options, successCb, failureCb);
+    },
+
+    createPin: function (options, successCb, failureCb) {
+      if (!options || !options.pin) {
+        throw new TypeError("Onegini: missing 'pin' argument for changePin.createPin");
+      }
+      utils.callbackExec('OneginiChangePinClient', 'createPin', options, successCb, failureCb);
+    }
+  };
+
+  var mobileAuthentication = {
+    enroll: function (options, successCb, failureCb) {
+      return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
+    }
+  };
+
   function deregister(options, successCb, failureCb) {
     if (!options || !options.profileId) {
       throw new TypeError("Onegini: missing 'profileId' argument for deregister");
     }
     return utils.promiseOrCallbackExec('OneginiUserDeregistrationClient', 'deregister', options, successCb, failureCb);
+  }
+
+  function isUserRegistered(options, successCb, failureCb) {
+    if (!options || !options.profileId) {
+      throw new TypeError("Onegini: missing 'profileId' argument for isUserRegistered");
+    }
+    return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'isUserRegistered', options, successCb, failureCb);
   }
 
   function getUserProfiles(successCb, failureCb) {
@@ -65,19 +94,24 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'logout', [], successCb, failureCb);
   }
 
-  function enrollForMobileAuthentication(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
+  function validatePinWithPolicy(options, successCb, failureCb) {
+    if (!options || !options.pin) {
+      throw new TypeError("Onegini: missing 'pin' argument for validatePinWithPolicy");
+    }
+    return utils.promiseOrCallbackExec('OneginiUserClient', 'validatePinWithPolicy', options, successCb, failureCb);
   }
 
   return {
     authenticate: authenticate,
     reauthenticate: reauthenticate,
     register: register,
+    changePin: changePin,
+    mobileAuthentication: mobileAuthentication,
     deregister: deregister,
+    isUserRegistered: isUserRegistered,
     getUserProfiles: getUserProfiles,
     getAuthenticatedUserProfile: getAuthenticatedUserProfile,
     logout: logout,
-    // TODO location of this method
-    enrollForMobileAuthentication: enrollForMobileAuthentication
+    validatePinWithPolicy: validatePinWithPolicy
   };
 })();

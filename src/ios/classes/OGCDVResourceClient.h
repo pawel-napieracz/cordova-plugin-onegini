@@ -3,8 +3,8 @@
 #import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
-@interface OGCDVUserDeregistrationClient : CDVPlugin
+@interface OGCDVResourceClient : CDVPlugin
 
-- (void)deregister:(CDVInvokedUrlCommand *)command;
+- (void)fetch:(CDVInvokedUrlCommand *)command;
 
 @end

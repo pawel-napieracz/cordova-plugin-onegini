@@ -5,32 +5,32 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.onegini.handler.PinValidationHandler;
+import com.onegini.handler.DeviceAuthenticationHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.util.ActionArgumentsUtil;
 
-public class OneginiUserClient extends CordovaPlugin {
+public class OneginiDeviceAuthenticationClient extends CordovaPlugin {
 
-  private static final String ACTION_VALIDATE_PIN_WITH_POLICY = "validatePinWithPolicy";
+  private static final String ACTION_AUTHENTICATE = "authenticate";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    if (ACTION_VALIDATE_PIN_WITH_POLICY.equals(action)) {
-      validatePinWithPolicy(args, callbackContext);
+    if (ACTION_AUTHENTICATE.equals(action)) {
+      authenticate(args, callbackContext);
       return true;
     }
 
     return false;
   }
 
-  private void validatePinWithPolicy(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final String pin = ActionArgumentsUtil.getPinFromArguments(args);
-    final PinValidationHandler pinValidationHandler = new PinValidationHandler(callbackContext);
+  private void authenticate(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    final DeviceAuthenticationHandler deviceAuthenticationHandler = new DeviceAuthenticationHandler(callbackContext);
+    final String[] scopes = ActionArgumentsUtil.getScopesFromArguments(args);
 
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        getOneginiClient().getUserClient().validatePinWithPolicy(pin.toCharArray(), pinValidationHandler);
+        getOneginiClient().getDeviceClient().authenticateDevice(scopes, deviceAuthenticationHandler);
       }
     });
   }

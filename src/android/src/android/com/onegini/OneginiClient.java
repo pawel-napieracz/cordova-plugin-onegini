@@ -8,6 +8,7 @@ import org.json.JSONException;
 import android.content.Intent;
 import android.net.Uri;
 import com.onegini.handler.InitializationHandler;
+import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 
 public class OneginiClient extends CordovaPlugin {
 
@@ -37,9 +38,11 @@ public class OneginiClient extends CordovaPlugin {
   }
 
   private void start(final CallbackContext callbackContext) {
+    final OneginiClientConfigModel configModel = OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).getConfigModel();
+
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
-        OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).start(new InitializationHandler(callbackContext));
+        OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext()).start(new InitializationHandler(callbackContext, configModel));
       }
     });
   }

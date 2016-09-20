@@ -5,6 +5,9 @@ exports.defineAutoTests = function () {
       nrOfUserProfiles,
       pin = "12356";
 
+
+  /******** onegini *********/
+
   describe('onegini', function () {
     it("onegini should exist", function () {
       expect(window.onegini).toBeDefined();
@@ -16,7 +19,11 @@ exports.defineAutoTests = function () {
       });
 
       it("should run ok", function (done) {
-        onegini.start(function () {
+        onegini.start(
+            {
+              secureXhr: true
+            },
+            function () {
               expect(true).toBe(true);
               done();
             },
@@ -27,9 +34,61 @@ exports.defineAutoTests = function () {
     });
   });
 
+
+  /******** onegini.user (1/2) *********/
+
   describe('onegini.user', function () {
     it("should exist", function () {
       expect(onegini.user).toBeDefined();
+    });
+
+    describe("validatePinWithPolicy", function () {
+      it("should exist", function () {
+        expect(onegini.user.validatePinWithPolicy).toBeDefined();
+      });
+
+      it("should fail because of an incorrect length", function (done) {
+        onegini.user.validatePinWithPolicy(
+            {
+              pin: "incorrect"
+            },
+            function (result) {
+              expect(result).toBeUndefined();
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              done();
+            });
+      });
+
+
+      it("should fail because of repeating numbers", function (done) {
+        onegini.user.validatePinWithPolicy(
+            {
+              pin: "11111"
+            },
+            function (result) {
+              expect(result).toBeUndefined();
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              done();
+            });
+      });
+
+      it("should succeed if pin is compliant to policy", function (done) {
+        onegini.user.validatePinWithPolicy(
+            {
+              pin: pin
+            },
+            function () {
+              expect(true).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
     });
 
     describe("getAuthenticatedUserProfile (1/3)", function () {
@@ -41,7 +100,6 @@ exports.defineAutoTests = function () {
         onegini.user.getAuthenticatedUserProfile(
             function (result) {
               expect(result).toBeUndefined();
-              done()
             },
             function (err) {
               expect(err).toBeDefined();
@@ -233,7 +291,7 @@ exports.defineAutoTests = function () {
                 });
           });
 
-          it('should succeed', function (done) {
+          it('should succeed with correct pin', function (done) {
             onegini.user.authenticate.providePin(
                 {
                   pin: pin
@@ -248,7 +306,7 @@ exports.defineAutoTests = function () {
           });
         });
 
-        it('should fail', function (done) {
+        it('should fail when user is already authenticated', function (done) {
           onegini.user.authenticate.start(
               {
                 profileId: registeredProfileId
@@ -262,6 +320,169 @@ exports.defineAutoTests = function () {
                 done();
               });
         });
+      });
+    });
+
+  });
+
+  /******** onegini.resource (1/2) *********/
+
+  describe('onegini.resource', function () {
+    it('should exist', function () {
+      expect(onegini.resource).toBeDefined();
+    });
+
+    describe('fetch', function () {
+      it('should exist', function () {
+        expect(onegini.resource.fetch).toBeDefined();
+      });
+
+      it('should fetch a non-anonymous resource', function (done) {
+        onegini.resource.fetch(
+            {
+              url: 'https://demo-msp.onegini.com/resources/devices',
+              headers: {
+                'x-test-string': 'foobar',
+                'x-test-int': 1337
+              }
+            },
+            function (response) {
+              expect(response).toBeDefined();
+              var body = response.body;
+              expect(body).toBeDefined();
+              expect(JSON.parse(body).devices).toBeDefined();
+              expect(response.headers).toBeDefined();
+              expect(response.status).toEqual(200);
+              expect(response.statusText).toBeDefined();
+              done();
+            }, function (err) {
+              expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
+            });
+      });
+
+      it("should require a url", function () {
+        expect(function () {
+          onegini.resource.fetch();
+        }).toThrow(new TypeError("Onegini: missing 'url' argument for fetch"));
+      });
+
+      it('should return error context when request fails', function (done) {
+        onegini.resource.fetch({
+              method: 'POST',
+              url: 'https://demo-msp.onegini.com/resources/devices'
+            }, function (response) {
+              expect(response).toBeUndefined();
+              fail('Success callback called, but method should have failed');
+            },
+            function (response) {
+              expect(response).toBeDefined();
+              expect(response.status).toEqual(405);
+              done();
+            })
+      });
+
+      it('should intercept an XMLHttpRequest', function (done) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://demo-msp.onegini.com/resources/devices');
+        xhr.onload = function () {
+          expect(this.readyState).toEqual(4);
+          expect(this.status).toBe(200);
+          expect(JSON.parse(this.responseText).devices).toBeDefined();
+          done();
+        };
+        xhr.send();
+      });
+    });
+  });
+
+  /******** onegini.user (2/2) *********/
+
+  describe('onegini.user', function () {
+    describe('changePin', function () {
+      describe('start', function () {
+        it("should exist", function () {
+          expect(onegini.user.changePin.start).toBeDefined();
+        });
+
+        it("should require a pin", function () {
+          expect(function () {
+            onegini.user.changePin.start()
+          }).toThrow(new TypeError("Onegini: missing 'pin' argument for changePin.start"));
+        });
+      });
+
+      describe('createPin', function () {
+        it("should exist", function () {
+          expect(onegini.user.changePin.createPin).toBeDefined();
+        });
+
+        it("should require a pin", function () {
+          expect(function () {
+            onegini.user.changePin.createPin()
+          }).toThrow(new TypeError("Onegini: missing 'pin' argument for changePin.createPin"));
+        });
+      });
+
+      it('should fail with incorrect current pin', function (done) {
+        onegini.user.changePin.start(
+            {
+              pin: "incorrect"
+            },
+            function (result) {
+              expect(result).toBeUndefined();
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              expect(err.maxFailureCount).toBeDefined();
+              expect(err.remainingFailureCount).toBeDefined();
+              expect(err.description).toBe("Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.");
+              done();
+            });
+      });
+
+      it("should return pinlength of '5' when correct pin is supplied", function (done) {
+        onegini.user.changePin.start(
+            {
+              pin: pin
+            },
+            function (result) {
+              expect(result).toBeDefined();
+              expect(result.pinLength).toBe(5);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+
+      it('should fail with new pin non-compliant with pin policy', function (done) {
+        onegini.user.changePin.createPin(
+            {
+              pin: "incorrect"
+            },
+            function () {
+              fail("Success callback was called while action should have failed");
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              expect(err.description).toBeDefined();
+              done();
+            });
+      });
+
+      it('should succeed with new pin compliant to pin policy', function (done) {
+        onegini.user.changePin.createPin(
+            {
+              pin: pin
+            },
+            function () {
+              expect(true).toBe(true);
+              done();
+            },
+            function (err) {
+              fail("Error callback was called while action should have succeeded");
+            });
       });
     });
 
@@ -319,7 +540,7 @@ exports.defineAutoTests = function () {
                 });
           });
 
-          it('should succeed', function (done) {
+          it('should succeed with correct pin', function (done) {
             onegini.user.reauthenticate.providePin(
                 {
                   pin: pin
@@ -333,6 +554,48 @@ exports.defineAutoTests = function () {
                 });
           });
         });
+      });
+    });
+
+    describe('isUserRegistered', function () {
+      it("should exist", function () {
+        expect(onegini.user.isUserRegistered).toBeDefined();
+      });
+
+      it("'profileId' argument mandatory", function () {
+        expect(function () {
+          onegini.user.isUserRegistered({}, function () {
+          }, function () {
+          });
+        }).toThrow(new TypeError("Onegini: missing 'profileId' argument for isUserRegistered"));
+      });
+
+      it("should succeed with correct profileId", function (done) {
+        onegini.user.isUserRegistered(
+            {
+              profileId: registeredProfileId
+            },
+            function (result) {
+              expect(result).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+
+      it("should fail with incorrect profileId", function (done) {
+        onegini.user.isUserRegistered(
+            {
+              profileId: "UNKNOWN"
+            },
+            function (result) {
+              expect(result).toBe(false);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
       });
     });
 
@@ -407,5 +670,71 @@ exports.defineAutoTests = function () {
       });
     });
 
+  });
+
+
+  /******** onegini.device *********/
+
+  describe('onegini.device', function () {
+    it("should exist", function () {
+      expect(onegini.device).toBeDefined();
+    });
+
+    describe("authenticate", function () {
+      it("should exist", function () {
+        expect(onegini.device.authenticate).toBeDefined();
+      });
+
+      it('should fail with invalid scopes', function (done) {
+        onegini.device.authenticate(
+            {
+              scopes: ["incorrect"]
+            },
+            function () {
+              expect(true).toBe(false);
+            },
+            function (err) {
+              expect(err).toBeDefined();
+              done();
+            });
+      });
+
+      it('should succeed with valid scopes', function (done) {
+        onegini.device.authenticate(
+            {
+              scopes: ["read", "application-details"]
+            },
+            function () {
+              expect(true).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
+    });
+  });
+
+  /******** onegini.resource (2/2) *********/
+
+  describe('onegini.resource', function () {
+    it('should fetch an anonymous resource', function (done) {
+      onegini.resource.fetch({
+            url: 'https://demo-msp.onegini.com/resources/application-details',
+            anonymous: true
+          },
+          function (response) {
+            expect(response).toBeDefined();
+            expect(response.body).toBeDefined();
+            expect(response.headers).toBeDefined();
+            expect(response.status).toEqual(200);
+            expect(response.statusText).toBeDefined();
+            done();
+          },
+          function (errResponse) {
+            expect(errResponse).toBeUndefined();
+            fail('Error response called, but method should have succeeded');
+          })
+    })
   });
 };

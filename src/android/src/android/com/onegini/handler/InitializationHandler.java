@@ -7,22 +7,25 @@ import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiInitializationError;
+import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
 public class InitializationHandler implements OneginiInitializationHandler {
 
   private final CallbackContext callbackContext;
+  private final OneginiClientConfigModel configModel;
 
-  public InitializationHandler(final CallbackContext callbackContext) {
+  public InitializationHandler(final CallbackContext callbackContext, final OneginiClientConfigModel configModel) {
     this.callbackContext = callbackContext;
+    this.configModel = configModel;
   }
 
   @Override
   public void onSuccess(final Set<UserProfile> userProfiles) {
-    // TODO do we really need to pass the user profiles with the success cb? If so: add to iOS as well
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
+        .withOneginiConfigModel(configModel)
         .build();
 
     callbackContext.sendPluginResult(pluginResult);

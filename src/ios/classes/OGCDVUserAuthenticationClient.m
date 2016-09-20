@@ -2,12 +2,7 @@
 
 #import "OGCDVUserAuthenticationClient.h"
 #import "OGCDVUserClientHelper.h"
-#import "AppDelegate.h"
-
-static NSString *const OGCDVPluginKeyProfileId = @"profileId";
-static NSString *const OGCDVPluginKeyPin = @"pin";
-static NSString *const OGCDVPluginKeyMaxFailureCount = @"maxFailureCount";
-static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureCount";
+#import "OGCDVConstants.h"
 
 @implementation OGCDVUserAuthenticationClient {}
 
@@ -65,7 +60,7 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
 
   ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
   if (user == nil) {
-    [self sendErrorResultForCallbackId:command.callbackId withMessage:[NSString stringWithFormat: @"Onegini: No registered user found for the provided %@.", OGCDVPluginKeyProfileId]];
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No registered user found."];
   } else {
     [[ONGUserClient sharedInstance] reauthenticateUser:user delegate:self];
   }
@@ -101,13 +96,9 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
     return;
   }
 
-  // Let's make sure the profile is no longer registered (there may be other (future) cases
-  // when this delegate method is invoked..
-  ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:userProfile.profileId];
-
   NSDictionary *result = @{
                            @"description": error.localizedDescription,
-                           @"deregistered": user == nil ? @(YES) : @(NO)
+                           OGCDVPluginKeyRemainingFailureCount: @(0)
                            };
 
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result] callbackId:self.checkPinCallbackId];
@@ -118,20 +109,19 @@ static NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureC
   self.pinChallenge = challenge;
 
   if (challenge.error != nil) {
-    NSMutableDictionary *result = [@{
-                                     OGCDVPluginKeyMaxFailureCount:@(challenge.maxFailureCount),
-                                     OGCDVPluginKeyRemainingFailureCount:@(challenge.remainingFailureCount),
-                                     @"description": [NSString stringWithFormat:@"Onegini: Incorrect Pin. Check the %@ and %@ properties for details.", OGCDVPluginKeyMaxFailureCount, OGCDVPluginKeyRemainingFailureCount]
-                                     } mutableCopy];
+    NSDictionary *result = @{
+                             OGCDVPluginKeyMaxFailureCount:@(challenge.maxFailureCount),
+                             OGCDVPluginKeyRemainingFailureCount:@(challenge.remainingFailureCount),
+                             @"description": [NSString stringWithFormat:@"Onegini: Incorrect Pin. Check the %@ and %@ properties for details.", OGCDVPluginKeyMaxFailureCount, OGCDVPluginKeyRemainingFailureCount]
+                             };
 
-    [result setValue:@(NO) forKey:@"deregistered"];
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result];
     [pluginResult setKeepCallbackAsBool:YES];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.checkPinCallbackId];
     return;
   }
 
-  CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+  CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
   self.authenticationCallbackId = nil;
 }

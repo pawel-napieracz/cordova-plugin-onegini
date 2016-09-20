@@ -9,7 +9,7 @@ import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
 public class AuthenticationHandler implements OneginiAuthenticationHandler {
-  private final CallbackContext callbackContext;
+  private CallbackContext callbackContext;
 
   public AuthenticationHandler(final CallbackContext callbackContext) {
     this.callbackContext = callbackContext;
@@ -27,13 +27,20 @@ public class AuthenticationHandler implements OneginiAuthenticationHandler {
 
   @Override
   public void onError(final OneginiAuthenticationError oneginiAuthenticationError) {
-    final PluginResult pluginResult = new PluginResultBuilder()
+    final PluginResultBuilder pluginResultBuilder = new PluginResultBuilder()
         .withError()
         .withErrorType(oneginiAuthenticationError.getErrorType())
-        .withErrorDescription(oneginiAuthenticationError.getErrorDescription())
-        .build();
+        .withErrorDescription(oneginiAuthenticationError.getErrorDescription());
 
-    sendPluginResult(pluginResult);
+    if (oneginiAuthenticationError.getErrorType() == OneginiAuthenticationError.USER_DEREGISTERED) {
+      pluginResultBuilder.withRemainingFailureCount(0);
+    }
+
+    sendPluginResult(pluginResultBuilder.build());
+  }
+
+  public void setCallbackContext(final CallbackContext callbackContext) {
+    this.callbackContext = callbackContext;
   }
 
   private void sendPluginResult(final PluginResult pluginResult) {
