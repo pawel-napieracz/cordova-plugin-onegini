@@ -28,8 +28,7 @@ public class DeviceAuthenticationHandler implements OneginiDeviceAuthenticationH
   public void onError(final OneginiDeviceAuthenticationError oneginiDeviceAuthenticationError) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withError()
-        .withErrorType(oneginiDeviceAuthenticationError.getErrorType())
-        .withErrorDescription(oneginiDeviceAuthenticationError.getErrorDescription())
+        .withOneginiError(oneginiDeviceAuthenticationError)
         .build();
 
     callbackContext.sendPluginResult(pluginResult);

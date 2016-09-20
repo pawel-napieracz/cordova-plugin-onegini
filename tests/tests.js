@@ -2,7 +2,7 @@
 
 exports.defineAutoTests = function () {
   var config = {
-    testForMultipleAuthenticators: true,
+    testForMultipleAuthenticators: false,
     get fingerPrintAuthenticatorID() {
       return navigator.userAgent.indexOf("Android") > -1 ? "com.onegini.authenticator.Fingerprint" : "com.onegini.authenticator.TouchID"
     }
@@ -299,7 +299,7 @@ exports.defineAutoTests = function () {
               },
               function (err) {
                 expect(err).toBeDefined();
-                expect(err.description).toBe("Onegini: No user authenticated");
+                expect(err.description).toBe("Onegini: No user authenticated.");
                 done();
               });
         });

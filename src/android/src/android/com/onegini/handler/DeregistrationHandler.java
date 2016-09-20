@@ -27,8 +27,7 @@ public class DeregistrationHandler implements OneginiDeregisterUserProfileHandle
   public void onError(final OneginiDeregistrationError oneginiDeregistrationError) {
     PluginResult pluginResult = new PluginResultBuilder()
         .withError()
-        .withErrorType(oneginiDeregistrationError.getErrorType())
-        .withErrorDescription(oneginiDeregistrationError.getErrorDescription())
+        .withOneginiError(oneginiDeregistrationError)
         .build();
 
     sendPluginResult(pluginResult);
