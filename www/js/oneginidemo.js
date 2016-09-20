@@ -2,6 +2,7 @@ var OneginiDemo = (function () {
   return {
     start: function () {
       onegini.start(
+          {},
           function () {
             console.log("Onegini is ready to go!");
           },
