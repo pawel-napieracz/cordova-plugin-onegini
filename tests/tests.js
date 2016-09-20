@@ -249,13 +249,13 @@ exports.defineAutoTests = function () {
         expect(onegini.user.authenticators.getNotRegistered).toBeDefined();
       });
 
-        it("should have a setPreferred method", function () {
-          expect(onegini.user.authenticators.setPreferred).toBeDefined();
-        });
+      it("should have a setPreferred method", function () {
+        expect(onegini.user.authenticators.setPreferred).toBeDefined();
+      });
 
-        it("should have a registerNew method", function () {
-          expect(onegini.user.authenticators.registerNew).toBeDefined();
-        });
+      it("should have a registerNew method", function () {
+        expect(onegini.user.authenticators.registerNew).toBeDefined();
+      });
 
       it("should have a providePin method", function () {
         expect(onegini.user.authenticators.providePin).toBeDefined();
@@ -285,6 +285,22 @@ exports.defineAutoTests = function () {
                 expect(err).toBeDefined();
                 expect(err.description).toBe("Onegini: No user authenticated.");
                 done();
+              });
+        });
+      });
+
+      describe("setPreferred", function () {
+        it("should succeed with pin authenticator", function () {
+          onegini.user.authenticators.setPreferred({
+                authenticatorId: "com.onegini.authenticator.PIN"
+              },
+              function () {
+                expect(true).toBe(true);
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+                fail("Error callbacks was called, but method should have succeeded");
               });
         });
       });
@@ -400,7 +416,7 @@ exports.defineAutoTests = function () {
     });
 
     describe("authenticators (2/2)", function () {
-      if(config.testForMultipleAuthenticators) {
+      if (config.testForMultipleAuthenticators) {
         describe('getRegistered', function () {
           it("should contain a PIN authenticator", function (done) {
             onegini.user.authenticators.getRegistered(
@@ -494,7 +510,8 @@ exports.defineAutoTests = function () {
                 });
           });
         });
-      } else {
+      }
+      else {
         console.warn("Skipping authenticators(2/2). Multiple authenticator tests disabled");
       }
     });
