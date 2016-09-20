@@ -36,6 +36,12 @@
       <feature name="OneginiChangePinClient">
         <param name="ios-package" value="OGCDVChangePinClient" />
       </feature>
+      <feature name="OneginiAuthenticatorsClient">
+        <param name="ios-package" value="OGCDVAuthenticatorsClient" />
+      </feature>
+      <feature name="OneginiAuthenticatorRegistrationClient">
+        <param name="ios-package" value="OGCDVAuthenticatorRegistrationClient" />
+      </feature>
       <feature name="OneginiDeviceAuthenticationClient">
         <param name="ios-package" value="OGCDVDeviceAuthenticationClient" />
       </feature>
@@ -69,17 +75,23 @@
     <source-file src="src/ios/classes/OGCDVUserAuthenticationClient.m"/>
     <header-file src="src/ios/classes/OGCDVChangePinClient.h"/>
     <source-file src="src/ios/classes/OGCDVChangePinClient.m"/>
+    <header-file src="src/ios/classes/OGCDVAuthenticatorsClient.h"/>
+    <source-file src="src/ios/classes/OGCDVAuthenticatorsClient.m"/>
+    <header-file src="src/ios/classes/OGCDVAuthenticatorRegistrationClient.h"/>
+    <source-file src="src/ios/classes/OGCDVAuthenticatorRegistrationClient.m"/>
     <header-file src="src/ios/classes/OGCDVDeviceAuthenticationClient.h"/>
     <source-file src="src/ios/classes/OGCDVDeviceAuthenticationClient.m"/>
     <header-file src="src/ios/classes/OGCDVResourceClient.h"/>
     <source-file src="src/ios/classes/OGCDVResourceClient.m"/>
     <header-file src="src/ios/classes/OGCDVMobileAuthenticationClient.h"/>
     <source-file src="src/ios/classes/OGCDVMobileAuthenticationClient.m"/>
+    <header-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.h"/>
+    <source-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.m"/>
     <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
     <source-file src="src/ios/classes/OGCDVWebBrowserViewController.m"/>
     <resource-file src="src/ios/classes/OGCDVWebBrowserViewController.xib"/>
 
-    <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
+    <!-- SDK Headers -->
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticator.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGChangePinDelegate.h"/>
@@ -102,7 +114,7 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGResourceResponse.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserProfile.h"/>
-
+    <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
     <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-5.00.00-SNAPSHOT-Release-fat-binary.a" framework="true"/>
 
     <framework src="libiconv.dylib"/>
@@ -143,6 +155,14 @@
         <param name="android-package" value="com.onegini.OneginiResourceClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiAuthenticatorsClient">
+        <param name="android-package" value="com.onegini.OneginiAuthenticatorsClient"/>
+        <param name="onload" value="false"/>
+      </feature>
+      <feature name="OneginiAuthenticatorRegistrationClient">
+        <param name="android-package" value="com.onegini.OneginiAuthenticatorRegistrationClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -167,6 +187,8 @@
     <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
 
     <!-- Onegini Plugin -->
+    <source-file src="src/android/src/android/com/onegini/OneginiAuthenticatorsClient.java"
+                 target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiClient.java"
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiUserClient.java"
@@ -187,19 +209,20 @@
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiResourceClient.java"
                  target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiAuthenticatorRegistrationClient.java"
+                 target-dir="src/com/onegini/"/>
 
     <!-- util -->
-    <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java"
-                 target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java"
-                 target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/ActionArgumentsUtil.java"
-                 target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/ActionArgumentsUtil.java" target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/util/AuthenticatorUtil.java" target-dir="src/com/onegini/util"/>
     <source-file src="src/android/src/android/com/onegini/util/RetrofitResponseUtil.java"
                  target-dir="src/com/onegini/util"/>
-
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/handler/AuthenticationHandler.java"
+                 target-dir="src/com/onegini/handler"/>
+    <source-file src="src/android/src/android/com/onegini/handler/AuthenticatorRegistrationHandler.java"
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/LogoutHandler.java"
                  target-dir="src/com/onegini/handler"/>

@@ -35,8 +35,7 @@ public class InitializationHandler implements OneginiInitializationHandler {
   public void onError(final OneginiInitializationError oneginiInitializationError) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withError()
-        .withErrorType(oneginiInitializationError.getErrorType())
-        .withErrorDescription(oneginiInitializationError.getErrorDescription())
+        .withOneginiError(oneginiInitializationError)
         .build();
 
     callbackContext.sendPluginResult(pluginResult);

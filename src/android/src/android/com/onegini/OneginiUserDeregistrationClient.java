@@ -1,6 +1,5 @@
 package com.onegini;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 

@@ -27,8 +27,7 @@ public class PinValidationHandler implements OneginiPinValidationHandler {
   @Override
   public void onError(final OneginiPinValidationError oneginiPinValidationError) {
     final PluginResult pluginResult = new PluginResultBuilder()
-        .withErrorType(oneginiPinValidationError.getErrorType())
-        .withErrorDescription(oneginiPinValidationError.getErrorDescription())
+        .withOneginiError(oneginiPinValidationError)
         .build();
 
     callbackContext.sendPluginResult(pluginResult);

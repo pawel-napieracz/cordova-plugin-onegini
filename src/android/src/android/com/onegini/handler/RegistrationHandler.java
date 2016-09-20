@@ -34,8 +34,7 @@ public class RegistrationHandler implements OneginiRegistrationHandler {
   public void onError(final OneginiRegistrationError oneginiRegistrationError) {
     PluginResult pluginResult = new PluginResultBuilder()
         .withError()
-        .withErrorType(oneginiRegistrationError.getErrorType())
-        .withErrorDescription(oneginiRegistrationError.getErrorDescription())
+        .withOneginiError(oneginiRegistrationError)
         .build();
 
     sendPluginResult(pluginResult);

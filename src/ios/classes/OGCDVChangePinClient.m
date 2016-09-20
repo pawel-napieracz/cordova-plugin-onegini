@@ -1,7 +1,6 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
 #import "OGCDVChangePinClient.h"
-#import "OGCDVUserClientHelper.h"
 #import "OGCDVConstants.h"
 
 @implementation OGCDVChangePinClient {}
@@ -10,7 +9,7 @@
 {
   [self.commandDelegate runInBackground:^{
     self.startCallbackId = command.callbackId;
-    NSDictionary *options = [command.arguments objectAtIndex:0];
+    NSDictionary *options = command.arguments[0];
     self.currentPin = options[OGCDVPluginKeyPin];
 
     if (self.currentPinChallenge != nil) {
@@ -34,7 +33,7 @@
   self.createPinCallbackId = command.callbackId;
 
   [self.commandDelegate runInBackground:^{
-    NSDictionary *options = [command.arguments objectAtIndex:0];
+    NSDictionary *options = command.arguments[0];
     NSString *pin = options[OGCDVPluginKeyPin];
     [self.createPinChallenge.sender respondWithCreatedPin:pin challenge:self.createPinChallenge];
   }];
@@ -54,7 +53,6 @@
                              };
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result];
-    [pluginResult setKeepCallbackAsBool:YES];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.startCallbackId];
     return;
   }

@@ -1,12 +1,9 @@
 package com.onegini.util;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,20 +12,18 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
-import retrofit.client.Header;
 import retrofit.client.Response;
 
 public class PluginResultBuilder {
 
   private JSONObject payload;
   private PluginResult.Status status;
-  private boolean shouldKeepCallback;
 
   public PluginResultBuilder() {
     payload = new JSONObject();
-    shouldKeepCallback = false;
   }
 
   public PluginResultBuilder withSuccess() {
@@ -53,16 +48,24 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder shouldKeepCallback() {
-    this.shouldKeepCallback = true;
-    return this;
-  }
-
-  public PluginResultBuilder withErrorType(final int errorType) {
+  public PluginResultBuilder withErrorCode(final int errorType) {
     status = ERROR;
 
     try {
-      payload.put("errorType", errorType);
+      payload.put("code", errorType);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withOneginiError(final OneginiError oneginiError) {
+    this.status = ERROR;
+
+    try {
+      payload.put("code", oneginiError.getErrorType());
+      payload.put("description", oneginiError.getErrorDescription());
     } catch (JSONException e) {
       handleException(e);
     }
@@ -157,7 +160,6 @@ public class PluginResultBuilder {
       pluginResult = new PluginResult(status, payload);
     }
 
-    pluginResult.setKeepCallback(shouldKeepCallback);
     return pluginResult;
   }
 }
