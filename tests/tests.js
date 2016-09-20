@@ -290,17 +290,17 @@ exports.defineAutoTests = function () {
       });
 
       describe("setPreferred", function () {
-        it("should succeed with pin authenticator", function () {
+        it("should fail with  authenticator", function (done) {
           onegini.user.authenticators.setPreferred({
                 authenticatorId: "com.onegini.authenticator.PIN"
               },
               function () {
-                expect(true).toBe(true);
-                done();
+                fail("Success callbacks was called, but method should have failed");
               },
               function (err) {
-                expect(err).toBeUndefined();
-                fail("Error callbacks was called, but method should have succeeded");
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No user authenticated");
+                done();
               });
         });
       });
@@ -416,6 +416,22 @@ exports.defineAutoTests = function () {
     });
 
     describe("authenticators (2/2)", function () {
+      describe("setPreferred", function () {
+        it("Should fail with a non-existing authenticator", function (done) {
+          onegini.user.authenticators.setPreferred({
+                authenticatorId: "invalid"
+              }, function () {
+                expect(true).toBe(true);
+                fail("Success callback called, but method should have failed.");
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No such authenticator found");
+                done();
+              });
+        });
+      });
+
       if (config.testForMultipleAuthenticators) {
         describe('getRegistered', function () {
           it("should contain a PIN authenticator", function (done) {
@@ -507,6 +523,22 @@ exports.defineAutoTests = function () {
                 },
                 function (err) {
                   expect(err).toBeUndefined();
+                });
+          });
+        });
+
+        describe("setPreferred", function () {
+          it("Should succeed with an existing authenticator", function (done) {
+            onegini.user.authenticators.setPreferred(
+                {
+                  authenticatorId: config.fingerPrintAuthenticatorID
+                }, function () {
+                  expect(true).toBe(true);
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                  fail("Error callback called, but method should have failed.");
                 });
           });
         });
