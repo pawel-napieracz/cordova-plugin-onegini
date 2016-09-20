@@ -94,7 +94,7 @@ module.exports = (function () {
   };
 
   var mobileAuthentication = {
-    enroll: function (options, successCb, failureCb) {
+    enroll: function (successCb, failureCb) {
       return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
     }
   };

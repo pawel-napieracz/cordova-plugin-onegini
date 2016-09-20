@@ -6,7 +6,14 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-  [[ONGUserClient sharedInstance] storeDevicePushTokenInSession:deviceToken];
+  // TODO constants
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"registrationOK" object:self userInfo:@{@"deviceToken": deviceToken}];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+  // TODO constants
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"registrationNOK" object:self userInfo:@{@"error": error}];
 }
 
 @end
