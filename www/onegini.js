@@ -7,7 +7,6 @@ module.exports = (function () {
   function start(options, successCb, failureCb) {
     var promise, callbackResult;
 
-    arguments = utils.shiftActionArgsForOptional(arguments);
     options = utils.getOptionsWithDefaults(options, {
       secureXhr: false
     });
