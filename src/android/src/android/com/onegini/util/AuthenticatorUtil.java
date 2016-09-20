@@ -1,6 +1,6 @@
 package com.onegini.util;
 
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_ID;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
 
 import java.util.Set;
 
@@ -17,7 +17,7 @@ public class AuthenticatorUtil {
     for (final OneginiAuthenticator authenticator: authenticatorSet) {
       final JSONObject authenticatorJSON = new JSONObject();
       //TODO Swicht to actual ID when getId method becames available in Onegini SDK.
-      authenticatorJSON.put(PARAM_ID, "com.onegini.authenticator." + authenticator.getName());
+      authenticatorJSON.put(PARAM_AUTHENTICATOR_ID, "com.onegini.authenticator." + authenticator.getName());
       authenticatorJSONArray.put(authenticatorJSON);
     }
 

@@ -5,7 +5,6 @@ import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICA
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_USER_ALREADY_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_PIN;
 
 import java.util.Set;
 

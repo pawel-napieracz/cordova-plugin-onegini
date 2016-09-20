@@ -66,7 +66,6 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
         .withErrorDescription(ERROR_INCORRECT_PIN)
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
-        .shouldKeepCallback()
         .build();
 
     sendOnNextAuthenticationAttemptResult(pluginResult);

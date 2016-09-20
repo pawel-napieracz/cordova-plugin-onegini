@@ -83,7 +83,7 @@ module.exports = (function () {
       if (!options || !options.authenticatorId) {
         throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew");
       }
-      return utils.promiseOrCallbackExec('OneginiAuthenticatorRegistrationClient', 'start', options, successCb, failureCb);
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorRegistrationClient', 'registerNew', options, successCb, failureCb);
     },
 
     providePin: function (options, successCb, failureCb) {
@@ -127,14 +127,6 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserClient', 'validatePinWithPolicy', options, successCb, failureCb);
   }
 
-  function getRegisteredAuthenticators(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiUserClient', 'getRegisteredAuthenticators', [], successCb, failureCb);
-  }
-
-  function getNotRegisteredAuthenticators(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiUserClient', 'getNotRegisteredAuthenticators', [], successCb, failureCb);
-  }
-
   return {
     authenticate: authenticate,
     reauthenticate: reauthenticate,
@@ -146,8 +138,6 @@ module.exports = (function () {
     getUserProfiles: getUserProfiles,
     getAuthenticatedUserProfile: getAuthenticatedUserProfile,
     logout: logout,
-    validatePinWithPolicy: validatePinWithPolicy,
-    getRegisteredAuthenticators: getRegisteredAuthenticators,
-    getNotRegisteredAuthenticators: getNotRegisteredAuthenticators
+    validatePinWithPolicy: validatePinWithPolicy
   };
 })();

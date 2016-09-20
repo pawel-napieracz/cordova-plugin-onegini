@@ -153,6 +153,10 @@
         <param name="android-package" value="com.onegini.OneginiAuthenticatorsClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiAuthenticatorRegistrationClient">
+        <param name="android-package" value="com.onegini.OneginiAuthenticatorRegistrationClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -199,6 +203,8 @@
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiResourceClient.java"
                  target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiAuthenticatorRegistrationClient.java"
+                 target-dir="src/com/onegini/"/>
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
@@ -209,6 +215,8 @@
                  target-dir="src/com/onegini/util"/>
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/handler/AuthenticationHandler.java"
+                 target-dir="src/com/onegini/handler"/>
+    <source-file src="src/android/src/android/com/onegini/handler/AuthenticatorRegistrationHandler.java"
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/LogoutHandler.java"
                  target-dir="src/com/onegini/handler"/>
