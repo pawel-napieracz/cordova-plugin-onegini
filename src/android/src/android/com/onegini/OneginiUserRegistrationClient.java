@@ -18,8 +18,8 @@ import com.onegini.handler.RegistrationHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
-import com.onegini.util.PluginResultBuilder;
 import com.onegini.util.ActionArgumentsUtil;
+import com.onegini.util.PluginResultBuilder;
 import com.onegini.util.UserProfileUtil;
 
 public class OneginiUserRegistrationClient extends CordovaPlugin {

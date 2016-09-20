@@ -1,10 +1,20 @@
 /* jshint jasmine: true */
 
 exports.defineAutoTests = function () {
+  var config = {
+    testForMultipleAuthenticators: true,
+    get fingerPrintAuthenticatorID() {
+      return navigator.userAgent.indexOf("Android") > -1 ? "com.onegini.authenticator.Fingerprint" : "com.onegini.authenticator.TouchID"
+    }
+  };
+
   var registeredProfileId,
       nrOfUserProfiles,
       pin = "12356";
 
+  if (!config.testForMultipleAuthenticators) {
+    console.warn("Testing for multiple authenticators disabled");
+  }
 
   /******** onegini *********/
 
@@ -245,6 +255,14 @@ exports.defineAutoTests = function () {
         expect(onegini.user.authenticators.getNotRegistered).toBeDefined();
       });
 
+      it("should have a registerNew method", function () {
+        expect(onegini.user.authenticators.registerNew).toBeDefined();
+      });
+
+      it("should have a providePin method", function () {
+        expect(onegini.user.authenticators.providePin).toBeDefined();
+      });
+
       describe("getRegistered", function () {
         it("should return an error when not logged in", function (done) {
           onegini.user.authenticators.getRegistered(
@@ -262,6 +280,29 @@ exports.defineAutoTests = function () {
       describe('getNotRegistered', function () {
         it("should return an error when not logged in", function (done) {
           onegini.user.authenticators.getNotRegistered(
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No user authenticated.");
+                done();
+              });
+        });
+      });
+
+      describe("registerNew", function () {
+        it("should require an authenticatorId", function () {
+          expect(function () {
+            onegini.user.authenticators.registerNew()
+          }).toThrow(new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew"));
+        });
+
+        it("should return an error when not logged in", function (done) {
+          onegini.user.authenticators.registerNew(
+              {
+                authenticatorId: 1
+              },
               function (result) {
                 expect(result).toBeUndefined();
               },
@@ -361,45 +402,105 @@ exports.defineAutoTests = function () {
     });
 
     describe("authenticators (2/2)", function () {
-      describe('getRegistered', function () {
-        it("should contain a PIN authenticator", function (done) {
-          onegini.user.authenticators.getRegistered(
-              function (result) {
-                expect(result).toBeDefined();
-                var nrOfAuthenticators = result.length;
-                expect(nrOfAuthenticators).toBeGreaterThan(0);
+      if(config.testForMultipleAuthenticators) {
+        describe('getRegistered', function () {
+          it("should contain a PIN authenticator", function (done) {
+            onegini.user.authenticators.getRegistered(
+                function (result) {
+                  expect(result).toBeDefined();
+                  var nrOfAuthenticators = result.length;
+                  expect(nrOfAuthenticators).toBeGreaterThan(0);
 
-                for (var r in result) {
-                  var authenticator = result[r];
-                  expect(authenticator.id).toBeDefined();
-                  if (authenticator.id === "com.onegini.authenticator.PIN") {
-                    done();
-                    return;
+                  for (var r in result) {
+                    var authenticator = result[r];
+                    expect(authenticator.authenticatorId).toBeDefined();
+                    if (authenticator.authenticatorId === "com.onegini.authenticator.PIN") {
+                      done();
+                      return;
+                    }
                   }
-                }
-                fail("Expected PIN Authenticator not found");
-                done();
-              },
-              function (err) {
-                expect(err).toBeUndefined();
-              });
+                  fail("Expected PIN Authenticator not found");
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                });
+          });
         });
-      });
 
-      describe('getNotRegistered', function () {
-        it("should succeed", function (done) {
-          onegini.user.authenticators.getNotRegistered(
-              function (result) {
-                expect(result).toBeDefined();
-                done();
-              },
-              function (err) {
-                expect(err).toBeUndefined();
-              });
+        describe('getNotRegistered', function () {
+          it("should succeed", function (done) {
+            onegini.user.authenticators.getNotRegistered(
+                function (result) {
+                  expect(result).toBeDefined();
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                });
+          });
         });
-      });
+
+        describe("registerNew", function () {
+          it("should succeed", function (done) {
+            onegini.user.authenticators.registerNew(
+                {
+                  authenticatorId: config.fingerPrintAuthenticatorID
+                },
+                function (result) {
+                  expect(result).toBeDefined();
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                  fail("Error callback called, but method should have succeeded");
+                });
+          });
+        });
+
+
+        describe("providePin", function () {
+          it("should require a pin", function () {
+            expect(function () {
+              onegini.user.authenticators.providePin()
+            }).toThrow(new TypeError("Onegini: missing 'pin' argument for authenticators.providePin"));
+          });
+
+          it("should fail with incorrect pin", function (done) {
+            onegini.user.authenticators.providePin(
+                {
+                  pin: "incorrect"
+                },
+                function (result) {
+                  expect(result).toBeUndefined();
+                },
+                function (err) {
+                  expect(err).toBeDefined();
+                  expect(err.maxFailureCount).toBeDefined();
+                  expect(err.remainingFailureCount).toBeDefined();
+                  expect(err.description).toBe("Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.");
+                  done();
+                });
+          });
+
+          it("should succeed with correct pin", function (done) {
+            onegini.user.authenticators.providePin(
+                {
+                  pin: pin
+                },
+                function () {
+                  expect(true).toBe(true);
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                });
+          });
+        });
+      } else {
+        console.warn("Skipping authenticators(2/2). Multiple authenticator tests disabled");
+      }
     });
-
   });
 
   /******** onegini.resource (1/2) *********/
@@ -779,7 +880,7 @@ exports.defineAutoTests = function () {
       it('should succeed with valid scopes', function (done) {
         onegini.device.authenticate(
             {
-              scopes: ["read", "application-details"]
+              scopes: ["application-details"]
             },
             function () {
               expect(true).toBe(true);

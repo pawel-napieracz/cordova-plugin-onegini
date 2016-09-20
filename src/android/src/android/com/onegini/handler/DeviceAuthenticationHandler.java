@@ -3,8 +3,8 @@ package com.onegini.handler;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
-import com.onegini.mobile.sdk.android.handlers.error.OneginiDeviceAuthenticationError;
 import com.onegini.mobile.sdk.android.handlers.OneginiDeviceAuthenticationHandler;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiDeviceAuthenticationError;
 import com.onegini.util.PluginResultBuilder;
 
 public class DeviceAuthenticationHandler implements OneginiDeviceAuthenticationHandler {
