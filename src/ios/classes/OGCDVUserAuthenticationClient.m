@@ -88,9 +88,7 @@
 -(void)userClient:(ONGUserClient *)userClient didFailToAuthenticateUser:(ONGUserProfile *)userProfile error:(NSError *)error
 {
   // May be called when the Pin is incorrect <max> times, but also when running
-  // 'startAuthentication' twice (which is incorrect usage).
-  // But this is why we have the 'deregistered' property and the check on 'self.startAuthenticationCallbackId'.
-
+  // 'startAuthentication' twice (which is incorrect usage). So that's why we have this check:
   if (self.authenticationCallbackId) {
     [self sendErrorResultForCallbackId:self.authenticationCallbackId withMessage:@"Don't call 'startAuthentication' twice, call 'checkPin' instead."];
     return;
