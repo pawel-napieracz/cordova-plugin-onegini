@@ -11,9 +11,11 @@
   [self.commandDelegate runInBackground:^{
       ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
       if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No user authenticated."];
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
         return;
       }
+
+      self.authenticationCallbackId = command.callbackId;
 
       NSDictionary *options = command.arguments[0];
       NSString *authenticatorId = options[OGCDVPluginKeyAuthenticatorId];
@@ -25,6 +27,7 @@
           return;
         }
       }
+
       [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No authenticator found."];
   }];
 }

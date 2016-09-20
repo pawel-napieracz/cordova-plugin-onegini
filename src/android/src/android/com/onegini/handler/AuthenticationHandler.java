@@ -29,8 +29,7 @@ public class AuthenticationHandler implements OneginiAuthenticationHandler {
   public void onError(final OneginiAuthenticationError oneginiAuthenticationError) {
     final PluginResultBuilder pluginResultBuilder = new PluginResultBuilder()
         .withError()
-        .withErrorType(oneginiAuthenticationError.getErrorType())
-        .withErrorDescription(oneginiAuthenticationError.getErrorDescription());
+        .withOneginiError(oneginiAuthenticationError);
 
     if (oneginiAuthenticationError.getErrorType() == OneginiAuthenticationError.USER_DEREGISTERED) {
       pluginResultBuilder.withRemainingFailureCount(0);

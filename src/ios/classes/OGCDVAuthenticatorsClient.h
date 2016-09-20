@@ -7,5 +7,6 @@
 
 - (void)getRegistered:(CDVInvokedUrlCommand *)command;
 - (void)getNotRegistered:(CDVInvokedUrlCommand *)command;
+- (void)setPreferred:(CDVInvokedUrlCommand *)command;
 
 @end

@@ -26,8 +26,7 @@ public class AuthenticatorRegistrationHandler implements OneginiAuthenticatorReg
   @Override
   public void onError(final OneginiAuthenticatorRegistrationError oneginiAuthenticatorRegistrationError) {
     final PluginResult pluginResult = new PluginResultBuilder()
-        .withErrorType(oneginiAuthenticatorRegistrationError.getErrorType())
-        .withErrorDescription(oneginiAuthenticatorRegistrationError.getErrorDescription())
+        .withOneginiError(oneginiAuthenticatorRegistrationError)
         .build();
 
     sendPluginResult(pluginResult);

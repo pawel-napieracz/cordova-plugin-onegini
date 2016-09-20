@@ -56,8 +56,7 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
   @Override
   public void onNextPinCreationAttempt(final OneginiPinValidationError oneginiPinValidationError) {
     PluginResult pluginResult = new PluginResultBuilder()
-        .withErrorType(oneginiPinValidationError.getErrorType())
-        .withErrorDescription(oneginiPinValidationError.getErrorDescription())
+        .withOneginiError(oneginiPinValidationError)
         .build();
 
     sendOnNextPinCreationAttemptResult(pluginResult);

@@ -17,7 +17,7 @@ allprojects {
 
     maven {
       // TODO move back to https://repo.onegini.com/artifactory/onegini-sdk after we have released the iOS SDK
-      url "https://repo.onegini.com/artifactory/public"
+      url "https://repo.onegini.com/artifactory/libs-snapshot-local"
       credentials {
         if(project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
           username artifactory_user

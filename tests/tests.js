@@ -2,7 +2,7 @@
 
 exports.defineAutoTests = function () {
   var config = {
-    testForMultipleAuthenticators: true,
+    testForMultipleAuthenticators: false,
     get fingerPrintAuthenticatorID() {
       return navigator.userAgent.indexOf("Android") > -1 ? "com.onegini.authenticator.Fingerprint" : "com.onegini.authenticator.TouchID"
     }
@@ -67,6 +67,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeDefined();
+              expect(err.code).toBe(9014);
               done();
             });
       });
@@ -82,6 +83,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeDefined();
+              expect(err.code).toBe(9013);
               done();
             });
       });
@@ -135,14 +137,6 @@ exports.defineAutoTests = function () {
             }, function () {
             });
           }).toThrow(new TypeError("Onegini: missing 'pin' argument for register.createPin"));
-        });
-
-        it("should require a success callback", function () {
-          expect(function () {
-            onegini.user.register.createPin({
-              pin: pin
-            })
-          }).toThrow(new TypeError("Onegini: missing argument for method. 'createPin' requires a Success Callback"));
         });
 
         it("can't be called before 'start' method", function (done) {
@@ -255,6 +249,10 @@ exports.defineAutoTests = function () {
         expect(onegini.user.authenticators.getNotRegistered).toBeDefined();
       });
 
+      it("should have a setPreferred method", function () {
+        expect(onegini.user.authenticators.setPreferred).toBeDefined();
+      });
+
       it("should have a registerNew method", function () {
         expect(onegini.user.authenticators.registerNew).toBeDefined();
       });
@@ -282,6 +280,22 @@ exports.defineAutoTests = function () {
           onegini.user.authenticators.getNotRegistered(
               function (result) {
                 expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No user authenticated.");
+                done();
+              });
+        });
+      });
+
+      describe("setPreferred", function () {
+        it("should fail with  authenticator", function (done) {
+          onegini.user.authenticators.setPreferred({
+                authenticatorId: "com.onegini.authenticator.PIN"
+              },
+              function () {
+                fail("Success callbacks was called, but method should have failed");
               },
               function (err) {
                 expect(err).toBeDefined();
@@ -402,7 +416,23 @@ exports.defineAutoTests = function () {
     });
 
     describe("authenticators (2/2)", function () {
-      if(config.testForMultipleAuthenticators) {
+      describe("setPreferred", function () {
+        it("Should fail with a non-existing authenticator", function (done) {
+          onegini.user.authenticators.setPreferred({
+                authenticatorId: "invalid"
+              }, function () {
+                expect(true).toBe(true);
+                fail("Success callback called, but method should have failed.");
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No such authenticator found");
+                done();
+              });
+        });
+      });
+
+      if (config.testForMultipleAuthenticators) {
         describe('getRegistered', function () {
           it("should contain a PIN authenticator", function (done) {
             onegini.user.authenticators.getRegistered(
@@ -458,7 +488,6 @@ exports.defineAutoTests = function () {
           });
         });
 
-
         describe("providePin", function () {
           it("should require a pin", function () {
             expect(function () {
@@ -497,7 +526,24 @@ exports.defineAutoTests = function () {
                 });
           });
         });
-      } else {
+
+        describe("setPreferred", function () {
+          it("Should succeed with an existing authenticator", function (done) {
+            onegini.user.authenticators.setPreferred(
+                {
+                  authenticatorId: config.fingerPrintAuthenticatorID
+                }, function () {
+                  expect(true).toBe(true);
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                  fail("Error callback called, but method should have failed.");
+                });
+          });
+        });
+      }
+      else {
         console.warn("Skipping authenticators(2/2). Multiple authenticator tests disabled");
       }
     });
@@ -645,6 +691,7 @@ exports.defineAutoTests = function () {
             function (err) {
               expect(err).toBeDefined();
               expect(err.description).toBeDefined();
+              expect(err.code).toBe(9014);
               done();
             });
       });

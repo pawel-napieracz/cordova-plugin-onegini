@@ -10,7 +10,7 @@
 {
   ONGUserProfile *authenticatedUserProfile = [[ONGUserClient sharedInstance] authenticatedUserProfile];
   if (authenticatedUserProfile == nil) {
-    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No user authenticated."];
+    [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
   } else {
     NSDictionary *result = @{OGCDVPluginKeyProfileId: authenticatedUserProfile.profileId};
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:command.callbackId];
