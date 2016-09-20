@@ -139,14 +139,6 @@ exports.defineAutoTests = function () {
           }).toThrow(new TypeError("Onegini: missing 'pin' argument for register.createPin"));
         });
 
-        it("should require a success callback", function () {
-          expect(function () {
-            onegini.user.register.createPin({
-              pin: pin
-            })
-          }).toThrow(new TypeError("Onegini: missing argument for method. 'createPin' requires a Success Callback"));
-        });
-
         it("can't be called before 'start' method", function (done) {
           onegini.user.register.createPin(
               {

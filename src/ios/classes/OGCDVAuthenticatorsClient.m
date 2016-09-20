@@ -18,7 +18,7 @@
       NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
       NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:registeredAuthenticators.count];
       for (ONGAuthenticator *authenticator in registeredAuthenticators) {
-        [result addObject:@{OGCDVPluginKeyId: authenticator.identifier}];
+        [result addObject:@{OGCDVPluginKeyAuthenticatorId: authenticator.identifier}];
       }
       [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
   }];
@@ -36,7 +36,7 @@
       NSSet<ONGAuthenticator *> *nonRegisteredAuthenticators = [[ONGUserClient sharedInstance] nonRegisteredAuthenticatorsForUser:user];
       NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:nonRegisteredAuthenticators.count];
       for (ONGAuthenticator *authenticator in nonRegisteredAuthenticators) {
-        [result addObject:@{OGCDVPluginKeyId: authenticator.identifier}];
+        [result addObject:@{OGCDVPluginKeyAuthenticatorId: authenticator.identifier}];
       }
       [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
   }];
