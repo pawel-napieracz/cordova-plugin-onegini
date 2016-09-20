@@ -20,9 +20,6 @@
             if (error != nil || !deregistered) {
               [self sendErrorResultForCallbackId:command.callbackId withError:error];
             } else {
-              // TODO there's a bug in the iOS SDK where deregistration doesn't log out the user, so until that's fixed we need this line
-              [[ONGUserClient sharedInstance] logoutUser:nil];
-
               [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
             }
         }];

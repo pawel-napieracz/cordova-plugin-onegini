@@ -30,7 +30,7 @@ NSString *const OGCDVPluginKeyHeaders = @"headers";
       [requestBuilder setMethod:method];
       [requestBuilder setPath:url];
 
-      if (![@"" isEqualToString:options[OGCDVPluginKeyBody]]) {
+      if (params != nil) {
         [requestBuilder setParametersEncoding:ONGParametersEncodingJSON];
         [requestBuilder setParameters:params];
       }
@@ -55,7 +55,7 @@ NSString *const OGCDVPluginKeyHeaders = @"headers";
       OGCDVPluginKeyBody: [self getBodyFromResponse:response],
       OGCDVPluginKeyStatus: @(response.statusCode),
       OGCDVPluginKeyStatusText: [self getStatusText:response.statusCode],
-      OGCDVPluginKeyHeaders: response.allHeaderFields
+      OGCDVPluginKeyHeaders: response.allHeaderFields == nil ? @{} : response.allHeaderFields
   };
 
   if (error == nil && response.statusCode == 200) {

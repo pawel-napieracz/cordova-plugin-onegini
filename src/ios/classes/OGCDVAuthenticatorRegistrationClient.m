@@ -6,7 +6,7 @@
 @implementation OGCDVAuthenticatorRegistrationClient {
 }
 
-- (void)start:(CDVInvokedUrlCommand *)command
+- (void)registerNew:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
       ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
@@ -14,6 +14,8 @@
         [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
         return;
       }
+
+      self.authenticationCallbackId = command.callbackId;
 
       NSDictionary *options = command.arguments[0];
       NSString *authenticatorId = options[OGCDVPluginKeyAuthenticatorId];
