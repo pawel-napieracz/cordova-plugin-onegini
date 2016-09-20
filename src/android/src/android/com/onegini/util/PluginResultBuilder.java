@@ -48,18 +48,6 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder withErrorCode(final int errorType) {
-    status = ERROR;
-
-    try {
-      payload.put("code", errorType);
-    } catch (JSONException e) {
-      handleException(e);
-    }
-
-    return this;
-  }
-
   public PluginResultBuilder withOneginiError(final OneginiError oneginiError) {
     this.status = ERROR;
 
