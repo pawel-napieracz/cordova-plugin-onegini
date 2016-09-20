@@ -8,10 +8,6 @@
 - (void)authenticate:(CDVInvokedUrlCommand*)command
 {
   [self.commandDelegate runInBackground:^{
-//    NSDictionary *options = [command.arguments objectAtIndex:0];
-//    NSString *scopes = options[OGCDVPluginKeyScopes];
-    // TODO
-
     NSArray<NSString*> *optionalScopes = nil;
     if (command.arguments.count > 0) {
       NSDictionary *options = command.arguments[0];
