@@ -1,21 +1,18 @@
-# Getting started
+# Onegini Cordova Plugin
 
-The `cordova-plugin-onegini` is an Apache Cordova plugin build to allow the use of Onegini's native SDKs to create Cordova applications.
+<div style="text-align:center; margin:40px" class="image logo">
+    <img height="125" src="images/logo.png" alt=""/>
+    <img height="125" src="images/cordova-logo.png" alt=""/>
+</div>
 
-The plugin currently supports the following platforms:
-  - Android
-  - iOS
+## An introduction
 
-The Plugin allows to perform native code invocations on the Onegini SDK directly from the Javascript layer of a Cordova application. To read more about the 
-plugin's public API documentation see the [Interface](interface.md) chapter.
+`cordova-plugin-onegini` is an [Apache Cordova](https://cordova.apache.org/) plugin build
+to allow the use of Onegini's native SDK's to create Cordova / PhoneGap applications for iOS and Android.
 
-The plugin uses two hooks to download the iOS SDK and configure the SDK with the given Token Server configuration.
-1. Downloading the iOS SDK - This hook is triggered after the plugin is installed (`before_plugin_install`). In order for this hook to complete successfully 
-you must follow the [installation steps](installation.md).
-2. Configuring the Onegini SDK - This hook is triggered after a platform is added (`after_platform_add`). The Onegini SDK requires some initial configuration 
-for some of the security related features. To make this easy we have integrated the Cordova plugin with the 
-[Onegini SDK configurator](https://github.com/Onegini/sdk-configurator). This hook will assume that you have installed the SDK configurator in your $PATH and 
-have downloaded the Token Server configuration for your application to the project root folder. Please follow the [installation steps](installation.md) to let 
-the hook complete successfully.
+## How the documentation is organized
 
-The next thing we recommend to do is read the installation and configuration instructions before you start.
+The plugin documentation has been split into several chapters:
+- [Installation](installation/introduction.md) section guides you through the steps to install the plugin and provides you with the prerequisites.
+- [Quick start](quickstart/introduction.md) contains the API description and code snippets on how to use the plugin.
+- [API reference](api-reference/introduction.md) contains the API description and code snippets on how to use the plugin.

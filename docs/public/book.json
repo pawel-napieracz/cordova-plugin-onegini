@@ -1,16 +1,17 @@
 {
   "gitbook": "2.x.x",
-  "title": "Onegini Cordova Plugin",
+  "title": "Onegini Cordova plugin",
+  "description": "The official documentation of the Onegini Cordova plugin.",
   "plugins": [
     "expandable-chapters",
     "toc",
-    "onegini-styling",
-    "-fontsettings",
     "disqus",
     "anker-enable",
     "prism",
     "-highlight",
-    "websequencediagrams"
+    "websequencediagrams",
+    "onegini-styling",
+    "-fontsettings"
   ],
   "pluginsConfig": {
     "disqus": {
