@@ -158,6 +158,7 @@ exports.defineAutoTests = function () {
       describe('start', function () {
         it("should return pinlength of '5'", function (done) {
           onegini.user.register.start(
+              undefined,
               function (result) {
                 expect(result).toBeDefined();
                 expect(result.pinLength).toBe(5);

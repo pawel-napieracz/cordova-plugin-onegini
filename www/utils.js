@@ -27,22 +27,6 @@ module.exports = (function () {
     return exec(successCb, failureCb, serviceName, methodName, args);
   }
 
-  function shiftActionArgsForOptional(args) {
-    if (typeof(args[0]) === 'function') {
-      for (var i = getObjectSize(args); i > 0; i--) {
-        args[i] = args[i - 1];
-      }
-
-      args[0] = undefined;
-    }
-
-    return args;
-  }
-
-  function getObjectSize(object) {
-    return Object.keys(object).length;
-  }
-
   function getOptionsWithDefaults(options, defaults, firstArg) {
     options = options || {};
 
@@ -74,7 +58,6 @@ module.exports = (function () {
     isArray: isArray,
     promiseOrCallbackExec: promiseOrCallbackExec,
     callbackExec: callbackExec,
-    getOptionsWithDefaults: getOptionsWithDefaults,
-    shiftActionArgsForOptional: shiftActionArgsForOptional
+    getOptionsWithDefaults: getOptionsWithDefaults
   };
 })();
