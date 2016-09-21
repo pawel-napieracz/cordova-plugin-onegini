@@ -330,6 +330,26 @@ exports.defineAutoTests = function () {
       });
     });
 
+    describe("mobileAuthentication", function () {
+      it("should have an enroll method", function () {
+        expect(onegini.user.mobileAuthentication.enroll).toBeDefined();
+      });
+
+      describe("enroll", function () {
+        it("should return an error when not logged in", function (done) {
+          onegini.user.mobileAuthentication.enroll(
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No user authenticated.");
+                done();
+              });
+        });
+      });
+    });
+
     describe('authenticate', function () {
       describe('start', function () {
         it("should exist", function () {

@@ -10,3 +10,5 @@ extern NSString *const OGCDVPluginKeyResourceBaseURL;
 extern NSString *const OGCDVPluginKeyAuthenticatorId;
 
 extern NSString *const OGCDVPluginErrorKeyNoUserAuthenticated;
+
+extern NSString *const OGCDVPluginClassMobileAuthentication;

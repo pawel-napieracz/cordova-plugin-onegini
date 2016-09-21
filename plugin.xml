@@ -50,6 +50,7 @@
       </feature>
       <feature name="OneginiMobileAuthenticationClient">
         <param name="ios-package" value="OGCDVMobileAuthenticationClient" />
+        <param name="onload" value="true" />
       </feature>
     </config-file>
 

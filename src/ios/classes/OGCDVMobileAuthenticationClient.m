@@ -1,19 +1,41 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
 #import "OGCDVMobileAuthenticationClient.h"
+#import "OGCDVConstants.h"
 
 @implementation OGCDVMobileAuthenticationClient {}
 
-// if not yet registered for notifications call registerForRemote.. here, then wait for the appdelegate's didregsiterforremote.. which sets the pushtoken in the SDK, then call enrollFor..
+  NSString *const OGCDVPluginKeyMarkedAsEnrolled = @"EnrolledForMobileAuthentication";
+
+- (void)pluginInitialize
+{
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching) name:UIApplicationDidFinishLaunchingNotification object:nil];
+}
+
+-(void)applicationDidFinishLaunching
+{
+  if ([self isEnrolled]) {
+    [self registerForRemoteNotifications];
+  }
+}
+
 - (void)enroll:(CDVInvokedUrlCommand*)command
 {
-  self.enrollCallbackId = command.callbackId;
+  [self.commandDelegate runInBackground:^{
+      ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+      if (user == nil) {
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+        return;
+      }
 
-  if (![self isRegisteredForRemoteNotifications]) {
-    [self registerForRemoteNotifications];
-  } else {
-    [self doEnroll];
-  }
+      self.enrollCallbackId = command.callbackId;
+
+      if (![self isRegisteredForRemoteNotifications]) {
+        [self registerForRemoteNotifications];
+      } else {
+        [self doEnroll];
+      }
+  }];
 }
 
 - (void)doEnroll
@@ -22,43 +44,62 @@
       if (error != nil || !enrolled) {
         [self sendErrorResultForCallbackId:self.enrollCallbackId withError:error];
       } else {
+        [self markAsEnrolled];
         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.enrollCallbackId];
       }
+      self.enrollCallbackId = nil;
   }];
 }
 
 - (void)registerForRemoteNotifications
 {
-  // TODO constants
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registrationOK:) name:@"registrationOK" object:nil];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registrationNOK:) name:@"registrationNOK" object:nil];
-
-
-  // TODO add iOS8 check, as 7 is the minimum supported by the Onegini SDK..
-  UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound) categories:nil];
-  [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-  [[UIApplication sharedApplication] registerForRemoteNotifications];
+  if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+#ifdef __IPHONE_8_0
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound) categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+#endif
+  } else {
+    UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
+  }
 }
 
 - (BOOL)isRegisteredForRemoteNotifications
 {
-  // TODO this is iOS 8+
-  return [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
+  if ([[UIApplication sharedApplication] respondsToSelector:@selector(isRegisteredForRemoteNotifications)]) {
+#ifdef __IPHONE_8_0
+    return [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
+#endif
+  } else {
+    return [[UIApplication sharedApplication] enabledRemoteNotificationTypes] != UIRemoteNotificationTypeNone;
+  }
 }
 
-- (void)registrationOK:(NSNotification *) result
+- (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-  // TODO constant
-  NSData *deviceToken = result.userInfo[@"deviceToken"];
-  [[ONGUserClient sharedInstance] storeDevicePushTokenInSession:deviceToken];
-  [self doEnroll];
+  if (self.enrollCallbackId == nil) {
+    // remember until 'OGCDVClient start' completes
+    self.pendingDeviceToken = deviceToken;
+  } else {
+    [[ONGUserClient sharedInstance] storeDevicePushTokenInSession:deviceToken];
+    [self doEnroll];
+  }
 }
 
-- (void)registrationNOK:(NSNotification *) result
+- (void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-  // TODO constant
-  NSError *error = result.userInfo[@"error"];
+  [[ONGUserClient sharedInstance] storeDevicePushTokenInSession:nil];
   [self sendErrorResultForCallbackId:self.enrollCallbackId withError:error];
 }
 
+- (void)markAsEnrolled
+{
+  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:OGCDVPluginKeyMarkedAsEnrolled];
+}
+
+- (BOOL)isEnrolled
+{
+  return [[NSUserDefaults standardUserDefaults] boolForKey:OGCDVPluginKeyMarkedAsEnrolled];
+}
 @end
