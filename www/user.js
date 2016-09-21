@@ -96,6 +96,15 @@ module.exports = (function () {
   var mobileAuthentication = {
     enroll: function (successCb, failureCb) {
       return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
+    },
+    registerConfirmationListener: function (onConfirmationRequest) {
+      return utils.callbackExec('OneginiHandleMobileAuthenticationRequestClient', 'registerConfirmationListener', [], onConfirmationRequest, null);
+    },
+    confirm: function (options, successCb, failureCb) {
+      if (!options || !options.response) {
+        throw new TypeError("Onegini: missing 'response' argument for confirm");
+      }
+      return utils.promiseOrCallbackExec('OneginiHandleMobileAuthenticationRequestClient', 'confirm', options, successCb, failureCb);
     }
   };
 

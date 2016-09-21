@@ -1,8 +1,9 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
 #import "AppDelegate+OGCDV.h"
-#import "OGCDVMobileAuthenticationClient.h"
 #import "OGCDVConstants.h"
+#import "OGCDVMobileAuthenticationClient.h"
+#import "OGCDVHandleMobileAuthenticationRequestClient.h"
 
 @implementation AppDelegate (OGCDV)
 
@@ -16,6 +17,12 @@
 {
   [[self.viewController getCommandInstance:OGCDVPluginClassMobileAuthentication]
       didFailToRegisterForRemoteNotificationsWithError:error];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+  [[self.viewController getCommandInstance:OGCDVPluginClassHandleMobileAuthenticationRequest]
+      handleMobileAuthenticationRequest:userInfo];
 }
 
 @end

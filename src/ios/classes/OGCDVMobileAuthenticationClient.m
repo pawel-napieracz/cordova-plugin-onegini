@@ -102,4 +102,5 @@
 {
   return [[NSUserDefaults standardUserDefaults] boolForKey:OGCDVPluginKeyMarkedAsEnrolled];
 }
+
 @end

@@ -348,6 +348,60 @@ exports.defineAutoTests = function () {
               });
         });
       });
+
+      describe('registerConfirmationListener', function () {
+        it("should exist", function () {
+          expect(onegini.user.mobileAuthentication.registerConfirmationListener).toBeDefined();
+        });
+
+        it("should require a success callback", function () {
+          expect(function () {
+            onegini.user.mobileAuthentication.registerConfirmationListener()
+          }).toThrow(new TypeError("Onegini: missing argument for method. 'registerConfirmationListener' requires a Success Callback"));
+        });
+
+        it("should succeed", function (done) {
+          onegini.user.mobileAuthentication.registerConfirmationListener(
+              function (confirmationRequest) {
+                // this function will only be called when there's actually a confirmation request
+                expect(confirmationRequest).toBeUndefined();
+                fail("Success callback called, but method should not invoke callbacks");
+                done();
+              });
+          // since we don't expect a confirmationRequest to come in we need to end the test manually
+          setTimeout(function() {
+            expect(true).toBe(true);
+            done();
+          }, 1000);
+        });
+      });
+
+      describe('confirm', function () {
+        it("should exist", function () {
+          expect(onegini.user.mobileAuthentication.confirm).toBeDefined();
+        });
+
+        it("should require a response", function () {
+          expect(function () {
+            onegini.user.mobileAuthentication.confirm()
+          }).toThrow(new TypeError("Onegini: missing 'response' argument for confirm"));
+        });
+
+        it("should return an error when no confirmation challenge is in progress", function (done) {
+          onegini.user.mobileAuthentication.confirm(
+              {
+                response: true
+              },
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: no confirmation challenge received.");
+                done();
+              });
+        });
+      });
     });
 
     describe('authenticate', function () {
