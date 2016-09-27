@@ -28,9 +28,9 @@ public class ChangePinHandler implements OneginiChangePinHandler {
 
   @Override
   public void onError(final OneginiChangePinError oneginiChangePinError) {
-    final PluginResult pluginResult= new PluginResultBuilder()
+    final PluginResult pluginResult = new PluginResultBuilder()
         .withError()
-        .withErrorDescription(oneginiChangePinError.getErrorDescription())
+        .withOneginiError(oneginiChangePinError)
         .build();
 
     sendPluginResult(pluginResult);

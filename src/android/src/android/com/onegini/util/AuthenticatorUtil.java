@@ -16,7 +16,7 @@ public class AuthenticatorUtil {
     JSONArray authenticatorJSONArray= new JSONArray();
     for (final OneginiAuthenticator authenticator: authenticatorSet) {
       final JSONObject authenticatorJSON = new JSONObject();
-      //TODO Swicht to actual ID when getId method becames available in Onegini SDK.
+      //TODO Switch to actual ID when getId method is available in Onegini SDK.
       authenticatorJSON.put(PARAM_AUTHENTICATOR_ID, "com.onegini.authenticator." + authenticator.getName());
       authenticatorJSONArray.put(authenticatorJSON);
     }

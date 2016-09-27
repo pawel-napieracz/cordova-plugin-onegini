@@ -43,8 +43,7 @@ dependencies {
   compile 'com.onegini.misc:og-ocra:100.00.00'
 
   // Google cloud messaging (GCM)
-  compile 'com.google.android.gms:play-services-base:8.4.0'
-  compile 'com.google.android.gms:play-services-gcm:8.4.0'
+  compile "com.google.android.gms:play-services-gcm:9.4.0"
 
   // Spongy castle
   compile 'com.madgag.spongycastle:core:1.54.0.0'
@@ -63,5 +62,11 @@ afterEvaluate {
     } else {
       dx.additionalParameters += '--multi-dex'
     }
+  }
+}
+
+android {
+  defaultConfig {
+    multiDexEnabled true
   }
 }
