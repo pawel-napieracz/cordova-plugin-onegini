@@ -17,6 +17,7 @@ import com.onegini.util.PluginResultBuilder;
 public class OneginiMobileAuthenticationClient extends CordovaPlugin {
 
   private static final String ACTION_ENROLL = "enroll";
+  //TOOD Load from cordova preferences
   private static final String GCM_SENDER_ID = "586427927998";
 
 

@@ -448,7 +448,7 @@ exports.defineAutoTests = function () {
                 expect(err).toBeUndefined();
                 fail("Error callback was called, but method should have succeeded");
               });
-        });
+        }, 10000);
       });
     });
 
