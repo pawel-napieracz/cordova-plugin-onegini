@@ -490,6 +490,22 @@ exports.defineAutoTests = function () {
       });
     });
 
+    describe("mobileAuthentication", function () {
+      describe("enroll", function () {
+        it("Should succeed in enrolling an authenticated user", function (done) {
+          onegini.user.mobileAuthentication.enroll(
+              function () {
+                expect(true).toBe(true);
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+                fail("Error callback was called, but method should have succeeded");
+              });
+        }, 10000);
+      });
+    });
+
     describe("authenticators (2/2)", function () {
       describe("setPreferred", function () {
         it("Should fail with a non-existing authenticator", function (done) {

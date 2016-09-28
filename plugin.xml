@@ -169,15 +169,15 @@
         <param name="android-package" value="com.onegini.OneginiAuthenticatorRegistrationClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiMobileAuthenticationClient">
+        <param name="android-package" value="com.onegini.OneginiMobileAuthenticationClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
       <uses-permission android:name="android.permission.WAKE_LOCK" />
-      <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-      <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-      <permission android:name="$PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-      <uses-permission android:name="$PACKAGE_NAME.permission.C2D_MESSAGE" />
     </config-file>
     <config-file target="AndroidManifest.xml" parent="application/activity">
       <intent-filter>
@@ -187,6 +187,29 @@
         <data android:scheme=""/> <!-- Intentionally Empty, SDK Configurator fills schemes from Token Server config. -->
       </intent-filter>
     </config-file>
+
+    <!-- GCM Config -->
+    <config-file target="AndroidManifest.xml" parent="application">
+      <receiver
+          android:name="com.google.android.gms.gcm.GcmReceiver"
+          android:exported="true"
+          android:permission="com.google.android.c2dm.permission.SEND" >
+        <intent-filter>
+          <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+          <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+          <category android:name="com.onegini.cordovaExampleApp" />
+        </intent-filter>
+      </receiver>
+      <service
+          android:name="com.onegini.gcm.GcmListenerService"
+          android:exported="false" >
+        <intent-filter>
+          <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+        </intent-filter>
+      </service>
+    </config-file>
+
+    <!-- Multidex -->
     <framework src="com.android.support:multidex:1.0.0" />
 
     <!-- Build gradle -->
@@ -217,6 +240,12 @@
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiAuthenticatorRegistrationClient.java"
                  target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiMobileAuthenticationClient.java"
+                 target-dir="src/com/onegini/"/>
+
+    <!-- gcm -->
+    <source-file src="src/android/src/android/com/onegini/gcm/OneginiGcmListenerService.java"
+                 target-dir="src/com/onegini/gcm"/>
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
@@ -247,6 +276,8 @@
     <source-file src="src/android/src/android/com/onegini/handler/DeviceAuthenticationHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/PinValidationHandler.java"
+                 target-dir="src/com/onegini/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/handler/MobileAuthenticationEnrollmentHandler.java"
                  target-dir="src/com/onegini/handler/"/>
   </platform>
 </plugin>
