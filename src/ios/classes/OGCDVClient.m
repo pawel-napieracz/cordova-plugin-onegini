@@ -22,7 +22,7 @@
               [self sendErrorResultForCallbackId:command.callbackId withMessage:@"The operating system that you use is no longer valid, please update your OS."];
             }
           } else {
-            OGCDVMobileAuthenticationClient *mobileAuthClient = [(CDVViewController *) self.viewController getCommandInstance:OGCDVPluginClassMobileAuthentication];
+            OGCDVMobileAuthenticationClient *mobileAuthClient = [(CDVViewController *) self.viewController getCommandInstance:OGCDVPluginClassMobileAuthenticationClient];
             if (mobileAuthClient.pendingDeviceToken != nil) {
               [[ONGUserClient sharedInstance] storeDevicePushTokenInSession:mobileAuthClient.pendingDeviceToken];
               mobileAuthClient.pendingDeviceToken = nil;

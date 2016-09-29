@@ -10,10 +10,8 @@ NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureCount";
 NSString *const OGCDVPluginKeyScopes = @"scopes";
 NSString *const OGCDVPluginKeyResourceBaseURL = @"resourceBaseURL";
 NSString *const OGCDVPluginKeyAuthenticatorId = @"authenticatorId";
-NSString *const OGCDVPluginKeyConfirmationType = @"type";
-NSString *const OGCDVPluginKeyConfirmationMessage = @"message";
 
 NSString *const OGCDVPluginErrorKeyNoUserAuthenticated = @"Onegini: No user authenticated.";
 
-NSString *const OGCDVPluginClassMobileAuthentication = @"OneginiMobileAuthenticationClient";
-NSString *const OGCDVPluginClassHandleMobileAuthenticationRequest = @"OneginiHandleMobileAuthenticationRequestClient";
+NSString *const OGCDVPluginClassMobileAuthenticationClient = @"OneginiMobileAuthenticationClient";
+NSString *const OGCDVPluginClassMobileAuthenticationRequestClient = @"OneginiMobileAuthenticationRequestClient";

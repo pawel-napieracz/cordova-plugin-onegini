@@ -93,21 +93,6 @@ module.exports = (function () {
     }
   };
 
-  var mobileAuthentication = {
-    enroll: function (successCb, failureCb) {
-      return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
-    },
-    registerConfirmationListener: function (onConfirmationRequest) {
-      return utils.callbackExec('OneginiHandleMobileAuthenticationRequestClient', 'registerConfirmationListener', [], onConfirmationRequest, null);
-    },
-    confirm: function (options, successCb, failureCb) {
-      if (!options || !options.response) {
-        throw new TypeError("Onegini: missing 'response' argument for confirm");
-      }
-      return utils.promiseOrCallbackExec('OneginiHandleMobileAuthenticationRequestClient', 'confirm', options, successCb, failureCb);
-    }
-  };
-
   function deregister(options, successCb, failureCb) {
     if (!options || !options.profileId) {
       throw new TypeError("Onegini: missing 'profileId' argument for deregister");
@@ -146,7 +131,6 @@ module.exports = (function () {
     reauthenticate: reauthenticate,
     register: register,
     changePin: changePin,
-    mobileAuthentication: mobileAuthentication,
     authenticators: authenticators,
     deregister: deregister,
     isUserRegistered: isUserRegistered,

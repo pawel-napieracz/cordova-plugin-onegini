@@ -3,6 +3,7 @@ module.exports = (function () {
   var device = require('./device');
   var utils = require('./utils');
   var resource = require('./resource');
+  var mobileAuthentication = require('./mobileAuthentication');
 
   function start(options, successCb, failureCb) {
     var promise, callbackResult;
@@ -34,6 +35,7 @@ module.exports = (function () {
     start: start,
     user: user,
     device: device,
-    resource: resource
+    resource: resource,
+    mobileAuthentication: mobileAuthentication
   };
 })();

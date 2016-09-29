@@ -15,6 +15,7 @@
   <js-module src="www/user.js" name="user" />
   <js-module src="www/utils.js" name="utils" />
   <js-module src="www/resource.js" name="resource" />
+  <js-module src="www/mobileAuthentication.js" name="mobileAuthentication" />
 
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
@@ -52,8 +53,8 @@
         <param name="ios-package" value="OGCDVMobileAuthenticationClient" />
         <param name="onload" value="true" />
       </feature>
-      <feature name="OneginiHandleMobileAuthenticationRequestClient">
-        <param name="ios-package" value="OGCDVHandleMobileAuthenticationRequestClient" />
+      <feature name="OneginiMobileAuthenticationRequestClient">
+        <param name="ios-package" value="OGCDVMobileAuthenticationRequestClient" />
       </feature>
     </config-file>
 
@@ -91,10 +92,11 @@
     <source-file src="src/ios/classes/OGCDVMobileAuthenticationClient.m"/>
     <header-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.h"/>
     <source-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.m"/>
-    <header-file src="src/ios/classes/OGCDVHandleMobileAuthenticationRequestClient.h"/>
-    <source-file src="src/ios/classes/OGCDVHandleMobileAuthenticationRequestClient.m"/>
     <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
     <source-file src="src/ios/classes/OGCDVWebBrowserViewController.m"/>
+    <header-file src="src/ios/classes/OGCDVMobileAuthenticationRequestClient.h"/>
+    <source-file src="src/ios/classes/OGCDVMobileAuthenticationRequestClient.m"/>
+
     <resource-file src="src/ios/classes/OGCDVWebBrowserViewController.xib"/>
 
     <!-- SDK Headers -->

@@ -36,7 +36,7 @@ module.exports = (function () {
       options[firstArg] = value;
     }
 
-    for (key in defaults) {
+    for (var key in defaults) {
       options[key] = options[key] || defaults[key];
     }
 
