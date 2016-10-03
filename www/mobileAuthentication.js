@@ -37,14 +37,17 @@ module.exports = (function () {
 
   PushHandler.prototype.shouldAccept = function (shouldAcceptCb) {
     this.callbacks.shouldAccept = shouldAcceptCb;
+    return this;
   };
 
   PushHandler.prototype.catch = function (catchCb) {
     this.callbacks.catch = catchCb;
+    return this;
   };
 
   PushHandler.prototype.done = function (doneCb) {
     this.callbacks.done = doneCb;
+    return this;
   };
 
   function on(type) {

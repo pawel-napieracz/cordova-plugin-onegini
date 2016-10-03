@@ -4,21 +4,25 @@
 #import "OneginiSDK.h"
 
 @interface OGCDVMobileAuthenticationRequestClient : CDVPlugin {
-    NSOperationQueue *queue;
+    NSOperationQueue *operationQueue;
+    NSString *confirmationChallengeCallbackId;
     id delegate;
 }
 
-@property (nonatomic, copy) NSString *confirmationChallengeCallbackId;
+@property (nonatomic, retain) NSOperationQueue *operationQueue;
+@property (nonatomic, retain) NSString *confirmationChallengeCallbackId;
 
-+ (id)shared;
-- (void)setDelegate:(id)aDelegate;
++ (id)sharedInstance;
+- (void)setDelegate:(id)newDelegate;
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
 - (void)registerConfirmationChallengeReceiver:(CDVInvokedUrlCommand *)command;
 - (void)replyToConfirmationChallenge:(CDVInvokedUrlCommand *)command;
 - (void)sendConfirmationChallengePluginResult:(CDVPluginResult *)pluginResult;
+- (void)sendMobileAuthenticationPluginResult:(NSDictionary *)result;
 
 @end
 
 @protocol OGCDVPluginMobileAuthenticationRequestDelegate
-- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient didReceiveConfirmationChallengeResponse:(BOOL)response;
+- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
+  didReceiveConfirmationChallengeResponse:(BOOL)response withCallbackId:(NSString *)callbackId;
 @end

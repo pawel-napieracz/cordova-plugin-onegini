@@ -4,63 +4,59 @@
 #import "OGCDVMobileAuthenticationOperation.h"
 
 NSString *const OGCDVPluginKeyAccept = @"accept";
+static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 @implementation OGCDVMobileAuthenticationRequestClient {
 }
 
-static OGCDVMobileAuthenticationRequestClient *shared;
+@synthesize operationQueue;
+@synthesize confirmationChallengeCallbackId;
 
-- (instancetype)init
++ (id)sharedInstance
 {
-    if (shared) {
-        return shared;
-    }
-    if (![super init]) {
-        return nil;
-    }
-
-    queue = [[NSOperationQueue alloc] init];
-    queue.maxConcurrentOperationCount = 1;
-    shared = self;
-    return self;
+    return sharedInstance;
 }
 
-+ (id)shared
+- (void)pluginInitialize
 {
-    if (!shared) {
-        [[OGCDVMobileAuthenticationRequestClient alloc] init];
-    }
-
-    return shared;
+    operationQueue = [[NSOperationQueue alloc] init];
+    [operationQueue setMaxConcurrentOperationCount:1];
+    confirmationChallengeCallbackId = [[NSString alloc] init];
+    sharedInstance = self;
 }
 
-- (void)setDelegate:(id)aDelegate
+- (void)setDelegate:(id)newDelegate
 {
-    delegate = aDelegate;
+    delegate = newDelegate;
 }
-
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc] initWithRemoteNotificationUserInfo:userInfo];
-    [queue addOperation:operation];
+    OGCDVMobileAuthenticationOperation *mobileAuthenticationOperation = [[OGCDVMobileAuthenticationOperation alloc] initWithRemoteNotificationUserInfo:userInfo];
+    [operationQueue addOperation:mobileAuthenticationOperation];
 }
 
 - (void)registerConfirmationChallengeReceiver:(CDVInvokedUrlCommand *)command
 {
-    [self setConfirmationChallengeCallbackId:command.callbackId];
+    confirmationChallengeCallbackId = command.callbackId;
 }
 
 - (void)replyToConfirmationChallenge:(CDVInvokedUrlCommand *)command
 {
     NSDictionary *options = command.arguments[0];
     BOOL result = [options[OGCDVPluginKeyAccept] boolValue];
-    [delegate mobileAuthenticationRequestClient:self didReceiveConfirmationChallengeResponse:result];
+    [delegate mobileAuthenticationRequestClient:self didReceiveConfirmationChallengeResponse:result withCallbackId:command.callbackId];
 }
 
 - (void)sendConfirmationChallengePluginResult:(CDVPluginResult *)pluginResult
 {
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.confirmationChallengeCallbackId];
+    [pluginResult setKeepCallbackAsBool:YES];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:confirmationChallengeCallbackId];
+}
+
+-(void)sendMobileAuthenticationPluginResult:(NSDictionary *)result
+{
+    [self.commandDelegate sendPluginResult:result[@"pluginResult"] callbackId:result[@"callbackId"]];
 }
 
 @end

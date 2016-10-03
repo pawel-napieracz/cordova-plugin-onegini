@@ -5,11 +5,18 @@
 
 @interface OGCDVMobileAuthenticationOperation : NSOperation<ONGMobileAuthenticationRequestDelegate, OGCDVPluginMobileAuthenticationRequestDelegate> {
     NSDictionary *remoteNotificationUserInfo;
+    NSString *didCompleteOperationCallbackId;
 }
 
+// TODO: Should confirmationChallengeConfirmationBlock not be atomic, retain?
 @property (nonatomic, copy) void (^confirmationChallengeConfirmationBlock)(BOOL confirmRequest);
-@property (retain) NSDictionary *remoteNotificationUserInfo;
+@property (atomic, retain) NSDictionary *remoteNotificationUserInfo;
+@property (atomic, retain) NSString *didCompleteOperationCallbackId;
+@property (atomic, assign) BOOL _executing;
+@property (atomic, assign) BOOL _finished;
 
 -(id)initWithRemoteNotificationUserInfo:(NSDictionary *)userInfo;
+-(void)sendOperationPluginResult:(CDVPluginResult *)result;
+-(void)completeOperation;
 
 @end

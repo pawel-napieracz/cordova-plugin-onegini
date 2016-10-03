@@ -96,6 +96,8 @@
     <source-file src="src/ios/classes/OGCDVWebBrowserViewController.m"/>
     <header-file src="src/ios/classes/OGCDVMobileAuthenticationRequestClient.h"/>
     <source-file src="src/ios/classes/OGCDVMobileAuthenticationRequestClient.m"/>
+    <header-file src="src/ios/classes/OGCDVMobileAuthenticationOperation.h"/>
+    <source-file src="src/ios/classes/OGCDVMobileAuthenticationOperation.m"/>
 
     <resource-file src="src/ios/classes/OGCDVWebBrowserViewController.xib"/>
 
