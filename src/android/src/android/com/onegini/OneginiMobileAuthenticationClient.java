@@ -17,9 +17,7 @@ import com.onegini.util.PluginResultBuilder;
 public class OneginiMobileAuthenticationClient extends CordovaPlugin {
 
   private static final String ACTION_ENROLL = "enroll";
-  //TOOD Load from cordova preferences
-  private static final String GCM_SENDER_ID = "586427927998";
-
+  private static final String PREF_GCM_SENDER_ID = "OneginiGcmSenderId";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -45,14 +43,23 @@ public class OneginiMobileAuthenticationClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        final String registrationID;
+        final String registrationId;
+        final String senderId = preferences.getString(PREF_GCM_SENDER_ID, null);
+
+        if (senderId == null) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withErrorDescription("Cannot enroll for mobile authentication: 'OneginiGcmSenderId' preference not found in config.xml")
+              .build());
+
+          return;
+        }
 
         try {
           InstanceID instanceID = InstanceID.getInstance(getApplicationContext());
-          registrationID = instanceID.getToken(GCM_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+          registrationId = instanceID.getToken(senderId, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
         } catch (Exception e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withError()
+              .withErrorDescription(e.getMessage())
               .build());
 
           return;
@@ -60,7 +67,7 @@ public class OneginiMobileAuthenticationClient extends CordovaPlugin {
 
         final MobileAuthenticationEnrollmentHandler mobileAuthenticationEnrollmentHandler = new MobileAuthenticationEnrollmentHandler(callbackContext);
 
-        getOneginiClient().getUserClient().enrollUserForMobileAuthentication(registrationID, mobileAuthenticationEnrollmentHandler);
+        getOneginiClient().getUserClient().enrollUserForMobileAuthentication(registrationId, mobileAuthenticationEnrollmentHandler);
       }
     });
   }

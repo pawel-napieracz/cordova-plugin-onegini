@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
+import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import retrofit.client.Response;
 
@@ -21,6 +22,7 @@ public class PluginResultBuilder {
 
   private JSONObject payload;
   private PluginResult.Status status;
+  private Boolean shouldKeepCallback = false;
 
   public PluginResultBuilder() {
     payload = new JSONObject();
@@ -33,6 +35,12 @@ public class PluginResultBuilder {
 
   public PluginResultBuilder withError() {
     status = ERROR;
+    return this;
+  }
+
+  public PluginResultBuilder shouldKeepCallback() {
+    this.shouldKeepCallback = true;
+
     return this;
   }
 
@@ -54,6 +62,18 @@ public class PluginResultBuilder {
     try {
       payload.put("code", oneginiError.getErrorType());
       payload.put("description", oneginiError.getErrorDescription());
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withOneginiMobileAuthenticationRequest(OneginiMobileAuthenticationRequest mobileAuthenticationRequest) {
+    try {
+      payload.put("type", mobileAuthenticationRequest.getType());
+      payload.put("message", mobileAuthenticationRequest.getMessage());
+      payload.put("profileId", mobileAuthenticationRequest.getUserProfile().getProfileId());
     } catch (JSONException e) {
       handleException(e);
     }
@@ -147,6 +167,8 @@ public class PluginResultBuilder {
     } else {
       pluginResult = new PluginResult(status, payload);
     }
+
+    pluginResult.setKeepCallback(shouldKeepCallback);
 
     return pluginResult;
   }

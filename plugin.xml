@@ -177,6 +177,10 @@
         <param name="android-package" value="com.onegini.OneginiMobileAuthenticationClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiMobileAuthenticationRequestClient">
+        <param name="android-package" value="com.onegini.OneginiMobileAuthenticationRequestClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -205,7 +209,7 @@
         </intent-filter>
       </receiver>
       <service
-          android:name="com.onegini.gcm.GcmListenerService"
+          android:name="com.onegini.gcm.OneginiGcmListenerService"
           android:exported="false" >
         <intent-filter>
           <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -246,6 +250,8 @@
                  target-dir="src/com/onegini/"/>
     <source-file src="src/android/src/android/com/onegini/OneginiMobileAuthenticationClient.java"
                  target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/OneginiMobileAuthenticationRequestClient.java"
+                 target-dir="src/com/onegini/"/>
 
     <!-- gcm -->
     <source-file src="src/android/src/android/com/onegini/gcm/OneginiGcmListenerService.java"
@@ -282,6 +288,8 @@
     <source-file src="src/android/src/android/com/onegini/handler/PinValidationHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/MobileAuthenticationEnrollmentHandler.java"
+                 target-dir="src/com/onegini/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/handler/MobileAuthenticationHandler.java"
                  target-dir="src/com/onegini/handler/"/>
   </platform>
 </plugin>

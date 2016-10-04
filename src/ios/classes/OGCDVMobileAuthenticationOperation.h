@@ -8,7 +8,6 @@
     NSString *didCompleteOperationCallbackId;
 }
 
-// TODO: Should confirmationChallengeConfirmationBlock not be atomic, retain?
 @property (nonatomic, copy) void (^confirmationChallengeConfirmationBlock)(BOOL confirmRequest);
 @property (atomic, retain) NSDictionary *remoteNotificationUserInfo;
 @property (atomic, retain) NSString *didCompleteOperationCallbackId;
