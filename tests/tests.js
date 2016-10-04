@@ -20,7 +20,10 @@ exports.defineAutoTests = function () {
   function sendMobileAuthenticationRequest(onreadystatechange) {
     var xhr = new XMLHttpRequest();
 
-    xhr.onreadystatechange = onreadystatechange;
+    if (onreadystatechange) {
+      xhr.onreadystatechange = onreadystatechange;
+    }
+
     xhr.open("POST", "https://demo-msp.onegini.com/oauth/api/v2/authenticate/user");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.setRequestHeader("Authorization", "Basic ODgyMzRCMEU5MzIzNzFCNzY3N0I2QkZCNUFGQTJGMTI1QjY3NkNGNTNBMTExREFGRjQyNjQ3NzM5QzRGMDVDNTo1MTE2NzA5OTM4QUE1MkY2RkI5NDkwRDc3MUE1QzQ0Rjk4N0QxRUE3ODJERUMwNEQwRTM4NzA5NEJBMzVGMzM5");
@@ -479,7 +482,6 @@ exports.defineAutoTests = function () {
                   fail("Mobile authentication request failed, but should have succeeded");
                 })
                 .done(function () {
-                  expect(true).toBe(true);
                   done();
                 });
           });
@@ -495,7 +497,6 @@ exports.defineAutoTests = function () {
                   reject();
                 })
                 .catch(function () {
-                  expect(true).toBe(true);
                   done();
                 })
                 .done(function () {
@@ -503,6 +504,27 @@ exports.defineAutoTests = function () {
                 });
           });
         });
+
+        it('Should be able to handle multiple requests', function (done) {
+          var counter = 0;
+
+          onegini.mobileAuthentication.on("push")
+              .shouldAccept(function (request, accept, reject) {
+                expect(request.type).toBeDefined();
+                expect(request.message).toBeDefined();
+                expect(request.profileId).toBeDefined();
+                accept();
+              })
+              .done(function () {
+                counter++;
+                if(counter === 2) {
+                  done();
+                }
+              });
+
+          sendMobileAuthenticationRequest();
+          sendMobileAuthenticationRequest();
+        }, 10000);
       });
     });
 
