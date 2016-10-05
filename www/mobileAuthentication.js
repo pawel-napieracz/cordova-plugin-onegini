@@ -5,7 +5,7 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
   }
 
-  function PushHandler() {
+  function MobileAuthenticationHandler(method) {
     var self = this;
     this.callbacks = {};
 
@@ -32,28 +32,27 @@ module.exports = (function () {
       }
     }
 
-    utils.callbackExec('OneginiMobileAuthenticationRequestClient', 'registerConfirmationChallengeReceiver', [], determineAccept, this.callbacks.catch);
+    utils.callbackExec('OneginiMobileAuthenticationRequestClient', 'registerChallengeReceiver', {method: method}, determineAccept, this.callbacks.catch);
   }
 
-  PushHandler.prototype.shouldAccept = function (shouldAcceptCb) {
+  MobileAuthenticationHandler.prototype.shouldAccept = function (shouldAcceptCb) {
     this.callbacks.shouldAccept = shouldAcceptCb;
     return this;
   };
 
-  PushHandler.prototype.catch = function (catchCb) {
+  MobileAuthenticationHandler.prototype.catch = function (catchCb) {
     this.callbacks.catch = catchCb;
     return this;
   };
 
-  PushHandler.prototype.done = function (doneCb) {
+  // TODO: Rename success cb
+  MobileAuthenticationHandler.prototype.done = function (doneCb) {
     this.callbacks.done = doneCb;
     return this;
   };
 
   function on(type) {
-    if(type === "push") {
-      return new PushHandler();
-    }
+    return new MobileAuthenticationHandler(type.toUpperCase());
   }
 
   return {

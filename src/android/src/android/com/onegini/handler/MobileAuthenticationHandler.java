@@ -1,28 +1,36 @@
 package com.onegini.handler;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_CONFIRMATION_CHALLENGE;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 
-import android.content.Context;
-import android.os.Bundle;
-import com.onegini.OneginiSDK;
 import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthenticationHandler;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthenticationError;
+import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthenticationPinRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiAcceptDenyCallback;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
+import com.onegini.mobile.sdk.android.model.entity.AuthenticationAttemptCounter;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
+import com.onegini.mobileAuthentication.Callback;
+import com.onegini.mobileAuthentication.ConfirmationCallback;
+import com.onegini.mobileAuthentication.PinCallback;
 import com.onegini.util.PluginResultBuilder;
 
-public class MobileAuthenticationHandler implements OneginiMobileAuthenticationHandler, OneginiMobileAuthenticationRequestHandler {
+public class MobileAuthenticationHandler
+    implements OneginiMobileAuthenticationHandler, OneginiMobileAuthenticationRequestHandler, OneginiMobileAuthenticationPinRequestHandler {
 
   private static MobileAuthenticationHandler instance = null;
-  private final Queue<Bundle> bundleQueue = new LinkedList<Bundle>();
-  private CallbackContext confirmationChallengeCallbackContext;
-  private CallbackContext completeMobileAuthenticationCallbackContext;
+  private final HashMap<Callback.Method, CallbackContext> challengeReceivers = new HashMap<Callback.Method, CallbackContext>();
+  private final Queue<Callback> callbackQueue = new LinkedList<Callback>();
   private OneginiAcceptDenyCallback acceptDenyCallback = null;
-  private Context context;
+  private boolean isRunning = false;
 
   protected MobileAuthenticationHandler() {
   }
@@ -35,44 +43,46 @@ public class MobileAuthenticationHandler implements OneginiMobileAuthenticationH
     return instance;
   }
 
-  public void queueBundle(final Bundle bundle, final Context context) {
-    if (bundleQueue.peek() == null) {
-      this.context = context;
-      handleBundle(bundle);
-    }
-
-    bundleQueue.add(bundle);
+  public void registerAuthenticationChallengeReceiver(final Callback.Method method, final CallbackContext callbackContext) {
+    challengeReceivers.put(method, callbackContext);
+    handleNextAuthenticationRequest();
   }
 
-  public void setConfirmationChallengeCallbackContext(final CallbackContext confirmationChallengeCallbackContext) {
-    this.confirmationChallengeCallbackContext = confirmationChallengeCallbackContext;
+  @Override
+  public void onNextAuthenticationAttempt(final AuthenticationAttemptCounter authenticationAttemptCounter) {
+
   }
 
-  public void setCompleteMobileAuthenticationCallbackContext(final CallbackContext completeMobileAuthenticationCallbackContext) {
-    this.completeMobileAuthenticationCallbackContext = completeMobileAuthenticationCallbackContext;
-  }
-
-  public void replyToConfirmationChallenge(final Boolean shouldAccept) {
-    if (shouldAccept) {
-      acceptDenyCallback.acceptAuthenticationRequest();
-    } else {
-      acceptDenyCallback.denyAuthenticationRequest();
-    }
+  @Override
+  public void startAuthentication(final OneginiMobileAuthenticationRequest oneginiMobileAuthenticationRequest, final OneginiPinCallback oneginiPinCallback,
+                                  final AuthenticationAttemptCounter authenticationAttemptCounter) {
+    final PinCallback pinCallback = new PinCallback(oneginiMobileAuthenticationRequest, oneginiPinCallback, authenticationAttemptCounter);
+    addAuthenticationRequestToQueue(pinCallback);
   }
 
   @Override
   public void startAuthentication(final OneginiMobileAuthenticationRequest mobileAuthenticationRequest,
                                   final OneginiAcceptDenyCallback acceptDenyCallback) {
-    if( confirmationChallengeCallbackContext == null) {
-      acceptDenyCallback.denyAuthenticationRequest();
-    }
-    else {
-      this.acceptDenyCallback = acceptDenyCallback;
-      confirmationChallengeCallbackContext.sendPluginResult(new PluginResultBuilder()
-          .withSuccess()
-          .withOneginiMobileAuthenticationRequest(mobileAuthenticationRequest)
-          .shouldKeepCallback()
+    final ConfirmationCallback confirmationCallback = new ConfirmationCallback(mobileAuthenticationRequest, acceptDenyCallback);
+    addAuthenticationRequestToQueue(confirmationCallback);
+  }
+
+  public void replyToConfirmationChallenge(final CallbackContext callbackContext, final boolean shouldAccept) {
+    if (!(callbackQueue.peek() instanceof ConfirmationCallback)) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withErrorDescription(ERROR_NO_CONFIRMATION_CHALLENGE)
           .build());
+
+      return;
+    }
+
+    final ConfirmationCallback confirmationCallback = (ConfirmationCallback) callbackQueue.peek();
+    confirmationCallback.setFinalResultCallbackContext(callbackContext);
+
+    if (shouldAccept) {
+      confirmationCallback.getAcceptDenyCallback().acceptAuthenticationRequest();
+    } else {
+      confirmationCallback.getAcceptDenyCallback().denyAuthenticationRequest();
     }
   }
 
@@ -82,30 +92,59 @@ public class MobileAuthenticationHandler implements OneginiMobileAuthenticationH
 
   @Override
   public void onSuccess() {
-    completeMobileAuthenticationCallbackContext.sendPluginResult(new PluginResultBuilder()
-        .withSuccess()
-        .build());
-
-    handleNextBundle();
+    finishAuthenticationRequest(null);
   }
 
   @Override
   public void onError(final OneginiMobileAuthenticationError oneginiMobileAuthenticationError) {
-    completeMobileAuthenticationCallbackContext.sendPluginResult(new PluginResultBuilder()
-        .withError()
-        .build());
-
-    handleNextBundle();
+    finishAuthenticationRequest(oneginiMobileAuthenticationError);
   }
 
-  private void handleBundle(final Bundle bundle) {
-    OneginiSDK.getOneginiClient(context).getUserClient().handleMobileAuthenticationRequest(bundle, this);
-  }
+  private void handleNextAuthenticationRequest() {
+    final Callback callback = callbackQueue.peek();
 
-  private void handleNextBundle() {
-    bundleQueue.poll();
-    if (bundleQueue.peek() != null) {
-      handleBundle(bundleQueue.peek());
+    if (!isRunning && callback != null) {
+      final OneginiMobileAuthenticationRequest mobileAuthenticationRequest = callback.getMobileAuthenticationRequest();
+      final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(callback.getMethod());
+
+      if (callbackContext != null) {
+        isRunning = true;
+        callbackContext.sendPluginResult(new PluginResultBuilder()
+            .withSuccess()
+            .shouldKeepCallback()
+            .withOneginiMobileAuthenticationRequest(mobileAuthenticationRequest)
+            .build());
+      }
     }
+  }
+
+  private void addAuthenticationRequestToQueue(final Callback callback) {
+    callbackQueue.add(callback);
+    handleNextAuthenticationRequest();
+  }
+
+  private void finishAuthenticationRequest(final OneginiError oneginiError) {
+    final CallbackContext callbackContext = callbackQueue.peek().getFinalResultCallbackContext();
+    final PluginResult pluginResult;
+
+    if (oneginiError == null) {
+      pluginResult = new PluginResultBuilder()
+          .withSuccess()
+          .build();
+    } else {
+      pluginResult = new PluginResultBuilder()
+          .withOneginiError(oneginiError)
+          .build();
+    }
+
+    callbackContext.sendPluginResult(pluginResult);
+
+    callbackQueue.poll();
+    isRunning = false;
+    handleNextAuthenticationRequest();
+  }
+
+  private CallbackContext getChallengeReceiverForCallbackMethod(final Callback.Method method) {
+    return challengeReceivers.get(method);
   }
 }

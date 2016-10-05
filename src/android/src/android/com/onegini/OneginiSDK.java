@@ -24,6 +24,7 @@ public class OneginiSDK {
 
     return new OneginiClientBuilder(applicationContext, createPinRequestHandler, pinAuthenticationRequestHandler)
         .setMobileAuthenticationRequestHandler(mobileAuthenticationHandler)
+        .setMobileAuthenticationPinRequestHandler(mobileAuthenticationHandler)
         .build();
   }
 }
