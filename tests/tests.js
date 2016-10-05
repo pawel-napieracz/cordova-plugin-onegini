@@ -17,17 +17,15 @@ exports.defineAutoTests = function () {
     console.warn("Testing for multiple authenticators disabled");
   }
 
-  function sendMobileAuthenticationRequest(onreadystatechange) {
+  function sendMobileAuthenticationRequest(type) {
     var xhr = new XMLHttpRequest();
 
-    if (onreadystatechange) {
-      xhr.onreadystatechange = onreadystatechange;
-    }
+    type = type || "push";
 
     xhr.open("POST", "https://demo-msp.onegini.com/oauth/api/v2/authenticate/user");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.setRequestHeader("Authorization", "Basic ODgyMzRCMEU5MzIzNzFCNzY3N0I2QkZCNUFGQTJGMTI1QjY3NkNGNTNBMTExREFGRjQyNjQ3NzM5QzRGMDVDNTo1MTE2NzA5OTM4QUE1MkY2RkI5NDkwRDc3MUE1QzQ0Rjk4N0QxRUE3ODJERUMwNEQwRTM4NzA5NEJBMzVGMzM5");
-    xhr.send("callback_uri=https://example.com&message=Test&type=push&user_id=testclientuserid");
+    xhr.send("callback_uri=https://wwww.onegini.com&message=Test&type=" + type + "&user_id=testclientuserid");
   }
 
   /******** onegini *********/
@@ -469,55 +467,58 @@ exports.defineAutoTests = function () {
           expect(onegini.mobileAuthentication.on).toBeDefined();
         });
 
-        it('Should accept a mobile authentication request', function (done) {
-          sendMobileAuthenticationRequest(function () {
-            onegini.mobileAuthentication.on("push")
-                .shouldAccept(function (request, accept, reject) {
-                  expect(request.type).toBeDefined();
-                  expect(request.message).toBeDefined();
-                  expect(request.profileId).toBeDefined();
-                  accept();
-                })
-                .catch(function () {
-                  fail("Mobile authentication request failed, but should have succeeded");
-                })
-                .done(function () {
-                  done();
-                });
-          });
-        });
-
-        it('Should reject a mobile authentication request', function (done) {
-          sendMobileAuthenticationRequest(function () {
-            onegini.mobileAuthentication.on("push")
-                .shouldAccept(function (request, accept, reject) {
-                  expect(request.type).toBeDefined();
-                  expect(request.message).toBeDefined();
-                  expect(request.profileId).toBeDefined();
-                  reject();
-                })
-                .catch(function () {
-                  done();
-                })
-                .done(function () {
-                  fail("Mobile authentication request succeeded, but should have failed");
-                });
-          });
-        });
-
-        it('Should be able to handle multiple requests', function (done) {
-          var counter = 0;
-
-          onegini.mobileAuthentication.on("push")
+        it('Should accept a mobile confirmation request', function (done) {
+          onegini.mobileAuthentication.on("confirmation")
               .shouldAccept(function (request, accept, reject) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
                 expect(request.profileId).toBeDefined();
                 accept();
               })
-              .done(function () {
+              .catch(function () {
+                fail("Mobile authentication request failed, but should have succeeded");
+              })
+              .success(function () {
+                done();
+              });
+
+          sendMobileAuthenticationRequest();
+        });
+
+        it('Should reject a mobile authentication request', function (done) {
+          onegini.mobileAuthentication.on("confirmation")
+              .shouldAccept(function (request, accept, reject) {
+                expect(request.type).toBeDefined();
+                expect(request.message).toBeDefined();
+                expect(request.profileId).toBeDefined();
+                reject();
+              })
+              .catch(function () {
+                done();
+              })
+              .success(function () {
+                fail("Mobile authentication request succeeded, but should have failed");
+              });
+
+          sendMobileAuthenticationRequest();
+        });
+
+        it('Should be able to handle multiple requests', function (done) {
+          var counter = 0;
+
+          onegini.mobileAuthentication.on("confirmation")
+              .shouldAccept(function (request, accept, reject) {
+                expect(request.type).toBeDefined();
+                expect(request.message).toBeDefined();
+                expect(request.profileId).toBeDefined();
+                accept();
+              })
+              .catch(function () {
+                fail('Mobile authentication request failed, but should have succeeded');
+              })
+              .success(function () {
                 counter++;
-                if(counter === 2) {
+                if (counter === 2) {
                   done();
                 }
               });
@@ -525,6 +526,52 @@ exports.defineAutoTests = function () {
           sendMobileAuthenticationRequest();
           sendMobileAuthenticationRequest();
         }, 10000);
+
+        it('Should accept a mobile pin request', function (done) {
+          onegini.mobileAuthentication.on("pin")
+              .providePin(function (request, accept, reject) {
+                expect(request.type).toBeDefined();
+                expect(request.message).toBeDefined();
+                expect(request.profileId).toBeDefined();
+                expect(request.maxFailureCount).toBeDefined();
+                expect(request.remainingFailureCount).toBeDefined();
+
+                if (request.remainingFailureCount === request.maxFailureCount - 1) {
+                  accept(pin);
+                }
+                else {
+                  accept('invalid');
+                }
+              })
+              .catch(function () {
+                fail('Mobile authentication request failed, but should have succeeded');
+              })
+              .success(function () {
+                done();
+              });
+
+          sendMobileAuthenticationRequest("push_with_pin");
+        }, 10000);
+
+        it('Should reject a mobile pin request', function (done) {
+          onegini.mobileAuthentication.on("pin")
+              .providePin(function (request, accept, reject) {
+                expect(request.type).toBeDefined();
+                expect(request.message).toBeDefined();
+                expect(request.profileId).toBeDefined();
+                expect(request.maxFailureCount).toBeDefined();
+                expect(request.remainingFailureCount).toBeDefined();
+                reject();
+              })
+              .catch(function () {
+                done();
+              })
+              .success(function () {
+                fail('Mobile authentication request succeeded, but should have failed');
+              });
+
+          sendMobileAuthenticationRequest("push_with_pin");
+        });
       });
     });
 

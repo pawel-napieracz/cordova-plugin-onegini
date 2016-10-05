@@ -16,7 +16,6 @@ public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
 
   private static final String ACTION_REGISTER_CHALLENGE_RECEIVER = "registerChallengeReceiver";
   private static final String ACTION_REPLY_TO_CHALLENGE = "replyToChallenge";
-  private static final String PARAM_METHOD = "method";
   private static final String PARAM_ACCEPT = "accept";
 
   @Override
@@ -35,26 +34,41 @@ public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
   private void registerChallengeReceiver(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final Callback.Method method = ActionArgumentsUtil.getCallbackMethodFromArguments(args);
 
-    MobileAuthenticationHandler.getInstance().registerAuthenticationChallengeReceiver(method, callbackContext);
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        MobileAuthenticationHandler.getInstance().registerAuthenticationChallengeReceiver(method, callbackContext);
+      }
+    });
   }
 
   private void replyToConfirmationChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final Boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
 
-    MobileAuthenticationHandler.getInstance().replyToConfirmationChallenge(callbackContext, shouldAccept);
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        MobileAuthenticationHandler.getInstance().replyToConfirmationChallenge(callbackContext, shouldAccept);
+      }
+    });
   }
 
   private void replyToPinChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
     final char[] pin;
 
-    if(shouldAccept) {
+    if (shouldAccept) {
       pin = ActionArgumentsUtil.getPinFromArguments(args).toCharArray();
     } else {
       pin = null;
     }
 
-    MobileAuthenticationHandler.getInstance().replyToPinChallenge(callbackContext, shouldAccept, pin);
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        MobileAuthenticationHandler.getInstance().replyToPinChallenge(callbackContext, shouldAccept, pin);
+      }
+    });
   }
 
   private void replyToChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {

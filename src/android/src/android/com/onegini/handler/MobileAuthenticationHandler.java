@@ -51,12 +51,14 @@ public class MobileAuthenticationHandler
   @Override
   public void onNextAuthenticationAttempt(final AuthenticationAttemptCounter authenticationAttemptCounter) {
     final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(Callback.Method.PIN);
+    final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
 
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
+        .withOneginiMobileAuthenticationRequest(pinCallback.getMobileAuthenticationRequest())
         .build());
   }
 
