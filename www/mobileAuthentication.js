@@ -8,51 +8,59 @@ module.exports = (function () {
   function MobileAuthenticationHandler(method) {
     var self = this;
     this.callbacks = {};
+    this.method = method;
 
-    function done() {
-      if (self.callbacks.done) {
-        self.callbacks.done();
-      }
-    }
-
-    function acceptRequest() {
-      utils.promiseOrCallbackExec('OneginiMobileAuthenticationRequestClient', 'replyToConfirmationChallenge', {accept: true}, done, self.callbacks.catch);
+    function acceptRequest(options) {
+      options = utils.getOptionsWithDefaults(options, {}, 'pin');
+      options.accept = true;
+      options.method = self.method;
+      utils.promiseOrCallbackExec('OneginiMobileAuthenticationRequestClient', 'replyToChallenge', options, callSuccess, self.callbacks.catch);
     }
 
     function rejectRequest() {
-      utils.promiseOrCallbackExec('OneginiMobileAuthenticationRequestClient', 'replyToConfirmationChallenge', {accept: false}, done, self.callbacks.catch);
+      var options = {
+        accept: false,
+        method: self.method
+      };
+
+      utils.promiseOrCallbackExec('OneginiMobileAuthenticationRequestClient', 'replyToChallenge', options, callSuccess, self.callbacks.catch);
     }
 
-    function determineAccept(request) {
-      if (self.callbacks.shouldAccept) {
-        self.callbacks.shouldAccept(request, acceptRequest, rejectRequest);
-      }
-      else {
-        rejectRequest();
+    function callChallengeReceiver(request) {
+      self.callbacks.challengeReceiver(request, acceptRequest, rejectRequest);
+    }
+
+    function callSuccess() {
+      if (self.callbacks.success) {
+        self.callbacks.success();
       }
     }
 
-    utils.callbackExec('OneginiMobileAuthenticationRequestClient', 'registerChallengeReceiver', {method: method}, determineAccept, this.callbacks.catch);
+    utils.callbackExec('OneginiMobileAuthenticationRequestClient', 'registerChallengeReceiver', {method: self.method}, callChallengeReceiver, this.callbacks.catch);
   }
 
-  MobileAuthenticationHandler.prototype.shouldAccept = function (shouldAcceptCb) {
-    this.callbacks.shouldAccept = shouldAcceptCb;
+  MobileAuthenticationHandler.prototype.shouldAccept = function (cb) {
+    this.callbacks.challengeReceiver = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.catch = function (catchCb) {
-    this.callbacks.catch = catchCb;
+  MobileAuthenticationHandler.prototype.providePin = function (cb) {
+    this.callbacks.challengeReceiver = cb;
     return this;
   };
 
-  // TODO: Rename success cb
-  MobileAuthenticationHandler.prototype.done = function (doneCb) {
-    this.callbacks.done = doneCb;
+  MobileAuthenticationHandler.prototype.catch = function (cb) {
+    this.callbacks.catch = cb;
     return this;
   };
 
-  function on(type) {
-    return new MobileAuthenticationHandler(type.toUpperCase());
+  MobileAuthenticationHandler.prototype.success = function (cb) {
+    this.callbacks.success = cb;
+    return this;
+  };
+
+  function on(method) {
+    return new MobileAuthenticationHandler(method);
   }
 
   return {

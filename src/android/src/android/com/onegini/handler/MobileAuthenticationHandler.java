@@ -1,6 +1,7 @@
 package com.onegini.handler;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_CONFIRMATION_CHALLENGE;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_PIN_CHALLENGE;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -29,7 +30,6 @@ public class MobileAuthenticationHandler
   private static MobileAuthenticationHandler instance = null;
   private final HashMap<Callback.Method, CallbackContext> challengeReceivers = new HashMap<Callback.Method, CallbackContext>();
   private final Queue<Callback> callbackQueue = new LinkedList<Callback>();
-  private OneginiAcceptDenyCallback acceptDenyCallback = null;
   private boolean isRunning = false;
 
   protected MobileAuthenticationHandler() {
@@ -50,7 +50,14 @@ public class MobileAuthenticationHandler
 
   @Override
   public void onNextAuthenticationAttempt(final AuthenticationAttemptCounter authenticationAttemptCounter) {
+    final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(Callback.Method.PIN);
 
+    callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withSuccess()
+        .shouldKeepCallback()
+        .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
+        .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
+        .build());
   }
 
   @Override
@@ -67,6 +74,25 @@ public class MobileAuthenticationHandler
     addAuthenticationRequestToQueue(confirmationCallback);
   }
 
+  public void replyToPinChallenge(final CallbackContext callbackContext, final boolean shouldAccept, final char[] pin) {
+    if (!(callbackQueue.peek() instanceof PinCallback)) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withErrorDescription(ERROR_NO_PIN_CHALLENGE)
+          .build());
+
+      return;
+    }
+
+    final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
+    pinCallback.setResultCallbackContext(callbackContext);
+
+    if (shouldAccept) {
+      pinCallback.getPinCallback().acceptAuthenticationRequest(pin);
+    } else {
+      pinCallback.getPinCallback().denyAuthenticationRequest();
+    }
+  }
+
   public void replyToConfirmationChallenge(final CallbackContext callbackContext, final boolean shouldAccept) {
     if (!(callbackQueue.peek() instanceof ConfirmationCallback)) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
@@ -77,7 +103,7 @@ public class MobileAuthenticationHandler
     }
 
     final ConfirmationCallback confirmationCallback = (ConfirmationCallback) callbackQueue.peek();
-    confirmationCallback.setFinalResultCallbackContext(callbackContext);
+    confirmationCallback.setResultCallbackContext(callbackContext);
 
     if (shouldAccept) {
       confirmationCallback.getAcceptDenyCallback().acceptAuthenticationRequest();
@@ -104,16 +130,26 @@ public class MobileAuthenticationHandler
     final Callback callback = callbackQueue.peek();
 
     if (!isRunning && callback != null) {
-      final OneginiMobileAuthenticationRequest mobileAuthenticationRequest = callback.getMobileAuthenticationRequest();
       final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(callback.getMethod());
 
       if (callbackContext != null) {
         isRunning = true;
-        callbackContext.sendPluginResult(new PluginResultBuilder()
+        final OneginiMobileAuthenticationRequest mobileAuthenticationRequest = callback.getMobileAuthenticationRequest();
+        final PluginResultBuilder pluginResultBuilder = new PluginResultBuilder();
+
+        pluginResultBuilder
             .withSuccess()
             .shouldKeepCallback()
-            .withOneginiMobileAuthenticationRequest(mobileAuthenticationRequest)
-            .build());
+            .withOneginiMobileAuthenticationRequest(mobileAuthenticationRequest);
+
+        if (callback instanceof PinCallback) {
+          final PinCallback pinCallback = (PinCallback) callback;
+          pluginResultBuilder
+              .withRemainingFailureCount(pinCallback.getAuthenticationAttemptCounter().getRemainingAttempts())
+              .withMaxFailureCount(pinCallback.getAuthenticationAttemptCounter().getRemainingAttempts());
+        }
+
+        callbackContext.sendPluginResult(pluginResultBuilder.build());
       }
     }
   }
@@ -124,7 +160,7 @@ public class MobileAuthenticationHandler
   }
 
   private void finishAuthenticationRequest(final OneginiError oneginiError) {
-    final CallbackContext callbackContext = callbackQueue.peek().getFinalResultCallbackContext();
+    final CallbackContext callbackContext = callbackQueue.poll().getResultCallbackContext();
     final PluginResult pluginResult;
 
     if (oneginiError == null) {
@@ -139,7 +175,6 @@ public class MobileAuthenticationHandler
 
     callbackContext.sendPluginResult(pluginResult);
 
-    callbackQueue.poll();
     isRunning = false;
     handleNextAuthenticationRequest();
   }

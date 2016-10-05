@@ -23,6 +23,8 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_PLUGIN_INTERNAL_ERROR = "Onegini: Internal plugin error";
   String ERROR_NO_SUCH_AUTHENTICATOR = "Onegini: No such authenticator found";
   String ERROR_NO_CONFIRMATION_CHALLENGE = "Onegini: Cannot reply to confirmation challenge, no challenge open";
+  String ERROR_NO_PIN_CHALLENGE = "Onegini: Cannot reply to pin challenge, no challenge open";
+  String ERROR_INVALID_MOBILE_AUTHENTICATOR_METHOD = "Onegini: Invalid mobile authenticator method";
 
   // Values
   int PIN_LENGTH = 5;

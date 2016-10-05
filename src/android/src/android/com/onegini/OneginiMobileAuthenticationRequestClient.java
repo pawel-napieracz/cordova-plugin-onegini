@@ -1,5 +1,7 @@
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_INVALID_MOBILE_AUTHENTICATOR_METHOD;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
@@ -7,11 +9,13 @@ import org.json.JSONException;
 
 import com.onegini.handler.MobileAuthenticationHandler;
 import com.onegini.mobileAuthentication.Callback;
+import com.onegini.util.ActionArgumentsUtil;
+import com.onegini.util.PluginResultBuilder;
 
 public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
 
   private static final String ACTION_REGISTER_CHALLENGE_RECEIVER = "registerChallengeReceiver";
-  private static final String ACTION_REPLY_TO_CONFIRMATION_CHALLENGE = "replyToConfirmationChallenge";
+  private static final String ACTION_REPLY_TO_CHALLENGE = "replyToChallenge";
   private static final String PARAM_METHOD = "method";
   private static final String PARAM_ACCEPT = "accept";
 
@@ -20,8 +24,8 @@ public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
     if (ACTION_REGISTER_CHALLENGE_RECEIVER.equals(action)) {
       registerChallengeReceiver(args, callbackContext);
       return true;
-    } else if (ACTION_REPLY_TO_CONFIRMATION_CHALLENGE.equals(action)) {
-      replyToConfirmationChallenge(args, callbackContext);
+    } else if (ACTION_REPLY_TO_CHALLENGE.equals(action)) {
+      replyToChallenge(args, callbackContext);
       return true;
     }
 
@@ -29,16 +33,45 @@ public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
   }
 
   private void registerChallengeReceiver(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final String methodString = args.getJSONObject(0).getString(PARAM_METHOD);
-    final Callback.Method method = Callback.Method.valueOf(methodString);
+    final Callback.Method method = ActionArgumentsUtil.getCallbackMethodFromArguments(args);
 
     MobileAuthenticationHandler.getInstance().registerAuthenticationChallengeReceiver(method, callbackContext);
   }
 
   private void replyToConfirmationChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final MobileAuthenticationHandler mobileAuthenticationHandler = MobileAuthenticationHandler.getInstance();
     final Boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
 
-    mobileAuthenticationHandler.replyToConfirmationChallenge(callbackContext, shouldAccept);
+    MobileAuthenticationHandler.getInstance().replyToConfirmationChallenge(callbackContext, shouldAccept);
+  }
+
+  private void replyToPinChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    final boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
+    final char[] pin;
+
+    if(shouldAccept) {
+      pin = ActionArgumentsUtil.getPinFromArguments(args).toCharArray();
+    } else {
+      pin = null;
+    }
+
+    MobileAuthenticationHandler.getInstance().replyToPinChallenge(callbackContext, shouldAccept, pin);
+  }
+
+  private void replyToChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    final Callback.Method method = ActionArgumentsUtil.getCallbackMethodFromArguments(args);
+
+    switch (method) {
+      case CONFIRMATION:
+        replyToConfirmationChallenge(args, callbackContext);
+        break;
+      case PIN:
+        replyToPinChallenge(args, callbackContext);
+        break;
+      default:
+        callbackContext.sendPluginResult(new PluginResultBuilder()
+            .withErrorDescription(ERROR_INVALID_MOBILE_AUTHENTICATOR_METHOD)
+            .build());
+        break;
+    }
   }
 }

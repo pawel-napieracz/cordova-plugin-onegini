@@ -8,7 +8,7 @@ public class Callback {
 
   private final OneginiMobileAuthenticationRequest mobileAuthenticationRequest;
   private final Method method;
-  private CallbackContext finalResultCallbackContext;
+  private CallbackContext resultCallbackContext;
 
   public Callback(final OneginiMobileAuthenticationRequest mobileAuthenticationRequest, final Method method) {
     this.mobileAuthenticationRequest = mobileAuthenticationRequest;
@@ -23,12 +23,12 @@ public class Callback {
     return method;
   }
 
-  public CallbackContext getFinalResultCallbackContext() {
-    return finalResultCallbackContext;
+  public CallbackContext getResultCallbackContext() {
+    return resultCallbackContext;
   }
 
-  public void setFinalResultCallbackContext(final CallbackContext finalResultCallbackContext) {
-    this.finalResultCallbackContext = finalResultCallbackContext;
+  public void setResultCallbackContext(final CallbackContext resultCallbackContext) {
+    this.resultCallbackContext = resultCallbackContext;
   }
 
   public enum Method {

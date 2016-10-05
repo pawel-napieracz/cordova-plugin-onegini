@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import android.support.annotation.Nullable;
 import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
+import com.onegini.mobileAuthentication.Callback;
 import com.squareup.okhttp.internal.http.HttpMethod;
 import retrofit.client.Header;
 import retrofit.client.Request;
@@ -45,6 +46,11 @@ public class ActionArgumentsUtil {
 
   public static String getPinFromArguments(final JSONArray args) throws JSONException {
     return args.getJSONObject(0).getString(PARAM_PIN);
+  }
+
+  public static Callback.Method getCallbackMethodFromArguments(final JSONArray args) throws JSONException {
+    final String methodName = args.getJSONObject(0).getString(PARAM_METHOD);
+    return Callback.Method.valueOf(methodName.toUpperCase());
   }
 
   public static boolean isFetchAnonymous(final JSONArray args) throws JSONException {

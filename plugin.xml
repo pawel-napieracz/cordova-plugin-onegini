@@ -291,5 +291,13 @@
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/MobileAuthenticationHandler.java"
                  target-dir="src/com/onegini/handler/"/>
+
+    <!-- mobileAuthentication -->
+    <source-file src="src/android/src/android/com/onegini/mobileAuthentication/Callback.java"
+                 target-dir="src/com/onegini/mobileAuthentication/"/>
+    <source-file src="src/android/src/android/com/onegini/mobileAuthentication/ConfirmationCallback.java"
+                 target-dir="src/com/onegini/mobileAuthentication/"/>
+    <source-file src="src/android/src/android/com/onegini/mobileAuthentication/PinCallback.java"
+                 target-dir="src/com/onegini/mobileAuthentication/"/>
   </platform>
 </plugin>
