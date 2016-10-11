@@ -1,11 +1,11 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
 #import "OGCDVResourceClient.h"
+#import "OGCDVConstants.h"
 
 NSString *const OGCDVPluginKeyAnonymous = @"anonymous";
 NSString *const OGCDVPluginKeyBody = @"body";
 NSString *const OGCDVPluginKeyUrl = @"url";
-NSString *const OGCDVPluginKeyMethod = @"method";
 NSString *const OGCDVPluginKeyStatus = @"status";
 NSString *const OGCDVPluginKeyStatusText = @"statusText";
 NSString *const OGCDVPluginKeyHeaders = @"headers";

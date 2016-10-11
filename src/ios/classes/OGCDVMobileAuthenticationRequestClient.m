@@ -2,15 +2,18 @@
 
 #import "OGCDVMobileAuthenticationRequestClient.h"
 #import "OGCDVMobileAuthenticationOperation.h"
+#import "OGCDVConstants.h"
 
 NSString *const OGCDVPluginKeyAccept = @"accept";
+NSString *const OGCDVPluginMobileAuthenticationMethodConfirmation = @"confirmation";
+NSString *const OGCDVPluginMobileAuthenticationMethodPin = @"pin";
 static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 @implementation OGCDVMobileAuthenticationRequestClient {
 }
 
 @synthesize operationQueue;
-@synthesize confirmationChallengeCallbackId;
+@synthesize challengeReceiversCallbackIds;
 
 + (id)sharedInstance
 {
@@ -21,7 +24,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 {
     operationQueue = [[NSOperationQueue alloc] init];
     [operationQueue setMaxConcurrentOperationCount:1];
-    confirmationChallengeCallbackId = [[NSString alloc] init];
+    challengeReceiversCallbackIds = [[NSMutableDictionary alloc] init];
     sharedInstance = self;
 }
 
@@ -32,31 +35,56 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    OGCDVMobileAuthenticationOperation *mobileAuthenticationOperation = [[OGCDVMobileAuthenticationOperation alloc] initWithRemoteNotificationUserInfo:userInfo];
-    [operationQueue addOperation:mobileAuthenticationOperation];
+    [[ONGUserClient sharedInstance] handleMobileAuthenticationRequest:userInfo delegate:self];
 }
 
-- (void)registerConfirmationChallengeReceiver:(CDVInvokedUrlCommand *)command
+- (void)userClient:(ONGUserClient *)userClient didReceiveConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation forRequest:(ONGMobileAuthenticationRequest *)request
 {
-    confirmationChallengeCallbackId = command.callbackId;
+    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+        initWithConfirmationChallenge:confirmation
+                           forRequest:request
+                            forMethod:OGCDVPluginMobileAuthenticationMethodConfirmation];
+    [operationQueue addOperation:operation];
 }
 
-- (void)replyToConfirmationChallenge:(CDVInvokedUrlCommand *)command
+- (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge forRequest:(ONGMobileAuthenticationRequest *)request
+{
+    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+        initWithPinChallenge:challenge
+                  forRequest:request
+                   forMethod:OGCDVPluginMobileAuthenticationMethodPin];
+    [operationQueue addOperation:operation];
+}
+
+- (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthenticationRequest:(ONGMobileAuthenticationRequest *)request error:(NSError *)error
+{
+    [self sendErrorResultForCallbackId:[delegate getCompleteOperationCallbackId:self] withError:error];
+    [delegate completeOperation];
+}
+
+- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthenticationRequest:(ONGMobileAuthenticationRequest *)request
+{
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:[delegate getCompleteOperationCallbackId:self]];
+    [delegate completeOperation];
+}
+
+- (void)registerChallengeReceiver:(CDVInvokedUrlCommand *)command
 {
     NSDictionary *options = command.arguments[0];
-    BOOL result = [options[OGCDVPluginKeyAccept] boolValue];
-    [delegate mobileAuthenticationRequestClient:self didReceiveConfirmationChallengeResponse:result withCallbackId:command.callbackId];
+    NSString *method = options[OGCDVPluginKeyMethod];
+    challengeReceiversCallbackIds[method] = command.callbackId;
 }
 
-- (void)sendConfirmationChallengePluginResult:(CDVPluginResult *)pluginResult
+- (void)replyToChallenge:(CDVInvokedUrlCommand *)command
 {
-    [pluginResult setKeepCallbackAsBool:YES];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:confirmationChallengeCallbackId];
-}
+    NSDictionary *options = command.arguments[0];
+    NSString *method = options[OGCDVPluginKeyMethod];
 
--(void)sendMobileAuthenticationPluginResult:(NSDictionary *)result
-{
-    [self.commandDelegate sendPluginResult:result[@"pluginResult"] callbackId:result[@"callbackId"]];
+    if ([OGCDVPluginMobileAuthenticationMethodConfirmation isEqualToString:method]) {
+        BOOL result = [options[OGCDVPluginKeyAccept] boolValue];
+        [delegate mobileAuthenticationRequestClient:self didReceiveConfirmationChallengeResponse:result withCallbackId:command.callbackId];
+    }
 }
 
 @end

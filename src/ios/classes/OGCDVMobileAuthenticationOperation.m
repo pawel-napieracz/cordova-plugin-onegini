@@ -3,20 +3,40 @@
 #import "OGCDVMobileAuthenticationOperation.h"
 #import "OGCDVConstants.h"
 
-NSString *const OGCDVPluginKeyType = @"type";
-NSString *const OGCDVPluginKeyMessage = @"message";
-
 @implementation OGCDVMobileAuthenticationOperation {
 }
 
-@synthesize remoteNotificationUserInfo;
-@synthesize didCompleteOperationCallbackId;
+@synthesize mobileAuthenticationRequest;
+@synthesize mobileAuthenticationMethod;
+@synthesize completeOperationCallbackId;
+@synthesize pinChallenge;
 
-- (id)initWithRemoteNotificationUserInfo:(NSDictionary *)userInfo
+- (id)initWithConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation
+                         forRequest:(ONGMobileAuthenticationRequest *)request
+                          forMethod:(NSString *)method
 {
-    if (![super init])
+    if (![super init]) {
         return nil;
-    [self setRemoteNotificationUserInfo:userInfo];
+    }
+
+    [self setConfirmationChallengeConfirmationBlock:confirmation];
+    [self setMobileAuthenticationMethod:method];
+    [self setMobileAuthenticationRequest:request];
+
+    return self;
+}
+
+- (id)initWithPinChallenge:(ONGPinChallenge *)challenge
+                forRequest:(ONGMobileAuthenticationRequest *)request
+                 forMethod:(NSString *)method;
+{
+    if (![super init]) {
+        return nil;
+    }
+
+    [self setPinChallenge:challenge];
+    [self setMobileAuthenticationMethod:method];
+    [self setMobileAuthenticationRequest:request];
 
     return self;
 }
@@ -37,58 +57,55 @@ NSString *const OGCDVPluginKeyMessage = @"message";
     [[OGCDVMobileAuthenticationRequestClient sharedInstance] performSelectorOnMainThread:@selector(setDelegate:)
                                                                               withObject:self
                                                                            waitUntilDone:YES];
-    [[ONGUserClient sharedInstance] handleMobileAuthenticationRequest:remoteNotificationUserInfo delegate:self];
+
+    NSDictionary *challengeReceiversCallbackIds = [[OGCDVMobileAuthenticationRequestClient sharedInstance] challengeReceiversCallbackIds];
+    NSString *challengeReceiverCallbackId = challengeReceiversCallbackIds[mobileAuthenticationMethod];
+
+    if (challengeReceiverCallbackId) {
+        [self sendChallenge:challengeReceiverCallbackId];
+    } else {
+        [[[OGCDVMobileAuthenticationRequestClient sharedInstance] challengeReceiversCallbackIds] addObserver:self
+                                                                                                  forKeyPath:mobileAuthenticationMethod
+                                                                                                     options:NSKeyValueObservingOptionNew
+                                                                                                     context:NULL];
+    }
 }
 
-- (void)userClient:(ONGUserClient *)userClient didReceiveConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation forRequest:(ONGMobileAuthenticationRequest *)request
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
 {
-    self.confirmationChallengeConfirmationBlock = confirmation;
 
-    NSDictionary *resultMessage = @{
-        OGCDVPluginKeyType : request.type,
-        OGCDVPluginKeyProfileId : request.userProfile.profileId,
-        OGCDVPluginKeyMessage : request.message
+    if ([keyPath isEqualToString:mobileAuthenticationMethod]) {
+        [[[OGCDVMobileAuthenticationRequestClient sharedInstance] challengeReceiversCallbackIds] removeObserver:self forKeyPath:mobileAuthenticationMethod];
+        NSString *challengeReceiverCallbackId = change[NSKeyValueChangeNewKey];
+        [self sendChallenge:challengeReceiverCallbackId];
+    }
+}
+
+- (void)sendChallenge:(NSString *)callbackId
+{
+    NSDictionary *message = @{
+        OGCDVPluginKeyType : mobileAuthenticationRequest.type,
+        OGCDVPluginKeyMessage : mobileAuthenticationRequest.message,
+        OGCDVPluginKeyProfileId : mobileAuthenticationRequest.userProfile.profileId
     };
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
+    [pluginResult setKeepCallbackAsBool:YES];
 
-    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultMessage];
-
-    [[OGCDVMobileAuthenticationRequestClient sharedInstance] performSelectorOnMainThread:@selector(sendConfirmationChallengePluginResult:)
-                                                                              withObject:result
-                                                                           waitUntilDone:YES];
-}
-
-- (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge forRequest:(ONGMobileAuthenticationRequest *)request
-{
+    [[[OGCDVMobileAuthenticationRequestClient sharedInstance] commandDelegate] sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 - (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient didReceiveConfirmationChallengeResponse:(BOOL)response withCallbackId:(NSString *)callbackId
 {
-    [self setDidCompleteOperationCallbackId:callbackId];
+    [self setCompleteOperationCallbackId:callbackId];
     [self confirmationChallengeConfirmationBlock](response);
 }
 
-- (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthenticationRequest:(ONGMobileAuthenticationRequest *)request error:(NSError *)error
+- (NSString *)getCompleteOperationCallbackId:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
 {
-    [self sendOperationPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR]];
-    [self completeOperation];
-}
-
-- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthenticationRequest:(ONGMobileAuthenticationRequest *)request
-{
-    [self sendOperationPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK]];
-    [self completeOperation];
-}
-
-- (void)sendOperationPluginResult:(CDVPluginResult *)result
-{
-    NSDictionary *arguments = @{
-        @"pluginResult" : result,
-        @"callbackId" : didCompleteOperationCallbackId,
-    };
-
-    [[OGCDVMobileAuthenticationRequestClient sharedInstance] performSelectorOnMainThread:@selector(sendMobileAuthenticationPluginResult:)
-                                                                              withObject:arguments
-                                                                           waitUntilDone:YES];
+    return self.completeOperationCallbackId;
 }
 
 - (BOOL)isAsynchronous
