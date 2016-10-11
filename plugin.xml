@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-onegini"
-        version="1.8.2">
+        version="1.8.3">
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
@@ -66,7 +66,7 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/OGUserProfile.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
-    <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-4.10.02-Release-fat-binary.a" framework="true"/>
+    <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-4.10.03-Release-fat-binary.a" framework="true"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
