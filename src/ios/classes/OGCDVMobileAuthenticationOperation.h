@@ -16,10 +16,10 @@
 
 - (id)initWithConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation
                          forRequest:(ONGMobileAuthenticationRequest *)request
-                          forMethod: (NSString *)method;
+                          forMethod:(NSString *)method;
 - (id)initWithPinChallenge:(ONGPinChallenge *)challenge
                 forRequest:(ONGMobileAuthenticationRequest *)request
-                 forMethod: (NSString *)method;
+                 forMethod:(NSString *)method;
 - (void)sendChallenge:(NSString *)callbackId;
 
 @end

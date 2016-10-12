@@ -22,7 +22,9 @@
 
 @protocol OGCDVPluginMobileAuthenticationRequestDelegate
 - (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
-  didReceiveConfirmationChallengeResponse:(BOOL)response withCallbackId:(NSString *)callbackId;
+  didReceiveConfirmationChallengeResponse:(BOOL)accept withCallbackId:(NSString *)callbackId;
+- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
+           didReceivePinChallengeResponse:(BOOL)accept withPin:(NSString *)pin withCallbackId:(NSString *)callbackId;
 - (NSString *)getCompleteOperationCallbackId:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient;
-- (void) completeOperation;
+- (void)completeOperation;
 @end

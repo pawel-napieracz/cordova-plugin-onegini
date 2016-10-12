@@ -80,10 +80,16 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 {
     NSDictionary *options = command.arguments[0];
     NSString *method = options[OGCDVPluginKeyMethod];
+    BOOL result = [options[OGCDVPluginKeyAccept] boolValue];
 
     if ([OGCDVPluginMobileAuthenticationMethodConfirmation isEqualToString:method]) {
-        BOOL result = [options[OGCDVPluginKeyAccept] boolValue];
-        [delegate mobileAuthenticationRequestClient:self didReceiveConfirmationChallengeResponse:result withCallbackId:command.callbackId];
+        [delegate mobileAuthenticationRequestClient:self didReceiveConfirmationChallengeResponse:result
+                                     withCallbackId:command.callbackId];
+    }
+    else if ([OGCDVPluginMobileAuthenticationMethodPin isEqualToString:method]) {
+        NSString *pin = options[OGCDVPluginKeyPin];
+        [delegate mobileAuthenticationRequestClient:self didReceivePinChallengeResponse:result withPin:pin
+                                     withCallbackId:command.callbackId];
     }
 }
 

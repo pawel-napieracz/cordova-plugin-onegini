@@ -86,22 +86,40 @@
 
 - (void)sendChallenge:(NSString *)callbackId
 {
-    NSDictionary *message = @{
-        OGCDVPluginKeyType : mobileAuthenticationRequest.type,
-        OGCDVPluginKeyMessage : mobileAuthenticationRequest.message,
-        OGCDVPluginKeyProfileId : mobileAuthenticationRequest.userProfile.profileId
-    };
+    NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
+    message[OGCDVPluginKeyType] = mobileAuthenticationRequest.type;
+    message[OGCDVPluginKeyMessage] = mobileAuthenticationRequest.message;
+    message[OGCDVPluginKeyProfileId] = mobileAuthenticationRequest.userProfile.profileId;
+
+    if (pinChallenge) {
+        message[OGCDVPluginKeyMaxFailureCount] = @(pinChallenge.maxFailureCount);
+        message[OGCDVPluginKeyRemainingFailureCount] = @(pinChallenge.remainingFailureCount);
+    }
+
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
     [pluginResult setKeepCallbackAsBool:YES];
 
     [[[OGCDVMobileAuthenticationRequestClient sharedInstance] commandDelegate] sendPluginResult:pluginResult callbackId:callbackId];
 }
 
-- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient didReceiveConfirmationChallengeResponse:(BOOL)response withCallbackId:(NSString *)callbackId
+- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
+  didReceiveConfirmationChallengeResponse:(BOOL)accept withCallbackId:(NSString *)callbackId
 {
     [self setCompleteOperationCallbackId:callbackId];
-    [self confirmationChallengeConfirmationBlock](response);
+    [self confirmationChallengeConfirmationBlock](accept);
 }
+
+- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient didReceivePinChallengeResponse:(BOOL)accept withPin:(NSString *)pin withCallbackId:(NSString *)callbackId
+{
+    [self setCompleteOperationCallbackId:callbackId];
+
+    if (accept) {
+        [[[self pinChallenge] sender] respondWithPin:pin challenge:pinChallenge];
+    } else {
+        [[[self pinChallenge] sender] cancelChallenge:pinChallenge];
+    }
+}
+
 
 - (NSString *)getCompleteOperationCallbackId:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
 {
