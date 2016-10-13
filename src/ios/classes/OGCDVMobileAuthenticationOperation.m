@@ -76,7 +76,6 @@
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-
     if ([keyPath isEqualToString:mobileAuthenticationMethod]) {
         [[[OGCDVMobileAuthenticationRequestClient sharedInstance] challengeReceiversCallbackIds] removeObserver:self forKeyPath:mobileAuthenticationMethod];
         NSString *challengeReceiverCallbackId = change[NSKeyValueChangeNewKey];
@@ -109,7 +108,8 @@
     [self confirmationChallengeConfirmationBlock](accept);
 }
 
-- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient didReceivePinChallengeResponse:(BOOL)accept withPin:(NSString *)pin withCallbackId:(NSString *)callbackId
+- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
+           didReceivePinChallengeResponse:(BOOL)accept withPin:(NSString *)pin withCallbackId:(NSString *)callbackId
 {
     [self setCompleteOperationCallbackId:callbackId];
 
@@ -118,11 +118,6 @@
     } else {
         [[[self pinChallenge] sender] cancelChallenge:pinChallenge];
     }
-}
-
-- (NSString *)getCompleteOperationCallbackId:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
-{
-    return self.completeOperationCallbackId;
 }
 
 - (BOOL)isAsynchronous
