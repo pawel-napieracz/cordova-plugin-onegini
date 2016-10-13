@@ -6,10 +6,13 @@ import com.onegini.OneginiSDK;
 import com.onegini.handler.MobileAuthenticationHandler;
 
 public class OneginiGcmListenerService extends GcmListenerService {
+
   @Override
   public void onMessageReceived(final String s, final Bundle bundle) {
-    if (!bundle.isEmpty()) {
-      OneginiSDK.getOneginiClient(this).getUserClient().handleMobileAuthenticationRequest(bundle, MobileAuthenticationHandler.getInstance());
+    if (bundle.isEmpty()) {
+      return;
     }
+
+    OneginiSDK.getOneginiClient(this).getUserClient().handleMobileAuthenticationRequest(bundle, MobileAuthenticationHandler.getInstance());
   }
 }

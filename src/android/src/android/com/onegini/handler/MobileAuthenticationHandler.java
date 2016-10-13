@@ -48,26 +48,7 @@ public class MobileAuthenticationHandler
     handleNextAuthenticationRequest();
   }
 
-  @Override
-  public void onNextAuthenticationAttempt(final AuthenticationAttemptCounter authenticationAttemptCounter) {
-    final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(Callback.Method.PIN);
-    final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
-
-    callbackContext.sendPluginResult(new PluginResultBuilder()
-        .withSuccess()
-        .shouldKeepCallback()
-        .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
-        .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
-        .withOneginiMobileAuthenticationRequest(pinCallback.getMobileAuthenticationRequest())
-        .build());
-  }
-
-  @Override
-  public void startAuthentication(final OneginiMobileAuthenticationRequest oneginiMobileAuthenticationRequest, final OneginiPinCallback oneginiPinCallback,
-                                  final AuthenticationAttemptCounter authenticationAttemptCounter) {
-    final PinCallback pinCallback = new PinCallback(oneginiMobileAuthenticationRequest, oneginiPinCallback, authenticationAttemptCounter);
-    addAuthenticationRequestToQueue(pinCallback);
-  }
+  // *START* Handling mobile authentication without additional authentication
 
   @Override
   public void startAuthentication(final OneginiMobileAuthenticationRequest mobileAuthenticationRequest,
@@ -76,27 +57,9 @@ public class MobileAuthenticationHandler
     addAuthenticationRequestToQueue(confirmationCallback);
   }
 
-  public void replyToPinChallenge(final CallbackContext callbackContext, final boolean shouldAccept, final char[] pin) {
-    if (!(callbackQueue.peek() instanceof PinCallback)) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_PIN_CHALLENGE)
-          .build());
-
-      return;
-    }
-
-    final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
-    pinCallback.setResultCallbackContext(callbackContext);
-
-    if (shouldAccept) {
-      pinCallback.getPinCallback().acceptAuthenticationRequest(pin);
-    } else {
-      pinCallback.getPinCallback().denyAuthenticationRequest();
-    }
-  }
-
   public void replyToConfirmationChallenge(final CallbackContext callbackContext, final boolean shouldAccept) {
-    if (!(callbackQueue.peek() instanceof ConfirmationCallback)) {
+    boolean isCallbackOfInvalidType = !(callbackQueue.peek() instanceof ConfirmationCallback);
+    if (isCallbackOfInvalidType) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withErrorDescription(ERROR_NO_CONFIRMATION_CHALLENGE)
           .build());
@@ -114,46 +77,97 @@ public class MobileAuthenticationHandler
     }
   }
 
+  // *END*
+
+  // *START* Handling mobile authentication with PIN
+
   @Override
-  public void finishAuthentication() {
+  public void startAuthentication(final OneginiMobileAuthenticationRequest oneginiMobileAuthenticationRequest, final OneginiPinCallback oneginiPinCallback,
+                                  final AuthenticationAttemptCounter authenticationAttemptCounter) {
+    final PinCallback pinCallback = new PinCallback(oneginiMobileAuthenticationRequest, oneginiPinCallback, authenticationAttemptCounter);
+    addAuthenticationRequestToQueue(pinCallback);
   }
+
+  @Override
+  public void onNextAuthenticationAttempt(final AuthenticationAttemptCounter authenticationAttemptCounter) {
+    final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(Callback.Method.PIN);
+    final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
+
+    callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withSuccess()
+        .shouldKeepCallback()
+        .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
+        .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
+        .withOneginiMobileAuthenticationRequest(pinCallback.getMobileAuthenticationRequest())
+        .build());
+  }
+
+  public void replyToPinChallenge(final CallbackContext callbackContext, final boolean shouldAccept, final char[] pin) {
+    boolean isCallbackOfInvalidType = !(callbackQueue.peek() instanceof PinCallback);
+    if (isCallbackOfInvalidType) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withErrorDescription(ERROR_NO_PIN_CHALLENGE)
+          .build());
+
+      return;
+    }
+
+    final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
+    pinCallback.setResultCallbackContext(callbackContext);
+
+    if (shouldAccept) {
+      pinCallback.getPinCallback().acceptAuthenticationRequest(pin);
+    } else {
+      pinCallback.getPinCallback().denyAuthenticationRequest();
+    }
+  }
+
+  // *END*
+
+  // *START* Mobile authentication Handler methods
 
   @Override
   public void onSuccess() {
     finishAuthenticationRequest(null);
   }
 
+
   @Override
   public void onError(final OneginiMobileAuthenticationError oneginiMobileAuthenticationError) {
     finishAuthenticationRequest(oneginiMobileAuthenticationError);
   }
 
+  // *END*
+
   private void handleNextAuthenticationRequest() {
     final Callback callback = callbackQueue.peek();
 
-    if (!isRunning && callback != null) {
-      final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(callback.getMethod());
-
-      if (callbackContext != null) {
-        isRunning = true;
-        final OneginiMobileAuthenticationRequest mobileAuthenticationRequest = callback.getMobileAuthenticationRequest();
-        final PluginResultBuilder pluginResultBuilder = new PluginResultBuilder();
-
-        pluginResultBuilder
-            .withSuccess()
-            .shouldKeepCallback()
-            .withOneginiMobileAuthenticationRequest(mobileAuthenticationRequest);
-
-        if (callback instanceof PinCallback) {
-          final PinCallback pinCallback = (PinCallback) callback;
-          pluginResultBuilder
-              .withRemainingFailureCount(pinCallback.getAuthenticationAttemptCounter().getRemainingAttempts())
-              .withMaxFailureCount(pinCallback.getAuthenticationAttemptCounter().getRemainingAttempts());
-        }
-
-        callbackContext.sendPluginResult(pluginResultBuilder.build());
-      }
+    if (isRunning || callback == null) {
+      return;
     }
+
+    final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(callback.getMethod());
+    if (callbackContext == null) {
+      return;
+    }
+
+    isRunning = true;
+    final OneginiMobileAuthenticationRequest mobileAuthenticationRequest = callback.getMobileAuthenticationRequest();
+    final PluginResultBuilder pluginResultBuilder = new PluginResultBuilder();
+
+    pluginResultBuilder
+        .withSuccess()
+        .shouldKeepCallback()
+        .withOneginiMobileAuthenticationRequest(mobileAuthenticationRequest);
+
+    if (callback instanceof PinCallback) {
+      final PinCallback pinCallback = (PinCallback) callback;
+      pluginResultBuilder
+          .withRemainingFailureCount(pinCallback.getAuthenticationAttemptCounter().getRemainingAttempts())
+          .withMaxFailureCount(pinCallback.getAuthenticationAttemptCounter().getRemainingAttempts());
+    }
+
+    callbackContext.sendPluginResult(pluginResultBuilder.build());
   }
 
   private void addAuthenticationRequestToQueue(final Callback callback) {
@@ -184,4 +198,11 @@ public class MobileAuthenticationHandler
   private CallbackContext getChallengeReceiverForCallbackMethod(final Callback.Method method) {
     return challengeReceivers.get(method);
   }
+
+  @Override
+  public void finishAuthentication() {
+    // We don't want to do anything here because the onSuccess or onError methods of the handler will be called. This method is a convenience method when you
+    // already want to close your UI dialog after authentication was finished.
+  }
+
 }
