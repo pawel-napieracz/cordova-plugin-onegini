@@ -22,6 +22,9 @@ allprojects {
         if (project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
           username artifactory_user
           password artifactory_password
+        } else {
+          throw new InvalidUserDataException("You must configure the 'artifactory_user' and 'artifactory_password' properties in your project before you can " +
+              "build it.")
         }
       }
     }
@@ -30,7 +33,7 @@ allprojects {
 
 dependencies {
   // Onegini SDK
-  compile('com.onegini.mobile.sdk.android:onegini-sdk:6.00.00-SNAPSHOT:debug@aar')
+  compile('com.onegini.mobile.sdk.android:onegini-sdk:6.00.01:release@aar')
 
   // Http Client
   compile 'com.squareup.okhttp:okhttp:2.4.0'
