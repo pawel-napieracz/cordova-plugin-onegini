@@ -25,6 +25,15 @@ exports.defineAutoTests = function () {
     xhr.open("POST", "https://demo-msp.onegini.com/oauth/api/v2/authenticate/user");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.setRequestHeader("Authorization", "Basic ODgyMzRCMEU5MzIzNzFCNzY3N0I2QkZCNUFGQTJGMTI1QjY3NkNGNTNBMTExREFGRjQyNjQ3NzM5QzRGMDVDNTo1MTE2NzA5OTM4QUE1MkY2RkI5NDkwRDc3MUE1QzQ0Rjk4N0QxRUE3ODJERUMwNEQwRTM4NzA5NEJBMzVGMzM5");
+
+    xhr.onreadystatechange = function () {
+      if (this.readyState === 4) {
+        if (this.status !== 200) {
+          console.error("Failed to send mobile authentication request!", JSON.parse(this.responseText));
+        }
+      }
+    };
+
     xhr.send("callback_uri=https://wwww.onegini.com&message=Test&type=" + type + "&user_id=testclientuserid");
   }
 
@@ -459,7 +468,7 @@ exports.defineAutoTests = function () {
                 expect(err).toBeUndefined();
                 fail("Error callback was called, but method should have succeeded");
               });
-        }, 10000);
+        }, 20000);
       });
 
       describe("on", function () {
@@ -483,7 +492,7 @@ exports.defineAutoTests = function () {
               });
 
           sendMobileAuthenticationRequest();
-        });
+        }, 10000);
 
         it('Should reject a mobile authentication request', function (done) {
           onegini.mobileAuthentication.on("confirmation")
@@ -501,7 +510,7 @@ exports.defineAutoTests = function () {
               });
 
           sendMobileAuthenticationRequest();
-        });
+        }, 10000);
 
         it('Should be able to handle multiple requests', function (done) {
           var counter = 0;
@@ -571,7 +580,7 @@ exports.defineAutoTests = function () {
               });
 
           sendMobileAuthenticationRequest("push_with_pin");
-        });
+        }, 10000);
       });
     });
 
