@@ -19,9 +19,8 @@
         return nil;
     }
 
+    [self initOperationWithRequest:request forMethod:method];
     [self setConfirmationChallengeConfirmationBlock:confirmation];
-    [self setMobileAuthenticationMethod:method];
-    [self setMobileAuthenticationRequest:request];
 
     return self;
 }
@@ -34,11 +33,19 @@
         return nil;
     }
 
+    [self initOperationWithRequest:request forMethod:method];
     [self setPinChallenge:challenge];
+
+    return self;
+}
+
+- (void)initOperationWithRequest:(ONGMobileAuthenticationRequest *)request forMethod:(NSString *)method
+{
+    self.qualityOfService = NSOperationQualityOfServiceBackground;
+
     [self setMobileAuthenticationMethod:method];
     [self setMobileAuthenticationRequest:request];
 
-    return self;
 }
 
 - (void)start
