@@ -1,38 +1,38 @@
 //  Copyright © 2016 Onegini. All rights reserved.
 
 #import "OGCDVUserRegistrationClient.h"
-#import "AppDelegate.h"
 #import "OGCDVWebBrowserViewController.h"
-
-static NSString *const OGCDVPluginKeyProfileId = @"profileId";
-static NSString *const OGCDVPluginKeyScopes = @"scopes";
-static NSString *const OGCDVPluginKeyPin = @"pin";
-static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
+#import "OGCDVUserClientHelper.h"
+#import "OGCDVConstants.h"
 
 @implementation OGCDVUserRegistrationClient {}
 
 - (void)start:(CDVInvokedUrlCommand*)command
 {
-  self.callbackId = command.callbackId;
-  NSArray *optionalScopes = nil;
-  if (command.arguments.count > 0) {
-    NSDictionary *options = [command.arguments objectAtIndex:0];
-    optionalScopes = options[OGCDVPluginKeyScopes];
-  }
-  [[ONGUserClient sharedInstance] registerUser:optionalScopes delegate:self];
+  [self.commandDelegate runInBackground:^{
+      self.callbackId = command.callbackId;
+      NSArray *optionalScopes = nil;
+      if (command.arguments.count > 0) {
+        NSDictionary *options = command.arguments[0];
+        optionalScopes = options[OGCDVPluginKeyScopes];
+      }
+      [[ONGUserClient sharedInstance] registerUser:optionalScopes delegate:self];
+  }];
 }
 
 - (void)createPin:(CDVInvokedUrlCommand*)command
 {
-  self.callbackId = command.callbackId;
-  NSDictionary *options = [command.arguments objectAtIndex:0];
-  NSString *pin = options[OGCDVPluginKeyPin];
+  [self.commandDelegate runInBackground:^{
+    self.callbackId = command.callbackId;
+    NSDictionary *options = command.arguments[0];
+    NSString *pin = options[OGCDVPluginKeyPin];
 
-  if (self.createPinChallenge) {
-    [self.createPinChallenge.sender respondWithCreatedPin:pin challenge:self.createPinChallenge];
-  } else {
-    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: createPin called, but no registration in progress. Did you call 'onegini.user.register.start'?"];
-  }
+    if (self.createPinChallenge) {
+      [self.createPinChallenge.sender respondWithCreatedPin:pin challenge:self.createPinChallenge];
+    } else {
+      [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: createPin called, but no registration in progress. Did you call 'onegini.user.register.start'?"];
+    }
+  }];
 }
 
 - (void)getUserProfiles:(CDVInvokedUrlCommand*)command
@@ -45,6 +45,16 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
   }
 
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
+}
+
+- (void)isUserRegistered:(CDVInvokedUrlCommand*)command
+{
+  NSDictionary *options = command.arguments[0];
+  NSString *profileId = options[OGCDVPluginKeyProfileId];
+
+  BOOL isRegistered = [OGCDVUserClientHelper getRegisteredUserProfile:profileId] != nil;
+
+  [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isRegistered] callbackId:command.callbackId];
 }
 
 #pragma mark - ONGRegistrationDelegate
@@ -63,12 +73,15 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:self.callbackId];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didReceiveAuthenticationCodeRequestWithUrl:(NSURL *)url
+- (void)userClient:(ONGUserClient *)userClient didReceiveRegistrationRequestWithUrl:(NSURL *)url
 {
-  OGCDVWebBrowserViewController *webBrowserViewController = [OGCDVWebBrowserViewController new];
-  webBrowserViewController.url = url;
-  webBrowserViewController.completionBlock = ^(NSURL *completionURL) {};
-  [self.viewController presentViewController:webBrowserViewController animated:YES completion:nil];
+  // run on the main thread; we initiated registration in a background thread, but now we need to manipulate the UI
+  dispatch_async(dispatch_get_main_queue(), ^{
+      OGCDVWebBrowserViewController *webBrowserViewController = [OGCDVWebBrowserViewController new];
+      webBrowserViewController.url = url;
+      webBrowserViewController.completionBlock = ^(NSURL *completionURL) {};
+      [self.viewController presentViewController:webBrowserViewController animated:YES completion:nil];
+  });
 }
 
 - (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile
@@ -81,13 +94,6 @@ static NSString *const OGCDVPluginKeyPinLength = @"pinLength";
 - (void)userClient:(ONGUserClient *)userClient didFailToRegisterWithError:(NSError *)error
 {
   [self.viewController dismissViewControllerAnimated:YES completion:nil];
-  [self sendErrorResultForCallbackId:self.callbackId withError:error];
-}
-
-#pragma mark - OGPinValidationDelegate
-
-- (void)pinEntryError:(NSError *)error
-{
   [self sendErrorResultForCallbackId:self.callbackId withError:error];
 }
 

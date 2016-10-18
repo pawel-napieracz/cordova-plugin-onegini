@@ -3,9 +3,7 @@
 #import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
-@interface OGCDVUserDeregistrationClient : CDVPlugin<ONGDeregistrationDelegate>
-
-@property (nonatomic, copy) NSString *callbackId;
+@interface OGCDVUserDeregistrationClient : CDVPlugin
 
 - (void)deregister:(CDVInvokedUrlCommand *)command;
 

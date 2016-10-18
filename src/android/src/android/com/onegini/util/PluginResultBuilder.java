@@ -1,9 +1,10 @@
 package com.onegini.util;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
 
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,17 +12,20 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
+import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
+import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
+import retrofit.client.Response;
 
 public class PluginResultBuilder {
 
   private JSONObject payload;
   private PluginResult.Status status;
-  private boolean shouldKeepCallback;
+  private Boolean shouldKeepCallback = false;
 
   public PluginResultBuilder() {
     payload = new JSONObject();
-    shouldKeepCallback = false;
   }
 
   public PluginResultBuilder withSuccess() {
@@ -31,6 +35,12 @@ public class PluginResultBuilder {
 
   public PluginResultBuilder withError() {
     status = ERROR;
+    return this;
+  }
+
+  public PluginResultBuilder shouldKeepCallback() {
+    this.shouldKeepCallback = true;
+
     return this;
   }
 
@@ -46,16 +56,24 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder shouldKeepCallback() {
-    this.shouldKeepCallback = true;
+  public PluginResultBuilder withOneginiError(final OneginiError oneginiError) {
+    this.status = ERROR;
+
+    try {
+      payload.put("code", oneginiError.getErrorType());
+      payload.put("description", oneginiError.getErrorDescription());
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
     return this;
   }
 
-  public PluginResultBuilder withErrorType(final int errorType) {
-    status = ERROR;
-
+  public PluginResultBuilder withOneginiMobileAuthenticationRequest(OneginiMobileAuthenticationRequest mobileAuthenticationRequest) {
     try {
-      payload.put("errorType", errorType);
+      payload.put("type", mobileAuthenticationRequest.getType());
+      payload.put("message", mobileAuthenticationRequest.getMessage());
+      payload.put("profileId", mobileAuthenticationRequest.getUserProfile().getProfileId());
     } catch (JSONException e) {
       handleException(e);
     }
@@ -103,6 +121,36 @@ public class PluginResultBuilder {
     return this;
   }
 
+  public PluginResultBuilder withRetrofitResponse(Response response) {
+    final int responseStatus = response.getStatus();
+    if (responseStatus == HttpURLConnection.HTTP_OK) {
+      this.status = OK;
+    } else {
+      this.status = ERROR;
+    }
+
+    try {
+      payload.put("body", RetrofitResponseUtil.getBodyStringFromRetrofitResponse(response));
+      payload.put("status", responseStatus);
+      payload.put("statusText", response.getReason());
+      payload.put("headers", RetrofitResponseUtil.getJsonHeadersFromRetrofitResponse(response));
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withOneginiConfigModel(final OneginiClientConfigModel configModel) {
+    try {
+      payload.put("resourceBaseURL", configModel.getResourceBaseUrl());
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
   private void handleException(JSONException e) {
     this.status = ERROR;
 
@@ -121,6 +169,7 @@ public class PluginResultBuilder {
     }
 
     pluginResult.setKeepCallback(shouldKeepCallback);
+
     return pluginResult;
   }
 }

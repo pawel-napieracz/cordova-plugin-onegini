@@ -1,6 +1,5 @@
 package com.onegini;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
@@ -29,19 +28,8 @@ public class OneginiUserDeregistrationClient extends CordovaPlugin {
     return false;
   }
 
-  private void startDeregistration(final JSONArray args, final CallbackContext callbackContext) {
-    final UserProfile userProfile;
-
-    try {
-      userProfile = getUserProfile(args);
-    } catch (JSONException e) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withError()
-          .withErrorDescription(ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT)
-          .build());
-
-      return;
-    }
+  private void startDeregistration(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    final UserProfile userProfile = getUserProfile(args);
 
     if (userProfile == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
@@ -52,10 +40,12 @@ public class OneginiUserDeregistrationClient extends CordovaPlugin {
       return;
     }
 
+    final DeregistrationHandler deregistrationHandler = new DeregistrationHandler(callbackContext);
+
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
         getOneginiClient().getUserClient()
-            .deregisterUser(userProfile, new DeregistrationHandler(callbackContext));
+            .deregisterUser(userProfile, deregistrationHandler);
       }
     });
   }
