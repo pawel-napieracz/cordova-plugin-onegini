@@ -258,7 +258,7 @@ var OneginiDemo = (function () {
     },
 
     enrollForMobileAuthentication: function () {
-      onegini.user.mobileAuthentication.enroll(
+      onegini.mobileAuthentication.enroll(
           function () {
             alert("Success!");
           },
