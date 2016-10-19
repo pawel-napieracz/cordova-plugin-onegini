@@ -5,8 +5,8 @@
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
-  <!--<hook type="after_platform_add" src="hooks/configure_sdk.js" />-->
-  <!--<hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />-->
+  <hook type="after_platform_add" src="hooks/configure_sdk.js" />
+  <hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />
 
   <js-module src="www/onegini.js" name="onegini">
     <clobbers target="onegini"/>
@@ -125,7 +125,7 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserProfile.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
-    <source-file src="src/ios/OneginiSDKiOS/OneginiSDKiOS-5.00.00-SNAPSHOT-Release-fat-binary.a" framework="true"/>
+    <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS-5.00.01.a" framework="true"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>

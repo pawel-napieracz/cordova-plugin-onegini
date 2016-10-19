@@ -16,12 +16,14 @@ allprojects {
     mavenCentral()
 
     maven {
-      // TODO move back to https://repo.onegini.com/artifactory/onegini-sdk after we have released the iOS SDK
-      url "https://repo.onegini.com/artifactory/libs-snapshot-local"
+      url "https://repo.onegini.com/artifactory/onegini-sdk"
       credentials {
-        if(project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
+        if (project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
           username artifactory_user
           password artifactory_password
+        } else {
+          throw new InvalidUserDataException("You must configure the 'artifactory_user' and 'artifactory_password' properties in your project before you can " +
+              "build it.")
         }
       }
     }
@@ -34,9 +36,8 @@ configurations {
 
 dependencies {
   // The onegini sdk
-  // TODO move back to the Released version of the iOS SDK
-  compile 'com.onegini.mobile.sdk.ios:OneginiSDKiOS:5.00.00-SNAPSHOT:Release-fat-binary@a'
-  compile 'com.onegini.mobile.sdk.ios:OneginiSDKiOS:5.00.00-SNAPSHOT:Release-iphoneos.headers@tar'
+  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.00.01@a'
+  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.00.01:headers@zip'
 }
 
 task prepareTargetDirectory {
@@ -54,10 +55,10 @@ task resolveDependencies(type: Copy, dependsOn: downloadLibs) {
   def headersPackage
 
   configurations.compile.each {
-    if (it.name.endsWith(".tar")) {
+    if (it.name.endsWith(".zip")) {
       headersPackage = it.absoluteFile;
     }
   }
-  from tarTree(headersPackage)
+  from zipTree(headersPackage)
   into headersDir
 }
