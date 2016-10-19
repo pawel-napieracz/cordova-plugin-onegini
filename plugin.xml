@@ -277,8 +277,6 @@
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/CreatePinRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/InitializationHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/PinAuthenticationRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/ChangePinHandler.java"
