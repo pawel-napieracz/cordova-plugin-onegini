@@ -85,8 +85,6 @@ public class OneginiClient extends CordovaPlugin {
   }
 
   private void start(final CallbackContext callbackContext) {
-    final OneginiClientConfigModel configModel = OneginiSDK.getInstance().getOneginiClient(getApplicationContext()).getConfigModel();
-
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
         OneginiSDK.getInstance().startSDK(getApplicationContext(), new OneginiInitializationHandler() {
