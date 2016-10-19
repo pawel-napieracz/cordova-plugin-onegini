@@ -21,6 +21,7 @@
     <config-file target="config.xml" parent="/*">
       <feature name="OneginiClient">
         <param name="ios-package" value="OGCDVClient" />
+        <param name="onload" value="true" />
       </feature>
       <feature name="OneginiUserClient">
         <param name="ios-package" value="OGCDVUserClient" />
