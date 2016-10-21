@@ -65,7 +65,6 @@ exports.defineAutoTests = function () {
     });
   });
 
-
   /******** onegini.user (1/2) *********/
 
   describe('onegini.user', function () {

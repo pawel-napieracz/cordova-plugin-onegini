@@ -21,7 +21,6 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   private CallbackContext finishAuthenticationCallback;
 
   protected PinAuthenticationRequestHandler() {
-
   }
 
   public static PinAuthenticationRequestHandler getInstance() {
@@ -49,7 +48,8 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   }
 
   @Override
-  public void startAuthentication(final UserProfile userProfile, final OneginiPinCallback oneginiPinCallback, final AuthenticationAttemptCounter authenticationAttemptCounter) {
+  public void startAuthentication(final UserProfile userProfile, final OneginiPinCallback oneginiPinCallback,
+                                  final AuthenticationAttemptCounter authenticationAttemptCounter) {
     this.pinCallback = oneginiPinCallback;
 
     final PluginResult pluginResult = new PluginResultBuilder()
