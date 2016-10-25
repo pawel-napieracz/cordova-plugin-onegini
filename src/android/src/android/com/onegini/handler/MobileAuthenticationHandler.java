@@ -176,7 +176,14 @@ public class MobileAuthenticationHandler
   }
 
   private void finishAuthenticationRequest(final OneginiError oneginiError) {
-    final CallbackContext callbackContext = callbackQueue.poll().getResultCallbackContext();
+    Callback callback = callbackQueue.poll();
+    if (callback == null) {
+      // We don't have a callback anymore so we cannot perform any callback. We'll just continue to process the next authentication request
+      startProcessingNextAuthenticationRequest();
+      return;
+    }
+
+    final CallbackContext callbackContext = callback.getResultCallbackContext();
     final PluginResult pluginResult;
 
     if (oneginiError == null) {
@@ -191,6 +198,10 @@ public class MobileAuthenticationHandler
 
     callbackContext.sendPluginResult(pluginResult);
 
+    startProcessingNextAuthenticationRequest();
+  }
+
+  private void startProcessingNextAuthenticationRequest() {
     isRunning = false;
     handleNextAuthenticationRequest();
   }

@@ -21,6 +21,7 @@
     <config-file target="config.xml" parent="/*">
       <feature name="OneginiClient">
         <param name="ios-package" value="OGCDVClient" />
+        <param name="onload" value="true" />
       </feature>
       <feature name="OneginiUserClient">
         <param name="ios-package" value="OGCDVUserClient" />
@@ -276,8 +277,6 @@
     <source-file src="src/android/src/android/com/onegini/handler/DeregistrationHandler.java"
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/CreatePinRequestHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/InitializationHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/PinAuthenticationRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>

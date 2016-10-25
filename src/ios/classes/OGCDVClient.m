@@ -5,33 +5,56 @@
 #import "OGCDVConstants.h"
 #import "OneginiConfigModel.h"
 #import "OGCDVMobileAuthenticationClient.h"
+#import "OGCDVMobileAuthenticationRequestClient.h"
 
 @implementation OGCDVClient {
 }
 
+- (void)pluginInitialize
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunchingNotification:)
+                                                 name:UIApplicationDidFinishLaunchingNotification object:nil];
+}
+
+- (void)applicationDidFinishLaunchingNotification:(NSNotification *)notification
+{
+    self.launchNotificationUserInfo = notification.userInfo[UIApplicationLaunchOptionsRemoteNotificationKey];
+}
+
 - (void)start:(CDVInvokedUrlCommand *)command
 {
-  [self.commandDelegate runInBackground:^{
-      [[[ONGClientBuilder new] build] start:^(BOOL result, NSError *error) {
-          if (error != nil) {
-            if (ONGGenericErrorOutdatedApplication == error.code) {
-              [self sendErrorResultForCallbackId:command.callbackId withMessage:@"The application version is no longer valid, please visit the app store to update your application."];
-            }
+    [self.commandDelegate runInBackground:^{
+        [[[ONGClientBuilder new] build] start:^(BOOL result, NSError *error) {
+            if (error != nil) {
+                if (ONGGenericErrorOutdatedApplication == error.code) {
+                    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"The application version is no longer valid, please visit the app store to update your application."];
+                }
 
-            if (ONGGenericErrorOutdatedOS == error.code) {
-              [self sendErrorResultForCallbackId:command.callbackId withMessage:@"The operating system that you use is no longer valid, please update your OS."];
+                if (ONGGenericErrorOutdatedOS == error.code) {
+                    [self sendErrorResultForCallbackId:command.callbackId withMessage:@"The operating system that you use is no longer valid, please update your OS."];
+                }
+            } else {
+                OGCDVMobileAuthenticationClient *mobileAuthClient = [(CDVViewController *)self.viewController getCommandInstance:OGCDVPluginClassMobileAuthenticationClient];
+                if (mobileAuthClient.pendingDeviceToken != nil) {
+                    [[ONGUserClient sharedInstance] storeDevicePushTokenInSession:mobileAuthClient.pendingDeviceToken];
+                    mobileAuthClient.pendingDeviceToken = nil;
+                }
+                NSDictionary *config = @{OGCDVPluginKeyResourceBaseURL: OneginiConfigModel.configuration[ONGResourceBaseURL]};
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:config] callbackId:command.callbackId];
+                [self handleLaunchNotification];
             }
-          } else {
-            OGCDVMobileAuthenticationClient *mobileAuthClient = [(CDVViewController *) self.viewController getCommandInstance:OGCDVPluginClassMobileAuthenticationClient];
-            if (mobileAuthClient.pendingDeviceToken != nil) {
-              [[ONGUserClient sharedInstance] storeDevicePushTokenInSession:mobileAuthClient.pendingDeviceToken];
-              mobileAuthClient.pendingDeviceToken = nil;
-            }
-            NSDictionary *config = @{OGCDVPluginKeyResourceBaseURL: OneginiConfigModel.configuration[ONGResourceBaseURL]};
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:config] callbackId:command.callbackId];
-          }
-      }];
-  }];
+        }];
+    }];
+}
+
+- (void)handleLaunchNotification
+{
+    NSDictionary *userInfo = self.launchNotificationUserInfo;
+
+    if (userInfo != nil) {
+        OGCDVMobileAuthenticationRequestClient *mobileAuthenticationRequestClient = [(CDVViewController *)self.viewController getCommandInstance:OGCDVPluginClassMobileAuthenticationRequestClient];
+        [[ONGUserClient sharedInstance] handleMobileAuthenticationRequest:userInfo delegate:mobileAuthenticationRequestClient];
+    }
 }
 
 @end

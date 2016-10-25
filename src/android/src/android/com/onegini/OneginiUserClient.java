@@ -36,6 +36,6 @@ public class OneginiUserClient extends CordovaPlugin {
   }
 
   private OneginiClient getOneginiClient() {
-    return OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext());
+    return OneginiSDK.getInstance().getOneginiClient(cordova.getActivity().getApplicationContext());
   }
 }

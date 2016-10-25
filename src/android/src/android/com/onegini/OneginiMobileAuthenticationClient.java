@@ -73,7 +73,7 @@ public class OneginiMobileAuthenticationClient extends CordovaPlugin {
   }
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {
-    return OneginiSDK.getOneginiClient(getApplicationContext());
+    return OneginiSDK.getInstance().getOneginiClient(getApplicationContext());
   }
 
   private Context getApplicationContext() {

@@ -6,9 +6,24 @@ import com.onegini.handler.MobileAuthenticationHandler;
 import com.onegini.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.client.OneginiClientBuilder;
+import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
 
 public class OneginiSDK {
-  public static OneginiClient getOneginiClient(final Context context) {
+  private static OneginiSDK instance;
+  private boolean isStarted;
+
+  protected OneginiSDK() {
+  }
+
+  public static OneginiSDK getInstance() {
+    if(instance == null) {
+      instance = new OneginiSDK();
+    }
+
+    return instance;
+  }
+
+  public OneginiClient getOneginiClient(final Context context) {
     OneginiClient oneginiClient = OneginiClient.getInstance();
     if (oneginiClient == null) {
       oneginiClient = buildSDK(context);
@@ -26,5 +41,14 @@ public class OneginiSDK {
         .setMobileAuthenticationRequestHandler(mobileAuthenticationHandler)
         .setMobileAuthenticationPinRequestHandler(mobileAuthenticationHandler)
         .build();
+  }
+
+  public boolean isStarted() {
+    return isStarted;
+  }
+
+  public void startSDK(final Context context, final OneginiInitializationHandler initializationHandler) {
+    getOneginiClient(context).start(initializationHandler);
+    this.isStarted = true;
   }
 }
