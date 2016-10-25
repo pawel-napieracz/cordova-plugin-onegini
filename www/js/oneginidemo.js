@@ -5,11 +5,32 @@ var OneginiDemo = (function () {
           {},
           function () {
             console.log("Onegini is ready to go!");
+            OneginiDemo.registerHandlers();
           },
           function (err) {
             alert("Error!\n\n" + err.description);
           }
       );
+    },
+
+    registerHandlers: function () {
+      onegini.mobileAuthentication.on("confirmation")
+          .shouldAccept(function (request, accept, reject) {
+            navigator.notification.confirm(request.message, function (buttonIndex) {
+              if (buttonIndex === 1) {
+                accept();
+              }
+              else {
+                reject();
+              }
+            }, 'Mobile Authentication Request', ['Accept', 'Reject']);
+          })
+          .success(function () {
+            console.log('Handled mobile authentication request!');
+          })
+          .catch(function (err) {
+            console.log("Mobile authentication request err: ", err);
+          });
     },
 
     isRegistered: function () {
@@ -278,5 +299,5 @@ var OneginiDemo = (function () {
           }
       );
     }
-  }
+  };
 })();
