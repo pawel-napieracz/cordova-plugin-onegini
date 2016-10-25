@@ -69,6 +69,16 @@ public class PluginResultBuilder {
     return this;
   }
 
+  public PluginResultBuilder withAuthenticationMethod(final String method) {
+    try {
+      payload.put("authenticationMethod", method);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
   public PluginResultBuilder withOneginiMobileAuthenticationRequest(OneginiMobileAuthenticationRequest mobileAuthenticationRequest) {
     try {
       payload.put("type", mobileAuthenticationRequest.getType());

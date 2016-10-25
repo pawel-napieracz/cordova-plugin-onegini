@@ -54,6 +54,9 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
 
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
+        .shouldKeepCallback()
+        .withAuthenticationMethod("onPinRequest")
+        .withPinLength(PIN_LENGTH)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -62,13 +65,14 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   @Override
   public void onNextAuthenticationAttempt(final AuthenticationAttemptCounter authenticationAttemptCounter) {
     final PluginResult pluginResult = new PluginResultBuilder()
-        .withError()
-        .withErrorDescription(ERROR_INCORRECT_PIN)
+        .withSuccess()
+        .shouldKeepCallback()
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
+        .withAuthenticationMethod("onPinRequest")
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
         .build();
 
-    sendOnNextAuthenticationAttemptResult(pluginResult);
+    sendStartAuthenticationResult(pluginResult);
   }
 
   @Override
@@ -76,7 +80,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
     pinCallback = null;
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .withPinLength(PIN_LENGTH)
+        .withAuthenticationMethod("onSuccess")
         .build();
 
     sendFinishAuthenticationResult(pluginResult);
