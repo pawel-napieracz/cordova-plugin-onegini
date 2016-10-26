@@ -42,8 +42,34 @@ var OneginiDemo = (function () {
       );
     },
 
+    registerFingerprintAuthenticator: function () {
+      onegini.user.authenticators.registerNew({authenticatorId: "com.onegini.authenticator.Fingerprint"})
+          .onPinRequest(function (actions, options) {
+            var pin = prompt("Please enter your " + options.pinLength + " digit pin", "12346");
+            actions.providePin(pin);
+          })
+          .onSuccess(function () {
+            alert("Success!");
+          })
+          .onError(function (err) {
+            alert("Error!\n\n" + err.description);
+          });
+    },
+
+    setFingerprintAuthenticator: function () {
+      onegini.user.authenticators.setPreferred({
+            authenticatorId: "com.onegini.authenticator.Fingerprint"
+          },
+          function () {
+            alert("Success!")
+          },
+          function (err) {
+            alert("Error!\n\n" + err.description);
+          });
+    },
+
     registrationCreatePin: function (pinLength) {
-      var pin = prompt("Please enter your " + pinLength + " digit Pin", "12346" /* default */);
+      var pin = prompt("Please enter your " + pinLength + " digit Pin", "12346");
       if (!pin) {
         return;
       }
@@ -65,7 +91,7 @@ var OneginiDemo = (function () {
       onegini.user.getUserProfiles(
           function (result) {
             that.userProfiles = result;
-            alert("Success!\n\User profiles:\n" + JSON.stringify(result));
+            alert("Success!\n\nUser profiles:\n" + JSON.stringify(result));
           },
           function (err) {
             alert("Error!\n\n" + err.description);
@@ -112,37 +138,33 @@ var OneginiDemo = (function () {
       if (!profileId) {
         return;
       }
-      var that = this;
-      onegini.user.authenticate.start(
-          {
-            profileId: profileId
-          },
-          function (result) {
-            console.log("onegini.user.authenticate.start success, now calling onegini.user.authenticate.providePin. " + JSON.stringify(result));
-            that.providePin();
-          },
-          function (err) {
-            alert("Error!\n\n" + err.description);
-          }
-      );
-    },
 
-    providePin: function () {
-      var pin = prompt("Please enter your Pin", "12346" /* default */);
-      if (!pin) {
-        return;
-      }
-      onegini.user.authenticate.providePin(
-          {
-            pin: pin
-          },
-          function (result) {
-            alert("Authentication succeeded!");
-          },
-          function (err) {
-            alert("Error!\n\n" + JSON.stringify(err));
-          }
-      );
+      // .onPinFailure(function(actions, options) {
+      //   alert('Wrong pin!');
+      //   actions.providePin('12346');
+      // })
+
+      onegini.user.authenticate(profileId)
+          .onPinRequest(function (actions, options) {
+            var pin = prompt("Please enter your " + options.pinLength + " digit pin", "12346");
+            actions.providePin(pin);
+          })
+          .onFingerprintRequest(function (actions) {
+            alert("Accepting fingerprint authentication request");
+            actions.acceptFingerprint();
+          })
+          .onFingerprintCaptured(function (actions) {
+            console.info("Authentication: Fingerprint captured");
+          })
+          .onFingerprintFailed(function () {
+            console.info("Authentication: Fingerprint failed");
+          })
+          .onSuccess(function () {
+            alert("Authentication success!");
+          })
+          .onError(function (err) {
+            alert("Authentication error!\n\n" + err.description);
+          });
     },
 
     reauthenticate: function () {
@@ -278,5 +300,5 @@ var OneginiDemo = (function () {
           }
       );
     }
-  }
+  };
 })();
