@@ -1,6 +1,5 @@
 package com.onegini.handler;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_INCORRECT_PIN;
 import static com.onegini.OneginiCordovaPluginConstants.PIN_LENGTH;
 
 import org.apache.cordova.CallbackContext;
@@ -16,7 +15,6 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
 
   private static PinAuthenticationRequestHandler instance = null;
   private OneginiPinCallback pinCallback = null;
-  private CallbackContext onNextAuthenticationAttemptCallback;
   private CallbackContext startAuthenticationCallback;
   private CallbackContext finishAuthenticationCallback;
 
@@ -34,10 +32,6 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
 
   public OneginiPinCallback getPinCallback() {
     return pinCallback;
-  }
-
-  public void setOnNextAuthenticationAttemptCallback(final CallbackContext onNextAuthenticationAttemptCallback) {
-    this.onNextAuthenticationAttemptCallback = onNextAuthenticationAttemptCallback;
   }
 
   public void setStartAuthenticationCallback(final CallbackContext startAuthenticationCallback) {
@@ -69,6 +63,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
         .shouldKeepCallback()
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withAuthenticationMethod("onPinRequest")
+        .withPinLength(PIN_LENGTH)
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
         .build();
 
@@ -84,12 +79,6 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
         .build();
 
     sendFinishAuthenticationResult(pluginResult);
-  }
-
-  private void sendOnNextAuthenticationAttemptResult(final PluginResult pluginResult) {
-    if (onNextAuthenticationAttemptCallback != null) {
-      onNextAuthenticationAttemptCallback.sendPluginResult(pluginResult);
-    }
   }
 
   private void sendStartAuthenticationResult(final PluginResult pluginResult) {

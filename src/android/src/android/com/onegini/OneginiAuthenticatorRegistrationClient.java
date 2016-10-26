@@ -75,10 +75,11 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withErrorDescription(OneginiCordovaPluginConstants.ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS)
           .build());
-    } else {
-      PinAuthenticationRequestHandler.getInstance().setOnNextAuthenticationAttemptCallback(callbackContext);
-      pinCallback.acceptAuthenticationRequest(pin.toCharArray());
+
+      return;
     }
+
+    pinCallback.acceptAuthenticationRequest(pin.toCharArray());
   }
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {

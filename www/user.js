@@ -15,13 +15,16 @@ module.exports = (function () {
         return utils.callbackExec(client, 'providePin', options, self.callbacks.onSuccess, self.callbacks.onError);
       },
       fallbackToPin: function () {
-        utils.promiseOrCallbackExec(client, 'fallbackToPin', [], self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'fallbackToPin', [], self.callbacks.onSuccess, self.callbacks.onError);
       },
       acceptFingerprint: function () {
-        utils.promiseOrCallbackExec(client, 'respondToFingerprintRequest', {accept: true}, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'respondToFingerprintRequest', {accept: true}, self.callbacks.onSuccess, self.callbacks.onError);
       },
       denyFingerprint: function () {
-        utils.promiseOrCallbackExec(client, 'respondToFingerprintRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
+        utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
+      },
+      createPin: function () {
+        utils.callbackExec(client);
       }
     };
 
@@ -66,6 +69,11 @@ module.exports = (function () {
 
   AuthenticationHandler.prototype.onSuccess = function (cb) {
     this.callbacks.onSuccess = cb;
+    return this;
+  };
+
+  AuthenticationHandler.prototype.onCreatePin = function (cb) {
+    this.callbacks.onCreatePin = cb;
     return this;
   };
 
