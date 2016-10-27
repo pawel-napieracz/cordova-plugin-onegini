@@ -10,6 +10,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.onegini.handler.AuthenticatorDeregistrationHandler;
 import com.onegini.handler.AuthenticatorRegistrationHandler;
 import com.onegini.handler.FingerprintAuthenticationHandler;
 import com.onegini.handler.PinAuthenticationRequestHandler;
@@ -22,6 +23,7 @@ import com.onegini.util.PluginResultBuilder;
 public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
   private static final String ACTION_START = "start";
   private static final String ACTION_PROVIDE_PIN = "providePin";
+  private static final String ACTION_DEREGISTER = "deregister";
 
   private AuthenticatorRegistrationHandler authenticatorRegistrationHandler;
 
@@ -32,6 +34,9 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
       return true;
     } else if (ACTION_PROVIDE_PIN.equals(action)) {
       providePin(args, callbackContext);
+      return true;
+    } else if (ACTION_DEREGISTER.equals(action)) {
+      deregister(args, callbackContext);
       return true;
     }
     return false;
@@ -80,6 +85,34 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
     }
 
     pinCallback.acceptAuthenticationRequest(pin.toCharArray());
+  }
+
+  private void deregister(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
+    final Set<OneginiAuthenticator> authenticatorSet;
+    final OneginiAuthenticator authenticator;
+
+    if (userProfile == null) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withErrorDescription(ERROR_NO_USER_AUTHENTICATED)
+          .build());
+
+      return;
+    }
+
+    authenticatorSet = getOneginiClient().getUserClient().getRegisteredAuthenticators(userProfile);
+    authenticator = ActionArgumentsUtil.getAuthenticatorFromArguments(args, authenticatorSet);
+
+    if (authenticator == null) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withErrorDescription(ERROR_NO_SUCH_AUTHENTICATOR)
+          .build());
+
+      return;
+    }
+
+    AuthenticatorDeregistrationHandler authenticationDeregistrationHandler = new AuthenticatorDeregistrationHandler(callbackContext);
+    getOneginiClient().getUserClient().deregisterAuthenticator(authenticator, authenticationDeregistrationHandler);
   }
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {

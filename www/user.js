@@ -149,6 +149,13 @@ module.exports = (function () {
 
     registerNew: function (options) {
       return new AuthenticationHandler(options, 'OneginiAuthenticatorRegistrationClient');
+    },
+
+    deregister: function (options, successCb, failureCb) {
+      if (!options || !options.authenticatorId) {
+        throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.deregister");
+      }
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorRegistrationClient', 'deregister', options, successCb, failureCb);
     }
   };
 
