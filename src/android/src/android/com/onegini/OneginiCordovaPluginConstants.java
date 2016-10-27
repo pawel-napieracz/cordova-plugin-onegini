@@ -28,6 +28,14 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_NO_PIN_CHALLENGE = "Onegini: Cannot reply to pin challenge, no challenge open";
   String ERROR_INVALID_MOBILE_AUTHENTICATOR_METHOD = "Onegini: Invalid mobile authenticator method";
 
+  // Authentication methods
+  String AUTH_METHOD_SUCCESS = "onSuccess";
+  String AUTH_METHOD_PIN_REQUEST = "onPinRequest";
+  String AUTH_METHOD_CREATE_PIN_REQUEST = "onCreatePinRequest";
+  String AUTH_METHOD_FINGERPRINT_REQUEST = "onFingerprintRequest";
+  String AUTH_METHOD_FINGERPRINT_FAILED = "onFingerprintFailed";
+  String AUTH_METHOD_FINGERPRINT_CAPTURED = "onFingerprintCaptured";
+
   // Values
   int PIN_LENGTH = 5;
 }
