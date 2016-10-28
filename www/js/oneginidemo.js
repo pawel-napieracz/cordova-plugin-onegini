@@ -139,11 +139,6 @@ var OneginiDemo = (function () {
         return;
       }
 
-      // .onPinFailure(function(actions, options) {
-      //   alert('Wrong pin!');
-      //   actions.providePin('12346');
-      // })
-
       onegini.user.authenticate(profileId)
           .onPinRequest(function (actions, options) {
             var pin = prompt("Please enter your " + options.pinLength + " digit pin", "12346");
@@ -153,7 +148,7 @@ var OneginiDemo = (function () {
             alert("Accepting fingerprint authentication request");
             actions.acceptFingerprint();
           })
-          .onFingerprintCaptured(function (actions) {
+          .onFingerprintCaptured(function () {
             console.info("Authentication: Fingerprint captured");
           })
           .onFingerprintFailed(function () {
@@ -220,27 +215,25 @@ var OneginiDemo = (function () {
     },
 
     startChangePin: function () {
-      var pin = prompt("Please enter your current Pin", "12346" /* default */);
-      if (!pin) {
-        return;
-      }
-      var that = this;
-      onegini.user.changePin.start(
-          {
-            pin: pin
-          },
-          function (result) {
-            console.log("onegini.user.changePin.start success, now calling onegini.user.changePin.createPin. " + JSON.stringify(result));
-            that.changePinCreatePin(result.pinLength);
-          },
-          function (err) {
-            alert("Error!\n\n" + err.description + "\n\n" + JSON.stringify(err));
-          }
-      );
+      onegini.user.changePin()
+          .onPinRequest(function (actions, options) {
+            var pin = prompt("Please enter your " + options.pinLength + " digit pin", "12346");
+            actions.providePin(pin);
+          })
+          .onCreatePinRequest(function (actions) {
+            var pin = prompt("Enter your new pin");
+            actions.createPin(pin);
+          })
+          .onSuccess(function () {
+            alert('Change pin success!');
+          })
+          .onError(function (err) {
+            alert('Change pin Error!\n\n' + err.description)
+          });
     },
 
     changePinCreatePin: function (pinLength) {
-      var pin = prompt("Please enter your " + pinLength + " digit NEW Pin", "12346" /* default */);
+      var pin = prompt("Please enter your " + pinLength + " digit NEW Pin", "12346");
       if (!pin) {
         return;
       }
