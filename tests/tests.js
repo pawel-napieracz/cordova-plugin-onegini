@@ -630,9 +630,11 @@ exports.defineAutoTests = function () {
 
       describe("deregister", function() {
         it("Should fail with a non-existing authenticator", function (done) {
-          onegini.user.authenticators.deregister({
+          onegini.user.authenticators.deregister(
+              {
                 authenticatorId: "invalid"
-              ), function (result) {
+              },
+              function (result) {
                 expect(result).toBeUndefined();
               },
               function (err) {
@@ -640,8 +642,8 @@ exports.defineAutoTests = function () {
                 expect(err.description).toBe("Onegini: No such authenticator found");
                 done();
               });
-        )};
-      )};
+        });
+      });
 
       if (config.testForMultipleAuthenticators) {
         describe('getRegistered', function () {
