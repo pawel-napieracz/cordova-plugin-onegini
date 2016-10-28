@@ -9,13 +9,13 @@ module.exports = (function () {
       providePin: function (options) {
         options = utils.getOptionsWithDefaults(options, {}, 'pin');
         if (!options || !options.pin) {
-          throw new TypeError('Onegini: missing "pin" argument for authenticate.providePin');
+          throw new TypeError('Onegini: missing "pin" argument for providePin');
         }
 
-        return utils.callbackExec(client, 'providePin', options, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'providePin', options, self.callbacks.onSuccess, self.callbacks.onError);
       },
       fallbackToPin: function () {
-        utils.callbackExec(client, 'fallbackToPin', [], self.callbacks.onSuccess, self.callbacks.onError);
+        utils.promiseOrCallbackExec(client, 'fallbackToPin');
       },
       acceptFingerprint: function () {
         utils.callbackExec(client, 'respondToFingerprintRequest', {accept: true}, self.callbacks.onSuccess, self.callbacks.onError);
@@ -23,8 +23,13 @@ module.exports = (function () {
       denyFingerprint: function () {
         utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
       },
-      createPin: function () {
-        utils.callbackExec(client);
+      createPin: function (options) {
+        options = utils.getOptionsWithDefaults(options, {}, 'pin');
+        if (!options || !options.pin) {
+          throw new TypeError('Onegini: missing "pin" argument for createPin');
+        }
+
+        utils.callbackExec(client, 'createPin', options, self.callbacks.onSuccess, self.callbacks.onError);
       }
     };
 
@@ -44,6 +49,11 @@ module.exports = (function () {
 
   AuthenticationHandler.prototype.onPinRequest = function (cb) {
     this.callbacks.onPinRequest = cb;
+    return this;
+  };
+
+  AuthenticationHandler.prototype.onCreatePinRequest = function (cb) {
+    this.callbacks.onCreatePinRequest = cb;
     return this;
   };
 
@@ -69,11 +79,6 @@ module.exports = (function () {
 
   AuthenticationHandler.prototype.onSuccess = function (cb) {
     this.callbacks.onSuccess = cb;
-    return this;
-  };
-
-  AuthenticationHandler.prototype.onCreatePin = function (cb) {
-    this.callbacks.onCreatePin = cb;
     return this;
   };
 
@@ -115,20 +120,8 @@ module.exports = (function () {
     }
   };
 
-  var changePin = {
-    start: function (options, successCb, failureCb) {
-      if (!options || !options.pin) {
-        throw new TypeError("Onegini: missing 'pin' argument for changePin.start");
-      }
-      return utils.promiseOrCallbackExec('OneginiChangePinClient', 'start', options, successCb, failureCb);
-    },
-
-    createPin: function (options, successCb, failureCb) {
-      if (!options || !options.pin) {
-        throw new TypeError("Onegini: missing 'pin' argument for changePin.createPin");
-      }
-      return utils.promiseOrCallbackExec('OneginiChangePinClient', 'createPin', options, successCb, failureCb);
-    }
+  var changePin = function () {
+    return new AuthenticationHandler(null, 'OneginiChangePinClient');
   };
 
   var authenticators = {
@@ -148,6 +141,11 @@ module.exports = (function () {
     },
 
     registerNew: function (options) {
+      options = utils.getOptionsWithDefaults(options, {}, 'authenticatorId');
+      if(!options || options.authenticatorId) {
+        throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew");
+      }
+
       return new AuthenticationHandler(options, 'OneginiAuthenticatorRegistrationClient');
     },
 

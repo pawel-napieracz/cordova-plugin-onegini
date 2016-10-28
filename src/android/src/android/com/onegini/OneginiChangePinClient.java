@@ -1,6 +1,7 @@
 package com.onegini;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -20,42 +21,56 @@ public class OneginiChangePinClient extends CordovaPlugin {
 
   private final static String ACTION_START = "start";
   private final static String ACTION_CREATE_PIN = "createPin";
-  private ChangePinHandler changePinHandler;
+  private final static String ACTION_PROVIDE_PIN = "providePin";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if (ACTION_START.equals(action)) {
-      startChangePin(args, callbackContext);
+      startChangePin(callbackContext);
       return true;
     } else if (ACTION_CREATE_PIN.equals(action)) {
       createPin(args, callbackContext);
+      return true;
+    } else if (ACTION_PROVIDE_PIN.equals(action)) {
+      providePin(args, callbackContext);
       return true;
     }
 
     return false;
   }
 
-  private void startChangePin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final String pin = ActionArgumentsUtil.getPinFromArguments(args);
-
-//    PinAuthenticationRequestHandler.getInstance().setOnNextAuthenticationAttemptCallback(callbackContext);
+  private void startChangePin(final CallbackContext callbackContext) throws JSONException {
+    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(callbackContext);
     PinAuthenticationRequestHandler.getInstance().setFinishAuthenticationCallback(callbackContext);
-    this.changePinHandler = new ChangePinHandler(callbackContext);
-    
+    CreatePinRequestHandler.getInstance().setOnStartPinCreationCallback(callbackContext);
+
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
+        final ChangePinHandler changePinHandler = new ChangePinHandler(callbackContext);
         getOneginiClient().getUserClient().changePin(changePinHandler);
-        PinAuthenticationRequestHandler.getInstance().getPinCallback()
-            .acceptAuthenticationRequest(pin.toCharArray());
       }
     });
+  }
+
+  private void providePin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    final String pin = ActionArgumentsUtil.getPinFromArguments(args);
+    final OneginiPinCallback pinCallback = PinAuthenticationRequestHandler.getInstance().getPinCallback();
+
+    if (pinCallback == null) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withErrorDescription(ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS)
+          .build());
+
+      return;
+    }
+
+    pinCallback.acceptAuthenticationRequest(pin.toCharArray());
   }
 
   private void createPin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String pin = ActionArgumentsUtil.getPinFromArguments(args);
     final OneginiPinCallback pinCallback = CreatePinRequestHandler.getInstance().getOneginiPinCallback();
-    CreatePinRequestHandler.getInstance().setOnNextPinCreationAttemptCallback(callbackContext);
 
     if (pinCallback == null) {
       final PluginResult pluginResult = new PluginResultBuilder()
@@ -64,7 +79,6 @@ public class OneginiChangePinClient extends CordovaPlugin {
           .build();
       callbackContext.sendPluginResult(pluginResult);
     } else {
-      changePinHandler.setCallbackContext(callbackContext);
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
 

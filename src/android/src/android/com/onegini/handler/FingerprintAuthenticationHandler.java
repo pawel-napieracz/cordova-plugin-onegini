@@ -1,5 +1,9 @@
 package com.onegini.handler;
 
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_METHOD_FINGERPRINT_CAPTURED;
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_METHOD_FINGERPRINT_FAILED;
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_METHOD_FINGERPRINT_REQUEST;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
@@ -33,10 +37,6 @@ public class FingerprintAuthenticationHandler implements OneginiFingerprintAuthe
     return fingerprintCallback;
   }
 
-  public boolean isInProgress() {
-    return fingerprintCallback != null;
-  }
-
   @Override
   public void startAuthentication(final UserProfile userProfile, final OneginiFingerprintCallback fingerprintCallback) {
     this.fingerprintCallback = fingerprintCallback;
@@ -44,7 +44,7 @@ public class FingerprintAuthenticationHandler implements OneginiFingerprintAuthe
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationMethod("onFingerprintRequest")
+        .withAuthenticationMethod(AUTH_METHOD_FINGERPRINT_REQUEST)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -55,7 +55,7 @@ public class FingerprintAuthenticationHandler implements OneginiFingerprintAuthe
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationMethod("onFingerprintFailed")
+        .withAuthenticationMethod(AUTH_METHOD_FINGERPRINT_FAILED)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -66,7 +66,7 @@ public class FingerprintAuthenticationHandler implements OneginiFingerprintAuthe
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationMethod("onFingerprintCaptured")
+        .withAuthenticationMethod(AUTH_METHOD_FINGERPRINT_CAPTURED)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -75,12 +75,6 @@ public class FingerprintAuthenticationHandler implements OneginiFingerprintAuthe
   @Override
   public void finishAuthentication() {
     fingerprintCallback = null;
-    final PluginResult pluginResult = new PluginResultBuilder()
-        .withSuccess()
-        .withAuthenticationMethod("onSuccess")
-        .build();
-
-    sendStartAuthenticationResult(pluginResult);
   }
 
   private void sendStartAuthenticationResult(final PluginResult pluginResult) {
