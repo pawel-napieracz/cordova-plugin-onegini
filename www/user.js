@@ -1,7 +1,7 @@
 module.exports = (function () {
   var utils = require('./utils');
 
-  function AuthenticationHandler(options, client) {
+  function AuthenticationHandler(options, client, action) {
     var self = this;
     this.callbacks = {};
 
@@ -44,7 +44,7 @@ module.exports = (function () {
       self.callbacks.onError(err);
     }
 
-    utils.callbackExec(client, 'start', options, callSuccessCallback, callErrorCallback)
+    utils.callbackExec(client, action, options, callSuccessCallback, callErrorCallback)
   }
 
   AuthenticationHandler.prototype.onPinRequest = function (cb) {
@@ -88,23 +88,15 @@ module.exports = (function () {
       throw new TypeError("Onegini: missing 'profileId' argument for user.authenticate");
     }
 
-    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient');
+    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'start');
   };
 
-  var reauthenticate = {
-    start: function (options, successCb, failureCb) {
+  var reauthenticate = function (options) {
       if (!options || !options.profileId) {
-        throw new TypeError("Onegini: missing 'profileId' argument for reauthenticate.start");
+        throw new TypeError("Onegini: missing 'profileId' argument for reauthenticate");
       }
-      return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'reauthenticate', options, successCb, failureCb);
-    },
 
-    providePin: function (options, successCb, failureCb) {
-      if (!options || !options.pin) {
-        throw new TypeError("Onegini: missing 'pin' argument for reauthenticate.providePin");
-      }
-      return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'providePin', options, successCb, failureCb);
-    }
+      return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'reauthenticate');
   };
 
   var register = {
@@ -121,7 +113,7 @@ module.exports = (function () {
   };
 
   var changePin = function () {
-    return new AuthenticationHandler(null, 'OneginiChangePinClient');
+    return new AuthenticationHandler(null, 'OneginiChangePinClient', 'start');
   };
 
   var authenticators = {
@@ -147,7 +139,7 @@ module.exports = (function () {
         throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew");
       }
 
-      return new AuthenticationHandler(options, 'OneginiAuthenticatorRegistrationClient');
+      return new AuthenticationHandler(options, 'OneginiAuthenticatorRegistrationClient', 'start');
     }
   };
 
