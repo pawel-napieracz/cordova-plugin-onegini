@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.onegini.handler.AuthenticatorRegistrationHandler;
-import com.onegini.handler.FingerprintAuthenticationHandler;
 import com.onegini.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
