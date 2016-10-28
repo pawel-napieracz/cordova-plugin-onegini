@@ -3,7 +3,7 @@
 
 exports.defineAutoTests = function () {
   var config = {
-    testForMultipleAuthenticators: false,
+    testForMultipleAuthenticators: true,
     get fingerPrintAuthenticatorID() {
       return navigator.userAgent.indexOf("Android") > -1 ? "com.onegini.authenticator.Fingerprint" : "com.onegini.authenticator.TouchID"
     }
@@ -544,6 +544,33 @@ exports.defineAutoTests = function () {
       });
     });
 
+    describe('reauthenticate', function () {
+      it('should exist', function () {
+        expect(onegini.user.reauthenticate).toBeDefined();
+      });
+
+      it("should require a profileId", function () {
+        expect(function () {
+          onegini.user.reauthenticate()
+        }).toThrow(new TypeError("Onegini: missing 'profileId' argument for reauthenticate"));
+      });
+
+      it("should succeed", function (done) {
+        onegini.user.reauthenticate({profileId: registeredProfileId})
+            .onPinRequest(function (actions) {
+              expect(actions).toBeDefined();
+              actions.providePin(pin);
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              fail('Error callback called, but method should have succeeded');
+            })
+            .onSuccess(function () {
+              done();
+            });
+      });
+    });
+
     describe("authenticators (2/2)", function () {
       describe("setPreferred", function () {
         it("Should fail with a non-existing authenticator", function (done) {
@@ -751,33 +778,6 @@ exports.defineAutoTests = function () {
             .onError(function (err) {
               expect(err).toBeUndefined();
               fail('Change pin failed, but should have succeeded');
-            });
-      });
-    });
-
-    describe('reauthenticate', function () {
-      it('should exist', function () {
-        expect(onegini.user.reauthenticate).toBeDefined();
-      });
-
-      it("should require a profileId", function () {
-        expect(function () {
-          onegini.user.reauthenticate()
-        }).toThrow(new TypeError("Onegini: missing 'profileId' argument for reauthenticate"));
-      });
-
-      it("should succeed", function (done) {
-        onegini.user.reauthenticate({profileId: registeredProfileId})
-            .onPinRequest(function (actions) {
-              expect(actions).toBeDefined();
-              actions.providePin(pin);
-            })
-            .onError(function (err) {
-              expect(err).toBeDefined();
-              fail('Error callback called, but method should have succeeded');
-            })
-            .onSuccess(function () {
-              done();
             });
       });
     });
