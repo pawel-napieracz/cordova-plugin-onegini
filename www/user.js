@@ -134,6 +134,7 @@ module.exports = (function () {
     },
 
     setPreferred: function (options, successCb, failureCb) {
+      options = utils.getOptionsWithDefaults(options, {}, 'authenticatorId');
       if (!options || !options.authenticatorId) {
         throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.setPreferred");
       }
@@ -142,7 +143,7 @@ module.exports = (function () {
 
     registerNew: function (options) {
       options = utils.getOptionsWithDefaults(options, {}, 'authenticatorId');
-      if(!options || options.authenticatorId) {
+      if(!options || !options.authenticatorId) {
         throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew");
       }
 
