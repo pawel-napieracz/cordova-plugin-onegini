@@ -41,7 +41,6 @@ public class OneginiChangePinClient extends CordovaPlugin {
 
   private void startChangePin(final CallbackContext callbackContext) throws JSONException {
     PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(callbackContext);
-    PinAuthenticationRequestHandler.getInstance().setFinishAuthenticationCallback(callbackContext);
     CreatePinRequestHandler.getInstance().setOnStartPinCreationCallback(callbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
