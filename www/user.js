@@ -121,7 +121,6 @@ module.exports = (function () {
   };
 
   var changePin = function () {
-    // TODO: Swap arguments?
     return new AuthenticationHandler(null, 'OneginiChangePinClient');
   };
 
@@ -142,6 +141,11 @@ module.exports = (function () {
     },
 
     registerNew: function (options) {
+      options = utils.getOptionsWithDefaults(options, {}, 'authenticatorId');
+      if(!options || options.authenticatorId) {
+        throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew");
+      }
+
       return new AuthenticationHandler(options, 'OneginiAuthenticatorRegistrationClient');
     }
   };
