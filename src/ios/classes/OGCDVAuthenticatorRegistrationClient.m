@@ -60,8 +60,13 @@
       NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
       for (ONGAuthenticator *authenticator in registeredAuthenticators) {
         if ([authenticator.identifier isEqualToString:authenticatorId]) {
-          [[ONGUserClient sharedInstance] deregisterAuthenticator:authenticator delegate:self];
-          [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+          [[ONGUserClient sharedInstance] deregisterAuthenticator:authenticator completion:^(BOOL deregistered, NSError * _Nullable error) {
+            if (error || !deregistered) {
+              [self sendErrorResultForCallbackId:command.callbackId withError:error];
+            } else {
+              [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            }
+          }];
           return;
         }
       }
