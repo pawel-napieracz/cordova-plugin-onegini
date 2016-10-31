@@ -10,6 +10,7 @@
 @synthesize mobileAuthenticationMethod;
 @synthesize completeOperationCallbackId;
 @synthesize pinChallenge;
+@synthesize fingerprintChallenge;
 
 - (id)initWithConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation
                          forRequest:(ONGMobileAuthenticationRequest *)request
@@ -35,6 +36,20 @@
 
     [self initOperationWithRequest:request forMethod:method];
     [self setPinChallenge:challenge];
+
+    return self;
+}
+
+- (id)initWithFingerprintChallenge:(ONGFingerprintChallenge *)challenge
+                        forRequest:(ONGMobileAuthenticationRequest *)request
+                         forMethod:(NSString *)method;
+{
+    if (![super init]) {
+        return nil;
+    }
+
+    [self initOperationWithRequest:request forMethod:method];
+    [self setFingerprintChallenge:challenge];
 
     return self;
 }
@@ -124,6 +139,18 @@
         [[[self pinChallenge] sender] respondWithPin:pin challenge:pinChallenge];
     } else {
         [[[self pinChallenge] sender] cancelChallenge:pinChallenge];
+    }
+}
+
+- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
+   didReceiveFingerprintChallengeResponse:(BOOL)accept withCallbackId:(NSString *)callbackId
+{
+    [self setCompleteOperationCallbackId:callbackId];
+
+    if (accept) {
+        [[[self fingerprintChallenge] sender] respondWithDefaultPromptForChallenge:fingerprintChallenge];
+    } else {
+        [[[self fingerprintChallenge] sender] cancelChallenge:fingerprintChallenge];
     }
 }
 
