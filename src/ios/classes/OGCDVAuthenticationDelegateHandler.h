@@ -6,7 +6,6 @@
 @interface OGCDVAuthenticationDelegateHandler : CDVPlugin<ONGAuthenticationDelegate>
 
 @property (nonatomic, copy) NSString *authenticationCallbackId;
-@property (nonatomic, copy) NSString *checkPinCallbackId;
 @property (nonatomic) ONGPinChallenge *pinChallenge;
 @property (nonatomic) ONGFingerprintChallenge *fingerprintChallenge;
 

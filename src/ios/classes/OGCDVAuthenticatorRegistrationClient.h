@@ -4,7 +4,7 @@
 
 @interface OGCDVAuthenticatorRegistrationClient : OGCDVAuthenticationDelegateHandler
 
-- (void)registerNew:(CDVInvokedUrlCommand *)command;
+- (void)start:(CDVInvokedUrlCommand *)command;
 - (void)providePin:(CDVInvokedUrlCommand *)command;
 
 @end

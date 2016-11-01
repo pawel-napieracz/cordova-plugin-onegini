@@ -6,7 +6,7 @@
 @implementation OGCDVAuthenticatorRegistrationClient {
 }
 
-- (void)registerNew:(CDVInvokedUrlCommand *)command
+- (void)start:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
       ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
@@ -39,7 +39,6 @@
     return;
   }
 
-  self.checkPinCallbackId = command.callbackId;
   NSDictionary *options = command.arguments[0];
   NSString *pin = options[OGCDVPluginKeyPin];
   [self.pinChallenge.sender respondWithPin:pin challenge:self.pinChallenge];

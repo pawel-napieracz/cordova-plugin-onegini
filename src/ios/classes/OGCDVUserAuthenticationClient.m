@@ -48,7 +48,6 @@
         return;
     }
     [self.commandDelegate runInBackground:^{
-        self.checkPinCallbackId = command.callbackId;
         NSDictionary *options = command.arguments[0];
         NSString *pin = options[OGCDVPluginKeyPin];
         [self.pinChallenge.sender respondWithPin:pin challenge:self.pinChallenge];
