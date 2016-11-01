@@ -12,8 +12,8 @@
 @property (atomic, retain) NSString *mobileAuthenticationMethod;
 @property (atomic, retain) ONGPinChallenge *pinChallenge;
 @property (atomic, retain) ONGFingerprintChallenge *fingerprintChallenge;
-@property (atomic, assign) BOOL _executing;
-@property (atomic, assign) BOOL _finished;
+@property (nonatomic, assign) BOOL _executing;
+@property (nonatomic, assign) BOOL _finished;
 
 - (id)initWithConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation
                          forRequest:(ONGMobileAuthenticationRequest *)request

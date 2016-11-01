@@ -136,9 +136,9 @@
     [self setCompleteOperationCallbackId:callbackId];
 
     if (accept) {
-        [[[self pinChallenge] sender] respondWithPin:pin challenge:pinChallenge];
+        [self.pinChallenge.sender respondWithPin:pin challenge:pinChallenge];
     } else {
-        [[[self pinChallenge] sender] cancelChallenge:pinChallenge];
+        [self.pinChallenge.sender cancelChallenge:pinChallenge];
     }
 }
 
@@ -148,9 +148,9 @@
     [self setCompleteOperationCallbackId:callbackId];
 
     if (accept) {
-        [[[self fingerprintChallenge] sender] respondWithDefaultPromptForChallenge:fingerprintChallenge];
+        [self.fingerprintChallenge.sender respondWithDefaultPromptForChallenge:fingerprintChallenge];
     } else {
-        [[[self fingerprintChallenge] sender] cancelChallenge:fingerprintChallenge];
+        [self.fingerprintChallenge.sender cancelChallenge:fingerprintChallenge];
     }
 }
 
