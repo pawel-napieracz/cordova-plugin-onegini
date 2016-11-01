@@ -13,8 +13,18 @@ NSString *const OGCDVPluginKeyAuthenticatorId = @"authenticatorId";
 NSString *const OGCDVPluginKeyMethod = @"method";
 NSString *const OGCDVPluginKeyType = @"type";
 NSString *const OGCDVPluginKeyMessage = @"message";
+NSString *const OGCDVPluginKeyAuthenticationMethod = @"authenticationMethod";
+NSString *const OGCDVPluginKeyAccept = @"accept";
+NSString *const OGCDVPluginKeyPrompt = @"iosPrompt";
 
 NSString *const OGCDVPluginErrorKeyNoUserAuthenticated = @"Onegini: No user authenticated.";
 
 NSString *const OGCDVPluginClassMobileAuthenticationClient = @"OneginiMobileAuthenticationClient";
 NSString *const OGCDVPluginClassMobileAuthenticationRequestClient = @"OneginiMobileAuthenticationRequestClient";
+
+NSString *const OGCDVPluginMethodSuccess = @"onSuccess";
+NSString *const OGCDVPluginMethodPinRequest = @"onPinRequest";
+NSString *const OGCDVPluginMethodCreatePinRequest = @"onCreatePinRequest";
+NSString *const OGCDVPluginMethodFingerprintRequest = @"onFingerprintRequest";
+NSString *const OGCDVPluginMethodFingerprintFailed = @"onFingerprintFailed";
+NSString *const OGCDVPluginMethodFingerprintCaptured = @"onFingerprintCaptured";

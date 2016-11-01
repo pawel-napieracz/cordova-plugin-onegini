@@ -17,8 +17,10 @@ module.exports = (function () {
       fallbackToPin: function () {
         utils.promiseOrCallbackExec(client, 'fallbackToPin');
       },
-      acceptFingerprint: function () {
-        utils.callbackExec(client, 'respondToFingerprintRequest', {accept: true}, self.callbacks.onSuccess, self.callbacks.onError);
+      acceptFingerprint: function (options) {
+        options = utils.getOptionsWithDefaults(options, {}, 'iosPrompt');
+        options.accept = true;
+        utils.callbackExec(client, 'respondToFingerprintRequest', options, self.callbacks.onSuccess, self.callbacks.onError);
       },
       denyFingerprint: function () {
         utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)

@@ -11,8 +11,18 @@ extern NSString *const OGCDVPluginKeyAuthenticatorId;
 extern NSString *const OGCDVPluginKeyMethod;
 extern NSString *const OGCDVPluginKeyType;
 extern NSString *const OGCDVPluginKeyMessage;
+extern NSString *const OGCDVPluginKeyAuthenticationMethod;
+extern NSString *const OGCDVPluginKeyAccept;
+extern NSString *const OGCDVPluginKeyPrompt;
 
 extern NSString *const OGCDVPluginErrorKeyNoUserAuthenticated;
 
 extern NSString *const OGCDVPluginClassMobileAuthenticationClient;
 extern NSString *const OGCDVPluginClassMobileAuthenticationRequestClient;
+
+extern NSString *const OGCDVPluginMethodSuccess;
+extern NSString *const OGCDVPluginMethodPinRequest;
+extern NSString *const OGCDVPluginMethodCreatePinRequest;
+extern NSString *const OGCDVPluginMethodFingerprintRequest;
+extern NSString *const OGCDVPluginMethodFingerprintFailed;
+extern NSString *const OGCDVPluginMethodFingerprintCaptured;
