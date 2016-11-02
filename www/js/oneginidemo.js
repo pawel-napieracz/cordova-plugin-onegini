@@ -43,7 +43,7 @@ var OneginiDemo = (function () {
     },
 
     registerFingerprintAuthenticator: function () {
-      onegini.user.authenticators.registerNew({authenticatorId: "com.onegini.authenticator.Fingerprint"})
+      onegini.user.authenticators.registerNew({authenticatorId: "com.onegini.authenticator.TouchID"})
           .onPinRequest(function (actions, options) {
             var pin = prompt("Please enter your " + options.pinLength + " digit pin", "12346");
             actions.providePin(pin);
@@ -58,7 +58,7 @@ var OneginiDemo = (function () {
 
     setFingerprintAuthenticator: function () {
       onegini.user.authenticators.setPreferred({
-            authenticatorId: "com.onegini.authenticator.Fingerprint"
+            authenticatorId: "com.onegini.authenticator.TouchID"
           },
           function () {
             alert("Success!")
@@ -146,7 +146,7 @@ var OneginiDemo = (function () {
           })
           .onFingerprintRequest(function (actions) {
             alert("Accepting fingerprint authentication request");
-            actions.acceptFingerprint();
+            actions.acceptFingerprint({ iosPrompt: "Login to Cordova Example App" });
           })
           .onFingerprintCaptured(function () {
             console.info("Authentication: Fingerprint captured");
@@ -230,24 +230,6 @@ var OneginiDemo = (function () {
           .onError(function (err) {
             alert('Change pin Error!\n\n' + err.description)
           });
-    },
-
-    changePinCreatePin: function (pinLength) {
-      var pin = prompt("Please enter your " + pinLength + " digit NEW Pin", "12346");
-      if (!pin) {
-        return;
-      }
-      onegini.user.changePin.createPin(
-          {
-            pin: pin
-          },
-          function (result) {
-            alert("Success!\n\nPin changed");
-          },
-          function (err) {
-            alert("Error!\n\n" + err.description);
-          }
-      );
     },
 
     getRegisteredAuthenticators: function () {
