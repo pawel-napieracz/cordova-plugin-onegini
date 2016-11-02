@@ -30,7 +30,7 @@
     if (self.createPinChallenge) {
       [self.createPinChallenge.sender respondWithCreatedPin:pin challenge:self.createPinChallenge];
     } else {
-      [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: createPin called, but no registration in progress. Did you call 'onegini.user.register.start'?"];
+      [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: createPin called, but no registration in progress."];
     }
   }];
 }

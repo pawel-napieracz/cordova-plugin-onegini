@@ -24,5 +24,3 @@ extern NSString *const OGCDVPluginMethodSuccess;
 extern NSString *const OGCDVPluginMethodPinRequest;
 extern NSString *const OGCDVPluginMethodCreatePinRequest;
 extern NSString *const OGCDVPluginMethodFingerprintRequest;
-extern NSString *const OGCDVPluginMethodFingerprintFailed;
-extern NSString *const OGCDVPluginMethodFingerprintCaptured;

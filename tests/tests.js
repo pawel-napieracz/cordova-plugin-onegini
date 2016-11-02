@@ -381,12 +381,14 @@ exports.defineAutoTests = function () {
               expect(actions).toBeDefined();
               expect(actions.providePin).toBeDefined();
               expect(options).toBeDefined();
-              expect(options.pinLength).toBe(5);
 
               if (options.remainingFailureCount = options.maxFailureCount - 1) {
                 actions.providePin(pin);
               }
               else {
+                console.log("remaining failure count", options.remainingFailureCount);
+                console.log("max failure count", options.maxFailureCount);
+
                 expect(options.remainingFailureCount).toBeDefined();
                 expect(options.maxFailureCount).toBeDefined();
                 expect(options.remainingFailureCount).toBe(3);
@@ -753,7 +755,6 @@ exports.defineAutoTests = function () {
               expect(actions).toBeDefined();
               expect(actions.providePin).toBeDefined();
               expect(options).toBeDefined();
-              expect(options.pinLength).toBe(5);
               actions.providePin(pin);
             })
             .onCreatePinRequest(function (actions, options) {

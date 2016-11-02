@@ -49,7 +49,6 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
         .withAuthenticationMethod(AUTH_METHOD_PIN_REQUEST)
-        .withPinLength(PIN_LENGTH)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -64,7 +63,6 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
         .withAuthenticationMethod(AUTH_METHOD_PIN_REQUEST)
-        .withPinLength(PIN_LENGTH)
         .build();
 
     sendStartAuthenticationResult(pluginResult);

@@ -26,5 +26,3 @@ NSString *const OGCDVPluginMethodSuccess = @"onSuccess";
 NSString *const OGCDVPluginMethodPinRequest = @"onPinRequest";
 NSString *const OGCDVPluginMethodCreatePinRequest = @"onCreatePinRequest";
 NSString *const OGCDVPluginMethodFingerprintRequest = @"onFingerprintRequest";
-NSString *const OGCDVPluginMethodFingerprintFailed = @"onFingerprintFailed";
-NSString *const OGCDVPluginMethodFingerprintCaptured = @"onFingerprintCaptured";

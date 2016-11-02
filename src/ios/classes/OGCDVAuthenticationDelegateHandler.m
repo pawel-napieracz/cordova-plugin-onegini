@@ -12,7 +12,7 @@
 {
     self.pinChallenge = nil;
     self.fingerprintChallenge = nil;
-    NSDictionary *result =  @{
+    NSDictionary *result = @{
         OGCDVPluginKeyAuthenticationMethod: OGCDVPluginMethodSuccess
     };
 
@@ -29,14 +29,11 @@
 - (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge
 {
     self.pinChallenge = challenge;
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
-    result[OGCDVPluginKeyAuthenticationMethod] = OGCDVPluginMethodPinRequest;
-
-    if (challenge.error != nil) {
-        result[OGCDVPluginKeyMaxFailureCount] = @(challenge.maxFailureCount);
-        result[OGCDVPluginKeyRemainingFailureCount] = @(challenge.remainingFailureCount);
-        result[@"description"] = [NSString stringWithFormat:@"Onegini: Incorrect Pin. Check the %@ and %@ properties for details.", OGCDVPluginKeyMaxFailureCount, OGCDVPluginKeyRemainingFailureCount];
-    }
+    NSDictionary *result = @{
+        OGCDVPluginKeyAuthenticationMethod: OGCDVPluginMethodPinRequest,
+        OGCDVPluginKeyMaxFailureCount: @(challenge.maxFailureCount),
+        OGCDVPluginKeyRemainingFailureCount: @(challenge.remainingFailureCount)
+    };
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
     [pluginResult setKeepCallbackAsBool:YES];
