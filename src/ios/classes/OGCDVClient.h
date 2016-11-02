@@ -5,6 +5,10 @@
 
 @interface OGCDVClient : CDVPlugin
 
+@property (nonatomic, copy) NSDictionary *launchNotificationUserInfo;
+
 - (void)start:(CDVInvokedUrlCommand *)command;
+- (void)applicationDidFinishLaunchingNotification:(NSNotification *)notification;
+- (void)handleLaunchNotification;
 
 @end

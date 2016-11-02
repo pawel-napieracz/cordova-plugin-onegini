@@ -92,8 +92,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
         if ([OGCDVPluginMobileAuthenticationMethodConfirmation isEqualToString:method]) {
             [delegate mobileAuthenticationRequestClient:self didReceiveConfirmationChallengeResponse:result
                                          withCallbackId:command.callbackId];
-        }
-        else if ([OGCDVPluginMobileAuthenticationMethodPin isEqualToString:method]) {
+        } else if ([OGCDVPluginMobileAuthenticationMethodPin isEqualToString:method]) {
             NSString *pin = options[OGCDVPluginKeyPin];
             [delegate mobileAuthenticationRequestClient:self didReceivePinChallengeResponse:result withPin:pin
                                          withCallbackId:command.callbackId];

@@ -38,4 +38,11 @@ public interface OneginiCordovaPluginConstants {
 
   // Values
   int PIN_LENGTH = 5;
+
+  // Extras
+  String EXTRA_MOBILE_AUTHENTICATION = "com.onegini.CordovaPluginMobileAuthenticationExtra";
+
+  // Push message
+  String PUSH_MSG_CONTENT = "content";
+  String PUSH_MSG_TRANSACTION_ID = "og_transaction_id";
 }

@@ -58,7 +58,7 @@ public class OneginiUserDeregistrationClient extends CordovaPlugin {
   }
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {
-    return OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext());
+    return OneginiSDK.getInstance().getOneginiClient(cordova.getActivity().getApplicationContext());
   }
 
 
