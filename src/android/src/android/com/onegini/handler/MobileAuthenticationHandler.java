@@ -11,7 +11,6 @@ import java.util.Queue;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
-import android.util.Log;
 import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthenticationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthenticationError;
@@ -120,7 +119,7 @@ public class MobileAuthenticationHandler
     }
 
     final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
-    pinCallback.setChallengeResponseCallbackContext(callbackContext);
+    pinCallback.setResultCallbackContext(callbackContext);
 
     if (shouldAccept) {
       pinCallback.getPinCallback().acceptAuthenticationRequest(pin);
@@ -195,14 +194,10 @@ public class MobileAuthenticationHandler
     finishAuthenticationRequest(null);
   }
 
+
   @Override
   public void onError(final OneginiMobileAuthenticationError oneginiMobileAuthenticationError) {
     finishAuthenticationRequest(oneginiMobileAuthenticationError);
-  }
-
-  @Override
-  public void finishAuthentication() {
-    Log.v("MobileAuth", "finished");
   }
 
   // *END*
@@ -244,7 +239,14 @@ public class MobileAuthenticationHandler
   }
 
   private void finishAuthenticationRequest(final OneginiError oneginiError) {
-    final CallbackContext callbackContext = callbackQueue.poll().getChallengeResponseCallbackContext();
+    Callback callback = callbackQueue.poll();
+    if (callback == null) {
+      // We don't have a callback anymore so we cannot perform any callback. We'll just continue to process the next authentication request
+      startProcessingNextAuthenticationRequest();
+      return;
+    }
+
+    final CallbackContext callbackContext = callback.getResultCallbackContext();
     final PluginResult pluginResult;
 
     if (oneginiError == null) {
@@ -259,6 +261,10 @@ public class MobileAuthenticationHandler
 
     callbackContext.sendPluginResult(pluginResult);
 
+    startProcessingNextAuthenticationRequest();
+  }
+
+  private void startProcessingNextAuthenticationRequest() {
     isRunning = false;
     handleNextAuthenticationRequest();
   }
@@ -266,4 +272,11 @@ public class MobileAuthenticationHandler
   private CallbackContext getChallengeReceiverForCallbackMethod(final Callback.Method method) {
     return challengeReceivers.get(method);
   }
+
+  @Override
+  public void finishAuthentication() {
+    // We don't want to do anything here because the onSuccess or onError methods of the handler will be called. This method is a convenience method when you
+    // already want to close your UI dialog after authentication was finished.
+  }
+
 }
