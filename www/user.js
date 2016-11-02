@@ -94,24 +94,16 @@ module.exports = (function () {
   };
 
   var reauthenticate = function (options) {
-      if (!options || !options.profileId) {
-        throw new TypeError("Onegini: missing 'profileId' argument for reauthenticate");
-      }
+    if (!options || !options.profileId) {
+      throw new TypeError("Onegini: missing 'profileId' argument for reauthenticate");
+    }
 
-      return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'reauthenticate');
+    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'reauthenticate');
   };
 
-  var register = {
-    start: function (options, successCb, failureCb) {
-      return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'start', options, successCb, failureCb);
-    },
-
-    createPin: function (options, successCb, failureCb) {
-      if (!options || !options.pin) {
-        throw new TypeError("Onegini: missing 'pin' argument for register.createPin");
-      }
-      return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'createPin', options, successCb, failureCb);
-    }
+  var register = function (options) {
+    options = utils.getOptionsWithDefaults(options, {}, 'scopes');
+    return new AuthenticationHandler(options, 'OneginiUserRegistrationClient', 'start');
   };
 
   var changePin = function () {
@@ -137,7 +129,7 @@ module.exports = (function () {
 
     registerNew: function (options) {
       options = utils.getOptionsWithDefaults(options, {}, 'authenticatorId');
-      if(!options || !options.authenticatorId) {
+      if (!options || !options.authenticatorId) {
         throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew");
       }
 

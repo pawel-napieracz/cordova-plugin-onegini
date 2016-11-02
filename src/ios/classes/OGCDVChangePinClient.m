@@ -61,6 +61,7 @@
 - (void)userClient:(ONGUserClient *)userClient didReceiveCreatePinChallenge:(ONGCreatePinChallenge *)challenge
 {
     self.createPinChallenge = challenge;
+    [self.viewController dismissViewControllerAnimated:YES completion:nil];
 
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     result[OGCDVPluginKeyAuthenticationMethod] = OGCDVPluginMethodCreatePinRequest;

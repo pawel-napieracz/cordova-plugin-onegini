@@ -143,70 +143,25 @@ exports.defineAutoTests = function () {
     });
 
     describe("register", function () {
-      it("should have a start method", function () {
-        expect(onegini.user.register.start).toBeDefined();
+      it("should exist", function () {
+        expect(onegini.user.register).toBeDefined();
       });
 
-      it("should have a createPin method", function () {
-        expect(onegini.user.register.createPin).toBeDefined();
-      });
-
-      describe("createPin", function () {
-        it("should require a pincode argument", function () {
-          expect(function () {
-            onegini.user.register.createPin({}, function () {
-            }, function () {
+      it("should succeed", function (done) {
+        onegini.user.register()
+            .onCreatePinRequest(function (actions, options) {
+              expect(options.profileId).toBeDefined();
+              expect(options.pinLength).toBe(5);
+              registeredProfileId = options.profileId;
+              actions.createPin(pin);
+            })
+            .onSuccess(function () {
+              done();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              fail("Registration failed, but should have suceeded");
             });
-          }).toThrow(new TypeError("Onegini: missing 'pin' argument for register.createPin"));
-        });
-
-        it("can't be called before 'start' method", function (done) {
-          onegini.user.register.createPin(
-              {
-                pin: pin
-              },
-              function (result) {
-                expect(result).toBeUndefined();
-              },
-              function (err) {
-                expect(err).toBeDefined();
-                expect(err.description).toBe("Onegini: createPin called, but no registration in progress.");
-                done();
-              });
-        });
-      });
-
-      describe('start', function () {
-        it("should return pinlength of '5'", function (done) {
-          onegini.user.register.start(
-              undefined,
-              function (result) {
-                expect(result).toBeDefined();
-                expect(result.pinLength).toBe(5);
-                done();
-              },
-              function (err) {
-                expect(err).toBeUndefined();
-              });
-        });
-      });
-
-      describe('createPin', function () {
-        it("should return a profileId", function (done) {
-          onegini.user.register.createPin(
-              {
-                pin: pin
-              },
-              function (result) {
-                expect(result).toBeDefined();
-                expect(result.profileId).toBeDefined();
-                registeredProfileId = result.profileId;
-                done();
-              },
-              function (err) {
-                expect(err).toBeUndefined();
-              });
-        });
       });
     });
 

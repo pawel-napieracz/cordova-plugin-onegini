@@ -50,7 +50,6 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 - (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge forRequest:(ONGMobileAuthenticationRequest *)request
 {
     if (challenge.error.code == ONGPinAuthenticationErrorInvalidPin) {
-        NSLog(@"Invalid pin, resending challenge");
         [delegate setPinChallenge:challenge];
         [delegate sendChallenge:challengeReceiversCallbackIds[OGCDVPluginMobileAuthenticationMethodPin]];
         return;
@@ -65,7 +64,6 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 - (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthenticationRequest:(ONGMobileAuthenticationRequest *)request error:(NSError *)error
 {
-    NSLog(@"Mobile auth request didFailToHandle callbackId: %@", [delegate completeOperationCallbackId]);
     [self sendErrorResultForCallbackId:[delegate completeOperationCallbackId] withError:error];
     [delegate completeOperation];
 }
@@ -74,7 +72,6 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[delegate completeOperationCallbackId]];
-    NSLog(@"Mobile auth request didHandle callbackId: %@", [delegate completeOperationCallbackId]);
     [delegate completeOperation];
 }
 
