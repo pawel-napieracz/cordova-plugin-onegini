@@ -51,6 +51,7 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
         .shouldKeepCallback()
         .withAuthenticationMethod(AUTH_METHOD_CREATE_PIN_REQUEST)
         .withPinLength(PIN_LENGTH)
+        .withProfileId(userProfile)
         .build();
 
     sendStartPinCreationResult(pluginResult);
