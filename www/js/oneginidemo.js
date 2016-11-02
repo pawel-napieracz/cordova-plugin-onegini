@@ -24,22 +24,17 @@ var OneginiDemo = (function () {
     },
 
     startRegistration: function () {
-      var that = this;
-      onegini.user.register.start(
-          {
-            //scopes: ["read"]
-          },
-          function (result) {
-            console.log("onegini.user.register.start success, now calling onegini.user.register.createPin. " + JSON.stringify(result));
-            // added a little timeout so the embedded browser has time to disappear
-            setTimeout(function () {
-              that.registrationCreatePin(result.pinLength);
-            }, 900);
-          },
-          function (err) {
-            alert("Error!\n\n" + err.description);
-          }
-      );
+      onegini.user.register()
+          .onCreatePinRequest(function (actions, options) {
+            var pin = prompt("Create your " + options.pinLength + "digit pin", "12346");
+            actions.createPin(pin);
+          })
+          .onSuccess(function () {
+            alert('Registration success!');
+          })
+          .onError(function (err) {
+            alert('Registration error!\n\n' + err.description)
+          });
     },
 
     registerFingerprintAuthenticator: function () {
@@ -146,7 +141,7 @@ var OneginiDemo = (function () {
           })
           .onFingerprintRequest(function (actions) {
             alert("Accepting fingerprint authentication request");
-            actions.acceptFingerprint({ iosPrompt: "Login to Cordova Example App" });
+            actions.acceptFingerprint({iosPrompt: "Login to Cordova Example App"});
           })
           .onFingerprintCaptured(function () {
             console.info("Authentication: Fingerprint captured");
