@@ -119,7 +119,7 @@ public class MobileAuthenticationHandler
     }
 
     final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
-    pinCallback.setResultCallbackContext(callbackContext);
+    pinCallback.setChallengeResponseCallbackContext(callbackContext);
 
     if (shouldAccept) {
       pinCallback.getPinCallback().acceptAuthenticationRequest(pin);
@@ -246,7 +246,7 @@ public class MobileAuthenticationHandler
       return;
     }
 
-    final CallbackContext callbackContext = callback.getResultCallbackContext();
+    final CallbackContext callbackContext = callback.getChallengeResponseCallbackContext();
     final PluginResult pluginResult;
 
     if (oneginiError == null) {
