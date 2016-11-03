@@ -12,18 +12,18 @@ import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFingerpri
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.PluginResultBuilder;
 
-public class FingerprintAuthenticationHandler implements OneginiFingerprintAuthenticationRequestHandler {
-  private static FingerprintAuthenticationHandler instance;
+public class FingerprintAuthenticationRequestHandler implements OneginiFingerprintAuthenticationRequestHandler {
+  private static FingerprintAuthenticationRequestHandler instance;
   private CallbackContext startAuthenticationCallbackContext;
   private OneginiFingerprintCallback fingerprintCallback;
 
-  protected FingerprintAuthenticationHandler() {
+  protected FingerprintAuthenticationRequestHandler() {
 
   }
 
-  public static FingerprintAuthenticationHandler getInstance() {
+  public static FingerprintAuthenticationRequestHandler getInstance() {
     if (instance == null) {
-      instance = new FingerprintAuthenticationHandler();
+      instance = new FingerprintAuthenticationRequestHandler();
     }
 
     return instance;

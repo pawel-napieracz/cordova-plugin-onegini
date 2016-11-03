@@ -16,7 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.onegini.handler.AuthenticationHandler;
-import com.onegini.handler.FingerprintAuthenticationHandler;
+import com.onegini.handler.FingerprintAuthenticationRequestHandler;
 import com.onegini.handler.LogoutHandler;
 import com.onegini.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
@@ -87,7 +87,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     }
 
     PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(callbackContext);
-    FingerprintAuthenticationHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
+    FingerprintAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
     authenticationHandler = new AuthenticationHandler(callbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
@@ -165,7 +165,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
   }
 
   private void respondToFingerprintRequest(final CallbackContext callbackContext, final JSONArray args) {
-    final OneginiFingerprintCallback fingerprintCallback = FingerprintAuthenticationHandler.getInstance().getFingerprintCallback();
+    final OneginiFingerprintCallback fingerprintCallback = FingerprintAuthenticationRequestHandler.getInstance().getFingerprintCallback();
     final boolean shouldAccept;
 
     if (fingerprintCallback == null) {

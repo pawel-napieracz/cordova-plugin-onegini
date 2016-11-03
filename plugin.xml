@@ -280,7 +280,7 @@
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/PinAuthenticationRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/FingerprintAuthenticationHandler.java"
+    <source-file src="src/android/src/android/com/onegini/handler/FingerprintAuthenticationRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/ChangePinHandler.java"
                  target-dir="src/com/onegini/handler/"/>
