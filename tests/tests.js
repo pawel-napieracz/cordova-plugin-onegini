@@ -4,7 +4,7 @@
 exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
-    testForMobileFingerprintAuthentication: true,
+    testForMobileFingerprintAuthentication: false,
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
     },
@@ -609,6 +609,40 @@ exports.defineAutoTests = function () {
       });
 
       if (config.testForMultipleAuthenticators) {
+        describe("getAll", function () {
+          it("should contain PIN and fingerprint authenticator (if available)", function (done) {
+            var foundPin = false,
+                foundFingerprint = false,
+                shouldFindPin = true,
+                shouldFindFingerprint = config.testForMultipleAuthenticators;
+
+
+            onegini.user.authenticators.getAll(
+                function (result) {
+                  expect(result).toBeDefined();
+
+                  for (var r in result) {
+                    var authenticator = result[r];
+                    expect(authenticator.authenticatorId).toBeDefined();
+                    if (authenticator.authenticatorId === "com.onegini.authenticator.PIN") {
+                      foundPin = true;
+                    } else if (authenticator.authenticatorId === config.fingerPrintAuthenticatorID) {
+                      foundFingerprint = true;
+                    }
+                  }
+
+                  expect(foundPin).toBe(shouldFindPin);
+                  expect(foundFingerprint).toBe(shouldFindFingerprint);
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                  fail("Method failed, but should have succeeded");
+                }
+            );
+          });
+        });
+
         describe('getRegistered', function () {
           it("should contain a PIN authenticator", function (done) {
             onegini.user.authenticators.getRegistered(
