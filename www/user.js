@@ -36,10 +36,10 @@ module.exports = (function () {
     };
 
     function callSuccessCallback(options) {
-      var method = options.authenticationMethod;
-      delete options.authenticationMethod;
+      var event = options.authenticationEvent;
+      delete options.authenticationEvent;
 
-      self.callbacks[method](self.callbackActions, options);
+      self.callbacks[event](self.callbackActions, options);
     }
 
     function callErrorCallback(err) {
