@@ -1,6 +1,6 @@
 package com.onegini.handler;
 
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_METHOD_CREATE_PIN_REQUEST;
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_CREATE_PIN_REQUEST;
 import static com.onegini.OneginiCordovaPluginConstants.PIN_LENGTH;
 
 import org.apache.cordova.CallbackContext;
@@ -49,7 +49,7 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
     PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationMethod(AUTH_METHOD_CREATE_PIN_REQUEST)
+        .withAuthenticationEvent(AUTH_EVENT_CREATE_PIN_REQUEST)
         .withPinLength(PIN_LENGTH)
         .withProfileId(userProfile)
         .build();
@@ -63,7 +63,7 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
         .withOneginiError(oneginiPinValidationError)
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationMethod(AUTH_METHOD_CREATE_PIN_REQUEST)
+        .withAuthenticationEvent(AUTH_EVENT_CREATE_PIN_REQUEST)
         .withPinLength(PIN_LENGTH)
         .build();
 

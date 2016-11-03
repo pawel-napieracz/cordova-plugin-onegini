@@ -1,8 +1,7 @@
 package com.onegini.handler;
 
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_METHOD_PIN_REQUEST;
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_INCORRECT_PIN;
-import static com.onegini.OneginiCordovaPluginConstants.PIN_LENGTH;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -48,7 +47,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
         .withSuccess()
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
-        .withAuthenticationMethod(AUTH_METHOD_PIN_REQUEST)
+        .withAuthenticationEvent(AUTH_EVENT_PIN_REQUEST)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -62,7 +61,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
         .withSuccess()
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
-        .withAuthenticationMethod(AUTH_METHOD_PIN_REQUEST)
+        .withAuthenticationEvent(AUTH_EVENT_PIN_REQUEST)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
