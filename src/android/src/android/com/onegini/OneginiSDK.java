@@ -43,6 +43,7 @@ public class OneginiSDK {
         .setMobileAuthenticationRequestHandler(mobileAuthenticationHandler)
         .setMobileAuthenticationPinRequestHandler(mobileAuthenticationHandler)
         .setFingerprintAuthenticatioRequestHandler(fingerprintAuthenticationRequestHandler)
+        .setMobileAuthenticationFingerprintRequestHandler(mobileAuthenticationHandler)
         .build();
   }
 

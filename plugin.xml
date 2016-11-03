@@ -300,5 +300,7 @@
                  target-dir="src/com/onegini/mobileAuthentication/"/>
     <source-file src="src/android/src/android/com/onegini/mobileAuthentication/PinCallback.java"
                  target-dir="src/com/onegini/mobileAuthentication/"/>
+    <source-file src="src/android/src/android/com/onegini/mobileAuthentication/FingerprintCallback.java"
+                 target-dir="src/com/onegini/mobileAuthentication/"/>
   </platform>
 </plugin>

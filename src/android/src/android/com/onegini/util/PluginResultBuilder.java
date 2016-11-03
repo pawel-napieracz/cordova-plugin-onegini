@@ -16,6 +16,7 @@ import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
+import com.onegini.mobileAuthentication.Callback;
 import retrofit.client.Response;
 
 public class PluginResultBuilder {
@@ -69,9 +70,11 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder withAuthenticationEvent(final String event) {
+  public PluginResultBuilder withOneginiMobileAuthenticationRequest(final OneginiMobileAuthenticationRequest mobileAuthenticationRequest) {
     try {
-      payload.put("authenticationEvent", event);
+      payload.put("type", mobileAuthenticationRequest.getType());
+      payload.put("message", mobileAuthenticationRequest.getMessage());
+      payload.put("profileId", mobileAuthenticationRequest.getUserProfile().getProfileId());
     } catch (JSONException e) {
       handleException(e);
     }
@@ -79,11 +82,9 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder withOneginiMobileAuthenticationRequest(OneginiMobileAuthenticationRequest mobileAuthenticationRequest) {
+  public PluginResultBuilder withMobileAuthenticationEvent(final String eventName) {
     try {
-      payload.put("type", mobileAuthenticationRequest.getType());
-      payload.put("message", mobileAuthenticationRequest.getMessage());
-      payload.put("profileId", mobileAuthenticationRequest.getUserProfile().getProfileId());
+      payload.put("mobileAuthenticationEvent", eventName);
     } catch (JSONException e) {
       handleException(e);
     }
