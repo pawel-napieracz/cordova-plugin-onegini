@@ -18,7 +18,7 @@
 - (void)providePin:(CDVInvokedUrlCommand *)command
 {
     if (!self.pinChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: please invoke 'onegini.user.authenticate.start' first."];
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: providePin called, but no pin authentication in progress."];
         return;
     }
     [self.commandDelegate runInBackground:^{
@@ -31,7 +31,7 @@
 - (void)createPin:(CDVInvokedUrlCommand *)command
 {
     if (!self.createPinChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: please invoke 'onegini.user.changePin' first."];
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: createPin called, but no registration in progress."];
         return;
     }
 
