@@ -68,8 +68,8 @@
     result[OGCDVPluginKeyPinLength] = @(challenge.pinLength);
 
     if (challenge.error != nil) {
-        result[@"code"] = @(challenge.error.code);
-        result[@"description"] = challenge.error.localizedDescription;
+        result[OGCDVPluginKeyErrorCode] = @(challenge.error.code);
+        result[OGCDVPluginKeyErrorDescription] = challenge.error.localizedDescription;
     }
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];

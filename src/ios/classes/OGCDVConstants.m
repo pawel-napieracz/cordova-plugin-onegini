@@ -16,6 +16,8 @@ NSString *const OGCDVPluginKeyMessage = @"message";
 NSString *const OGCDVPluginKeyAuthenticationEvent = @"authenticationEvent";
 NSString *const OGCDVPluginKeyAccept = @"accept";
 NSString *const OGCDVPluginKeyPrompt = @"iosPrompt";
+NSString *const OGCDVPluginKeyErrorCode = @"code";
+NSString *const OGCDVPluginKeyErrorDescription = @"description";
 
 NSString *const OGCDVPluginErrorKeyNoUserAuthenticated = @"Onegini: No user authenticated.";
 

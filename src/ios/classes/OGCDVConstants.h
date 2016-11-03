@@ -14,6 +14,8 @@ extern NSString *const OGCDVPluginKeyMessage;
 extern NSString *const OGCDVPluginKeyAuthenticationEvent;
 extern NSString *const OGCDVPluginKeyAccept;
 extern NSString *const OGCDVPluginKeyPrompt;
+extern NSString *const OGCDVPluginKeyErrorCode;
+extern NSString *const OGCDVPluginKeyErrorDescription;
 
 extern NSString *const OGCDVPluginErrorKeyNoUserAuthenticated;
 
