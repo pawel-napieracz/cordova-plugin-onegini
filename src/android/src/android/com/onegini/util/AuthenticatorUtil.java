@@ -15,12 +15,17 @@ public class AuthenticatorUtil {
   public static JSONArray AuthenticatorSetToJSONArray(final Set<OneginiAuthenticator> authenticatorSet) throws JSONException {
     JSONArray authenticatorJSONArray= new JSONArray();
     for (final OneginiAuthenticator authenticator: authenticatorSet) {
-      final JSONObject authenticatorJSON = new JSONObject();
       //TODO Switch to actual ID when getId method is available in Onegini SDK.
-      authenticatorJSON.put(PARAM_AUTHENTICATOR_ID, "com.onegini.authenticator." + authenticator.getName());
+      final JSONObject authenticatorJSON = AuthenticatorToJSONObject(authenticator);
       authenticatorJSONArray.put(authenticatorJSON);
     }
 
     return authenticatorJSONArray;
+  }
+
+  public static JSONObject AuthenticatorToJSONObject(final OneginiAuthenticator authenticator) throws JSONException {
+    final JSONObject authenticatorJSON = new JSONObject();
+    authenticatorJSON.put(PARAM_AUTHENTICATOR_ID, "com.onegini.authenticator." + authenticator.getName());
+    return authenticatorJSON;
   }
 }
