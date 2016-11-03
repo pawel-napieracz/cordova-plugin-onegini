@@ -80,7 +80,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
     });
   }
 
-  private void getPreferredAuthenticator(final CallbackContext callbackContext) throws JSONException {
+  private void getPreferredAuthenticator(final CallbackContext callbackContext) {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
@@ -111,7 +111,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
     });
   }
 
-  private void setPreferredAuthenticator(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+  private void setPreferredAuthenticator(final JSONArray args, final CallbackContext callbackContext) {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
@@ -125,7 +125,13 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
         }
 
         final Set<OneginiAuthenticator> authenticatorSet = getOneginiClient().getUserClient().getRegisteredAuthenticators(userProfile);
-        final OneginiAuthenticator authenticator = ActionArgumentsUtil.getAuthenticatorFromArguments(args, authenticatorSet);
+
+        OneginiAuthenticator authenticator;
+        try {
+          authenticator = ActionArgumentsUtil.getAuthenticatorFromArguments(args, authenticatorSet);
+        } catch (JSONException e) {
+          authenticator = null;
+        }
 
         if (authenticator == null) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
