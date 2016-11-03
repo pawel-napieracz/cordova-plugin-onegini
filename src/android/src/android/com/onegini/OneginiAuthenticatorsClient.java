@@ -19,12 +19,16 @@ import com.onegini.util.PluginResultBuilder;
 
 public class OneginiAuthenticatorsClient extends CordovaPlugin {
   private static final String ACTION_GET_REGISTERED_AUTHENTICATORS = "getRegistered";
+  private static final String ACTION_GET_ALL_AUTHENTICATORS = "getAll";
   private static final String ACTION_GET_NOT_REGISTERED_AUTHENTICATORS = "getNotRegistered";
   private static final String ACTION_SET_PREFERRED_AUTHENTICATOR = "setPreferred";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if (ACTION_GET_REGISTERED_AUTHENTICATORS.equals(action)) {
+      getAuthenticators(callbackContext, action);
+      return true;
+    } else if (ACTION_GET_ALL_AUTHENTICATORS.equals(action)) {
       getAuthenticators(callbackContext, action);
       return true;
     } else if (ACTION_GET_NOT_REGISTERED_AUTHENTICATORS.equals(action)) {
@@ -55,8 +59,12 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
         final Set<OneginiAuthenticator> authenticatorSet;
         if (ACTION_GET_REGISTERED_AUTHENTICATORS.equals(action)) {
           authenticatorSet = getOneginiClient().getUserClient().getRegisteredAuthenticators(userProfile);
-        } else {
+        } else if (ACTION_GET_NOT_REGISTERED_AUTHENTICATORS.equals(action)){
           authenticatorSet = getOneginiClient().getUserClient().getNotRegisteredAuthenticators(userProfile);
+        } else if (ACTION_GET_ALL_AUTHENTICATORS.equals(action)) {
+          authenticatorSet = getOneginiClient().getUserClient().getAllAuthenticators(userProfile);
+        } else {
+          return;
         }
 
         final JSONArray authenticatorJSONArray;
