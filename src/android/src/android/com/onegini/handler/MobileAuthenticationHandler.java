@@ -1,6 +1,7 @@
 package com.onegini.handler;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_CONFIRMATION_CHALLENGE;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_FINGERPRINT_CHALLENGE;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_PIN_CHALLENGE;
 
 import java.util.HashMap;
@@ -13,19 +14,22 @@ import org.apache.cordova.PluginResult;
 import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthenticationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthenticationError;
+import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthenticationFingerprintRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthenticationPinRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiAcceptDenyCallback;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFingerprintCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.AuthenticationAttemptCounter;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobileAuthentication.Callback;
 import com.onegini.mobileAuthentication.ConfirmationCallback;
+import com.onegini.mobileAuthentication.FingerprintCallback;
 import com.onegini.mobileAuthentication.PinCallback;
 import com.onegini.util.PluginResultBuilder;
 
 public class MobileAuthenticationHandler
-    implements OneginiMobileAuthenticationHandler, OneginiMobileAuthenticationRequestHandler, OneginiMobileAuthenticationPinRequestHandler {
+    implements OneginiMobileAuthenticationHandler, OneginiMobileAuthenticationRequestHandler, OneginiMobileAuthenticationPinRequestHandler, OneginiMobileAuthenticationFingerprintRequestHandler {
 
   private static MobileAuthenticationHandler instance = null;
   private final HashMap<Callback.Method, CallbackContext> challengeReceivers = new HashMap<Callback.Method, CallbackContext>();
@@ -68,7 +72,7 @@ public class MobileAuthenticationHandler
     }
 
     final ConfirmationCallback confirmationCallback = (ConfirmationCallback) callbackQueue.peek();
-    confirmationCallback.setResultCallbackContext(callbackContext);
+    confirmationCallback.setChallengeResponseCallbackContext(callbackContext);
 
     if (shouldAccept) {
       confirmationCallback.getAcceptDenyCallback().acceptAuthenticationRequest();
@@ -86,6 +90,8 @@ public class MobileAuthenticationHandler
                                   final AuthenticationAttemptCounter authenticationAttemptCounter) {
     final PinCallback pinCallback = new PinCallback(oneginiMobileAuthenticationRequest, oneginiPinCallback, authenticationAttemptCounter);
     addAuthenticationRequestToQueue(pinCallback);
+
+    // TODO: Check if this request is a fallback from another request.
   }
 
   @Override
@@ -113,12 +119,69 @@ public class MobileAuthenticationHandler
     }
 
     final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
-    pinCallback.setResultCallbackContext(callbackContext);
+    pinCallback.setChallengeResponseCallbackContext(callbackContext);
 
     if (shouldAccept) {
       pinCallback.getPinCallback().acceptAuthenticationRequest(pin);
     } else {
       pinCallback.getPinCallback().denyAuthenticationRequest();
+    }
+  }
+
+  // *END*
+
+  // *START* Handling mobile authentication with Fingerprint
+
+  @Override
+  public void startAuthentication(final OneginiMobileAuthenticationRequest oneginiMobileAuthenticationRequest,
+                                  final OneginiFingerprintCallback oneginiFingerprintCallback) {
+    final FingerprintCallback fingerprintCallback = new FingerprintCallback(oneginiMobileAuthenticationRequest, oneginiFingerprintCallback);
+    addAuthenticationRequestToQueue(fingerprintCallback);
+  }
+
+  @Override
+  public void onNextAuthenticationAttempt() {
+    final FingerprintCallback fingerprintCallback = (FingerprintCallback) callbackQueue.peek();
+    final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(Callback.Method.FINGERPRINT);
+
+    callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withSuccess()
+        .shouldKeepCallback()
+        .withMobileAuthenticationEvent("FingerprintNextAttempt")
+        .withOneginiMobileAuthenticationRequest(fingerprintCallback.getMobileAuthenticationRequest())
+        .build());
+  }
+
+  @Override
+  public void onFingerprintCaptured() {
+    final FingerprintCallback fingerprintCallback = (FingerprintCallback) callbackQueue.peek();
+    final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(Callback.Method.FINGERPRINT);
+
+    callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withSuccess()
+        .shouldKeepCallback()
+        .withMobileAuthenticationEvent("FingerprintCaptured")
+        .withOneginiMobileAuthenticationRequest(fingerprintCallback.getMobileAuthenticationRequest())
+        .build());
+  }
+
+  public void replyToFingerprintChallenge(final CallbackContext callbackContext, final boolean shouldAccept) {
+    boolean isCallbackOfInvalidType = !(callbackQueue.peek() instanceof FingerprintCallback);
+    if (isCallbackOfInvalidType) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withErrorDescription(ERROR_NO_FINGERPRINT_CHALLENGE)
+          .build());
+
+      return;
+    }
+
+    final FingerprintCallback fingerprintCallback = (FingerprintCallback) callbackQueue.peek();
+    fingerprintCallback.setChallengeResponseCallbackContext(callbackContext);
+
+    if (shouldAccept) {
+      fingerprintCallback.getFingerprintCallback().acceptAuthenticationRequest();
+    } else {
+      fingerprintCallback.getFingerprintCallback().denyAuthenticationRequest();
     }
   }
 
@@ -183,7 +246,7 @@ public class MobileAuthenticationHandler
       return;
     }
 
-    final CallbackContext callbackContext = callback.getResultCallbackContext();
+    final CallbackContext callbackContext = callback.getChallengeResponseCallbackContext();
     final PluginResult pluginResult;
 
     if (oneginiError == null) {

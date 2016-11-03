@@ -3,7 +3,11 @@
 
 exports.defineAutoTests = function () {
   var config = {
-    testForMultipleAuthenticators: false,
+    testForMultipleAuthenticators: true,
+    testForMobileFingerprintAuthentication: true,
+    get platform() {
+      return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
+    },
     get fingerPrintAuthenticatorID() {
       return navigator.userAgent.indexOf("Android") > -1 ? "com.onegini.authenticator.Fingerprint" : "com.onegini.authenticator.TouchID"
     }
@@ -15,6 +19,10 @@ exports.defineAutoTests = function () {
 
   if (!config.testForMultipleAuthenticators) {
     console.warn("Testing for multiple authenticators disabled");
+  }
+
+  if (!config.testForMobileFingerprintAuthentication) {
+    console.warn("Testing for mobile fingerprint authentication disabled (requires interaction)");
   }
 
   function sendMobileAuthenticationRequest(type) {
@@ -64,7 +72,6 @@ exports.defineAutoTests = function () {
       });
     });
   });
-
 
   /******** onegini.user (1/2) *********/
 
@@ -350,7 +357,7 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe("mobileAuthentication", function () {
+    describe("mobileAuthentication (1/3)", function () {
       describe('enroll', function () {
         it("should exist", function () {
           expect(onegini.mobileAuthentication.enroll).toBeDefined();
@@ -456,7 +463,7 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe("mobileAuthentication", function () {
+    describe("mobileAuthentication (2/3)", function () {
       describe("enroll", function () {
         it("Should succeed in enrolling an authenticated user", function (done) {
           onegini.mobileAuthentication.enroll(
@@ -494,7 +501,7 @@ exports.defineAutoTests = function () {
           sendMobileAuthenticationRequest();
         }, 10000);
 
-        it('Should reject a mobile authentication request', function (done) {
+        it('Should reject a mobile confirmation request', function (done) {
           onegini.mobileAuthentication.on("confirmation")
               .shouldAccept(function (request, accept, reject) {
                 expect(request.type).toBeDefined();
@@ -700,7 +707,7 @@ exports.defineAutoTests = function () {
           it("Should succeed with an existing authenticator", function (done) {
             onegini.user.authenticators.setPreferred(
                 {
-                  authenticatorId: config.fingerPrintAuthenticatorID
+                  authenticatorId: "com.onegini.authenticator.PIN" //config.fingerPrintAuthenticatorID
                 }, function () {
                   expect(true).toBe(true);
                   done();
@@ -713,9 +720,99 @@ exports.defineAutoTests = function () {
         });
       }
       else {
-        console.warn("Skipping authenticators(2/2). Multiple authenticator tests disabled");
+        console.warn("Skipping authenticators (2/2). Multiple authenticator tests disabled");
       }
     });
+
+    if (config.testForMobileFingerprintAuthentication) {
+      describe("mobileAuthentication (3/3)", function () {
+        describe("on", function () {
+          it("Should accept a mobile fingerprint request", function (done) {
+            onegini.mobileAuthentication.on("fingerprint")
+                .shouldAccept(function (request, accept, reject) {
+                  console.log("Please provide correct fingerprint");
+                  expect(request.type).toBeDefined();
+                  expect(request.message).toBeDefined();
+                  expect(request.profileId).toBeDefined();
+                  accept();
+                })
+                .catch(function () {
+                  fail("Mobile authentication request failed, but should have succeeded");
+                })
+                .success(function () {
+                  done();
+                });
+
+            sendMobileAuthenticationRequest("push_with_fingerprint");
+          }, 10000);
+
+          it("Should reject a mobile fingerprint request", function (done) {
+            onegini.mobileAuthentication.on("fingerprint")
+                .shouldAccept(function (request, accept, reject) {
+                  expect(request.type).toBeDefined();
+                  expect(request.message).toBeDefined();
+                  expect(request.profileId).toBeDefined();
+                  reject();
+                })
+                .catch(function () {
+                  done();
+                })
+                .success(function () {
+                  fail("Mobile authentication request succeeded, but should have failed");
+                });
+
+            sendMobileAuthenticationRequest("push_with_fingerprint");
+          }, 10000);
+
+          if (config.platform == "android") {
+            it("Should be notified on fingerprint captured", function (done) {
+              var didCallCaptured = false;
+              onegini.mobileAuthentication.on("fingerprint")
+                  .shouldAccept(function (request, accept, reject) {
+                    console.log("Please provide any fingerprint");
+                    accept();
+                  })
+                  .onFingerprintCaptured(function () {
+                    console.log("Please remove your finger");
+                    didCallCaptured = true;
+                  })
+                  .catch(function () {
+                    fail("Mobile fingerprint authentication threw instead of triggering fingerprint capture event");
+                  })
+                  .success(function () {
+                    expect(didCallCaptured).toBe(true);
+                    setTimeout(done, 500);
+                  });
+
+              sendMobileAuthenticationRequest("push_with_fingerprint");
+            }, 10000);
+
+            it("Should request fingerprint authentication again on incorrect fingerprint", function (done) {
+              onegini.mobileAuthentication.on("fingerprint")
+                  .shouldAccept(function (request, accept, reject) {
+                    console.log("Please provide incorrect fingerprint");
+                    accept();
+                  })
+                  .onFingerprintNextAttempt(function () {
+                    expect(true).toBe(true);
+                    done();
+                  })
+                  .catch(function () {
+                    fail("Mobile fingerprint authentication threw instead of requesting another attempt");
+                  })
+                  .success(function () {
+                    fail("Mobile fingerprint authentication didn't request another attempt (or you supplied a correct fingerprint)")
+                  });
+
+              sendMobileAuthenticationRequest("push_with_fingerprint");
+            }, 10000);
+          }
+        });
+      });
+    }
+    else {
+      console.warn("Skipping mobileAuthentication (3/3). Mobile fingerprint authentication tests disabled");
+    }
   });
 
   /******** onegini.resource (1/2) *********/

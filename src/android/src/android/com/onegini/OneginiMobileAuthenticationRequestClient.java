@@ -71,6 +71,17 @@ public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
     });
   }
 
+  private void replyToFingerprintChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    final boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
+
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        MobileAuthenticationHandler.getInstance().replyToFingerprintChallenge(callbackContext, shouldAccept);
+      }
+    });
+  }
+
   private void replyToChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final Callback.Method method = ActionArgumentsUtil.getCallbackMethodFromArguments(args);
 
@@ -80,6 +91,9 @@ public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
         break;
       case PIN:
         replyToPinChallenge(args, callbackContext);
+        break;
+      case FINGERPRINT:
+        replyToFingerprintChallenge(args, callbackContext);
         break;
       default:
         callbackContext.sendPluginResult(new PluginResultBuilder()

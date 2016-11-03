@@ -27,7 +27,17 @@ module.exports = (function () {
     }
 
     function callChallengeReceiver(request) {
-      self.callbacks.challengeReceiver(request, acceptRequest, rejectRequest);
+      if (request.mobileAuthenticationEvent) {
+        var eventName = request.mobileAuthenticationEvent;
+        delete request.mobileAuthenticationEvent;
+
+        if (self.callbacks["on" + eventName]) {
+          self.callbacks["on" + eventName]();
+        }
+      }
+      else {
+        self.callbacks.challengeReceiver(request, acceptRequest, rejectRequest);
+      }
     }
 
     function callSuccess() {
@@ -46,6 +56,16 @@ module.exports = (function () {
 
   MobileAuthenticationHandler.prototype.providePin = function (cb) {
     this.callbacks.challengeReceiver = cb;
+    return this;
+  };
+
+  MobileAuthenticationHandler.prototype.onFingerprintCaptured = function (cb) {
+    this.callbacks.onFingerprintCaptured = cb;
+    return this;
+  };
+
+  MobileAuthenticationHandler.prototype.onFingerprintNextAttempt = function (cb) {
+    this.callbacks.onFingerprintNextAttempt = cb;
     return this;
   };
 

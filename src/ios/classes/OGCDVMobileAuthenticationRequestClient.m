@@ -8,6 +8,7 @@
 NSString *const OGCDVPluginKeyAccept = @"accept";
 NSString *const OGCDVPluginMobileAuthenticationMethodConfirmation = @"confirmation";
 NSString *const OGCDVPluginMobileAuthenticationMethodPin = @"pin";
+NSString *const OGCDVPluginMobileAuthenticationMethodFingerprint = @"fingerprint";
 static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 @implementation OGCDVMobileAuthenticationRequestClient {
@@ -61,6 +62,18 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
                   forRequest:request
                    forMethod:OGCDVPluginMobileAuthenticationMethodPin];
     [operationQueue addOperation:operation];
+
+    // TODO: Check if this request is a fallback from another request
+}
+
+- (void)userClient:(ONGUserClient *)userClient didReceiveFingerprintChallenge:(ONGFingerprintChallenge *)challenge
+        forRequest:(ONGMobileAuthenticationRequest *)request
+{
+    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+        initWithFingerprintChallenge:challenge
+                          forRequest:request
+                           forMethod:OGCDVPluginMobileAuthenticationMethodFingerprint];
+    [operationQueue addOperation:operation];
 }
 
 - (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthenticationRequest:(ONGMobileAuthenticationRequest *)request error:(NSError *)error
@@ -97,6 +110,11 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
             NSString *pin = options[OGCDVPluginKeyPin];
             [delegate mobileAuthenticationRequestClient:self didReceivePinChallengeResponse:result withPin:pin
                                          withCallbackId:command.callbackId];
+        } else if ([OGCDVPluginMobileAuthenticationMethodFingerprint isEqualToString:method]) {
+            [delegate mobileAuthenticationRequestClient:self didReceiveFingerprintChallengeResponse:result
+                                         withCallbackId:command.callbackId];
+        } else {
+
         }
     }];
 }
