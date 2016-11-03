@@ -769,7 +769,7 @@ exports.defineAutoTests = function () {
               var didCallCaptured = false;
               onegini.mobileAuthentication.on("fingerprint")
                   .shouldAccept(function (request, accept, reject) {
-                    console.log("Please provide a fingerprint");
+                    console.log("Please provide any fingerprint");
                     accept();
                   })
                   .onFingerprintCaptured(function () {
