@@ -86,7 +86,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return;
     }
 
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(callbackContext);
+    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
     FingerprintAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
     authenticationHandler = new AuthenticationHandler(callbackContext);
 
@@ -111,7 +111,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return;
     }
 
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(reauthenticateCallbackContext);
+    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(reauthenticateCallbackContext);
     authenticationHandler = new AuthenticationHandler(reauthenticateCallbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {

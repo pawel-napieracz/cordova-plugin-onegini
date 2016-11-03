@@ -35,7 +35,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
     return pinCallback;
   }
 
-  public void setStartAuthenticationCallback(final CallbackContext startAuthenticationCallback) {
+  public void setStartAuthenticationCallbackContext(final CallbackContext startAuthenticationCallback) {
     this.startAuthenticationCallback = startAuthenticationCallback;
   }
 

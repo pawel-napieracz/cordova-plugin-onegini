@@ -60,7 +60,7 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
       return;
     }
 
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(callbackContext);
+    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
     authenticatorRegistrationHandler = new AuthenticatorRegistrationHandler(callbackContext);
     getOneginiClient().getUserClient().registerAuthenticator(authenticator, authenticatorRegistrationHandler);
   }
