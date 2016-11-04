@@ -269,6 +269,10 @@ exports.defineAutoTests = function () {
     });
 
     describe("authenticators (1/2)", function () {
+      it("should have a getAll method", function () {
+        expect(onegini.user.authenticators.getAll).toBeDefined();
+      });
+
       it("should have a getRegistered method", function () {
         expect(onegini.user.authenticators.getRegistered).toBeDefined();
       });
@@ -608,41 +612,41 @@ exports.defineAutoTests = function () {
         });
       });
 
-      if (config.testForMultipleAuthenticators) {
-        describe("getAll", function () {
-          it("should contain PIN and fingerprint authenticator (if available)", function (done) {
-            var foundPin = false,
-                foundFingerprint = false,
-                shouldFindPin = true,
-                shouldFindFingerprint = config.testForMultipleAuthenticators;
+      describe("getAll", function () {
+        it("should contain PIN and fingerprint authenticator (if available)", function (done) {
+          var foundPin = false,
+              foundFingerprint = false,
+              shouldFindPin = true,
+              shouldFindFingerprint = config.testForMultipleAuthenticators;
 
 
-            onegini.user.authenticators.getAll(
-                function (result) {
-                  expect(result).toBeDefined();
+          onegini.user.authenticators.getAll(
+              function (result) {
+                expect(result).toBeDefined();
 
-                  for (var r in result) {
-                    var authenticator = result[r];
-                    expect(authenticator.authenticatorId).toBeDefined();
-                    if (authenticator.authenticatorId === "com.onegini.authenticator.PIN") {
-                      foundPin = true;
-                    } else if (authenticator.authenticatorId === config.fingerPrintAuthenticatorID) {
-                      foundFingerprint = true;
-                    }
+                for (var r in result) {
+                  var authenticator = result[r];
+                  expect(authenticator.authenticatorId).toBeDefined();
+                  if (authenticator.authenticatorId === "com.onegini.authenticator.PIN") {
+                    foundPin = true;
+                  } else if (authenticator.authenticatorId === config.fingerPrintAuthenticatorID) {
+                    foundFingerprint = true;
                   }
-
-                  expect(foundPin).toBe(shouldFindPin);
-                  expect(foundFingerprint).toBe(shouldFindFingerprint);
-                  done();
-                },
-                function (err) {
-                  expect(err).toBeUndefined();
-                  fail("Method failed, but should have succeeded");
                 }
-            );
-          });
-        });
 
+                expect(foundPin).toBe(shouldFindPin);
+                expect(foundFingerprint).toBe(shouldFindFingerprint);
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+                fail("Method failed, but should have succeeded");
+              }
+          );
+        });
+      });
+
+      if (config.testForMultipleAuthenticators) {
         describe('getRegistered', function () {
           it("should contain a PIN authenticator", function (done) {
             onegini.user.authenticators.getRegistered(
