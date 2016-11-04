@@ -1,9 +1,11 @@
 package com.onegini;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_USER_ALREADY_AUTHENTICATED;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_ACCEPT;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
 import java.util.Set;
@@ -14,9 +16,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.onegini.handler.AuthenticationHandler;
+import com.onegini.handler.FingerprintAuthenticationRequestHandler;
 import com.onegini.handler.LogoutHandler;
 import com.onegini.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFingerprintCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.ActionArgumentsUtil;
@@ -27,6 +31,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
   private static final String ACTION_START = "start";
   private static final String ACTION_PROVIDE_PIN = "providePin";
+  private static final String ACTION_RESPOND_TO_FINGERPRINT_REQUEST = "respondToFingerprintRequest";
   private static final String ACTION_REAUTHENTICATE = "reauthenticate";
   private final static String ACTION_LOGOUT = "logout";
   private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
@@ -49,18 +54,21 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     } else if (ACTION_LOGOUT.equals(action)) {
       logout(callbackContext);
       return true;
+    } else if (ACTION_RESPOND_TO_FINGERPRINT_REQUEST.equals(action)) {
+      respondToFingerprintRequest(callbackContext, args);
+      return true;
     }
 
     return false;
   }
 
-  private void startAuthentication(final JSONArray args, final CallbackContext startAuthenticationCallbackContext) {
+  private void startAuthentication(final JSONArray args, final CallbackContext callbackContext) {
     final UserProfile userProfile;
 
     try {
       userProfile = getUserProfileForAuthentication(args);
     } catch (Exception e) {
-      startAuthenticationCallbackContext.sendPluginResult(new PluginResultBuilder()
+      callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
           .withErrorDescription(e.getMessage())
           .build());
@@ -68,8 +76,9 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return;
     }
 
-    if (userProfile.equals(getOneginiClient().getUserClient().getAuthenticatedUserProfile())) {
-      startAuthenticationCallbackContext.sendPluginResult(new PluginResultBuilder()
+    final UserProfile authenticatedUserProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
+    if (userProfile.equals(authenticatedUserProfile)) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
           .withErrorDescription(ERROR_USER_ALREADY_AUTHENTICATED)
           .build());
@@ -77,13 +86,13 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return;
     }
 
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(startAuthenticationCallbackContext);
-    authenticationHandler = new AuthenticationHandler(startAuthenticationCallbackContext);
+    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
+    FingerprintAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
+    authenticationHandler = new AuthenticationHandler(callbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
-        getOneginiClient().getUserClient()
-            .authenticateUser(userProfile, authenticationHandler);
+        getOneginiClient().getUserClient().authenticateUser(userProfile, authenticationHandler);
       }
     });
   }
@@ -102,7 +111,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return;
     }
 
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(reauthenticateCallbackContext);
+    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(reauthenticateCallbackContext);
     authenticationHandler = new AuthenticationHandler(reauthenticateCallbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
@@ -138,20 +147,55 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     return UserProfileUtil.findUserProfileById(profileId, registeredUserProfiles);
   }
 
-  private void providePin(final JSONArray args, final CallbackContext providePinCallbackContext) throws JSONException {
+  private void providePin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String pin = ActionArgumentsUtil.getPinFromArguments(args);
     final OneginiPinCallback pinCallback = PinAuthenticationRequestHandler.getInstance().getPinCallback();
-    authenticationHandler.setCallbackContext(providePinCallbackContext);
+    authenticationHandler.setCallbackContext(callbackContext);
 
     if (pinCallback == null) {
-      providePinCallbackContext.sendPluginResult(new PluginResultBuilder()
+      callbackContext.sendPluginResult(new PluginResultBuilder()
           .withErrorDescription(OneginiCordovaPluginConstants.ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS)
           .build());
-    } else {
-      PinAuthenticationRequestHandler.getInstance().setOnNextAuthenticationAttemptCallback(providePinCallbackContext);
-      pinCallback.acceptAuthenticationRequest(pin.toCharArray());
+
+      return;
     }
 
+    pinCallback.acceptAuthenticationRequest(pin.toCharArray());
+
+  }
+
+  private void respondToFingerprintRequest(final CallbackContext callbackContext, final JSONArray args) {
+    final OneginiFingerprintCallback fingerprintCallback = FingerprintAuthenticationRequestHandler.getInstance().getFingerprintCallback();
+    final boolean shouldAccept;
+
+    if (fingerprintCallback == null) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withErrorDescription(ERROR_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS)
+          .build());
+
+      return;
+    }
+
+    try {
+      shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
+    } catch (JSONException e) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withErrorDescription(e.getMessage())
+          .build());
+
+      return;
+    }
+
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        if (shouldAccept) {
+          fingerprintCallback.acceptAuthenticationRequest();
+        } else {
+          fingerprintCallback.denyAuthenticationRequest();
+        }
+      }
+    });
   }
 
   private void logout(final CallbackContext callbackContext) {

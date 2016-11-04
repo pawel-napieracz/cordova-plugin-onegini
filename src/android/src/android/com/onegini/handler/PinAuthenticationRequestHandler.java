@@ -1,7 +1,7 @@
 package com.onegini.handler;
 
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_INCORRECT_PIN;
-import static com.onegini.OneginiCordovaPluginConstants.PIN_LENGTH;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -16,9 +16,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
 
   private static PinAuthenticationRequestHandler instance = null;
   private OneginiPinCallback pinCallback = null;
-  private CallbackContext onNextAuthenticationAttemptCallback;
   private CallbackContext startAuthenticationCallback;
-  private CallbackContext finishAuthenticationCallback;
 
   protected PinAuthenticationRequestHandler() {
   }
@@ -35,25 +33,21 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
     return pinCallback;
   }
 
-  public void setOnNextAuthenticationAttemptCallback(final CallbackContext onNextAuthenticationAttemptCallback) {
-    this.onNextAuthenticationAttemptCallback = onNextAuthenticationAttemptCallback;
-  }
-
-  public void setStartAuthenticationCallback(final CallbackContext startAuthenticationCallback) {
+  public void setStartAuthenticationCallbackContext(final CallbackContext startAuthenticationCallback) {
     this.startAuthenticationCallback = startAuthenticationCallback;
   }
 
-  public void setFinishAuthenticationCallback(final CallbackContext finishAuthenticationCallback) {
-    this.finishAuthenticationCallback = finishAuthenticationCallback;
-  }
-
   @Override
-  public void startAuthentication(final UserProfile userProfile, final OneginiPinCallback oneginiPinCallback,
+  public void startAuthentication(final UserProfile userProfile, final OneginiPinCallback pinCallback,
                                   final AuthenticationAttemptCounter authenticationAttemptCounter) {
-    this.pinCallback = oneginiPinCallback;
+    this.pinCallback = pinCallback;
 
     final PluginResult pluginResult = new PluginResultBuilder()
+        .shouldKeepCallback()
         .withSuccess()
+        .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
+        .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
+        .withAuthenticationEvent(AUTH_EVENT_PIN_REQUEST)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -62,30 +56,20 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   @Override
   public void onNextAuthenticationAttempt(final AuthenticationAttemptCounter authenticationAttemptCounter) {
     final PluginResult pluginResult = new PluginResultBuilder()
-        .withError()
+        .shouldKeepCallback()
         .withErrorDescription(ERROR_INCORRECT_PIN)
+        .withSuccess()
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
+        .withAuthenticationEvent(AUTH_EVENT_PIN_REQUEST)
         .build();
 
-    sendOnNextAuthenticationAttemptResult(pluginResult);
+    sendStartAuthenticationResult(pluginResult);
   }
 
   @Override
   public void finishAuthentication() {
     pinCallback = null;
-    final PluginResult pluginResult = new PluginResultBuilder()
-        .withSuccess()
-        .withPinLength(PIN_LENGTH)
-        .build();
-
-    sendFinishAuthenticationResult(pluginResult);
-  }
-
-  private void sendOnNextAuthenticationAttemptResult(final PluginResult pluginResult) {
-    if (onNextAuthenticationAttemptCallback != null) {
-      onNextAuthenticationAttemptCallback.sendPluginResult(pluginResult);
-    }
   }
 
   private void sendStartAuthenticationResult(final PluginResult pluginResult) {
@@ -94,9 +78,4 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
     }
   }
 
-  private void sendFinishAuthenticationResult(final PluginResult pluginResult) {
-    if (finishAuthenticationCallback != null && !finishAuthenticationCallback.isFinished()) {
-      finishAuthenticationCallback.sendPluginResult(pluginResult);
-    }
-  }
 }

@@ -4,7 +4,7 @@
 exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
-    testForMobileFingerprintAuthentication: true,
+    testForMobileFingerprintAuthentication: false,
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
     },
@@ -48,7 +48,7 @@ exports.defineAutoTests = function () {
   /******** onegini *********/
 
   describe('onegini', function () {
-    it("onegini should exist", function () {
+    it("should exist", function () {
       expect(window.onegini).toBeDefined();
     });
 
@@ -72,6 +72,7 @@ exports.defineAutoTests = function () {
       });
     });
   });
+
 
   /******** onegini.user (1/2) *********/
 
@@ -150,70 +151,25 @@ exports.defineAutoTests = function () {
     });
 
     describe("register", function () {
-      it("should have a start method", function () {
-        expect(onegini.user.register.start).toBeDefined();
+      it("should exist", function () {
+        expect(onegini.user.register).toBeDefined();
       });
 
-      it("should have a createPin method", function () {
-        expect(onegini.user.register.createPin).toBeDefined();
-      });
-
-      describe("createPin", function () {
-        it("should require a pincode argument", function () {
-          expect(function () {
-            onegini.user.register.createPin({}, function () {
-            }, function () {
+      it("should succeed", function (done) {
+        onegini.user.register()
+            .onCreatePinRequest(function (actions, options) {
+              expect(options.profileId).toBeDefined();
+              expect(options.pinLength).toBe(5);
+              registeredProfileId = options.profileId;
+              actions.createPin(pin);
+            })
+            .onSuccess(function () {
+              done();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              fail("Registration failed, but should have suceeded");
             });
-          }).toThrow(new TypeError("Onegini: missing 'pin' argument for register.createPin"));
-        });
-
-        it("can't be called before 'start' method", function (done) {
-          onegini.user.register.createPin(
-              {
-                pin: pin
-              },
-              function (result) {
-                expect(result).toBeUndefined();
-              },
-              function (err) {
-                expect(err).toBeDefined();
-                expect(err.description).toBe("Onegini: createPin called, but no registration in progress. Did you call 'onegini.user.register.start'?");
-                done();
-              });
-        });
-      });
-
-      describe('start', function () {
-        it("should return pinlength of '5'", function (done) {
-          onegini.user.register.start(
-              undefined,
-              function (result) {
-                expect(result).toBeDefined();
-                expect(result.pinLength).toBe(5);
-                done();
-              },
-              function (err) {
-                expect(err).toBeUndefined();
-              });
-        });
-      });
-
-      describe('createPin', function () {
-        it("should return a profileId", function (done) {
-          onegini.user.register.createPin(
-              {
-                pin: pin
-              },
-              function (result) {
-                expect(result).toBeDefined();
-                expect(result.profileId).toBeDefined();
-                registeredProfileId = result.profileId;
-                done();
-              },
-              function (err) {
-                expect(err).toBeUndefined();
-              });
-        });
       });
     });
 
@@ -285,10 +241,6 @@ exports.defineAutoTests = function () {
         expect(onegini.user.authenticators.registerNew).toBeDefined();
       });
 
-      it("should have a providePin method", function () {
-        expect(onegini.user.authenticators.providePin).toBeDefined();
-      });
-
       describe("getRegistered", function () {
         it("should return an error when not logged in", function (done) {
           onegini.user.authenticators.getRegistered(
@@ -334,25 +286,23 @@ exports.defineAutoTests = function () {
       });
 
       describe("registerNew", function () {
-        it("should require an authenticatorId", function () {
+        it("should exist", function () {
+          expect(onegini.user.authenticators.registerNew).toBeDefined();
+        });
+
+        it("should require an authenticatorId argument", function () {
           expect(function () {
             onegini.user.authenticators.registerNew()
           }).toThrow(new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew"));
         });
 
         it("should return an error when not logged in", function (done) {
-          onegini.user.authenticators.registerNew(
-              {
-                authenticatorId: 1
-              },
-              function (result) {
-                expect(result).toBeUndefined();
-              },
-              function (err) {
+          onegini.user.authenticators.registerNew('dummy')
+              .onError(function (err) {
                 expect(err).toBeDefined();
                 expect(err.description).toBe("Onegini: No user authenticated.");
                 done();
-              });
+              })
         });
       });
     });
@@ -377,89 +327,57 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe('authenticate', function () {
-      describe('start', function () {
-        it("should exist", function () {
-          expect(onegini.user.authenticate.start).toBeDefined();
-        });
+    describe("authenticate", function () {
+      it("should exist", function () {
+        expect(onegini.user.authenticate).toBeDefined();
+      });
 
-        it("should require a profileId", function () {
-          expect(function () {
-            onegini.user.authenticate.start()
-          }).toThrow(new TypeError("Onegini: missing 'profileId' argument for authenticate.start"));
-        });
+      it("should require a profile ID", function () {
+        expect(function () {
+          onegini.user.authenticate();
+        }).toThrow(new TypeError("Onegini: missing 'profileId' argument for user.authenticate"));
+      });
 
-        it('should succeed', function (done) {
-          onegini.user.authenticate.start(
-              {
-                profileId: registeredProfileId
-              },
-              function () {
-                expect(true).toBe(true);
-                done();
-              },
-              function (err) {
-                expect(err).toBeUndefined();
-              });
-        });
+      it("should succeed", function (done) {
+        onegini.user.authenticate(registeredProfileId)
+            .onPinRequest(function (actions, options) {
+              expect(actions).toBeDefined();
+              expect(actions.providePin).toBeDefined();
+              expect(options).toBeDefined();
 
-        describe('providePin', function () {
-          it("should exist", function () {
-            expect(onegini.user.authenticate.providePin).toBeDefined();
-          });
+              if (options.remainingFailureCount = options.maxFailureCount - 1) {
+                actions.providePin(pin);
+              }
+              else {
+                console.log("remaining failure count", options.remainingFailureCount);
+                console.log("max failure count", options.maxFailureCount);
 
-          it("should require a pin", function () {
-            expect(function () {
-              onegini.user.authenticate.providePin()
-            }).toThrow(new TypeError("Onegini: missing 'pin' argument for authenticate.providePin"));
-          });
+                expect(options.remainingFailureCount).toBeDefined();
+                expect(options.maxFailureCount).toBeDefined();
+                expect(options.remainingFailureCount).toBe(3);
+                expect(options.maxFailureCount).toBe(3);
+                actions.providePin('incorrect');
+              }
+            })
+            .onSuccess(function () {
+              done();
+            })
+            .onError(function (err) {
+              expect(err).toBeUndefined();
+              fail("User authentication failed, but should have succeeded");
+            });
+      });
 
-          it('should fail with incorrect pin', function (done) {
-            onegini.user.authenticate.providePin(
-                {
-                  pin: "incorrect"
-                },
-                function (result) {
-                  expect(result).toBeUndefined();
-                },
-                function (err) {
-                  expect(err).toBeDefined();
-                  expect(err.maxFailureCount).toBeDefined();
-                  expect(err.remainingFailureCount).toBeDefined();
-                  expect(err.description).toBe("Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.");
-                  done();
-                });
-          });
-
-          it('should succeed with correct pin', function (done) {
-            onegini.user.authenticate.providePin(
-                {
-                  pin: pin
-                },
-                function () {
-                  expect(true).toBe(true);
-                  done();
-                },
-                function (err) {
-                  expect(err).toBeUndefined();
-                });
-          });
-        });
-
-        it('should fail when user is already authenticated', function (done) {
-          onegini.user.authenticate.start(
-              {
-                profileId: registeredProfileId
-              },
-              function (result) {
-                expect(result).toBeUndefined();
-              },
-              function (err) {
-                expect(err).toBeDefined();
-                expect(err.description).toBe("Onegini: User already authenticated.");
-                done();
-              });
-        });
+      it('should fail when user is already authenticated', function (done) {
+        onegini.user.authenticate(registeredProfileId)
+            .onSuccess(function () {
+              fail("User authentication succeeded, but should have failed");
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              expect(err.description).toBe("Onegini: User already authenticated.");
+              done();
+            });
       });
     });
 
@@ -591,6 +509,33 @@ exports.defineAutoTests = function () {
       });
     });
 
+    describe('reauthenticate', function () {
+      it('should exist', function () {
+        expect(onegini.user.reauthenticate).toBeDefined();
+      });
+
+      it("should require a profileId", function () {
+        expect(function () {
+          onegini.user.reauthenticate()
+        }).toThrow(new TypeError("Onegini: missing 'profileId' argument for reauthenticate"));
+      });
+
+      it("should succeed", function (done) {
+        onegini.user.reauthenticate({profileId: registeredProfileId})
+            .onPinRequest(function (actions) {
+              expect(actions).toBeDefined();
+              actions.providePin(pin);
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              fail('Error callback called, but method should have succeeded');
+            })
+            .onSuccess(function () {
+              done();
+            });
+      });
+    });
+
     describe("authenticators (2/2)", function () {
       describe("setPreferred", function () {
         it("Should fail with a non-existing authenticator", function (done) {
@@ -649,56 +594,17 @@ exports.defineAutoTests = function () {
 
         describe("registerNew", function () {
           it("should succeed", function (done) {
-            onegini.user.authenticators.registerNew(
-                {
-                  authenticatorId: config.fingerPrintAuthenticatorID
-                },
-                function (result) {
-                  expect(result).toBeDefined();
-                  done();
-                },
-                function (err) {
-                  expect(err).toBeUndefined();
-                  fail("Error callback called, but method should have succeeded");
-                });
-          });
-        });
-
-        describe("providePin", function () {
-          it("should require a pin", function () {
-            expect(function () {
-              onegini.user.authenticators.providePin()
-            }).toThrow(new TypeError("Onegini: missing 'pin' argument for authenticators.providePin"));
-          });
-
-          it("should fail with incorrect pin", function (done) {
-            onegini.user.authenticators.providePin(
-                {
-                  pin: "incorrect"
-                },
-                function (result) {
-                  expect(result).toBeUndefined();
-                },
-                function (err) {
-                  expect(err).toBeDefined();
-                  expect(err.maxFailureCount).toBeDefined();
-                  expect(err.remainingFailureCount).toBeDefined();
-                  expect(err.description).toBe("Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.");
-                  done();
-                });
-          });
-
-          it("should succeed with correct pin", function (done) {
-            onegini.user.authenticators.providePin(
-                {
-                  pin: pin
-                },
-                function () {
+            onegini.user.authenticators.registerNew({authenticatorId: config.fingerPrintAuthenticatorID})
+                .onPinRequest(function (actions) {
+                  actions.providePin(pin);
+                })
+                .onSuccess(function () {
                   expect(true).toBe(true);
                   done();
-                },
-                function (err) {
+                })
+                .onError(function (err) {
                   expect(err).toBeUndefined();
+                  fail('Authenticator registration failed, but should have suceeded');
                 });
           });
         });
@@ -890,161 +796,43 @@ exports.defineAutoTests = function () {
 
   describe('onegini.user', function () {
     describe('changePin', function () {
-      describe('start', function () {
-        it("should exist", function () {
-          expect(onegini.user.changePin.start).toBeDefined();
-        });
-
-        it("should require a pin", function () {
-          expect(function () {
-            onegini.user.changePin.start()
-          }).toThrow(new TypeError("Onegini: missing 'pin' argument for changePin.start"));
-        });
+      it("Should exist", function () {
+        expect(onegini.user.changePin).toBeDefined();
       });
 
-      describe('createPin', function () {
-        it("should exist", function () {
-          expect(onegini.user.changePin.createPin).toBeDefined();
-        });
+      it("Should succeed", function (done) {
+        var count = 0;
 
-        it("should require a pin", function () {
-          expect(function () {
-            onegini.user.changePin.createPin()
-          }).toThrow(new TypeError("Onegini: missing 'pin' argument for changePin.createPin"));
-        });
-      });
+        onegini.user.changePin()
+            .onPinRequest(function (actions, options) {
+              expect(actions).toBeDefined();
+              expect(actions.providePin).toBeDefined();
+              expect(options).toBeDefined();
+              actions.providePin(pin);
+            })
+            .onCreatePinRequest(function (actions, options) {
+              expect(options.pinLength).toBe(5);
+              expect(function () {
+                actions.createPin();
+              }).toThrow(new TypeError('Onegini: missing "pin" argument for createPin'));
 
-      it('should fail with incorrect current pin', function (done) {
-        onegini.user.changePin.start(
-            {
-              pin: "incorrect"
-            },
-            function (result) {
-              expect(result).toBeUndefined();
-            },
-            function (err) {
-              expect(err).toBeDefined();
-              expect(err.maxFailureCount).toBeDefined();
-              expect(err.remainingFailureCount).toBeDefined();
-              expect(err.description).toBe("Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.");
+              if (count === 0) {
+                actions.createPin('invalid');
+              }
+              else {
+                expect(count).toBe(1);
+                actions.createPin(pin);
+              }
+
+              count += 1;
+            })
+            .onSuccess(function () {
               done();
-            });
-      });
-
-      it("should return pinlength of '5' when correct pin is supplied", function (done) {
-        onegini.user.changePin.start(
-            {
-              pin: pin
-            },
-            function (result) {
-              expect(result).toBeDefined();
-              expect(result.pinLength).toBe(5);
-              done();
-            },
-            function (err) {
+            })
+            .onError(function (err) {
               expect(err).toBeUndefined();
+              fail('Change pin failed, but should have succeeded');
             });
-      });
-
-      it('should fail with new pin non-compliant with pin policy', function (done) {
-        onegini.user.changePin.createPin(
-            {
-              pin: "incorrect"
-            },
-            function () {
-              fail("Success callback was called while action should have failed");
-            },
-            function (err) {
-              expect(err).toBeDefined();
-              expect(err.description).toBeDefined();
-              expect(err.code).toBe(9014);
-              done();
-            });
-      });
-
-      it('should succeed with new pin compliant to pin policy', function (done) {
-        onegini.user.changePin.createPin(
-            {
-              pin: pin
-            },
-            function () {
-              expect(true).toBe(true);
-              done();
-            },
-            function (err) {
-              fail("Error callback was called while action should have succeeded");
-            });
-      });
-    });
-
-    describe('reauthenticate', function () {
-      describe('start', function () {
-        it("should exist", function () {
-          expect(onegini.user.reauthenticate.start).toBeDefined();
-        });
-
-        it("should require a profileId", function () {
-          expect(function () {
-            onegini.user.reauthenticate.start()
-          }).toThrow(new TypeError("Onegini: missing 'profileId' argument for reauthenticate.start"));
-        });
-
-        it('should succeed', function (done) {
-          onegini.user.reauthenticate.start(
-              {
-                profileId: registeredProfileId
-              },
-              function (result) {
-                expect(result).toBeDefined();
-                done();
-              },
-              function (err) {
-                expect(err).toBeUndefined();
-              });
-        });
-
-        describe('providePin', function () {
-          it("should exist", function () {
-            expect(onegini.user.reauthenticate.providePin).toBeDefined();
-          });
-
-          it("should require a pin", function () {
-            expect(function () {
-              onegini.user.reauthenticate.providePin()
-            }).toThrow(new TypeError("Onegini: missing 'pin' argument for reauthenticate.providePin"));
-          });
-
-          it('should fail with incorrect pin', function (done) {
-            onegini.user.reauthenticate.providePin(
-                {
-                  pin: "incorrect"
-                },
-                function (result) {
-                  expect(result).toBeUndefined();
-                },
-                function (err) {
-                  expect(err).toBeDefined();
-                  expect(err.maxFailureCount).toBeDefined();
-                  expect(err.remainingFailureCount).toBeDefined();
-                  expect(err.description).toBe("Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.");
-                  done();
-                });
-          });
-
-          it('should succeed with correct pin', function (done) {
-            onegini.user.reauthenticate.providePin(
-                {
-                  pin: pin
-                },
-                function () {
-                  expect(true).toBe(true);
-                  done();
-                },
-                function (err) {
-                  expect(err).toBeUndefined();
-                });
-          });
-        });
       });
     });
 

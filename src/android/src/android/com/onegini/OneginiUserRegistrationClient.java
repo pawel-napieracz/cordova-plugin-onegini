@@ -101,7 +101,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
     callbackContext.sendPluginResult(pluginResult);
   }
 
-  public void getUserProfiles(final CallbackContext callbackContext) {
+  private void getUserProfiles(final CallbackContext callbackContext) {
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
         final Set<UserProfile> userProfiles = getOneginiClient().getUserClient().getUserProfiles();

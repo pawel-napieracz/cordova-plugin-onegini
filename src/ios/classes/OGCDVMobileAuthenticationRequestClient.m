@@ -5,7 +5,6 @@
 #import "OGCDVConstants.h"
 #import "OGCDVAuthenticationDelegateHandler.h"
 
-NSString *const OGCDVPluginKeyAccept = @"accept";
 NSString *const OGCDVPluginMobileAuthenticationMethodConfirmation = @"confirmation";
 NSString *const OGCDVPluginMobileAuthenticationMethodPin = @"pin";
 NSString *const OGCDVPluginMobileAuthenticationMethodFingerprint = @"fingerprint";
