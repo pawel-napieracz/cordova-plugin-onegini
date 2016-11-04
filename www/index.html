@@ -34,7 +34,6 @@
       <br/>
       <button onclick="OneginiDemo.startRegistration()">register</button>
       <button onclick="OneginiDemo.deregister()">deregister</button>
-      <!--      <button onclick="OneginiDemo.registrationCreatePin(5)">create Pin</button>-->
     </p>
 
     <h3>Device Authentication</h3>
@@ -45,7 +44,6 @@
     <h3>User Authentication</h3>
     <p>
       <button onclick="OneginiDemo.startUserAuthentication()">authenticate</button>
-      <button onclick="OneginiDemo.providePin()">(provide Pin)</button>
       <button onclick="OneginiDemo.getAuthenticatedUserProfile()">get authenticated user profile</button>
       <button onclick="OneginiDemo.reauthenticate()">reauthenticate</button>
       <button onclick="OneginiDemo.logout()">logout</button>
@@ -54,13 +52,14 @@
     <h3>Change Pin</h3>
     <p>
       <button onclick="OneginiDemo.startChangePin()">start change pin</button>
-      <button onclick="OneginiDemo.changePinCreatePin(5)">create new pin</button>
     </p>
 
     <h3>Authenticators</h3>
     <p>
       <button onclick="OneginiDemo.getRegisteredAuthenticators()">registered</button>
       <button onclick="OneginiDemo.getNotRegisteredAuthenticators()">not registered</button>
+      <button onclick="OneginiDemo.registerFingerprintAuthenticator()">Register Fingerprint</button>
+      <button onclick="OneginiDemo.setFingerprintAuthenticator()">Prefer Fingerprint</button>
     </p>
 
     <h3>Mobile Authentication</h3>

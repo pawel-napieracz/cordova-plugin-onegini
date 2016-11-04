@@ -45,26 +45,47 @@ var OneginiDemo = (function () {
     },
 
     startRegistration: function () {
-      var that = this;
-      onegini.user.register.start(
-          {
-            //scopes: ["read"]
+      onegini.user.register()
+          .onCreatePinRequest(function (actions, options) {
+            var pin = prompt("Create your " + options.pinLength + "digit pin", "12346");
+            actions.createPin(pin);
+          })
+          .onSuccess(function () {
+            alert('Registration success!');
+          })
+          .onError(function (err) {
+            alert('Registration error!\n\n' + err.description)
+          });
+    },
+
+    registerFingerprintAuthenticator: function () {
+      onegini.user.authenticators.registerNew({authenticatorId: "com.onegini.authenticator.TouchID"})
+          .onPinRequest(function (actions, options) {
+            var pin = prompt("Please enter your " + options.pinLength + " digit pin", "12346");
+            actions.providePin(pin);
+          })
+          .onSuccess(function () {
+            alert("Success!");
+          })
+          .onError(function (err) {
+            alert("Error!\n\n" + err.description);
+          });
+    },
+
+    setFingerprintAuthenticator: function () {
+      onegini.user.authenticators.setPreferred({
+            authenticatorId: "com.onegini.authenticator.TouchID"
           },
-          function (result) {
-            console.log("onegini.user.register.start success, now calling onegini.user.register.createPin. " + JSON.stringify(result));
-            // added a little timeout so the embedded browser has time to disappear
-            setTimeout(function () {
-              that.registrationCreatePin(result.pinLength);
-            }, 900);
+          function () {
+            alert("Success!")
           },
           function (err) {
             alert("Error!\n\n" + err.description);
-          }
-      );
+          });
     },
 
     registrationCreatePin: function (pinLength) {
-      var pin = prompt("Please enter your " + pinLength + " digit Pin", "12346" /* default */);
+      var pin = prompt("Please enter your " + pinLength + " digit Pin", "12346");
       if (!pin) {
         return;
       }
@@ -86,7 +107,7 @@ var OneginiDemo = (function () {
       onegini.user.getUserProfiles(
           function (result) {
             that.userProfiles = result;
-            alert("Success!\n\User profiles:\n" + JSON.stringify(result));
+            alert("Success!\n\nUser profiles:\n" + JSON.stringify(result));
           },
           function (err) {
             alert("Error!\n\n" + err.description);
@@ -133,37 +154,28 @@ var OneginiDemo = (function () {
       if (!profileId) {
         return;
       }
-      var that = this;
-      onegini.user.authenticate.start(
-          {
-            profileId: profileId
-          },
-          function (result) {
-            console.log("onegini.user.authenticate.start success, now calling onegini.user.authenticate.providePin. " + JSON.stringify(result));
-            that.providePin();
-          },
-          function (err) {
-            alert("Error!\n\n" + err.description);
-          }
-      );
-    },
 
-    providePin: function () {
-      var pin = prompt("Please enter your Pin", "12346" /* default */);
-      if (!pin) {
-        return;
-      }
-      onegini.user.authenticate.providePin(
-          {
-            pin: pin
-          },
-          function (result) {
-            alert("Authentication succeeded!");
-          },
-          function (err) {
-            alert("Error!\n\n" + JSON.stringify(err));
-          }
-      );
+      onegini.user.authenticate(profileId)
+          .onPinRequest(function (actions, options) {
+            var pin = prompt("Please enter your " + options.pinLength + " digit pin", "12346");
+            actions.providePin(pin);
+          })
+          .onFingerprintRequest(function (actions) {
+            alert("Accepting fingerprint authentication request");
+            actions.acceptFingerprint({iosPrompt: "Login to Cordova Example App"});
+          })
+          .onFingerprintCaptured(function () {
+            console.info("Authentication: Fingerprint captured");
+          })
+          .onFingerprintFailed(function () {
+            console.info("Authentication: Fingerprint failed");
+          })
+          .onSuccess(function () {
+            alert("Authentication success!");
+          })
+          .onError(function (err) {
+            alert("Authentication error!\n\n" + err.description);
+          });
     },
 
     reauthenticate: function () {
@@ -219,41 +231,21 @@ var OneginiDemo = (function () {
     },
 
     startChangePin: function () {
-      var pin = prompt("Please enter your current Pin", "12346" /* default */);
-      if (!pin) {
-        return;
-      }
-      var that = this;
-      onegini.user.changePin.start(
-          {
-            pin: pin
-          },
-          function (result) {
-            console.log("onegini.user.changePin.start success, now calling onegini.user.changePin.createPin. " + JSON.stringify(result));
-            that.changePinCreatePin(result.pinLength);
-          },
-          function (err) {
-            alert("Error!\n\n" + err.description + "\n\n" + JSON.stringify(err));
-          }
-      );
-    },
-
-    changePinCreatePin: function (pinLength) {
-      var pin = prompt("Please enter your " + pinLength + " digit NEW Pin", "12346" /* default */);
-      if (!pin) {
-        return;
-      }
-      onegini.user.changePin.createPin(
-          {
-            pin: pin
-          },
-          function (result) {
-            alert("Success!\n\nPin changed");
-          },
-          function (err) {
-            alert("Error!\n\n" + err.description);
-          }
-      );
+      onegini.user.changePin()
+          .onPinRequest(function (actions, options) {
+            var pin = prompt("Please enter your " + options.pinLength + " digit pin", "12346");
+            actions.providePin(pin);
+          })
+          .onCreatePinRequest(function (actions) {
+            var pin = prompt("Enter your new pin");
+            actions.createPin(pin);
+          })
+          .onSuccess(function () {
+            alert('Change pin success!');
+          })
+          .onError(function (err) {
+            alert('Change pin Error!\n\n' + err.description)
+          });
     },
 
     getRegisteredAuthenticators: function () {
