@@ -52,15 +52,13 @@
         }
 
         ONGAuthenticator *authenticator = [[ONGUserClient sharedInstance] preferredAuthenticator];
-        NSString *authenticatorId;
-        if (authenticator == nil) {
-            authenticatorId = nil;
-        } else {
-            authenticatorId = authenticator.identifier;
+        NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+        if (authenticator != nil) {
+            result[OGCDVPluginKeyAuthenticatorId] = authenticator.identifier;
         }
 
         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                                                 messageAsString:authenticatorId]
+                                                             messageAsDictionary:result]
                                     callbackId:command.callbackId];
     }];
 }
