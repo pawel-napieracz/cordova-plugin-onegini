@@ -279,7 +279,7 @@ exports.defineAutoTests = function () {
 
       describe("getPreferred", function () {
         it("should return an error when not logged in", function (done) {
-            onegini.user.authenticators.getPreferred(
+          onegini.user.authenticators.getPreferred(
               function (result) {
                 expect(result).toBeUndefined();
               },
@@ -289,7 +289,7 @@ exports.defineAutoTests = function () {
                 done();
               });
         });
-      })
+      });
 
       describe("setPreferred", function () {
         it("should return an error when not logged in", function (done) {
@@ -592,7 +592,8 @@ exports.defineAutoTests = function () {
                   expect(authenticator.authenticatorId).toBeDefined();
                   if (authenticator.authenticatorId === "com.onegini.authenticator.PIN") {
                     foundPin = true;
-                  } else if (authenticator.authenticatorId === config.fingerPrintAuthenticatorID) {
+                  }
+                  else if (authenticator.authenticatorId === config.fingerPrintAuthenticatorID) {
                     foundFingerprint = true;
                   }
                 }
@@ -609,43 +610,43 @@ exports.defineAutoTests = function () {
         });
       });
 
-        describe('getRegistered', function () {
-          it("should contain a PIN authenticator", function (done) {
-            onegini.user.authenticators.getRegistered(
-                function (result) {
-                  expect(result).toBeDefined();
-                  var nrOfAuthenticators = result.length;
-                  expect(nrOfAuthenticators).toBeGreaterThan(0);
+      describe('getRegistered', function () {
+        it("should contain a PIN authenticator", function (done) {
+          onegini.user.authenticators.getRegistered(
+              function (result) {
+                expect(result).toBeDefined();
+                var nrOfAuthenticators = result.length;
+                expect(nrOfAuthenticators).toBeGreaterThan(0);
 
-                  for (var r in result) {
-                    var authenticator = result[r];
-                    expect(authenticator.authenticatorId).toBeDefined();
-                    if (authenticator.authenticatorId === "com.onegini.authenticator.PIN") {
-                      done();
-                      return;
-                    }
+                for (var r in result) {
+                  var authenticator = result[r];
+                  expect(authenticator.authenticatorId).toBeDefined();
+                  if (authenticator.authenticatorId === "com.onegini.authenticator.PIN") {
+                    done();
+                    return;
                   }
-                  fail("Expected PIN Authenticator not found");
-                  done();
-                },
-                function (err) {
-                  expect(err).toBeUndefined();
-                });
-          });
+                }
+                fail("Expected PIN Authenticator not found");
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+              });
         });
+      });
 
-        describe('getNotRegistered', function () {
-          it("should succeed", function (done) {
-            onegini.user.authenticators.getNotRegistered(
-                function (result) {
-                  expect(result).toBeDefined();
-                  done();
-                },
-                function (err) {
-                  expect(err).toBeUndefined();
-                });
-          });
+      describe('getNotRegistered', function () {
+        it("should succeed", function (done) {
+          onegini.user.authenticators.getNotRegistered(
+              function (result) {
+                expect(result).toBeDefined();
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+              });
         });
+      });
 
       describe("getPreferred", function () {
         it("Should succeed and be default PIN authenticator", function (done) {
