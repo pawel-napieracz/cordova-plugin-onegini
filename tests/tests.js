@@ -249,6 +249,10 @@ exports.defineAutoTests = function () {
         expect(onegini.user.authenticators.registerNew).toBeDefined();
       });
 
+      it("should have a deregister method", function () {
+        expect(onegini.user.authenticators.deregister).toBeDefined();
+      });
+
       describe("getRegistered", function () {
         it("should return an error when not logged in", function (done) {
           onegini.user.authenticators.getRegistered(
@@ -325,6 +329,29 @@ exports.defineAutoTests = function () {
                 expect(err.description).toBe("Onegini: No user authenticated.");
                 done();
               })
+        });
+      });
+
+      describe("deregister", function () {
+        it("should require an authenticatorId", function () {
+          expect(function () {
+            onegini.user.authenticators.deregister()
+          }).toThrow(new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.deregister"));
+        });
+
+        it("should return an error when not logged in", function (done) {
+          onegini.user.authenticators.deregister(
+              {
+                authenticatorId: 1
+              },
+              function () {
+                fail("Success callback was called, but method should have failed");
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No user authenticated.");
+                done();
+              });
         });
       });
     });
@@ -575,6 +602,23 @@ exports.defineAutoTests = function () {
         });
       });
 
+      describe("deregister", function() {
+        it("Should fail with a non-existing authenticator", function (done) {
+          onegini.user.authenticators.deregister(
+              {
+                authenticatorId: "invalid"
+              },
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No such authenticator found");
+                done();
+              });
+        });
+      });
+
       describe("getAll", function () {
         it("should contain PIN and fingerprint authenticator (if available)", function (done) {
           var foundPin = false,
@@ -691,6 +735,21 @@ exports.defineAutoTests = function () {
                   done();
                 },
                 function (err) {
+                  expect(err).toBeUndefined();
+                  fail("Error callback called, but method should have failed.");
+                });
+          });
+        });
+
+        describe("deregister", function () {
+          it("Should succeed with existing fingerprint authenticator", function (done) {
+            onegini.user.authenticators.deregister(
+                {
+                  authenticatorId: config.fingerPrintAuthenticatorID
+                }, function () {
+                  expect(true).toBe(true);
+                  done();
+                }, function (err) {
                   expect(err).toBeUndefined();
                   fail("Error callback called, but method should have failed.");
                 });

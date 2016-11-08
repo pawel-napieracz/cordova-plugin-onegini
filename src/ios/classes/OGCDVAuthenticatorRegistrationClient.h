@@ -6,5 +6,6 @@
 
 - (void)start:(CDVInvokedUrlCommand *)command;
 - (void)providePin:(CDVInvokedUrlCommand *)command;
+- (void)deregister:(CDVInvokedUrlCommand *)command;
 
 @end

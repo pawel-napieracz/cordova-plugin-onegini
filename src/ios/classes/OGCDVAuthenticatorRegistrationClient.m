@@ -28,7 +28,7 @@
             }
         }
 
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No authenticator found."];
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
     }];
 }
 
@@ -42,6 +42,36 @@
   NSDictionary *options = command.arguments[0];
   NSString *pin = options[OGCDVPluginKeyPin];
   [self.pinChallenge.sender respondWithPin:pin challenge:self.pinChallenge];
+}
+
+- (void)deregister:(CDVInvokedUrlCommand *)command
+{
+  [self.commandDelegate runInBackground:^{
+      ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+      if (user == nil) {
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+        return;
+      }
+
+      NSDictionary *options = command.arguments[0];
+      NSString *authenticatorId = options[OGCDVPluginKeyAuthenticatorId];
+
+      NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
+      for (ONGAuthenticator *authenticator in registeredAuthenticators) {
+        if ([authenticator.identifier isEqualToString:authenticatorId]) {
+          [[ONGUserClient sharedInstance] deregisterAuthenticator:authenticator completion:^(BOOL deregistered, NSError * _Nullable error) {
+            if (error || !deregistered) {
+              [self sendErrorResultForCallbackId:command.callbackId withError:error];
+            } else {
+              [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            }
+          }];
+          return;
+        }
+      }
+
+      [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
+  }];
 }
 
 @end
