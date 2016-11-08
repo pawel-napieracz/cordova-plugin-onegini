@@ -5,6 +5,7 @@
 
 @interface OGCDVAuthenticatorsClient : CDVPlugin
 
+- (void)getAll:(CDVInvokedUrlCommand *)command;
 - (void)getRegistered:(CDVInvokedUrlCommand *)command;
 - (void)getNotRegistered:(CDVInvokedUrlCommand *)command;
 - (void)getPreferred:(CDVInvokedUrlCommand *)command;
