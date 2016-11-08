@@ -1,6 +1,6 @@
 package com.onegini.util;
 
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_BODY;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_HEADERS;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_METHOD;
@@ -60,11 +60,11 @@ public class ActionArgumentsUtil {
   @Nullable
   public static OneginiAuthenticator getAuthenticatorFromArguments(final JSONArray args,
                                                                    final Set<OneginiAuthenticator> availableAuthenticators) throws JSONException {
-    final String authenticatorId = args.getJSONObject(0).getString(PARAM_AUTHENTICATOR_ID);
+    final String authenticatorType = args.getJSONObject(0).getString(PARAM_AUTHENTICATOR_TYPE);
 
     for (OneginiAuthenticator authenticator : availableAuthenticators) {
-      final String id = "com.onegini.authenticator." + authenticator.getName();
-      if (id.equals(authenticatorId)) {
+      final String type = AuthenticatorUtil.authenticatorTypeToString(authenticator.getType());
+      if (type.equals(authenticatorType)) {
         return authenticator;
       }
     }
