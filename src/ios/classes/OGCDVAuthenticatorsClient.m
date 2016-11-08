@@ -6,6 +6,24 @@
 @implementation OGCDVAuthenticatorsClient {
 }
 
+- (void)getAll:(CDVInvokedUrlCommand *)command
+{
+    [self.commandDelegate runInBackground:^{
+        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        if (user == nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            return;
+        }
+
+        NSSet<ONGAuthenticator *> *allAuthenticators = [[ONGUserClient sharedInstance] allAuthenticatorsForUser:user];
+        NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:allAuthenticators.count];
+        for (ONGAuthenticator *authenticator in allAuthenticators) {
+            [result addObject:@{OGCDVPluginKeyAuthenticatorId: authenticator.identifier}];
+        }
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
+    }];
+}
+
 - (void)getRegistered:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
@@ -40,6 +58,27 @@
       }
       [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
   }];
+}
+
+- (void)getPreferred:(CDVInvokedUrlCommand *)command
+{
+    [self.commandDelegate runInBackground:^{
+        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        if (user == nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            return;
+        }
+
+        ONGAuthenticator *authenticator = [[ONGUserClient sharedInstance] preferredAuthenticator];
+        NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+        if (authenticator != nil) {
+            result[OGCDVPluginKeyAuthenticatorId] = authenticator.identifier;
+        }
+
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                             messageAsDictionary:result]
+                                    callbackId:command.callbackId];
+    }];
 }
 
 - (void)setPreferred:(CDVInvokedUrlCommand *)command

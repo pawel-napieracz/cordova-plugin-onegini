@@ -1,5 +1,7 @@
 package com.onegini.handler;
 
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_SUCCESS;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
@@ -18,6 +20,7 @@ public class AuthenticatorRegistrationHandler implements OneginiAuthenticatorReg
   public void onSuccess() {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
+        .withAuthenticationEvent(AUTH_EVENT_SUCCESS)
         .build();
 
     sendPluginResult(pluginResult);

@@ -40,8 +40,7 @@ public class OneginiChangePinClient extends CordovaPlugin {
   }
 
   private void startChangePin(final CallbackContext callbackContext) throws JSONException {
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(callbackContext);
-    PinAuthenticationRequestHandler.getInstance().setFinishAuthenticationCallback(callbackContext);
+    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
     CreatePinRequestHandler.getInstance().setOnStartPinCreationCallback(callbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
@@ -85,6 +84,6 @@ public class OneginiChangePinClient extends CordovaPlugin {
   }
 
   private OneginiClient getOneginiClient() {
-    return OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext());
+    return OneginiSDK.getInstance().getOneginiClient(cordova.getActivity().getApplicationContext());
   }
 }

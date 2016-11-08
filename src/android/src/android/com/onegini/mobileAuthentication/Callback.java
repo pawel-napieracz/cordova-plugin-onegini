@@ -8,7 +8,7 @@ public class Callback {
 
   private final OneginiMobileAuthenticationRequest mobileAuthenticationRequest;
   private final Method method;
-  private CallbackContext resultCallbackContext;
+  private CallbackContext challengeResponseCallbackContext;
 
   public Callback(final OneginiMobileAuthenticationRequest mobileAuthenticationRequest, final Method method) {
     this.mobileAuthenticationRequest = mobileAuthenticationRequest;
@@ -23,17 +23,18 @@ public class Callback {
     return method;
   }
 
-  public CallbackContext getResultCallbackContext() {
-    return resultCallbackContext;
+  public CallbackContext getChallengeResponseCallbackContext() {
+    return challengeResponseCallbackContext;
   }
 
-  public void setResultCallbackContext(final CallbackContext resultCallbackContext) {
-    this.resultCallbackContext = resultCallbackContext;
+  public void setChallengeResponseCallbackContext(final CallbackContext resultCallbackContext) {
+    this.challengeResponseCallbackContext = resultCallbackContext;
   }
 
   public enum Method {
     CONFIRMATION,
-    PIN
+    PIN,
+    FINGERPRINT
   }
 
 }

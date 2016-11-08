@@ -12,7 +12,6 @@ import org.json.JSONException;
 
 import com.onegini.handler.AuthenticatorDeregistrationHandler;
 import com.onegini.handler.AuthenticatorRegistrationHandler;
-import com.onegini.handler.FingerprintAuthenticationHandler;
 import com.onegini.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
@@ -66,7 +65,7 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
       return;
     }
 
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallback(callbackContext);
+    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
     authenticatorRegistrationHandler = new AuthenticatorRegistrationHandler(callbackContext);
     getOneginiClient().getUserClient().registerAuthenticator(authenticator, authenticatorRegistrationHandler);
   }
@@ -116,6 +115,6 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
   }
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {
-    return OneginiSDK.getOneginiClient(cordova.getActivity().getApplicationContext());
+    return OneginiSDK.getInstance().getOneginiClient(cordova.getActivity().getApplicationContext());
   }
 }

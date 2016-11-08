@@ -26,16 +26,24 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_NO_SUCH_AUTHENTICATOR = "Onegini: No such authenticator found";
   String ERROR_NO_CONFIRMATION_CHALLENGE = "Onegini: Cannot reply to confirmation challenge, no challenge open";
   String ERROR_NO_PIN_CHALLENGE = "Onegini: Cannot reply to pin challenge, no challenge open";
+  String ERROR_NO_FINGERPRINT_CHALLENGE = "Onegini: Cannot reply to fingerprint challenge, no challenge open";
   String ERROR_INVALID_MOBILE_AUTHENTICATOR_METHOD = "Onegini: Invalid mobile authenticator method";
 
   // Authentication methods
-  String AUTH_METHOD_SUCCESS = "onSuccess";
-  String AUTH_METHOD_PIN_REQUEST = "onPinRequest";
-  String AUTH_METHOD_CREATE_PIN_REQUEST = "onCreatePinRequest";
-  String AUTH_METHOD_FINGERPRINT_REQUEST = "onFingerprintRequest";
-  String AUTH_METHOD_FINGERPRINT_FAILED = "onFingerprintFailed";
-  String AUTH_METHOD_FINGERPRINT_CAPTURED = "onFingerprintCaptured";
+  String AUTH_EVENT_SUCCESS = "onSuccess";
+  String AUTH_EVENT_PIN_REQUEST = "onPinRequest";
+  String AUTH_EVENT_CREATE_PIN_REQUEST = "onCreatePinRequest";
+  String AUTH_EVENT_FINGERPRINT_REQUEST = "onFingerprintRequest";
+  String AUTH_EVENT_FINGERPRINT_FAILED = "onFingerprintFailed";
+  String AUTH_EVENT_FINGERPRINT_CAPTURED = "onFingerprintCaptured";
 
   // Values
   int PIN_LENGTH = 5;
+
+  // Extras
+  String EXTRA_MOBILE_AUTHENTICATION = "com.onegini.CordovaPluginMobileAuthenticationExtra";
+
+  // Push message
+  String PUSH_MSG_CONTENT = "content";
+  String PUSH_MSG_TRANSACTION_ID = "og_transaction_id";
 }

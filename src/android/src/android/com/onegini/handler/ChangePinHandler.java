@@ -1,6 +1,6 @@
 package com.onegini.handler;
 
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_METHOD_SUCCESS;
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_SUCCESS;
 import static com.onegini.OneginiCordovaPluginConstants.PIN_LENGTH;
 
 import org.apache.cordova.CallbackContext;
@@ -22,7 +22,7 @@ public class ChangePinHandler implements OneginiChangePinHandler {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .withPinLength(PIN_LENGTH)
-        .withAuthenticationMethod(AUTH_METHOD_SUCCESS)
+        .withAuthenticationEvent(AUTH_EVENT_SUCCESS)
         .build();
 
     sendPluginResult(pluginResult);

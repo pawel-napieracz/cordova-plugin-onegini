@@ -1,8 +1,7 @@
 package com.onegini.handler;
 
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_METHOD_PIN_REQUEST;
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_INCORRECT_PIN;
-import static com.onegini.OneginiCordovaPluginConstants.PIN_LENGTH;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -18,10 +17,8 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   private static PinAuthenticationRequestHandler instance = null;
   private OneginiPinCallback pinCallback = null;
   private CallbackContext startAuthenticationCallback;
-  private CallbackContext finishAuthenticationCallback;
 
   protected PinAuthenticationRequestHandler() {
-
   }
 
   public static PinAuthenticationRequestHandler getInstance() {
@@ -36,23 +33,21 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
     return pinCallback;
   }
 
-  public void setStartAuthenticationCallback(final CallbackContext startAuthenticationCallback) {
+  public void setStartAuthenticationCallbackContext(final CallbackContext startAuthenticationCallback) {
     this.startAuthenticationCallback = startAuthenticationCallback;
   }
 
-  public void setFinishAuthenticationCallback(final CallbackContext finishAuthenticationCallback) {
-    this.finishAuthenticationCallback = finishAuthenticationCallback;
-  }
-
   @Override
-  public void startAuthentication(final UserProfile userProfile, final OneginiPinCallback pinCallback, final AuthenticationAttemptCounter authenticationAttemptCounter) {
+  public void startAuthentication(final UserProfile userProfile, final OneginiPinCallback pinCallback,
+                                  final AuthenticationAttemptCounter authenticationAttemptCounter) {
     this.pinCallback = pinCallback;
 
     final PluginResult pluginResult = new PluginResultBuilder()
-        .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationMethod(AUTH_METHOD_PIN_REQUEST)
-        .withPinLength(PIN_LENGTH)
+        .withSuccess()
+        .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
+        .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
+        .withAuthenticationEvent(AUTH_EVENT_PIN_REQUEST)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -66,8 +61,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
         .withSuccess()
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
-        .withAuthenticationMethod(AUTH_METHOD_PIN_REQUEST)
-        .withPinLength(PIN_LENGTH)
+        .withAuthenticationEvent(AUTH_EVENT_PIN_REQUEST)
         .build();
 
     sendStartAuthenticationResult(pluginResult);

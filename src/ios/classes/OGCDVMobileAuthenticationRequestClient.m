@@ -5,9 +5,9 @@
 #import "OGCDVConstants.h"
 #import "OGCDVAuthenticationDelegateHandler.h"
 
-NSString *const OGCDVPluginKeyAccept = @"accept";
 NSString *const OGCDVPluginMobileAuthenticationMethodConfirmation = @"confirmation";
 NSString *const OGCDVPluginMobileAuthenticationMethodPin = @"pin";
+NSString *const OGCDVPluginMobileAuthenticationMethodFingerprint = @"fingerprint";
 static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 @implementation OGCDVMobileAuthenticationRequestClient {
@@ -51,7 +51,6 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 - (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge forRequest:(ONGMobileAuthenticationRequest *)request
 {
     if (challenge.error.code == ONGPinAuthenticationErrorInvalidPin) {
-        NSLog(@"Invalid pin, resending challenge");
         [delegate setPinChallenge:challenge];
         [delegate sendChallenge:challengeReceiversCallbackIds[OGCDVPluginMobileAuthenticationMethodPin]];
         return;
@@ -62,11 +61,22 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
                   forRequest:request
                    forMethod:OGCDVPluginMobileAuthenticationMethodPin];
     [operationQueue addOperation:operation];
+
+    // TODO: Check if this request is a fallback from another request
+}
+
+- (void)userClient:(ONGUserClient *)userClient didReceiveFingerprintChallenge:(ONGFingerprintChallenge *)challenge
+        forRequest:(ONGMobileAuthenticationRequest *)request
+{
+    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+        initWithFingerprintChallenge:challenge
+                          forRequest:request
+                           forMethod:OGCDVPluginMobileAuthenticationMethodFingerprint];
+    [operationQueue addOperation:operation];
 }
 
 - (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthenticationRequest:(ONGMobileAuthenticationRequest *)request error:(NSError *)error
 {
-    NSLog(@"Mobile auth request didFailToHandle callbackId: %@", [delegate completeOperationCallbackId]);
     [self sendErrorResultForCallbackId:[delegate completeOperationCallbackId] withError:error];
     [delegate completeOperation];
 }
@@ -75,7 +85,6 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[delegate completeOperationCallbackId]];
-    NSLog(@"Mobile auth request didHandle callbackId: %@", [delegate completeOperationCallbackId]);
     [delegate completeOperation];
 }
 
@@ -96,11 +105,15 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
         if ([OGCDVPluginMobileAuthenticationMethodConfirmation isEqualToString:method]) {
             [delegate mobileAuthenticationRequestClient:self didReceiveConfirmationChallengeResponse:result
                                          withCallbackId:command.callbackId];
-        }
-        else if ([OGCDVPluginMobileAuthenticationMethodPin isEqualToString:method]) {
+        } else if ([OGCDVPluginMobileAuthenticationMethodPin isEqualToString:method]) {
             NSString *pin = options[OGCDVPluginKeyPin];
             [delegate mobileAuthenticationRequestClient:self didReceivePinChallengeResponse:result withPin:pin
                                          withCallbackId:command.callbackId];
+        } else if ([OGCDVPluginMobileAuthenticationMethodFingerprint isEqualToString:method]) {
+            [delegate mobileAuthenticationRequestClient:self didReceiveFingerprintChallengeResponse:result
+                                         withCallbackId:command.callbackId];
+        } else {
+
         }
     }];
 }

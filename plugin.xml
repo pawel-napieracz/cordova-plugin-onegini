@@ -21,6 +21,7 @@
     <config-file target="config.xml" parent="/*">
       <feature name="OneginiClient">
         <param name="ios-package" value="OGCDVClient" />
+        <param name="onload" value="true" />
       </feature>
       <feature name="OneginiUserClient">
         <param name="ios-package" value="OGCDVUserClient" />
@@ -279,11 +280,9 @@
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/CreatePinRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/InitializationHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/PinAuthenticationRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/FingerprintAuthenticationHandler.java"
+    <source-file src="src/android/src/android/com/onegini/handler/FingerprintAuthenticationRequestHandler.java"
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/ChangePinHandler.java"
                  target-dir="src/com/onegini/handler/"/>
@@ -302,6 +301,8 @@
     <source-file src="src/android/src/android/com/onegini/mobileAuthentication/ConfirmationCallback.java"
                  target-dir="src/com/onegini/mobileAuthentication/"/>
     <source-file src="src/android/src/android/com/onegini/mobileAuthentication/PinCallback.java"
+                 target-dir="src/com/onegini/mobileAuthentication/"/>
+    <source-file src="src/android/src/android/com/onegini/mobileAuthentication/FingerprintCallback.java"
                  target-dir="src/com/onegini/mobileAuthentication/"/>
   </platform>
 </plugin>

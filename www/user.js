@@ -1,7 +1,7 @@
 module.exports = (function () {
   var utils = require('./utils');
 
-  function AuthenticationHandler(options, client) {
+  function AuthenticationHandler(options, client, action) {
     var self = this;
     this.callbacks = {};
 
@@ -17,8 +17,10 @@ module.exports = (function () {
       fallbackToPin: function () {
         utils.promiseOrCallbackExec(client, 'fallbackToPin');
       },
-      acceptFingerprint: function () {
-        utils.callbackExec(client, 'respondToFingerprintRequest', {accept: true}, self.callbacks.onSuccess, self.callbacks.onError);
+      acceptFingerprint: function (options) {
+        options = utils.getOptionsWithDefaults(options, {}, 'iosPrompt');
+        options.accept = true;
+        utils.callbackExec(client, 'respondToFingerprintRequest', options, self.callbacks.onSuccess, self.callbacks.onError);
       },
       denyFingerprint: function () {
         utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
@@ -34,17 +36,17 @@ module.exports = (function () {
     };
 
     function callSuccessCallback(options) {
-      var method = options.authenticationMethod;
-      delete options.authenticationMethod;
+      var event = options.authenticationEvent;
+      delete options.authenticationEvent;
 
-      self.callbacks[method](self.callbackActions, options);
+      self.callbacks[event](self.callbackActions, options);
     }
 
     function callErrorCallback(err) {
       self.callbacks.onError(err);
     }
 
-    utils.callbackExec(client, 'start', options, callSuccessCallback, callErrorCallback)
+    utils.callbackExec(client, action, options, callSuccessCallback, callErrorCallback)
   }
 
   AuthenticationHandler.prototype.onPinRequest = function (cb) {
@@ -88,43 +90,31 @@ module.exports = (function () {
       throw new TypeError("Onegini: missing 'profileId' argument for user.authenticate");
     }
 
-    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient');
+    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'start');
   };
 
-  var reauthenticate = {
-    start: function (options, successCb, failureCb) {
-      if (!options || !options.profileId) {
-        throw new TypeError("Onegini: missing 'profileId' argument for reauthenticate.start");
-      }
-      return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'reauthenticate', options, successCb, failureCb);
-    },
-
-    providePin: function (options, successCb, failureCb) {
-      if (!options || !options.pin) {
-        throw new TypeError("Onegini: missing 'pin' argument for reauthenticate.providePin");
-      }
-      return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'providePin', options, successCb, failureCb);
+  var reauthenticate = function (options) {
+    if (!options || !options.profileId) {
+      throw new TypeError("Onegini: missing 'profileId' argument for reauthenticate");
     }
+
+    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'reauthenticate');
   };
 
-  var register = {
-    start: function (options, successCb, failureCb) {
-      return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'start', options, successCb, failureCb);
-    },
-
-    createPin: function (options, successCb, failureCb) {
-      if (!options || !options.pin) {
-        throw new TypeError("Onegini: missing 'pin' argument for register.createPin");
-      }
-      return utils.promiseOrCallbackExec('OneginiUserRegistrationClient', 'createPin', options, successCb, failureCb);
-    }
+  var register = function (options) {
+    options = utils.getOptionsWithDefaults(options, {}, 'scopes');
+    return new AuthenticationHandler(options, 'OneginiUserRegistrationClient', 'start');
   };
 
   var changePin = function () {
-    return new AuthenticationHandler(null, 'OneginiChangePinClient');
+    return new AuthenticationHandler(null, 'OneginiChangePinClient', 'start');
   };
 
   var authenticators = {
+    getAll: function(successCb, failureCb) {
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getAll', [], successCb, failureCb);
+    },
+
     getRegistered: function (successCb, failureCb) {
       return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getRegistered', [], successCb, failureCb);
     },
@@ -133,7 +123,12 @@ module.exports = (function () {
       return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getNotRegistered', [], successCb, failureCb);
     },
 
+    getPreferred: function (successCb, failureCb) {
+      return utils.promiseOrCallbackExec("OneginiAuthenticatorsClient", "getPreferred", [], successCb, failureCb);
+    },
+
     setPreferred: function (options, successCb, failureCb) {
+      options = utils.getOptionsWithDefaults(options, {}, 'authenticatorId');
       if (!options || !options.authenticatorId) {
         throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.setPreferred");
       }
@@ -142,11 +137,11 @@ module.exports = (function () {
 
     registerNew: function (options) {
       options = utils.getOptionsWithDefaults(options, {}, 'authenticatorId');
-      if(!options || options.authenticatorId) {
+      if (!options || !options.authenticatorId) {
         throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew");
       }
 
-      return new AuthenticationHandler(options, 'OneginiAuthenticatorRegistrationClient');
+      return new AuthenticationHandler(options, 'OneginiAuthenticatorRegistrationClient', 'start');
     },
 
     deregister: function (options, successCb, failureCb) {
