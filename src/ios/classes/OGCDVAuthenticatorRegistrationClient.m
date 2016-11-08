@@ -28,7 +28,7 @@
             }
         }
 
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No authenticator found."];
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
     }];
 }
 
@@ -70,7 +70,7 @@
         }
       }
 
-      [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No authenticator found."];
+      [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
   }];
 }
 

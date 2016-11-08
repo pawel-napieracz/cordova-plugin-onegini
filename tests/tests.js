@@ -335,7 +335,7 @@ exports.defineAutoTests = function () {
       describe("deregister", function () {
         it("should require an authenticatorId", function () {
           expect(function () {
-            onegini.user.authenticator.deregister()
+            onegini.user.authenticators.deregister()
           }).toThrow(new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.deregister"));
         });
 
