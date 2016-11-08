@@ -48,7 +48,7 @@ public class OneginiResourceClient extends CordovaPlugin {
         final Response response;
 
         if (isAnonymous) {
-          okClient = getOneginiClient().getDeviceClient().getRetrofitClient();
+          okClient = getOneginiClient().getDeviceClient().getAnonymousResourceRetrofitClient();
         } else {
           okClient = getOneginiClient().getUserClient().getResourceRetrofitClient();
         }
