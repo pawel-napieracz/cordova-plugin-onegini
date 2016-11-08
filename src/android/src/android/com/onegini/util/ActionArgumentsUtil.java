@@ -60,6 +60,7 @@ public class ActionArgumentsUtil {
   @Nullable
   public static OneginiAuthenticator getAuthenticatorFromArguments(final JSONArray args,
                                                                    final Set<OneginiAuthenticator> availableAuthenticators) throws JSONException {
+    // TODO: Logic to search for authenticator id in the case of authenticator type = CUSTOM
     final String authenticatorType = args.getJSONObject(0).getString(PARAM_AUTHENTICATOR_TYPE);
 
     for (OneginiAuthenticator authenticator : availableAuthenticators) {
