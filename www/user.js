@@ -123,6 +123,10 @@ module.exports = (function () {
       return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getNotRegistered', [], successCb, failureCb);
     },
 
+    getPreferred: function (successCb, failureCb) {
+      return utils.promiseOrCallbackExec("OneginiAuthenticatorsClient", "getPreferred", [], successCb, failureCb);
+    },
+
     setPreferred: function (options, successCb, failureCb) {
       options = utils.getOptionsWithDefaults(options, {}, 'authenticatorId');
       if (!options || !options.authenticatorId) {

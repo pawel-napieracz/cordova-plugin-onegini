@@ -10,6 +10,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
@@ -21,6 +22,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
   private static final String ACTION_GET_REGISTERED_AUTHENTICATORS = "getRegistered";
   private static final String ACTION_GET_ALL_AUTHENTICATORS = "getAll";
   private static final String ACTION_GET_NOT_REGISTERED_AUTHENTICATORS = "getNotRegistered";
+  private static final String ACTION_GET_PREFERRED_AUTHENTICATOR = "getPreferred";
   private static final String ACTION_SET_PREFERRED_AUTHENTICATOR = "setPreferred";
 
   @Override
@@ -33,6 +35,9 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
       return true;
     } else if (ACTION_GET_NOT_REGISTERED_AUTHENTICATORS.equals(action)) {
       getAuthenticators(callbackContext, action);
+      return true;
+    } else if (ACTION_GET_PREFERRED_AUTHENTICATOR.equals(action)) {
+      getPreferredAuthenticator(callbackContext);
       return true;
     } else if (ACTION_SET_PREFERRED_AUTHENTICATOR.equals(action)) {
       setPreferredAuthenticator(args, callbackContext);
@@ -83,32 +88,74 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
     });
   }
 
-  private void setPreferredAuthenticator(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
-    if (userProfile == null) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_USER_AUTHENTICATED)
-          .build());
+  private void getPreferredAuthenticator(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
+        if (userProfile == null) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withErrorDescription(ERROR_NO_USER_AUTHENTICATED)
+              .build());
 
-      return;
-    }
+          return;
+        }
 
-    final Set<OneginiAuthenticator> authenticatorSet = getOneginiClient().getUserClient().getRegisteredAuthenticators(userProfile);
-    final OneginiAuthenticator authenticator = ActionArgumentsUtil.getAuthenticatorFromArguments(args, authenticatorSet);
+        final OneginiAuthenticator authenticator = getOneginiClient().getUserClient().getPreferredAuthenticator();
 
-    if (authenticator == null) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_SUCH_AUTHENTICATOR)
-          .build());
+        final JSONObject authenticatorJSON;
+        try {
+          authenticatorJSON = AuthenticatorUtil.AuthenticatorToJSONObject(authenticator);
+        } catch (JSONException e) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withErrorDescription(ERROR_PLUGIN_INTERNAL_ERROR)
+              .build());
 
-      return;
-    }
+          return;
+        }
 
-    getOneginiClient().getUserClient().setPreferredAuthenticator(authenticator);
+        callbackContext.success(authenticatorJSON);
+      }
+    });
+  }
 
-    callbackContext.sendPluginResult(new PluginResultBuilder()
-        .withSuccess()
-        .build());
+  private void setPreferredAuthenticator(final JSONArray args, final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
+        if (userProfile == null) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withErrorDescription(ERROR_NO_USER_AUTHENTICATED)
+              .build());
+
+          return;
+        }
+
+        final Set<OneginiAuthenticator> authenticatorSet = getOneginiClient().getUserClient().getRegisteredAuthenticators(userProfile);
+
+        OneginiAuthenticator authenticator;
+        try {
+          authenticator = ActionArgumentsUtil.getAuthenticatorFromArguments(args, authenticatorSet);
+        } catch (JSONException e) {
+          authenticator = null;
+        }
+
+        if (authenticator == null) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withErrorDescription(ERROR_NO_SUCH_AUTHENTICATOR)
+              .build());
+
+          return;
+        }
+
+        getOneginiClient().getUserClient().setPreferredAuthenticator(authenticator);
+
+        callbackContext.sendPluginResult(new PluginResultBuilder()
+            .withSuccess()
+            .build());
+      }
+    });
   }
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {
