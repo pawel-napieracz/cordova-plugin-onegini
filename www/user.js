@@ -111,6 +111,10 @@ module.exports = (function () {
   };
 
   var authenticators = {
+    getAll: function(successCb, failureCb) {
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getAll', [], successCb, failureCb);
+    },
+
     getRegistered: function (successCb, failureCb) {
       return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getRegistered', [], successCb, failureCb);
     },
