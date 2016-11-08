@@ -6,14 +6,12 @@
 @interface OGCDVChangePinClient : CDVPlugin<ONGChangePinDelegate>
 
 @property (nonatomic, copy) NSString *startCallbackId;
-@property (nonatomic, copy) NSString *createPinCallbackId;
 
-@property (nonatomic, copy) NSString *currentPin;
-@property (nonatomic) ONGPinChallenge *currentPinChallenge;
-
+@property (nonatomic) ONGPinChallenge *pinChallenge;
 @property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
 
 - (void)start:(CDVInvokedUrlCommand *)command;
+- (void)providePin:(CDVInvokedUrlCommand *)command;
 - (void)createPin:(CDVInvokedUrlCommand *)command;
 
 @end

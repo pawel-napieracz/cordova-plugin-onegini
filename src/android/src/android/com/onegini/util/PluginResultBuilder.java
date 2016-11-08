@@ -92,6 +92,16 @@ public class PluginResultBuilder {
     return this;
   }
 
+  public PluginResultBuilder withAuthenticationEvent(final String eventName) {
+    try {
+      payload.put("authenticationEvent", eventName);
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
   public PluginResultBuilder withRemainingFailureCount(int remainingFailureCount) {
     try {
       payload.put("remainingFailureCount", remainingFailureCount);

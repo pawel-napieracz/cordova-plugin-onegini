@@ -3,54 +3,54 @@
 #import "OGCDVAuthenticationDelegateHandler.h"
 #import "OGCDVConstants.h"
 
-@implementation OGCDVAuthenticationDelegateHandler {}
+@implementation OGCDVAuthenticationDelegateHandler {
+}
 
 #pragma mark - ONGAuthenticationDelegate
 
--(void)userClient:(ONGUserClient *)userClient didAuthenticateUser:(ONGUserProfile *)userProfile
+- (void)userClient:(ONGUserClient *)userClient didAuthenticateUser:(ONGUserProfile *)userProfile
 {
-  self.pinChallenge = nil;
-  [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.checkPinCallbackId];
-}
-
--(void)userClient:(ONGUserClient *)userClient didFailToAuthenticateUser:(ONGUserProfile *)userProfile error:(NSError *)error
-{
-  // May be called when the Pin is incorrect <max> times, but also when running
-  // 'startAuthentication' twice (which is incorrect usage).
-  // But this is why we have the 'deregistered' property and the check on 'self.startAuthenticationCallbackId'.
-
-  if (self.authenticationCallbackId) {
-    [self sendErrorResultForCallbackId:self.authenticationCallbackId withMessage:@"Don't call 'startAuthentication' twice, call 'checkPin' instead."];
-    return;
-  }
-
-  NSDictionary *result = @{
-      @"description": error.localizedDescription,
-      OGCDVPluginKeyRemainingFailureCount: @(0)
-  };
-
-  [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result] callbackId:self.checkPinCallbackId];
-}
-
--(void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge
-{
-  self.pinChallenge = challenge;
-
-  if (challenge.error != nil) {
+    self.pinChallenge = nil;
+    self.fingerprintChallenge = nil;
     NSDictionary *result = @{
-        OGCDVPluginKeyMaxFailureCount:@(challenge.maxFailureCount),
-        OGCDVPluginKeyRemainingFailureCount:@(challenge.remainingFailureCount),
-        @"description": [NSString stringWithFormat:@"Onegini: Incorrect Pin. Check the %@ and %@ properties for details.", OGCDVPluginKeyMaxFailureCount, OGCDVPluginKeyRemainingFailureCount]
+        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventSuccess
     };
 
-    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.checkPinCallbackId];
-    return;
-  }
-
-  CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-  [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
-  self.authenticationCallbackId = nil;
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:self.authenticationCallbackId];
 }
+
+- (void)userClient:(ONGUserClient *)userClient didFailToAuthenticateUser:(ONGUserProfile *)userProfile error:(NSError *)error
+{
+    [self sendErrorResultForCallbackId:self.authenticationCallbackId withError:error];
+    self.pinChallenge = nil;
+    self.fingerprintChallenge = nil;
+}
+
+- (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge
+{
+    self.pinChallenge = challenge;
+    NSDictionary *result = @{
+        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventPinRequest,
+        OGCDVPluginKeyMaxFailureCount: @(challenge.maxFailureCount),
+        OGCDVPluginKeyRemainingFailureCount: @(challenge.remainingFailureCount)
+    };
+
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+    [pluginResult setKeepCallbackAsBool:YES];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
+}
+
+- (void)userClient:(ONGUserClient *)userClient didReceiveFingerprintChallenge:(ONGFingerprintChallenge *)challenge
+{
+    self.fingerprintChallenge = challenge;
+
+    NSDictionary *result = @{
+        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventFingerprintRequest
+    };
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+    [pluginResult setKeepCallbackAsBool:YES];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
+}
+
 
 @end
