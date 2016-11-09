@@ -60,6 +60,10 @@ public class PluginResultBuilder {
   public PluginResultBuilder withOneginiError(final OneginiError oneginiError) {
     this.status = ERROR;
 
+    if (oneginiError == null) {
+      return this;
+    }
+
     try {
       payload.put("code", oneginiError.getErrorType());
       payload.put("description", oneginiError.getErrorDescription());
