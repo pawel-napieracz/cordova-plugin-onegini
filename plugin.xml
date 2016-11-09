@@ -270,6 +270,8 @@
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/AuthenticatorRegistrationHandler.java"
                  target-dir="src/com/onegini/handler"/>
+    <source-file src="src/android/src/android/com/onegini/handler/AuthenticatorDeregistrationHandler.java"
+                 target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/LogoutHandler.java"
                  target-dir="src/com/onegini/handler"/>
     <source-file src="src/android/src/android/com/onegini/handler/RegistrationHandler.java"
