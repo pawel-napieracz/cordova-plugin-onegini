@@ -94,6 +94,7 @@ module.exports = (function () {
   };
 
   var reauthenticate = function (options) {
+    options = utils.getOptionsWithDefaults(options, {}, 'profileId');
     if (!options || !options.profileId) {
       throw new TypeError("Onegini: missing 'profileId' argument for reauthenticate");
     }
