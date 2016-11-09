@@ -2,6 +2,7 @@
 
 #import "OGCDVAuthenticatorRegistrationClient.h"
 #import "OGCDVConstants.h"
+#import "OGCDVAuthenticatorsClientHelper.h"
 
 @implementation OGCDVAuthenticatorRegistrationClient {
 }
@@ -18,17 +19,15 @@
         self.authenticationCallbackId = command.callbackId;
 
         NSDictionary *options = command.arguments[0];
-        NSString *authenticatorId = options[OGCDVPluginKeyAuthenticatorId];
-
         NSSet<ONGAuthenticator *> *nonRegisteredAuthenticators = [[ONGUserClient sharedInstance] nonRegisteredAuthenticatorsForUser:user];
-        for (ONGAuthenticator *authenticator in nonRegisteredAuthenticators) {
-            if ([authenticator.identifier isEqualToString:authenticatorId]) {
-                [[ONGUserClient sharedInstance] registerAuthenticator:authenticator delegate:self];
-                return;
-            }
+        ONGAuthenticator *authenticator = [OGCDVAuthenticatorsClientHelper authenticatorFromArguments:nonRegisteredAuthenticators options:options];
+
+        if (authenticator == nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No authenticator found."];
+            return;
         }
 
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No authenticator found."];
+        [[ONGUserClient sharedInstance] registerAuthenticator:authenticator delegate:self];
     }];
 }
 
