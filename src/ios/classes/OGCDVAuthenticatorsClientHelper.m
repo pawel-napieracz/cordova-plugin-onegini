@@ -7,23 +7,48 @@
 
 + (NSDictionary *)dictionaryFromAuthenticator:(ONGAuthenticator *)authenticator
 {
-    NSString *type;
-    switch (authenticator.type) {
-        case 1:
-            type = OGCDVPluginAuthenticatorTypePin;
-            break;
-        case 2:
-            type = OGCDVPluginAuthenticatorTypeTouchId;
-            break;
-        default:
-            type = nil;
-            break;
+    NSString *type = [self typeStringFromAuthenticatorType:authenticator.type];
+
+    NSString *identifier;
+    if (authenticator.type == 1 || authenticator.type == 2) {
+        NSArray *identifierItems = [authenticator.identifier componentsSeparatedByString:@"."];
+        identifier = [identifierItems lastObject];
+    } else {
+        identifier = authenticator.identifier;
     }
-    NSDictionary *object = @{
+
+    NSDictionary *dictionary = @{
         OGCDVPluginKeyAuthenticatorType: type,
-        OGCDVPluginKeyAuthenticatorId: authenticator.identifier
+        OGCDVPluginKeyAuthenticatorId: identifier
     };
-    return object;
+    return dictionary;
+}
+
++ (ONGAuthenticator *)authenticatorFromArguments:(NSSet<ONGAuthenticator *> *)registeredAuthenticators options:
+    (NSDictionary *)options
+{
+    NSString *authenticatorType = options[OGCDVPluginKeyAuthenticatorType];
+
+    // TODO: Implement search on authenticatorId once custom authenticators have been implemented
+
+    for (ONGAuthenticator *authenticator in registeredAuthenticators) {
+        if ([[self typeStringFromAuthenticatorType:authenticator.type] isEqualToString:authenticatorType]) {
+            return authenticator;
+        }
+    }
+    return nil;
+}
+
++ (NSString *)typeStringFromAuthenticatorType:(ONGAuthenticatorType)authenticatorType
+{
+    switch (authenticatorType) {
+        case ONGAuthenticatorPIN:
+            return OGCDVPluginAuthenticatorTypePin;
+        case ONGAuthenticatorTouchID:
+            return OGCDVPluginAuthenticatorTypeTouchId;
+        default:
+            return nil;
+    }
 }
 
 @end

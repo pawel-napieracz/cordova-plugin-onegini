@@ -89,18 +89,16 @@
         }
 
         NSDictionary *options = command.arguments[0];
-        NSString *authenticatorId = options[OGCDVPluginKeyAuthenticatorId];
-
         NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
-        for (ONGAuthenticator *authenticator in registeredAuthenticators) {
-            if ([authenticator.identifier isEqualToString:authenticatorId]) {
-                [[ONGUserClient sharedInstance] setPreferredAuthenticator:authenticator];
-                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-                return;
-            }
+        ONGAuthenticator *authenticator = [OGCDVAuthenticatorsClientHelper authenticatorFromArguments:registeredAuthenticators options:options];
+
+        if (authenticator == nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
+            return;
         }
 
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
+        [[ONGUserClient sharedInstance] setPreferredAuthenticator:authenticator];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
     }];
 }
 
