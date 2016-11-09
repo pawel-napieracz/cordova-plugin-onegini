@@ -77,7 +77,6 @@
 - (void)fallbackToPin:(CDVInvokedUrlCommand *)command
 {
     if (!self.fingerprintChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: no fingerprint challenge active"];
         return;
     }
 

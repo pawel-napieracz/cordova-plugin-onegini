@@ -98,7 +98,6 @@ exports.defineAutoTests = function () {
             });
       });
 
-
       it("should fail because of repeating numbers", function (done) {
         onegini.user.validatePinWithPolicy(
             {
@@ -236,7 +235,7 @@ exports.defineAutoTests = function () {
 
       it("should have a getPreferred method", function () {
         expect(onegini.user.authenticators.getPreferred).toBeDefined();
-      })
+      });
 
       it("should have a setPreferred method", function () {
         expect(onegini.user.authenticators.setPreferred).toBeDefined();
@@ -384,7 +383,7 @@ exports.defineAutoTests = function () {
         }).toThrow(new TypeError("Onegini: missing 'profileId' argument for user.authenticate"));
       });
 
-      it("should succeed", function (done) {
+      it("should succeed with pin authentication", function (done) {
         onegini.user.authenticate(registeredProfileId)
             .onPinRequest(function (actions, options) {
               expect(actions).toBeDefined();
@@ -599,7 +598,7 @@ exports.defineAutoTests = function () {
         });
       });
 
-      describe("deregister", function() {
+      describe("deregister", function () {
         it("Should fail with a non-existing authenticator", function (done) {
           onegini.user.authenticators.deregister(
               {
@@ -738,6 +737,26 @@ exports.defineAutoTests = function () {
           });
         });
 
+        describe("user.reauthenticate", function () {
+          it("should allow fallback from fingerprint to pin", function (done) {
+            onegini.user.reauthenticate(registeredProfileId)
+                .onFingerprintRequest(function (actions) {
+                  actions.fallbackToPin();
+                })
+                .onPinRequest(function (actions) {
+                  actions.providePin(pin);
+                })
+                .onSuccess(function () {
+                  expect(true).toBe(true);
+                  done();
+                })
+                .onError(function (err) {
+                  expect(err).toBeUndefined();
+                  fail("Fingerprint authentication should have succeeded");
+                })
+          });
+        });
+
         describe("deregister", function () {
           it("Should succeed with existing fingerprint authenticator", function (done) {
             onegini.user.authenticators.deregister(
@@ -866,8 +885,8 @@ exports.defineAutoTests = function () {
             {
               url: 'https://demo-msp.onegini.com/resources/devices',
               headers: {
-                'x-test-string': 'foobar',
-                'x-test-int': 1337
+                'X-Test-String': 'foobar',
+                'X-Test-Int': 1337
               }
             },
             function (response) {
