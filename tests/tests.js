@@ -330,16 +330,16 @@ exports.defineAutoTests = function () {
       });
 
       describe("deregister", function () {
-        it("should require an authenticatorId", function () {
+        it("should require an authenticatorType", function () {
           expect(function () {
             onegini.user.authenticators.deregister()
-          }).toThrow(new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.deregister"));
+          }).toThrow(new TypeError("Onegini: missing 'authenticatorType' argument for authenticators.deregister"));
         });
 
         it("should return an error when not logged in", function (done) {
           onegini.user.authenticators.deregister(
               {
-                authenticatorId: 1
+                authenticatorType: 1
               },
               function () {
                 fail("Success callback was called, but method should have failed");
@@ -603,7 +603,7 @@ exports.defineAutoTests = function () {
         it("Should fail with a non-existing authenticator", function (done) {
           onegini.user.authenticators.deregister(
               {
-                authenticatorId: "invalid"
+                authenticatorType: "invalid"
               },
               function (result) {
                 expect(result).toBeUndefined();
@@ -742,7 +742,7 @@ exports.defineAutoTests = function () {
           it("Should succeed with existing fingerprint authenticator", function (done) {
             onegini.user.authenticators.deregister(
                 {
-                  authenticatorId: config.fingerPrintAuthenticatorID
+                  authenticatorType: "Fingerprint"
                 }, function () {
                   expect(true).toBe(true);
                   done();
