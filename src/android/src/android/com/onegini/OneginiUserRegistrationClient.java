@@ -1,6 +1,8 @@
 package com.onegini;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_ILLEGAL_ARGUMENT_PROFILE;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
@@ -70,7 +72,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
 
     if (pinCallback == null) {
       final PluginResult pluginResult = new PluginResultBuilder()
-          .withErrorDescription(ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS)
+          .withPluginError(ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS, ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS)
           .build();
       createPinCallbackContext.sendPluginResult(pluginResult);
     } else {
@@ -90,7 +92,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
     } catch (JSONException e) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription(ERROR_ARGUMENT_IS_NOT_A_VALID_PROFILE_OBJECT)
+          .withPluginError(ERROR_ILLEGAL_ARGUMENT_PROFILE, ERROR_CODE_ILLEGAL_ARGUMENT)
           .build());
 
       return;

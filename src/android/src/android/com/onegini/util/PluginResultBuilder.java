@@ -1,5 +1,6 @@
 package com.onegini.util;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
@@ -16,7 +17,6 @@ import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
-import com.onegini.mobileAuthentication.Callback;
 import retrofit.client.Response;
 
 public class PluginResultBuilder {
@@ -45,11 +45,12 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder withErrorDescription(final String description) {
+  public PluginResultBuilder withPluginError(final String description, final int code) {
     status = ERROR;
 
     try {
       payload.put("description", description);
+      payload.put("code", code);
     } catch (JSONException e) {
       handleException(e);
     }
@@ -58,7 +59,7 @@ public class PluginResultBuilder {
   }
 
   public PluginResultBuilder withOneginiError(final OneginiError oneginiError) {
-    this.status = ERROR;
+    status = ERROR;
 
     if (oneginiError == null) {
       return this;
@@ -179,8 +180,9 @@ public class PluginResultBuilder {
   private void handleException(JSONException e) {
     this.status = ERROR;
 
-    Map<String, String> payload = new HashMap<String, String>();
+    Map<String, Object> payload = new HashMap<String, Object>();
     payload.put("description", ERROR_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
+    payload.put("code",ERROR_CODE_PLUGIN_INTERNAL_ERROR);
     this.payload = new JSONObject(payload);
   }
 

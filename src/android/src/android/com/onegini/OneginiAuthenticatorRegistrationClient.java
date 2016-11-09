@@ -1,5 +1,8 @@
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_SUCH_AUTHENTICATOR;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
 
@@ -48,7 +51,7 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
 
     if (userProfile == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_USER_AUTHENTICATED)
+          .withPluginError(ERROR_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
           .build());
 
       return;
@@ -59,7 +62,7 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
 
     if (authenticator == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_SUCH_AUTHENTICATOR)
+          .withPluginError(ERROR_NO_SUCH_AUTHENTICATOR, ERROR_CODE_NO_SUCH_AUTHENTICATOR)
           .build());
 
       return;
@@ -77,7 +80,7 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
 
     if (pinCallback == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(OneginiCordovaPluginConstants.ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS)
+          .withPluginError(OneginiCordovaPluginConstants.ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS, ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS)
           .build());
 
       return;
@@ -93,7 +96,7 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
 
     if (userProfile == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_USER_AUTHENTICATED)
+          .withPluginError(ERROR_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
           .build());
 
       return;
@@ -104,7 +107,7 @@ public class OneginiAuthenticatorRegistrationClient extends CordovaPlugin {
 
     if (authenticator == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_SUCH_AUTHENTICATOR)
+          .withPluginError(ERROR_NO_SUCH_AUTHENTICATOR, ERROR_CODE_NO_SUCH_AUTHENTICATOR)
           .build());
 
       return;

@@ -1,5 +1,8 @@
 package com.onegini.handler;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_CONFIRMATION_CHALLENGE;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_FINGERPRINT_CHALLENGE;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_PIN_CHALLENGE;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_CONFIRMATION_CHALLENGE;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_FINGERPRINT_CHALLENGE;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_PIN_CHALLENGE;
@@ -65,7 +68,7 @@ public class MobileAuthenticationHandler
     boolean isCallbackOfInvalidType = !(callbackQueue.peek() instanceof ConfirmationCallback);
     if (isCallbackOfInvalidType) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_CONFIRMATION_CHALLENGE)
+          .withPluginError(ERROR_NO_CONFIRMATION_CHALLENGE, ERROR_CODE_NO_CONFIRMATION_CHALLENGE)
           .build());
 
       return;
@@ -112,7 +115,7 @@ public class MobileAuthenticationHandler
     boolean isCallbackOfInvalidType = !(callbackQueue.peek() instanceof PinCallback);
     if (isCallbackOfInvalidType) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_PIN_CHALLENGE)
+          .withPluginError(ERROR_NO_PIN_CHALLENGE, ERROR_CODE_NO_PIN_CHALLENGE)
           .build());
 
       return;
@@ -169,7 +172,7 @@ public class MobileAuthenticationHandler
     boolean isCallbackOfInvalidType = !(callbackQueue.peek() instanceof FingerprintCallback);
     if (isCallbackOfInvalidType) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_FINGERPRINT_CHALLENGE)
+          .withPluginError(ERROR_NO_FINGERPRINT_CHALLENGE, ERROR_CODE_NO_FINGERPRINT_CHALLENGE)
           .build());
 
       return;

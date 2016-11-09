@@ -1,5 +1,6 @@
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
@@ -34,7 +35,7 @@ public class OneginiUserDeregistrationClient extends CordovaPlugin {
     if (userProfile == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withErrorDescription(ERROR_PROFILE_NOT_REGISTERED)
+          .withPluginError(ERROR_PROFILE_NOT_REGISTERED, ERROR_CODE_PROFILE_NOT_REGISTERED)
           .build());
 
       return;

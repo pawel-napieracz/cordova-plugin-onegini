@@ -1,5 +1,8 @@
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_CONFIGURATION;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
 
 import org.apache.cordova.CallbackContext;
@@ -34,7 +37,7 @@ public class OneginiMobileAuthenticationClient extends CordovaPlugin {
 
     if (userProfile == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(ERROR_NO_USER_AUTHENTICATED)
+          .withPluginError(ERROR_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
           .build());
 
       return;
@@ -48,7 +51,7 @@ public class OneginiMobileAuthenticationClient extends CordovaPlugin {
 
         if (senderId == null) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withErrorDescription("Cannot enroll for mobile authentication: 'OneginiGcmSenderId' preference not found in config.xml")
+              .withPluginError("Cannot enroll for mobile authentication: 'OneginiGcmSenderId' preference not found in config.xml", ERROR_CODE_CONFIGURATION)
               .build());
 
           return;
@@ -59,7 +62,7 @@ public class OneginiMobileAuthenticationClient extends CordovaPlugin {
           registrationId = instanceID.getToken(senderId, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
         } catch (Exception e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withErrorDescription(e.getMessage())
+              .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
               .build());
 
           return;

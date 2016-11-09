@@ -1,5 +1,9 @@
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_IO_EXCEPTION;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
+
 import java.io.IOException;
 
 import org.apache.cordova.CallbackContext;
@@ -35,7 +39,7 @@ public class OneginiResourceClient extends CordovaPlugin {
       request = ActionArgumentsUtil.getRequestFromArguments(args);
     } catch (IllegalArgumentException e) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withErrorDescription(e.getMessage())
+          .withPluginError(e.getMessage(), ERROR_CODE_ILLEGAL_ARGUMENT)
           .build());
 
       return;
@@ -57,7 +61,7 @@ public class OneginiResourceClient extends CordovaPlugin {
           response = okClient.execute(request);
         } catch (IOException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withErrorDescription(e.getMessage())
+              .withPluginError(e.getMessage(), ERROR_CODE_IO_EXCEPTION)
               .build());
           return;
         }

@@ -1,6 +1,7 @@
 package com.onegini.handler;
 
 import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_INCORRECT_PIN;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_INCORRECT_PIN;
 
 import org.apache.cordova.CallbackContext;
@@ -57,7 +58,7 @@ public class PinAuthenticationRequestHandler implements OneginiPinAuthentication
   public void onNextAuthenticationAttempt(final AuthenticationAttemptCounter authenticationAttemptCounter) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .shouldKeepCallback()
-        .withErrorDescription(ERROR_INCORRECT_PIN)
+        .withPluginError(ERROR_INCORRECT_PIN, ERROR_CODE_INCORRECT_PIN)
         .withSuccess()
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
