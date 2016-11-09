@@ -3,6 +3,8 @@ package com.onegini;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
 import java.util.Set;
 
@@ -17,6 +19,7 @@ import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.util.ActionArgumentsUtil;
 import com.onegini.util.AuthenticatorUtil;
 import com.onegini.util.PluginResultBuilder;
+import com.onegini.util.UserProfileUtil;
 
 public class OneginiAuthenticatorsClient extends CordovaPlugin {
   private static final String ACTION_GET_REGISTERED_AUTHENTICATORS = "getRegistered";
@@ -28,13 +31,13 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if (ACTION_GET_REGISTERED_AUTHENTICATORS.equals(action)) {
-      getAuthenticators(callbackContext, action);
+      getAuthenticators(args, callbackContext, action);
       return true;
     } else if (ACTION_GET_ALL_AUTHENTICATORS.equals(action)) {
-      getAuthenticators(callbackContext, action);
+      getAuthenticators(args, callbackContext, action);
       return true;
     } else if (ACTION_GET_NOT_REGISTERED_AUTHENTICATORS.equals(action)) {
-      getAuthenticators(callbackContext, action);
+      getAuthenticators(args, callbackContext, action);
       return true;
     } else if (ACTION_GET_PREFERRED_AUTHENTICATOR.equals(action)) {
       getPreferredAuthenticator(callbackContext);
@@ -47,15 +50,16 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
     return false;
   }
 
-  private void getAuthenticators(final CallbackContext callbackContext, final String action) {
+  private void getAuthenticators(final JSONArray args, final CallbackContext callbackContext, final String action) {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
-
-        if (userProfile == null) {
+        final UserProfile userProfile;
+        try {
+          userProfile = getUserProfile(args);
+        } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withErrorDescription(ERROR_NO_USER_AUTHENTICATED)
+              .withErrorDescription(ERROR_PROFILE_NOT_REGISTERED)
               .build());
 
           return;
@@ -64,7 +68,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
         final Set<OneginiAuthenticator> authenticatorSet;
         if (ACTION_GET_REGISTERED_AUTHENTICATORS.equals(action)) {
           authenticatorSet = getOneginiClient().getUserClient().getRegisteredAuthenticators(userProfile);
-        } else if (ACTION_GET_NOT_REGISTERED_AUTHENTICATORS.equals(action)){
+        } else if (ACTION_GET_NOT_REGISTERED_AUTHENTICATORS.equals(action)) {
           authenticatorSet = getOneginiClient().getUserClient().getNotRegisteredAuthenticators(userProfile);
         } else if (ACTION_GET_ALL_AUTHENTICATORS.equals(action)) {
           authenticatorSet = getOneginiClient().getUserClient().getAllAuthenticators(userProfile);
@@ -160,5 +164,11 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {
     return OneginiSDK.getInstance().getOneginiClient(cordova.getActivity().getApplicationContext());
+  }
+
+  private UserProfile getUserProfile(final JSONArray args) throws JSONException {
+    String profileId = args.getJSONObject(0).getString(PARAM_PROFILE_ID);
+    Set<UserProfile> registeredUserProfiles = getOneginiClient().getUserClient().getUserProfiles();
+    return UserProfileUtil.findUserProfileById(profileId, registeredUserProfiles);
   }
 }
