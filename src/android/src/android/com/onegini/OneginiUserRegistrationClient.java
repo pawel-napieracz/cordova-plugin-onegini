@@ -108,7 +108,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
         final JSONArray resultPayload;
 
         try {
-          resultPayload = UserProfileUtil.ProfileSetToJSONArray(userProfiles);
+          resultPayload = UserProfileUtil.profileSetToJSONArray(userProfiles);
         } catch (JSONException e) {
           callbackContext.error(ERROR_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
           return;

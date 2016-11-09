@@ -24,7 +24,7 @@ public class UserProfileUtil {
     return null;
   }
 
-  public static JSONArray ProfileSetToJSONArray(final Set<UserProfile> userProfileSet) throws JSONException {
+  public static JSONArray profileSetToJSONArray(final Set<UserProfile> userProfileSet) throws JSONException {
     JSONArray userProfileJSONArray = new JSONArray();
     for (final UserProfile userProfile : userProfileSet) {
       final JSONObject userProfileJSON = new JSONObject();
