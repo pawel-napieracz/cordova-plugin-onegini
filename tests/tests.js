@@ -252,6 +252,57 @@ exports.defineAutoTests = function () {
         expect(onegini.user.authenticators.deregister).toBeDefined();
       });
 
+      describe("getAll", function () {
+        it("should return an error when profile not registered", function (done) {
+          onegini.user.authenticators.getAll(
+              {
+                profileId: "dummy"
+              },
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No registered user found.");
+                done();
+              });
+        });
+      });
+
+      describe("getRegistered", function () {
+        it("should return an error when profile not registered", function (done) {
+          onegini.user.authenticators.getRegistered(
+              {
+                profileId: "dummy"
+              },
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No registered user found.");
+                done();
+              });
+        });
+      });
+
+      describe("getNotRegistered", function () {
+        it("should return an error when profile not registered", function (done) {
+          onegini.user.authenticators.getNotRegistered(
+              {
+                profileId: "dummy"
+              },
+              function (result) {
+                expect(result).toBeUndefined();
+              },
+              function (err) {
+                expect(err).toBeDefined();
+                expect(err.description).toBe("Onegini: No registered user found.");
+                done();
+              });
+        });
+      });
+
       describe("getPreferred", function () {
         it("should return an error when not logged in", function (done) {
           onegini.user.authenticators.getPreferred(

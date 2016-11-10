@@ -18,6 +18,7 @@ extern NSString *const OGCDVPluginKeyErrorCode;
 extern NSString *const OGCDVPluginKeyErrorDescription;
 
 extern NSString *const OGCDVPluginErrorKeyNoUserAuthenticated;
+extern NSString *const OGCDVPluginErrorKeyNoRegisteredUser;
 
 extern NSString *const OGCDVPluginClassMobileAuthenticationClient;
 extern NSString *const OGCDVPluginClassMobileAuthenticationRequestClient;

@@ -20,6 +20,7 @@ NSString *const OGCDVPluginKeyErrorCode = @"code";
 NSString *const OGCDVPluginKeyErrorDescription = @"description";
 
 NSString *const OGCDVPluginErrorKeyNoUserAuthenticated = @"Onegini: No user authenticated.";
+NSString *const OGCDVPluginErrorKeyNoRegisteredUser = @"Onegini: No registered user found.";
 
 NSString *const OGCDVPluginClassMobileAuthenticationClient = @"OneginiMobileAuthenticationClient";
 NSString *const OGCDVPluginClassMobileAuthenticationRequestClient = @"OneginiMobileAuthenticationRequestClient";

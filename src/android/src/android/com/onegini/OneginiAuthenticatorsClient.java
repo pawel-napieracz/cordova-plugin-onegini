@@ -59,6 +59,14 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
           userProfile = getUserProfile(args);
         } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withErrorDescription(ERROR_PLUGIN_INTERNAL_ERROR)
+              .build());
+
+          return;
+        }
+
+        if (userProfile == null) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
               .withErrorDescription(ERROR_PROFILE_NOT_REGISTERED)
               .build());
 

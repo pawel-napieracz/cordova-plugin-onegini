@@ -2,6 +2,7 @@
 
 #import "OGCDVAuthenticatorsClient.h"
 #import "OGCDVConstants.h"
+#import "OGCDVUserClientHelper.h"
 
 @implementation OGCDVAuthenticatorsClient {
 }
@@ -9,9 +10,9 @@
 - (void)getAll:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoRegisteredUser];
             return;
         }
 
@@ -27,10 +28,10 @@
 - (void)getRegistered:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
-      ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+      ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
       if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
-        return;
+          [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoRegisteredUser];
+          return;
       }
 
       NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
@@ -45,10 +46,10 @@
 - (void)getNotRegistered:(CDVInvokedUrlCommand *)command
 {
   [self.commandDelegate runInBackground:^{
-      ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+      ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
       if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
-        return;
+          [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoRegisteredUser];
+          return;
       }
 
       NSSet<ONGAuthenticator *> *nonRegisteredAuthenticators = [[ONGUserClient sharedInstance] nonRegisteredAuthenticatorsForUser:user];
@@ -104,6 +105,13 @@
 
       [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
   }];
+}
+
++ (ONGUserProfile *)userProfileFromCommand:(CDVInvokedUrlCommand *)command
+{
+    NSDictionary *options = command.arguments[0];
+    NSString *profileId = options[OGCDVPluginKeyProfileId];
+    return [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
 }
 
 @end
