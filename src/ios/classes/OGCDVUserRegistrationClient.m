@@ -32,7 +32,7 @@
             [self.createPinChallenge.sender respondWithCreatedPin:pin challenge:self.createPinChallenge];
         } else {
             [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeCreatePinNoRegistrationInProgress
-                                    andMessage:OGCDVPluginErrCreatePinNoRegistrationInProgress];
+                                    andMessage:OGCDVPluginErrDescriptionCreatePinNoRegistrationInProgress];
         }
     }];
 }

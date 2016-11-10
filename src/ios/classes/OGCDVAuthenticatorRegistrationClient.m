@@ -11,7 +11,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -28,14 +28,14 @@
             }
         }
 
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrNoSuchAuthenticator];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrDescriptionNoSuchAuthenticator];
     }];
 }
 
 - (void)providePin:(CDVInvokedUrlCommand *)command
 {
     if (!self.pinChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrNoSuchAuthenticator];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoPinChallenge andMessage:OGCDVPluginErrDescriptionNoPinChallenge];
         return;
     }
 
@@ -49,7 +49,7 @@
   [self.commandDelegate runInBackground:^{
       ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
       if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrNoUserAuthenticated];
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
         return;
       }
 
@@ -70,7 +70,7 @@
         }
       }
 
-      [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrNoSuchAuthenticator];
+      [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrDescriptionNoSuchAuthenticator];
   }];
 }
 

@@ -18,7 +18,7 @@
 - (void)providePin:(CDVInvokedUrlCommand *)command
 {
     if (!self.pinChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProvidePinNoAuthenticationInProgress andMessage:OGCDVPluginErrProvidePinNoAuthenticationInProgress];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProvidePinNoAuthenticationInProgress andMessage:OGCDVPluginErrDescriptionProvidePinNoAuthenticationInProgress];
         return;
     }
     [self.commandDelegate runInBackground:^{
@@ -31,7 +31,7 @@
 - (void)createPin:(CDVInvokedUrlCommand *)command
 {
     if (!self.createPinChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeCreatePinNoRegistrationInProgress andMessage:OGCDVPluginErrCreatePinNoRegistrationInProgress];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeCreatePinNoRegistrationInProgress andMessage:OGCDVPluginErrDescriptionCreatePinNoRegistrationInProgress];
         return;
     }
 

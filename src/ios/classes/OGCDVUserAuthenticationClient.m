@@ -11,7 +11,7 @@
 {
     ONGUserProfile *authenticatedUserProfile = [[ONGUserClient sharedInstance] authenticatedUserProfile];
     if (authenticatedUserProfile == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrNoUserAuthenticated];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
     } else {
         NSDictionary *result = @{OGCDVPluginKeyProfileId: authenticatedUserProfile.profileId};
         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:command.callbackId];
@@ -27,7 +27,7 @@
         ONGUserProfile *authenticatedUserProfile = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (authenticatedUserProfile && [authenticatedUserProfile.profileId isEqualToString:profileId]) {
             [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator
-                                    andMessage:OGCDVPluginErrUserAlreadyAuthenticated];
+                                    andMessage:OGCDVPluginErrDescriptionUserAlreadyAuthenticated];
             return;
         }
 
@@ -36,7 +36,7 @@
         ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
         if (user == nil) {
             [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered
-                                    andMessage:OGCDVPluginErrProfileNotRegistered];
+                                    andMessage:OGCDVPluginErrDescriptionProfileNotRegistered];
         } else {
             [[ONGUserClient sharedInstance] authenticateUser:user delegate:self];
         }
@@ -47,7 +47,7 @@
 {
     if (!self.pinChallenge) {
         [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProvidePinNoAuthenticationInProgress
-                                andMessage:OGCDVPluginErrProvidePinNoAuthenticationInProgress];
+                                andMessage:OGCDVPluginErrDescriptionProvidePinNoAuthenticationInProgress];
         return;
     }
     [self.commandDelegate runInBackground:^{
@@ -61,7 +61,7 @@
 {
     if (!self.fingerprintChallenge) {
         [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoFingerprintChallenge
-                                     andMessage:OGCDVPluginErrNoFingerprintChallenge];
+                                     andMessage:OGCDVPluginErrDescriptionNoFingerprintChallenge];
         return;
     }
 
@@ -81,7 +81,7 @@
 - (void)fallbackToPin:(CDVInvokedUrlCommand *)command
 {
     if (!self.fingerprintChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoFingerprintChallenge andMessage:OGCDVPluginErrNoFingerprintChallenge];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoFingerprintChallenge andMessage:OGCDVPluginErrDescriptionNoFingerprintChallenge];
         return;
     }
 
@@ -100,7 +100,7 @@
 
         ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered andMessage:OGCDVPluginErrProfileNotRegistered];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered andMessage:OGCDVPluginErrDescriptionProfileNotRegistered];
         } else {
             [[ONGUserClient sharedInstance] reauthenticateUser:user delegate:self];
         }

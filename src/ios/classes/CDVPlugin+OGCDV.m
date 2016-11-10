@@ -25,7 +25,7 @@
     NSString *errorMessage;
     int errorCode;
     if (error == nil) {
-        errorMessage = OGCDVPluginErrInternalError;
+        errorMessage = OGCDVPluginErrDescriptionInternalError;
         errorCode = OGCDVPluginErrCodePluginInternalError;
     } else {
         errorMessage = [NSString stringWithFormat:@"%@\n%@", error.localizedDescription, error.localizedRecoverySuggestion];

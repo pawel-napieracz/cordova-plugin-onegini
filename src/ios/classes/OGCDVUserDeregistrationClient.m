@@ -15,7 +15,7 @@
 
       if (user == nil) {
         [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered
-                                andMessage:OGCDVPluginErrProfileNotRegistered];
+                                andMessage:OGCDVPluginErrDescriptionProfileNotRegistered];
       } else {
         [[ONGUserClient sharedInstance] deregisterUser:user completion:^(BOOL deregistered, NSError *_Nullable error) {
             if (error != nil || !deregistered) {
