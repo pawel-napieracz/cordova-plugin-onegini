@@ -86,7 +86,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
 
         final JSONArray authenticatorJSONArray;
         try {
-          authenticatorJSONArray = AuthenticatorUtil.AuthenticatorSetToJSONArray(authenticatorSet);
+          authenticatorJSONArray = AuthenticatorUtil.authenticatorSetToJSONArray(authenticatorSet);
         } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
               .withErrorDescription(ERROR_PLUGIN_INTERNAL_ERROR)
@@ -117,7 +117,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
 
         final JSONObject authenticatorJSON;
         try {
-          authenticatorJSON = AuthenticatorUtil.AuthenticatorToJSONObject(authenticator);
+          authenticatorJSON = AuthenticatorUtil.authenticatorToJSONObject(authenticator);
         } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
               .withErrorDescription(ERROR_PLUGIN_INTERNAL_ERROR)

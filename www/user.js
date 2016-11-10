@@ -138,25 +138,25 @@ module.exports = (function () {
     },
 
     setPreferred: function (options, successCb, failureCb) {
-      options = utils.getOptionsWithDefaults(options, {}, 'authenticatorId');
-      if (!options || !options.authenticatorId) {
-        throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.setPreferred");
+      options = utils.getOptionsWithDefaults(options, {}, 'authenticatorType');
+      if (!options || !options.authenticatorType) {
+        throw new TypeError("Onegini: missing 'authenticatorType' argument for authenticators.setPreferred");
       }
       return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'setPreferred', options, successCb, failureCb);
     },
 
     registerNew: function (options) {
-      options = utils.getOptionsWithDefaults(options, {}, 'authenticatorId');
-      if (!options || !options.authenticatorId) {
-        throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew");
+      options = utils.getOptionsWithDefaults(options, {}, 'authenticatorType');
+      if (!options || !options.authenticatorType) {
+        throw new TypeError("Onegini: missing 'authenticatorType' argument for authenticators.registerNew");
       }
 
       return new AuthenticationHandler(options, 'OneginiAuthenticatorRegistrationClient', 'start');
     },
 
     deregister: function (options, successCb, failureCb) {
-      if (!options || !options.authenticatorId) {
-        throw new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.deregister");
+      if (!options || !options.authenticatorType) {
+        throw new TypeError("Onegini: missing 'authenticatorType' argument for authenticators.deregister");
       }
       return utils.promiseOrCallbackExec('OneginiAuthenticatorRegistrationClient', 'deregister', options, successCb, failureCb);
     }

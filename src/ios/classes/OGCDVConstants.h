@@ -7,6 +7,7 @@ extern NSString *const OGCDVPluginKeyProfileId;
 extern NSString *const OGCDVPluginKeyRemainingFailureCount;
 extern NSString *const OGCDVPluginKeyScopes;
 extern NSString *const OGCDVPluginKeyResourceBaseURL;
+extern NSString *const OGCDVPluginKeyAuthenticatorType;
 extern NSString *const OGCDVPluginKeyAuthenticatorId;
 extern NSString *const OGCDVPluginKeyMethod;
 extern NSString *const OGCDVPluginKeyType;
@@ -22,6 +23,9 @@ extern NSString *const OGCDVPluginErrorKeyNoRegisteredUser;
 
 extern NSString *const OGCDVPluginClassMobileAuthenticationClient;
 extern NSString *const OGCDVPluginClassMobileAuthenticationRequestClient;
+
+extern NSString *const OGCDVPluginAuthenticatorTypePin;
+extern NSString *const OGCDVPluginAuthenticatorTypeTouchId;
 
 extern NSString *const OGCDVPluginAuthEventSuccess;
 extern NSString *const OGCDVPluginAuthEventPinRequest;
