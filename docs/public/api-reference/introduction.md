@@ -1,6 +1,6 @@
 # API Reference
 
-This section describes the API's that are exposed by the Onegini Cordova Plugin.
+This section describes the APIs that are exposed by the Onegini Cordova Plugin.
 
 ## API
 
@@ -9,10 +9,13 @@ This section describes the API's that are exposed by the Onegini Cordova Plugin.
   * [Device-related API's: `onegini.device.*`](device/introduction.md)
 
 ## Using promises instead of callbacks
+
 All API functions accept an optional success callback and error callback function.
-If Promises are more your style then you may be happy yo learn that all functions can be used as a Promise as well.
+
+If Promises are more your style then you may be happy to learn that all functions can be used as a Promise as well.
 
 For example, if you want to use `start` with callbacks, do:
+
 ```js
 onegini.user.authenticate.start(
   {
@@ -31,7 +34,8 @@ onegini.user.authenticate.start(
 );
 ```
 
-.. or as a Promise, do:
+...or as a Promise, do:
+
 ```js
 onegini.user.authenticate.start({
     profileId: "W8DUJ2"

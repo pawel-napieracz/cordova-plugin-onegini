@@ -1,6 +1,6 @@
 # Deregistration
 
-Deregistration is the process of remove registration of a user (profile) from the device and the server.
+Deregistration is the process of removing a user (profile) from the device and the server.
 
 ## `onegini.user.deregister`
 
@@ -8,7 +8,7 @@ This function takes a mandatory first argument with the following properties:
 
 | Property | Default | Description |
 | --- | --- | --- |
-| `profileId` | - | The Profile Id you previously "remembered" during registration
+| `profileId` | - | The profile ID you previously stored during registration
 
 ```js
 onegini.user.deregister(

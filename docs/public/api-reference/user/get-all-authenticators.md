@@ -1,11 +1,15 @@
-# Get Not Registered Authenticators
+# Get All Authenticators
 
-A user may want to register additional authenticators (Fingerprint, FIDO, ...). This function offers a way to retrieve the list of not-registered authenticators:
+This function offers a way to retrieve all available authenticators.
 
-## `onegini.user.authenticators.getNotRegistered`
+## `onegini.user.authenticators.getAll`
 
 ```js
-onegini.user.authenticators.getNotRegistered(
+onegini.user.authenticators.getAll(
+  {
+    profileId: "W8DUJ2"
+  },
+
   // success callback
   function (result) {
     for (var r in result) {
@@ -25,7 +29,7 @@ The success callback contains an _array of objects_ with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
-| `authenticatorId` | - | An authenticator ID not associated with the user
+| `authenticatorId` | - | An authenticator ID associated with the authenticator
 
 The error callback contains an object with these properties:
 

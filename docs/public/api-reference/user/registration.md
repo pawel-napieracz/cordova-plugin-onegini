@@ -1,6 +1,6 @@
 # Registration
 
-Registering a user is a two-step process: first the user needs to perform an OAuth, then he needs to configure a Pin. These steps are reflected by the plugin API. Just take these steps in this order:
+Registering a user is a two-step process: first the user needs to perform OAuth authorization, then he needs to configure a PIN. These steps are reflected by the plugin API. Just take the steps in this order:
 
 ## `onegini.user.register.start`
 
@@ -18,12 +18,12 @@ onegini.user.register.start(
 
   // success callback
   function (result) {
-    console.log("Required Pin length: " + result.pinLength);
+    console.log("Required PIN length: " + result.pinLength);
   },
   
   // error callback
   function (err) {
-    console.log("Error description: " + err.description);
+    console.log("Error: " + err.description);
   }
 );
 ```
@@ -32,7 +32,7 @@ The success callback contains an object with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
-| `pinLength` | 5 | The required Pin length that's configured on the server
+| `pinLength` | 5 | The required PIN length that's configured on the server
 
 The error callback contains an object with these properties:
 
@@ -43,7 +43,7 @@ The error callback contains an object with these properties:
 
 ## `onegini.user.register.createPin`
 
-The success callback of `onegini.user.register.start` will provide you with the Pin length. Use this information to ask the user the Pin code he wants to configure. Once done send the Pin to this function, which takes a mandatory first argument with the following properties:
+The success callback of `onegini.user.register.start` will provide you with the PIN length. Use this information to ask the user the PIN code he wants to configure. Once done send the PIN to this function, which takes a mandatory first argument with the following properties:
 
 | Property | Default | Description |
 | --- | --- | --- |
@@ -71,7 +71,7 @@ The success callback returns an object with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
-| `profileId` | W8DUJ2 | The profile Id representing the registered user
+| `profileId` | W8DUJ2 | The profile ID identifying the registered user
 
 The error callback contains an object with these properties:
 

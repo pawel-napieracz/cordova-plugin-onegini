@@ -18,6 +18,7 @@
         * [Validate Pin with policy](api-reference/user/validate-pin-with-policy.md)
         * [Get User Profiles](api-reference/user/get-user-profiles.md)
         * [Get Authenticated User Profile](api-reference/user/get-authenticated-user-profile.md)
+        * [Get all authenticators](api-reference/user/get-all-authenticators.md)
         * [Get registered authenticators](api-reference/user/get-registered-authenticators.md)
         * [Get not registered authenticators](api-reference/user/get-not-registered-authenticators.md)
         * [Register authenticator](api-reference/user/register-authenticator.md)

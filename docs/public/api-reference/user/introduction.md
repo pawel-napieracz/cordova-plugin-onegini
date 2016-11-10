@@ -11,6 +11,7 @@ This section describes the API's that are available on the global `onegini.user`
   * [Validate Pin with policy: `onegini.user.validatePinWithPolicy`](validate-pin-with-policy.md)
   * [Get User Profiles: `onegini.user.getUserProfiles`](get-user-profiles.md)
   * [Get Authenticated User Profile: `onegini.user.getAuthenticatedUserProfile`](get-authenticated-user-profile.md)
+  * [Get all authenticators: `onegini.user.authenticators.getAll`](get-all-authenticators.md)
   * [Get registered authenticators: `onegini.user.authenticators.getRegistered`](get-registered-authenticators.md)
   * [Get not registered authenticators: `onegini.user.authenticators.getNotRegistered`](get-not-registered-authenticators.md)
   * [Register authenticator: `onegini.user.authenticators.[registerNew|providePin]`](register-authenticator.md)

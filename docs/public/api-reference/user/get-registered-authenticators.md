@@ -1,6 +1,6 @@
 # Get Registered Authenticators
 
-A user may have registered multiple authenticators (Pin, Fingerprint, ..). This function offers a way to retrieve them:
+A user may have registered multiple authenticators (PIN, Fingerprint, ...). This function offers a way to retrieve them:
 
 ## `onegini.user.authenticators.getRegistered`
 
@@ -21,11 +21,11 @@ onegini.user.authenticators.getRegistered(
 );
 ```
 
-The success callback contains an _Array of objects_ with these properties:
+The success callback contains an _array of objects_ with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
-| `authenticatorId` | - | An Authenticator Id associated with the user
+| `authenticatorId` | - | An authenticator ID associated with the authenticator
 
 The error callback contains an object with these properties:
 
