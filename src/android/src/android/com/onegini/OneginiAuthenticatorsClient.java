@@ -3,9 +3,9 @@ package com.onegini;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_SUCH_AUTHENTICATOR;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
 
 import java.util.Set;
 
@@ -58,7 +58,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
 
         if (userProfile == null) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withPluginError(ERROR_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
+              .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
               .build());
 
           return;
@@ -80,7 +80,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
           authenticatorJSONArray = AuthenticatorUtil.authenticatorSetToJSONArray(authenticatorSet);
         } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withPluginError(ERROR_PLUGIN_INTERNAL_ERROR, ERROR_CODE_PLUGIN_INTERNAL_ERROR)
+              .withPluginError(ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR, ERROR_CODE_PLUGIN_INTERNAL_ERROR)
               .build());
 
           return;
@@ -98,7 +98,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
         final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
         if (userProfile == null) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withPluginError(ERROR_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
+              .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
               .build());
 
           return;
@@ -111,7 +111,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
           authenticatorJSON = AuthenticatorUtil.authenticatorToJSONObject(authenticator);
         } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withPluginError(ERROR_PLUGIN_INTERNAL_ERROR, ERROR_CODE_PLUGIN_INTERNAL_ERROR)
+              .withPluginError(ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR, ERROR_CODE_PLUGIN_INTERNAL_ERROR)
               .build());
 
           return;
@@ -129,7 +129,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
         final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
         if (userProfile == null) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withPluginError(ERROR_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
+              .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
               .build());
 
           return;
@@ -146,7 +146,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
 
         if (authenticator == null) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withPluginError(ERROR_NO_SUCH_AUTHENTICATOR, ERROR_CODE_NO_SUCH_AUTHENTICATOR)
+              .withPluginError(ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR, ERROR_CODE_NO_SUCH_AUTHENTICATOR)
               .build());
 
           return;

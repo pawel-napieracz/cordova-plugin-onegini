@@ -3,7 +3,7 @@ package com.onegini;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_CONFIGURATION;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -37,7 +37,7 @@ public class OneginiMobileAuthenticationClient extends CordovaPlugin {
 
     if (userProfile == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
+          .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
           .build());
 
       return;

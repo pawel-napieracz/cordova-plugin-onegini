@@ -14,20 +14,21 @@ public interface OneginiCordovaPluginConstants {
   String PARAM_ACCEPT = "accept";
 
   // Error descriptions
-  String ERROR_PLUGIN_INTERNAL_ERROR = "Onegini: Internal plugin error";
-  String ERROR_ILLEGAL_ARGUMENT_PROFILE = "Onegini: Argument Provided is not a valid profile object";
-  String ERROR_PROFILE_NOT_REGISTERED = "Onegini: No registered user found.";
-  String ERROR_USER_ALREADY_AUTHENTICATED = "Onegini: User already authenticated.";
-  String ERROR_NO_USER_AUTHENTICATED = "Onegini: No user authenticated.";
-  String ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = "Onegini: createPin called, but no registration in progress.";
-  String ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS = "Onegini: providePin called, but no pin authentication in progress.";
-  String ERROR_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS = "Onegini: received reply for fingerprint authentication, but no fingerprint authentication in progress.";
-  String ERROR_INCORRECT_PIN = "Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
-  String ERROR_NO_SUCH_AUTHENTICATOR = "Onegini: No such authenticator found";
-  String ERROR_NO_CONFIRMATION_CHALLENGE = "Onegini: Cannot reply to confirmation challenge, no challenge open";
-  String ERROR_NO_PIN_CHALLENGE = "Onegini: Cannot reply to pin challenge, no challenge open";
-  String ERROR_NO_FINGERPRINT_CHALLENGE = "Onegini: Cannot reply to fingerprint challenge, no challenge open";
-  String ERROR_INVALID_MOBILE_AUTHENTICATION_METHOD = "Onegini: Invalid mobile authentication method";
+  String ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR = "Onegini: Internal plugin error";
+  String ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE = "Onegini: Argument provided is not a valid profile object";
+
+  String ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED = "Onegini: No registered user found.";
+  String ERROR_DESCRIPTION_USER_ALREADY_AUTHENTICATED = "Onegini: User already authenticated.";
+  String ERROR_DESCRIPTION_NO_USER_AUTHENTICATED = "Onegini: No user authenticated.";
+  String ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR = "Onegini: No such authenticator found";
+  String ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = "Onegini: createPin called, but no registration in progress.";
+  String ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS = "Onegini: providePin called, but no pin authentication in progress.";
+  String ERROR_DESCRIPTION_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS = "Onegini: received reply for fingerprint authentication, but no fingerprint authentication in progress.";
+  String ERROR_DESCRIPTION_NO_CONFIRMATION_CHALLENGE = "Onegini: Cannot reply to confirmation challenge, no challenge open";
+  String ERROR_DESCRIPTION_NO_PIN_CHALLENGE = "Onegini: Cannot reply to pin challenge, no challenge open";
+  String ERROR_DESCRIPTION_NO_FINGERPRINT_CHALLENGE = "Onegini: Cannot reply to fingerprint challenge, no challenge open";
+  String ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD = "Onegini: Invalid mobile authentication method";
+  String ERROR_DESCRIPTION_INCORRECT_PIN = "Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
 
   // Error codes
   int ERROR_CODE_PLUGIN_INTERNAL_ERROR = 8000;

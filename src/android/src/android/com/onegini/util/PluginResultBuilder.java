@@ -1,7 +1,7 @@
 package com.onegini.util;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 
@@ -181,7 +181,7 @@ public class PluginResultBuilder {
     this.status = ERROR;
 
     Map<String, Object> payload = new HashMap<String, Object>();
-    payload.put("description", ERROR_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
+    payload.put("description", ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
     payload.put("code",ERROR_CODE_PLUGIN_INTERNAL_ERROR);
     this.payload = new JSONObject(payload);
   }

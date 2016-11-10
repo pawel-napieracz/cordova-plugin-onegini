@@ -1,17 +1,17 @@
 package com.onegini;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_ILLEGAL_ARGUMENT_PROFILE;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_USER_ALREADY_AUTHENTICATED;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_NO_USER_AUTHENTICATED;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROFILE_NOT_REGISTERED;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_USER_ALREADY_AUTHENTICATED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_USER_ALREADY_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_ACCEPT;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
@@ -98,7 +98,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     if (userProfile.equals(authenticatedUserProfile)) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withPluginError(ERROR_USER_ALREADY_AUTHENTICATED, ERROR_CODE_USER_ALREADY_AUTHENTICATED)
+          .withPluginError(ERROR_DESCRIPTION_USER_ALREADY_AUTHENTICATED, ERROR_CODE_USER_ALREADY_AUTHENTICATED)
           .build());
 
       return;
@@ -156,11 +156,11 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       userProfile = getUserProfile(args);
 
     } catch (JSONException e) {
-      throw new IllegalArgumentException(ERROR_ILLEGAL_ARGUMENT_PROFILE);
+      throw new IllegalArgumentException(ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE);
     }
 
     if (userProfile == null) {
-      throw new Exception(ERROR_PROFILE_NOT_REGISTERED);
+      throw new Exception(ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED);
     }
 
     return userProfile;
@@ -180,7 +180,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
     if (pinCallback == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS, ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS)
+          .withPluginError(ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS, ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS)
           .build());
 
       return;
@@ -196,7 +196,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
 
     if (fingerprintCallback == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS, ERROR_CODE_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS)
+          .withPluginError(ERROR_DESCRIPTION_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS, ERROR_CODE_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS)
           .build());
 
       return;
@@ -259,7 +259,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
         if (authenticatedUserProfile == null) {
           pluginResultBuilder
               .withError()
-              .withPluginError(ERROR_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED);
+              .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED);
         } else {
           pluginResultBuilder
               .withSuccess()

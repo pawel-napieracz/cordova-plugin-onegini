@@ -1,10 +1,10 @@
 package com.onegini;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_ILLEGAL_ARGUMENT_PROFILE;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
 import java.util.Set;
@@ -72,7 +72,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
 
     if (pinCallback == null) {
       final PluginResult pluginResult = new PluginResultBuilder()
-          .withPluginError(ERROR_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS, ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS)
+          .withPluginError(ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS, ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS)
           .build();
       createPinCallbackContext.sendPluginResult(pluginResult);
     } else {
@@ -92,7 +92,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
     } catch (JSONException e) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
-          .withPluginError(ERROR_ILLEGAL_ARGUMENT_PROFILE, ERROR_CODE_ILLEGAL_ARGUMENT)
+          .withPluginError(ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE, ERROR_CODE_ILLEGAL_ARGUMENT)
           .build());
 
       return;
@@ -112,7 +112,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
         try {
           resultPayload = UserProfileUtil.profileSetToJSONArray(userProfiles);
         } catch (JSONException e) {
-          callbackContext.error(ERROR_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
+          callbackContext.error(ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
           return;
         }
 

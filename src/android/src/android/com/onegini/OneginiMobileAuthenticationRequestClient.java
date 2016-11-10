@@ -1,7 +1,7 @@
 package com.onegini;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_INVALID_MOBILE_AUTHENTICATION_METHOD;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -98,7 +98,7 @@ public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
         break;
       default:
         callbackContext.sendPluginResult(new PluginResultBuilder()
-            .withPluginError(ERROR_INVALID_MOBILE_AUTHENTICATION_METHOD, ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD)
+            .withPluginError(ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD, ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD)
             .build());
         break;
     }
