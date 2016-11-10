@@ -18,7 +18,7 @@
 - (void)providePin:(CDVInvokedUrlCommand *)command
 {
     if (!self.pinChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: providePin called, but no pin authentication in progress."];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProvidePinNoAuthenticationInProgress andMessage:OGCDVPluginErrProvidePinNoAuthenticationInProgress];
         return;
     }
     [self.commandDelegate runInBackground:^{
@@ -31,7 +31,7 @@
 - (void)createPin:(CDVInvokedUrlCommand *)command
 {
     if (!self.createPinChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: createPin called, but no registration in progress."];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeCreatePinNoRegistrationInProgress andMessage:OGCDVPluginErrCreatePinNoRegistrationInProgress];
         return;
     }
 

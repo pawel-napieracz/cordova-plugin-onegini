@@ -25,7 +25,7 @@ NSString *const OGCDVPluginKeyMarkedAsEnrolled = @"EnrolledForMobileAuthenticati
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrNoUserAuthenticated];
             return;
         }
 

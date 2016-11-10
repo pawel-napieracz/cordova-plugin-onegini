@@ -11,7 +11,7 @@
                                 callbackId:callbackId];
 }
 
-- (void)sendErrorResultForCallbackId:(NSString *)callbackId withErrorCode:(long)code andMessage:(NSString *)errorMessage
+- (void)sendErrorResultForCallbackId:(NSString *)callbackId withErrorCode:(int)code andMessage:(NSString *)errorMessage
 {
     NSDictionary *result = @{
         OGCDVPluginKeyErrorCode: @(code),
@@ -23,13 +23,13 @@
 - (void)sendErrorResultForCallbackId:(NSString *)callbackId withError:(NSError *)error
 {
     NSString *errorMessage;
-    long errorCode;
+    int errorCode;
     if (error == nil) {
-        errorMessage = @"An unknown error occurred.";
-        errorCode = -1;
+        errorMessage = OGCDVPluginErrInternalError;
+        errorCode = OGCDVPluginErrCodePluginInternalError;
     } else {
         errorMessage = [NSString stringWithFormat:@"%@\n%@", error.localizedDescription, error.localizedRecoverySuggestion];
-        errorCode = (long)error.code;
+        errorCode = error.code;
     }
     [self sendErrorResultForCallbackId:callbackId withErrorCode:errorCode andMessage:errorMessage];
 }

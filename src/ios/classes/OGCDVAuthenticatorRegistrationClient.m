@@ -11,7 +11,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrNoUserAuthenticated];
             return;
         }
 
@@ -28,14 +28,14 @@
             }
         }
 
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrNoSuchAuthenticator];
     }];
 }
 
 - (void)providePin:(CDVInvokedUrlCommand *)command
 {
     if (!self.pinChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: please invoke 'start' first."];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrNoSuchAuthenticator];
         return;
     }
 
@@ -49,7 +49,7 @@
   [self.commandDelegate runInBackground:^{
       ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
       if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+        [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrNoUserAuthenticated];
         return;
       }
 
@@ -70,7 +70,7 @@
         }
       }
 
-      [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
+      [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrNoSuchAuthenticator];
   }];
 }
 
