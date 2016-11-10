@@ -39,6 +39,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
   private static final String ACTION_START = "start";
   private static final String ACTION_PROVIDE_PIN = "providePin";
   private static final String ACTION_RESPOND_TO_FINGERPRINT_REQUEST = "respondToFingerprintRequest";
+  private static final String ACTION_FALLBACK_TO_PIN = "fallbackToPin";
   private static final String ACTION_REAUTHENTICATE = "reauthenticate";
   private final static String ACTION_LOGOUT = "logout";
   private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
@@ -63,6 +64,9 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return true;
     } else if (ACTION_RESPOND_TO_FINGERPRINT_REQUEST.equals(action)) {
       respondToFingerprintRequest(callbackContext, args);
+      return true;
+    } else if (ACTION_FALLBACK_TO_PIN.equals(action)) {
+      fallbackToPin(callbackContext);
       return true;
     }
 
@@ -133,6 +137,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
     }
 
     PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
+    FingerprintAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
     authenticationHandler = new AuthenticationHandler(callbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
@@ -215,6 +220,21 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
         } else {
           fingerprintCallback.denyAuthenticationRequest();
         }
+      }
+    });
+  }
+
+  private void fallbackToPin(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        final OneginiFingerprintCallback fingerprintCallback = FingerprintAuthenticationRequestHandler.getInstance().getFingerprintCallback();
+
+        if (fingerprintCallback == null) {
+          return;
+        }
+
+        fingerprintCallback.fallbackToPin();
       }
     });
   }
