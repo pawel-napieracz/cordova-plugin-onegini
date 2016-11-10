@@ -65,7 +65,7 @@ public class ActionArgumentsUtil {
 
     for (OneginiAuthenticator authenticator : availableAuthenticators) {
       final String type = AuthenticatorUtil.authenticatorTypeToString(authenticator.getType());
-      if (type.equals(authenticatorType)) {
+      if (type != null && type.equals(authenticatorType)) {
         return authenticator;
       }
     }

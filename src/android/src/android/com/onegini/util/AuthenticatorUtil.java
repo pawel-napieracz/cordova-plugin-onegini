@@ -13,8 +13,8 @@ import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
 
 public class AuthenticatorUtil {
 
-  private static String AUTHENTICATOR_TYPE_PIN = "PIN";
-  private static String AUTHENTICATOR_TYPE_FINGERPRINT = "Fingerprint";
+  private final static String AUTHENTICATOR_TYPE_PIN = "PIN";
+  private final static String AUTHENTICATOR_TYPE_FINGERPRINT = "Fingerprint";
 
   public static JSONArray authenticatorSetToJSONArray(final Set<OneginiAuthenticator> authenticatorSet) throws JSONException {
     JSONArray authenticatorJSONArray = new JSONArray();

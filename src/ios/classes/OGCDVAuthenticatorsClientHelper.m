@@ -10,7 +10,7 @@
     NSString *type = [self typeStringFromAuthenticatorType:authenticator.type];
 
     NSString *identifier;
-    if (authenticator.type == 1 || authenticator.type == 2) {
+    if (authenticator.type == ONGAuthenticatorPIN || authenticator.type == ONGAuthenticatorTouchID) {
         NSArray *identifierItems = [authenticator.identifier componentsSeparatedByString:@"."];
         identifier = [identifierItems lastObject];
     } else {
