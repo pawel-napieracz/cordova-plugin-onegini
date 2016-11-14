@@ -60,8 +60,8 @@
 - (void)respondToFingerprintRequest:(CDVInvokedUrlCommand *)command
 {
     if (!self.fingerprintChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoFingerprintChallenge
-                                     andMessage:OGCDVPluginErrDescriptionNoFingerprintChallenge];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeFingerprintNoAuthenticationInProgress
+                                andMessage:OGCDVPluginErrDescriptionFingerprintNoAuthenticationInProgress];
         return;
     }
 
@@ -81,7 +81,8 @@
 - (void)fallbackToPin:(CDVInvokedUrlCommand *)command
 {
     if (!self.fingerprintChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoFingerprintChallenge andMessage:OGCDVPluginErrDescriptionNoFingerprintChallenge];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeFingerprintNoAuthenticationInProgress
+                                andMessage:OGCDVPluginErrDescriptionFingerprintNoAuthenticationInProgress];
         return;
     }
 

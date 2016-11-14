@@ -29,7 +29,7 @@
         errorCode = OGCDVPluginErrCodePluginInternalError;
     } else {
         errorMessage = [NSString stringWithFormat:@"%@\n%@", error.localizedDescription, error.localizedRecoverySuggestion];
-        errorCode = error.code;
+        errorCode = (int) error.code;
     }
     [self sendErrorResultForCallbackId:callbackId withErrorCode:errorCode andMessage:errorMessage];
 }
