@@ -1,6 +1,6 @@
 # Logout
 
-For security reasons it's always a good idea to explicity logout a user. You can use this function to do so:
+For security reasons it is always a good idea to explicity logout a user. You can use this function to do so.
 
 ## `onegini.user.logout`
 
@@ -18,9 +18,9 @@ onegini.user.logout(
 );
 ```
 
-The error callback contains an object with these properties:
+The error callback contains an object with the following properties.
 
 | Property | Example | Description |
 | --- | --- | --- |
-| `code` | 9001 | The error code
-| `description` | "Invalid Pin" | Human readable error description
+| `code` | 8000 | The error code
+| `description` | "Onegini: Internal plugin error." | Human readable error description

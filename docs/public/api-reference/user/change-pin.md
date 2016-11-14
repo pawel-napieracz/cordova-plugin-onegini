@@ -1,8 +1,8 @@
 # Change Pin
 
-Once authenticated a user is able to change his Pin code.
+Once authenticated, a user is able to change his PIN code.
 
-It's recommended to implement this process in two steps: first ask and validate the currently configured Pin, then ask and validate the new Pin. To accomodate this the plugin provides these two functions:
+It is recommended to implement this process in two steps: first request and validate the currently configured PIN, then request and validate the new PIN. To accomodate this the plugin provides the two following functions.
 
 ## `onegini.user.changePin.start`
 
@@ -10,7 +10,7 @@ This function takes a mandatory first argument with the following properties:
 
 | Property | Default | Description |
 | --- | --- | --- |
-| `pin` | - | The currently configured Pin
+| `pin` | - | The currently configured PIN
 
 ```js
 onegini.user.changePin.start(

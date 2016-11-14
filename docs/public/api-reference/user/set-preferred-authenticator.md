@@ -1,24 +1,26 @@
 # Set Preferred Authenticator
 
-In case a user has multiple authenticators (PIN, Fingerprint, ..) you can have him indicate which one he prefers by using this function:
+When a user has multiple registered authenticators (PIN, fingerprint, ...), you may want to allow them to choose which authenticator they prefer.
 
 ## `onegini.user.authenticators.setPreferred`
 
 This function takes a mandatory first argument with the following properties:
 
-| Property | Default | Description |
+| Property | Example | Description |
 | --- | --- | --- |
-| `authenticatorId` | - | The Authenticator Id as received from `onegini.user.authenticators.getNotRegistered`
+| `authenticatorType` | "Fingerprint" | The authenticator type as received from `onegini.user.authenticators.getRegistered`
 
 ```js
 onegini.user.authenticators.setPreferred(
+  // the authenticator type the user would like to set as
+  // preferred
   {
-    authenticatorId: "com.onegini.authenticator.FINGERPRINT"
+    authenticatorType: "Fingerprint"
   },
 
   // success callback
   function () {
-    console.log("The provided Authenticator Id is now the preferred authenticator");
+    console.log("The provided authenticator ID is now the preferred authenticator");
   },
 
   // error callback
@@ -32,5 +34,5 @@ The error callback contains an object with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
-| `code` | 9001 | The error code
-| `description` | "Invalid Pin" | Human readable error description
+| `code` | 8005 | The error code
+| `description` | "Onegini: No user authenticated." | Human readable error description
