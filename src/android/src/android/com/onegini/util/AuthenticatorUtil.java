@@ -2,6 +2,7 @@ package com.onegini.util;
 
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
 import java.util.Set;
 
@@ -9,7 +10,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.onegini.OneginiSDK;
+import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
+import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 
 public class AuthenticatorUtil {
 
@@ -42,5 +46,10 @@ public class AuthenticatorUtil {
         return AUTHENTICATOR_TYPE_FINGERPRINT;
     }
     return null;
+  }
+
+  public static UserProfile getUserProfileFromArguments(final JSONArray args, final Set<UserProfile> registeredUserProfiles) throws JSONException {
+    String profileId = args.getJSONObject(0).getString(PARAM_PROFILE_ID);
+    return UserProfileUtil.findUserProfileById(profileId, registeredUserProfiles);
   }
 }
