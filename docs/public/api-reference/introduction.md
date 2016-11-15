@@ -24,7 +24,7 @@ onegini.user.authenticate.start(
 
   // success callback
   function () {
-    console.log("The provided Profile Id is allowed to authenticate");
+    console.log("The provided profile ID is allowed to authenticate");
   },
 
   // error callback
@@ -40,7 +40,7 @@ onegini.user.authenticate.start(
 onegini.user.authenticate.start({
     profileId: "W8DUJ2"
 }).then(function () {
-    console.log("The provided Profile Id is allowed to authenticate");
+    console.log("The provided profile ID is allowed to authenticate");
 }, function (err) {
     console.log("Error: " + err.description);
 });

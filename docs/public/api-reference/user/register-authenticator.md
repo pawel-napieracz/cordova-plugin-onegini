@@ -1,8 +1,6 @@
-# Register authenticator
+# Register Authenticator
 
-You can register additional authenticators for the currently logged in user. So when the user is logged in and `onegini.user.authenticators.getNotRegistered` indicates additional authenticators are available, you can register them with this function. 
-
-Similar to authentication this function is a two-step process.
+You can register additional authenticators for the currently logged in user. When a user is logged in and `onegini.user.authenticators.getNotRegistered` indicates additional authenticators are available, you can register them using this function. 
 
 ## `onegini.user.authenticators.registerNew`
 
@@ -10,17 +8,18 @@ This function takes a mandatory first argument with the following properties:
 
 | Property | Default | Description |
 | --- | --- | --- |
-| `authenticatorId` | - | The Authenticator Id as received from `onegini.user.authenticators.getNotRegistered`
+| `authenticatorType` | - | The authenticator type as received from `onegini.user.authenticators.getNotRegistered`
 
 ```js
 onegini.user.authenticators.registerNew(
   {
-    authenticatorId: "com.onegini.authenticator.FINGERPRINT"
-  },
+    authenticatorType: "Fingerprint"
+  })
+    .onPinRequest() 
 
   // success callback
   function () {
-    console.log("The provided Authenticator Id can be registered");
+    console.log("The provided authenticator has been registered");
   },
 
   // error callback

@@ -1,6 +1,6 @@
 # Bootstrapping the Onegini SDK
 
-The first thing you'll want to do when your app starts is initialize the Onegini SDK. This will perform a few checks and report an error in case of trouble.
+The first thing that needs to be done when the app starts is to initizialize the Onegini SDK. This will perform a few checks and report an error in case of trouble.
 
 ## `onegini.start`
 
@@ -8,7 +8,7 @@ This function takes an optional first argument with the following properties:
 
 | Property | Default | Description |
 | --- | --- | --- |
-| `secureXhr` | `false` | Allow the plugin to intercept XHR GET/POST/.. webview requests and route them through the plugin for added security
+| `secureXhr` | `false` | Allow the plugin to intercept XHR GET/POST/... webview requests and route them through the plugin for added security
 
 ```js
 // As with all Cordova plugins you must wait for `deviceready` to fire
