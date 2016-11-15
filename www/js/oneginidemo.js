@@ -59,7 +59,7 @@ var OneginiDemo = (function () {
     },
 
     registerFingerprintAuthenticator: function () {
-      onegini.user.authenticators.registerNew({authenticatorId: "com.onegini.authenticator.TouchID"})
+      onegini.user.authenticators.registerNew({authenticatorType: "Fingerprint"})
           .onPinRequest(function (actions, options) {
             var pin = prompt("Please enter your " + options.pinLength + " digit pin", "12346");
             actions.providePin(pin);
@@ -74,7 +74,7 @@ var OneginiDemo = (function () {
 
     setFingerprintAuthenticator: function () {
       onegini.user.authenticators.setPreferred({
-            authenticatorId: "com.onegini.authenticator.TouchID"
+            authenticatorType: "Fingerprint"
           },
           function () {
             alert("Success!")
