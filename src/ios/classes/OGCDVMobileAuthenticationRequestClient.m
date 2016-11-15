@@ -15,6 +15,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 @synthesize operationQueue;
 @synthesize challengeReceiversCallbackIds;
+@synthesize authenticationEventsForMethods;
 
 + (id)sharedInstance
 {
@@ -26,6 +27,12 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
     operationQueue = [[NSOperationQueue alloc] init];
     [operationQueue setMaxConcurrentOperationCount:1];
     challengeReceiversCallbackIds = [[NSMutableDictionary alloc] init];
+    authenticationEventsForMethods = @{
+        OGCDVPluginMobileAuthenticationMethodConfirmation: OGCDVPluginAuthEventConfirmationRequest,
+        OGCDVPluginMobileAuthenticationMethodPin: OGCDVPluginAuthEventPinRequest,
+        OGCDVPluginMobileAuthenticationMethodFingerprint: OGCDVPluginAuthEventFingerprintRequest
+    };
+
     sharedInstance = self;
 }
 
@@ -97,9 +104,13 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 - (void)replyToChallenge:(CDVInvokedUrlCommand *)command
 {
+    if (delegate == nil || [delegate isFinished]) {
+        return;
+    }
+
     [self.commandDelegate runInBackground:^{
         NSDictionary *options = command.arguments[0];
-        NSString *method = options[OGCDVPluginKeyMethod];
+        NSString *method = [delegate mobileAuthenticationMethod];
         BOOL result = [options[OGCDVPluginKeyAccept] boolValue];
 
         if ([OGCDVPluginMobileAuthenticationMethodConfirmation isEqualToString:method]) {
@@ -113,7 +124,6 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
             [delegate mobileAuthenticationRequestClient:self didReceiveFingerprintChallengeResponse:result
                                          withCallbackId:command.callbackId];
         } else {
-
         }
     }];
 }

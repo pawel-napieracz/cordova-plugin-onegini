@@ -29,6 +29,7 @@ NSString *const OGCDVPluginAuthenticatorTypePin = @"PIN";
 NSString *const OGCDVPluginAuthenticatorTypeTouchId = @"Fingerprint";
 
 NSString *const OGCDVPluginAuthEventSuccess = @"onSuccess";
+NSString *const OGCDVPluginAuthEventConfirmationRequest = @"onConfirmationRequest";
 NSString *const OGCDVPluginAuthEventPinRequest = @"onPinRequest";
 NSString *const OGCDVPluginAuthEventCreatePinRequest = @"onCreatePinRequest";
 NSString *const OGCDVPluginAuthEventFingerprintRequest = @"onFingerprintRequest";

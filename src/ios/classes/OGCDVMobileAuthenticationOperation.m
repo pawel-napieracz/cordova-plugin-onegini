@@ -111,6 +111,7 @@
     message[OGCDVPluginKeyType] = mobileAuthenticationRequest.type;
     message[OGCDVPluginKeyMessage] = mobileAuthenticationRequest.message;
     message[OGCDVPluginKeyProfileId] = mobileAuthenticationRequest.userProfile.profileId;
+    message[OGCDVPluginKeyAuthenticationEvent] = [[OGCDVMobileAuthenticationRequestClient sharedInstance] authenticationEventsForMethods][mobileAuthenticationMethod];
 
     if (pinChallenge) {
         message[OGCDVPluginKeyMaxFailureCount] = @(pinChallenge.maxFailureCount);

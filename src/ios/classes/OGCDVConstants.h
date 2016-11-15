@@ -27,6 +27,7 @@ extern NSString *const OGCDVPluginAuthenticatorTypePin;
 extern NSString *const OGCDVPluginAuthenticatorTypeTouchId;
 
 extern NSString *const OGCDVPluginAuthEventSuccess;
+extern NSString *const OGCDVPluginAuthEventConfirmationRequest;
 extern NSString *const OGCDVPluginAuthEventPinRequest;
 extern NSString *const OGCDVPluginAuthEventCreatePinRequest;
 extern NSString *const OGCDVPluginAuthEventFingerprintRequest;
