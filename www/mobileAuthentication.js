@@ -8,74 +8,72 @@ module.exports = (function () {
   function MobileAuthenticationHandler(method) {
     var self = this;
     this.callbacks = {};
-    this.method = method;
 
-    function acceptRequest(options) {
-      options = utils.getOptionsWithDefaults(options, {}, 'pin');
-      options.accept = true;
-      options.method = self.method;
-      utils.promiseOrCallbackExec('OneginiMobileAuthenticationRequestClient', 'replyToChallenge', options, callSuccess, self.callbacks.catch);
-    }
+    this.callbackActions = {
+      accept: function (options) {
+        options = utils.getOptionsWithDefaults(options, {}, 'pin');
+        options.accept = true;
+        utils.promiseOrCallbackExec('OneginiMobileAuthenticationRequestClient', 'replyToChallenge', options, self.callbacks.onSuccess, self.callbacks.onError);
+      },
 
-    function rejectRequest() {
-      var options = {
-        accept: false,
-        method: self.method
-      };
+      deny: function () {
+        var options = {
+          accept: false
+        };
 
-      utils.promiseOrCallbackExec('OneginiMobileAuthenticationRequestClient', 'replyToChallenge', options, callSuccess, self.callbacks.catch);
-    }
-
-    function callChallengeReceiver(request) {
-      if (request.mobileAuthenticationEvent) {
-        var eventName = request.mobileAuthenticationEvent;
-        delete request.mobileAuthenticationEvent;
-
-        if (self.callbacks["on" + eventName]) {
-          self.callbacks["on" + eventName]();
-        }
+        utils.promiseOrCallbackExec('OneginiMobileAuthenticationRequestClient', 'replyToChallenge', options, self.callbacks.onSuccess, self.callbacks.onError);
       }
-      else {
-        self.callbacks.challengeReceiver(request, acceptRequest, rejectRequest);
+    };
+
+    function callSuccessCallback(options) {
+      var event = options.authenticationEvent;
+      delete options.authenticationEvent;
+
+      if (self.callbacks[event]) {
+        self.callbacks[event](self.callbackActions, options);
       }
     }
 
-    function callSuccess() {
-      if (self.callbacks.success) {
-        self.callbacks.success();
-      }
+    function callErrorCallback(err) {
+      self.callbacks.onError(err);
     }
 
-    utils.callbackExec('OneginiMobileAuthenticationRequestClient', 'registerChallengeReceiver', {method: self.method}, callChallengeReceiver, this.callbacks.catch);
+    utils.callbackExec('OneginiMobileAuthenticationRequestClient', 'registerChallengeReceiver', {method: method}, callSuccessCallback, callErrorCallback);
   }
 
-  MobileAuthenticationHandler.prototype.shouldAccept = function (cb) {
-    this.callbacks.challengeReceiver = cb;
+  MobileAuthenticationHandler.prototype.onConfirmationRequest = function (cb) {
+    this.callbacks.onConfirmationRequest = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.providePin = function (cb) {
-    this.callbacks.challengeReceiver = cb;
+  MobileAuthenticationHandler.prototype.onPinRequest = function (cb) {
+    this.callbacks.onPinRequest = cb;
     return this;
   };
+
+  MobileAuthenticationHandler.prototype.onFingerprintRequest = function (cb) {
+    this.callbacks.onFingerprintRequest = cb;
+    return this;
+  };
+
 
   MobileAuthenticationHandler.prototype.onFingerprintCaptured = function (cb) {
     this.callbacks.onFingerprintCaptured = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.onFingerprintNextAttempt = function (cb) {
-    this.callbacks.onFingerprintNextAttempt = cb;
+  MobileAuthenticationHandler.prototype.onFingerprintFailed = function (cb) {
+    this.callbacks.onFingerprintFailed = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.catch = function (cb) {
-    this.callbacks.catch = cb;
+  MobileAuthenticationHandler.prototype.onError = function (cb) {
+    this.callbacks.onError = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.success = function (cb) {
-    this.callbacks.success = cb;
+  MobileAuthenticationHandler.prototype.onSuccess = function (cb) {
+    this.callbacks.onSuccess = cb;
     return this;
   };
 
