@@ -27,12 +27,12 @@
 
 - (void)getRegistered:(CDVInvokedUrlCommand *)command
 {
-  [self.commandDelegate runInBackground:^{
-      ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
-      if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
-        return;
-      }
+    [self.commandDelegate runInBackground:^{
+        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        if (user == nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
+            return;
+        }
 
         NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
         NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:registeredAuthenticators.count];
@@ -45,12 +45,12 @@
 
 - (void)getNotRegistered:(CDVInvokedUrlCommand *)command
 {
-  [self.commandDelegate runInBackground:^{
-      ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
-      if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
-        return;
-      }
+    [self.commandDelegate runInBackground:^{
+        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        if (user == nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
+            return;
+        }
 
         NSSet<ONGAuthenticator *> *nonRegisteredAuthenticators = [[ONGUserClient sharedInstance] nonRegisteredAuthenticatorsForUser:user];
         NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:nonRegisteredAuthenticators.count];
@@ -81,19 +81,20 @@
 
 - (void)setPreferred:(CDVInvokedUrlCommand *)command
 {
-  [self.commandDelegate runInBackground:^{
-      ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
-      if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
-        return;
-      }
+    [self.commandDelegate runInBackground:^{
+        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        if (user == nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
+            return;
+        }
 
         NSDictionary *options = command.arguments[0];
         NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
         ONGAuthenticator *authenticator = [OGCDVAuthenticatorsClientHelper authenticatorFromArguments:registeredAuthenticators options:options];
 
         if (authenticator == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator
+                                    andMessage:OGCDVPluginErrDescriptionNoSuchAuthenticator];
             return;
         }
 
