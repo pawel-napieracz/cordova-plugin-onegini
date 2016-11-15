@@ -83,6 +83,8 @@
     <source-file src="src/ios/classes/OGCDVChangePinClient.m"/>
     <header-file src="src/ios/classes/OGCDVAuthenticatorsClient.h"/>
     <source-file src="src/ios/classes/OGCDVAuthenticatorsClient.m"/>
+    <header-file src="src/ios/classes/OGCDVAuthenticatorsClientHelper.h"/>
+    <source-file src="src/ios/classes/OGCDVAuthenticatorsClientHelper.m"/>
     <header-file src="src/ios/classes/OGCDVAuthenticatorRegistrationClient.h"/>
     <source-file src="src/ios/classes/OGCDVAuthenticatorRegistrationClient.m"/>
     <header-file src="src/ios/classes/OGCDVDeviceAuthenticationClient.h"/>

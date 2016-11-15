@@ -2,6 +2,7 @@
 
 #import "OGCDVAuthenticatorRegistrationClient.h"
 #import "OGCDVConstants.h"
+#import "OGCDVAuthenticatorsClientHelper.h"
 
 @implementation OGCDVAuthenticatorRegistrationClient {
 }
@@ -18,17 +19,15 @@
         self.authenticationCallbackId = command.callbackId;
 
         NSDictionary *options = command.arguments[0];
-        NSString *authenticatorId = options[OGCDVPluginKeyAuthenticatorId];
-
         NSSet<ONGAuthenticator *> *nonRegisteredAuthenticators = [[ONGUserClient sharedInstance] nonRegisteredAuthenticatorsForUser:user];
-        for (ONGAuthenticator *authenticator in nonRegisteredAuthenticators) {
-            if ([authenticator.identifier isEqualToString:authenticatorId]) {
-                [[ONGUserClient sharedInstance] registerAuthenticator:authenticator delegate:self];
-                return;
-            }
+        ONGAuthenticator *authenticator = [OGCDVAuthenticatorsClientHelper authenticatorFromArguments:nonRegisteredAuthenticators options:options];
+
+        if (authenticator == nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrDescriptionNoSuchAuthenticator];
+            return;
         }
 
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrDescriptionNoSuchAuthenticator];
+        [[ONGUserClient sharedInstance] registerAuthenticator:authenticator delegate:self];
     }];
 }
 
@@ -54,23 +53,21 @@
       }
 
       NSDictionary *options = command.arguments[0];
-      NSString *authenticatorId = options[OGCDVPluginKeyAuthenticatorId];
-
       NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
-      for (ONGAuthenticator *authenticator in registeredAuthenticators) {
-        if ([authenticator.identifier isEqualToString:authenticatorId]) {
-          [[ONGUserClient sharedInstance] deregisterAuthenticator:authenticator completion:^(BOOL deregistered, NSError * _Nullable error) {
-            if (error || !deregistered) {
-              [self sendErrorResultForCallbackId:command.callbackId withError:error];
-            } else {
-              [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-            }
-          }];
+      ONGAuthenticator *authenticator = [OGCDVAuthenticatorsClientHelper authenticatorFromArguments:registeredAuthenticators options:options];
+
+      if (authenticator == nil) {
+          [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrDescriptionNoSuchAuthenticator];
           return;
-        }
       }
 
-      [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator andMessage:OGCDVPluginErrDescriptionNoSuchAuthenticator];
+      [[ONGUserClient sharedInstance] deregisterAuthenticator:authenticator completion:^(BOOL deregistered, NSError * _Nullable error) {
+          if (error || !deregistered) {
+              [self sendErrorResultForCallbackId:command.callbackId withError:error];
+          } else {
+              [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+          }
+      }];
   }];
 }
 

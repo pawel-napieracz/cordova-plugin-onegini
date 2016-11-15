@@ -7,9 +7,6 @@ exports.defineAutoTests = function () {
     testForMobileFingerprintAuthentication: false,
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
-    },
-    get fingerPrintAuthenticatorID() {
-      return navigator.userAgent.indexOf("Android") > -1 ? "com.onegini.authenticator.Fingerprint" : "com.onegini.authenticator.TouchID"
     }
   };
 
@@ -297,7 +294,7 @@ exports.defineAutoTests = function () {
       describe("setPreferred", function () {
         it("should return an error when not logged in", function (done) {
           onegini.user.authenticators.setPreferred({
-                authenticatorId: "com.onegini.authenticator.PIN"
+                authenticatorType: "PIN"
               },
               function () {
                 fail("Success callbacks was called, but method should have failed");
@@ -315,10 +312,10 @@ exports.defineAutoTests = function () {
           expect(onegini.user.authenticators.registerNew).toBeDefined();
         });
 
-        it("should require an authenticatorId argument", function () {
+        it("should require an authenticatorType argument", function () {
           expect(function () {
             onegini.user.authenticators.registerNew()
-          }).toThrow(new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.registerNew"));
+          }).toThrow(new TypeError("Onegini: missing 'authenticatorType' argument for authenticators.registerNew"));
         });
 
         it("should return an error when not logged in", function (done) {
@@ -332,16 +329,16 @@ exports.defineAutoTests = function () {
       });
 
       describe("deregister", function () {
-        it("should require an authenticatorId", function () {
+        it("should require an authenticatorType", function () {
           expect(function () {
             onegini.user.authenticators.deregister()
-          }).toThrow(new TypeError("Onegini: missing 'authenticatorId' argument for authenticators.deregister"));
+          }).toThrow(new TypeError("Onegini: missing 'authenticatorType' argument for authenticators.deregister"));
         });
 
         it("should return an error when not logged in", function (done) {
           onegini.user.authenticators.deregister(
               {
-                authenticatorId: 1
+                authenticatorType: 1
               },
               function () {
                 fail("Success callback was called, but method should have failed");
@@ -588,7 +585,7 @@ exports.defineAutoTests = function () {
       describe("setPreferred", function () {
         it("Should fail with a non-existing authenticator", function (done) {
           onegini.user.authenticators.setPreferred({
-                authenticatorId: "invalid"
+                authenticatorType: "invalid"
               }, function () {
                 expect(true).toBe(true);
                 fail("Success callback called, but method should have failed.");
@@ -605,7 +602,7 @@ exports.defineAutoTests = function () {
         it("Should fail with a non-existing authenticator", function (done) {
           onegini.user.authenticators.deregister(
               {
-                authenticatorId: "invalid"
+                authenticatorType: "invalid"
               },
               function (result) {
                 expect(result).toBeUndefined();
@@ -632,11 +629,11 @@ exports.defineAutoTests = function () {
 
                 for (var r in result) {
                   var authenticator = result[r];
-                  expect(authenticator.authenticatorId).toBeDefined();
-                  if (authenticator.authenticatorId === "com.onegini.authenticator.PIN") {
+                  expect(authenticator.authenticatorType).toBeDefined();
+                  if (authenticator.authenticatorType === "PIN") {
                     foundPin = true;
                   }
-                  else if (authenticator.authenticatorId === config.fingerPrintAuthenticatorID) {
+                  else if (authenticator.authenticatorType === "Fingerprint") {
                     foundFingerprint = true;
                   }
                 }
@@ -663,8 +660,8 @@ exports.defineAutoTests = function () {
 
                 for (var r in result) {
                   var authenticator = result[r];
-                  expect(authenticator.authenticatorId).toBeDefined();
-                  if (authenticator.authenticatorId === "com.onegini.authenticator.PIN") {
+                  expect(authenticator.authenticatorType).toBeDefined();
+                  if (authenticator.authenticatorType === "PIN") {
                     done();
                     return;
                   }
@@ -696,7 +693,7 @@ exports.defineAutoTests = function () {
           onegini.user.authenticators.getPreferred(
               function (result) {
                 expect(result).toBeDefined();
-                expect(result.authenticatorId).toBe("com.onegini.authenticator.PIN");
+                expect(result.authenticatorType).toBe("PIN");
                 done();
               },
               function (err) {
@@ -709,7 +706,7 @@ exports.defineAutoTests = function () {
       if (config.testForMultipleAuthenticators) {
         describe("registerNew", function () {
           it("should succeed", function (done) {
-            onegini.user.authenticators.registerNew({authenticatorId: config.fingerPrintAuthenticatorID})
+            onegini.user.authenticators.registerNew({authenticatorType: "Fingerprint"})
                 .onPinRequest(function (actions) {
                   actions.providePin(pin);
                 })
@@ -728,7 +725,7 @@ exports.defineAutoTests = function () {
           it("Should succeed with an existing authenticator", function (done) {
             onegini.user.authenticators.setPreferred(
                 {
-                  authenticatorId: config.fingerPrintAuthenticatorID
+                  authenticatorType: "PIN"
                 }, function () {
                   expect(true).toBe(true);
                   done();
@@ -764,7 +761,7 @@ exports.defineAutoTests = function () {
           it("Should succeed with existing fingerprint authenticator", function (done) {
             onegini.user.authenticators.deregister(
                 {
-                  authenticatorId: config.fingerPrintAuthenticatorID
+                  authenticatorType: "Fingerprint"
                 }, function () {
                   expect(true).toBe(true);
                   done();

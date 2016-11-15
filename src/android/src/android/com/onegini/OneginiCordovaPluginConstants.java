@@ -10,6 +10,7 @@ public interface OneginiCordovaPluginConstants {
   String PARAM_METHOD = "method";
   String PARAM_HEADERS = "headers";
   String PARAM_BODY = "body";
+  String PARAM_AUTHENTICATOR_TYPE = "authenticatorType";
   String PARAM_AUTHENTICATOR_ID = "authenticatorId";
   String PARAM_ACCEPT = "accept";
 
