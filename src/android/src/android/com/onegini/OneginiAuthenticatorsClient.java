@@ -3,9 +3,11 @@ package com.onegini;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED;
 
 import java.util.Set;
 
@@ -60,7 +62,7 @@ public class OneginiAuthenticatorsClient extends CordovaPlugin {
           userProfile = AuthenticatorUtil.getUserProfileFromArguments(args, registeredUserProfiles);
         } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withErrorDescription(ERROR_PLUGIN_INTERNAL_ERROR)
+              .withPluginError(ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR, ERROR_CODE_PLUGIN_INTERNAL_ERROR)
               .build());
 
           return;
