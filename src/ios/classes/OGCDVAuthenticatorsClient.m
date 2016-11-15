@@ -12,7 +12,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -30,7 +30,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -48,7 +48,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -66,7 +66,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -84,7 +84,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -93,7 +93,8 @@
         ONGAuthenticator *authenticator = [OGCDVAuthenticatorsClientHelper authenticatorFromArguments:registeredAuthenticators options:options];
 
         if (authenticator == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator
+                                    andMessage:OGCDVPluginErrDescriptionNoSuchAuthenticator];
             return;
         }
 

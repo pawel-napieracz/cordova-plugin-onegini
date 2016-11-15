@@ -52,5 +52,4 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
 }
 
-
 @end
