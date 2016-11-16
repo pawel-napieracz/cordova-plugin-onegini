@@ -3,6 +3,7 @@
 #import "OGCDVAuthenticatorsClient.h"
 #import "OGCDVConstants.h"
 #import "OGCDVAuthenticatorsClientHelper.h"
+#import "OGCDVUserClientHelper.h"
 
 @implementation OGCDVAuthenticatorsClient {
 }
@@ -10,7 +11,7 @@
 - (void)getAll:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
         if (user == nil) {
             [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
@@ -28,7 +29,7 @@
 - (void)getRegistered:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
         if (user == nil) {
             [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
@@ -46,7 +47,7 @@
 - (void)getNotRegistered:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
         if (user == nil) {
             [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
@@ -101,6 +102,13 @@
         [[ONGUserClient sharedInstance] setPreferredAuthenticator:authenticator];
         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
     }];
+}
+
++ (ONGUserProfile *)userProfileFromCommand:(CDVInvokedUrlCommand *)command
+{
+    NSDictionary *options = command.arguments[0];
+    NSString *profileId = options[OGCDVPluginKeyProfileId];
+    return [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
 }
 
 @end
