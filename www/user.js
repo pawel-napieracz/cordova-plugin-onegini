@@ -118,16 +118,25 @@ module.exports = (function () {
   };
 
   var authenticators = {
-    getAll: function (successCb, failureCb) {
-      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getAll', [], successCb, failureCb);
+    getAll: function(options, successCb, failureCb) {
+      if (!options || !options.profileId) {
+        throw new TypeError("Onegini: missing 'profileId' argument for authenticators.getAll");
+      }
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getAll', options, successCb, failureCb);
     },
 
-    getRegistered: function (successCb, failureCb) {
-      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getRegistered', [], successCb, failureCb);
+    getRegistered: function (options, successCb, failureCb) {
+      if (!options || !options.profileId) {
+        throw new TypeError("Onegini: missing 'profileId' argument for authenticators.getRegistered");
+      }
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getRegistered', options, successCb, failureCb);
     },
 
-    getNotRegistered: function (successCb, failureCb) {
-      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getNotRegistered', [], successCb, failureCb);
+    getNotRegistered: function (options, successCb, failureCb) {
+      if (!options || !options.profileId) {
+        throw new TypeError("Onegini: missing 'profileId' argument for authenticators.getNotRegistered");
+      }
+      return utils.promiseOrCallbackExec('OneginiAuthenticatorsClient', 'getNotRegistered', options, successCb, failureCb);
     },
 
     getPreferred: function (successCb, failureCb) {

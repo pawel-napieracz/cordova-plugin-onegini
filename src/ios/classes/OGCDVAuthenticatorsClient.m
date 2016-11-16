@@ -3,6 +3,7 @@
 #import "OGCDVAuthenticatorsClient.h"
 #import "OGCDVConstants.h"
 #import "OGCDVAuthenticatorsClientHelper.h"
+#import "OGCDVUserClientHelper.h"
 
 @implementation OGCDVAuthenticatorsClient {
 }
@@ -10,9 +11,9 @@
 - (void)getAll:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -28,9 +29,9 @@
 - (void)getRegistered:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -46,9 +47,9 @@
 - (void)getNotRegistered:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -66,7 +67,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -84,7 +85,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:OGCDVPluginErrorKeyNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
 
@@ -93,13 +94,21 @@
         ONGAuthenticator *authenticator = [OGCDVAuthenticatorsClientHelper authenticatorFromArguments:registeredAuthenticators options:options];
 
         if (authenticator == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No such authenticator found"];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator
+                                    andMessage:OGCDVPluginErrDescriptionNoSuchAuthenticator];
             return;
         }
 
         [[ONGUserClient sharedInstance] setPreferredAuthenticator:authenticator];
         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
     }];
+}
+
++ (ONGUserProfile *)userProfileFromCommand:(CDVInvokedUrlCommand *)command
+{
+    NSDictionary *options = command.arguments[0];
+    NSString *profileId = options[OGCDVPluginKeyProfileId];
+    return [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
 }
 
 @end

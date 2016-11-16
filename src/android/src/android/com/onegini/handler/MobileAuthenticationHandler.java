@@ -61,7 +61,7 @@ public class MobileAuthenticationHandler
     handleNextAuthenticationRequest();
   }
 
-  // *START* Handling mobile authentication without additional authentication (confirmation request)
+  // *START* Handling mobile authentication without additional authentication
 
   @Override
   public void startAuthentication(final OneginiMobileAuthenticationRequest mobileAuthenticationRequest,

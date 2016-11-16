@@ -14,7 +14,8 @@
       ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
 
       if (user == nil) {
-        [self sendErrorResultForCallbackId:command.callbackId withMessage:@"Onegini: No registered user found."];
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered
+                                andMessage:OGCDVPluginErrDescriptionProfileNotRegistered];
       } else {
         [[ONGUserClient sharedInstance] deregisterUser:user completion:^(BOOL deregistered, NSError *_Nullable error) {
             if (error != nil || !deregistered) {

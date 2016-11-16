@@ -26,10 +26,10 @@ public class LogoutHandler implements OneginiLogoutHandler{
   }
 
   @Override
-  public void onError(final OneginiLogoutError oneginiLogoutError) {
+  public void onError(final OneginiLogoutError logoutError) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withError()
-        .withErrorDescription(oneginiLogoutError.getErrorDescription())
+        .withOneginiError(logoutError)
         .build();
 
     callbackContext.sendPluginResult(pluginResult);
