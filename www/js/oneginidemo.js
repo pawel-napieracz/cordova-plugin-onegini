@@ -15,7 +15,7 @@ var OneginiDemo = (function () {
 
     registerHandlers: function () {
       onegini.mobileAuthentication.on("confirmation")
-          .onRequest(function (actions, request) {
+          .onConfirmationRequest(function (actions, request) {
             console.log("Mobile Authentication Confirmation request", request);
 
             navigator.notification.confirm(request.message, function (buttonIndex) {
@@ -23,7 +23,7 @@ var OneginiDemo = (function () {
                 actions.accept();
               }
               else {
-                actions.reject();
+                actions.deny();
               }
             }, "Mobile Authentication Request", ["Accept", "Reject"]);
           })
@@ -36,7 +36,7 @@ var OneginiDemo = (function () {
           });
 
       onegini.mobileAuthentication.on("pin")
-          .onRequest(function (actions, request) {
+          .onPinRequest(function (actions, request) {
             console.log("Mobile Authentication PIN request", request);
 
             navigator.notification.prompt(request.message, function (results) {
@@ -44,7 +44,7 @@ var OneginiDemo = (function () {
                 actions.accept(results.input1);
               }
               else {
-                actions.reject();
+                actions.deny();
               }
             }, "Mobile Authentication Request", ["Accept", "Reject"], "12346");
           })
@@ -57,7 +57,7 @@ var OneginiDemo = (function () {
           });
 
       onegini.mobileAuthentication.on("fingerprint")
-          .onRequest(function (actions, request) {
+          .onFingerprintRequest(function (actions, request) {
             console.log("Mobile authentication fingerprint request", request);
 
             navigator.notification.confirm(request.message, function (buttonIndex) {
@@ -65,7 +65,7 @@ var OneginiDemo = (function () {
                 actions.accept();
               }
               else {
-                actions.reject();
+                actions.deny();
               }
             }, "Mobile Authentication Request", ["Accept", "Reject"]);
           })
@@ -256,7 +256,6 @@ var OneginiDemo = (function () {
       if (!profileId) {
         return;
       }
-      var that = this;
       onegini.user.isUserRegistered(
           {
             profileId: profileId
