@@ -123,7 +123,6 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
         } else if ([OGCDVPluginMobileAuthenticationMethodFingerprint isEqualToString:method]) {
             [delegate mobileAuthenticationRequestClient:self didReceiveFingerprintChallengeResponse:result
                                          withCallbackId:command.callbackId];
-        } else {
         }
     }];
 }
