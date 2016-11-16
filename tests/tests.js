@@ -448,16 +448,16 @@ exports.defineAutoTests = function () {
 
         it('Should accept a mobile confirmation request', function (done) {
           onegini.mobileAuthentication.on("confirmation")
-              .shouldAccept(function (request, accept, reject) {
+              .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
                 expect(request.profileId).toBeDefined();
-                accept();
+                actions.accept();
               })
-              .catch(function () {
+              .onError(function () {
                 fail("Mobile authentication request failed, but should have succeeded");
               })
-              .success(function () {
+              .onSuccess(function () {
                 done();
               });
 
@@ -466,16 +466,16 @@ exports.defineAutoTests = function () {
 
         it('Should reject a mobile confirmation request', function (done) {
           onegini.mobileAuthentication.on("confirmation")
-              .shouldAccept(function (request, accept, reject) {
+              .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
                 expect(request.profileId).toBeDefined();
-                reject();
+                actions.deny();
               })
-              .catch(function () {
+              .onSuccess(function () {
                 done();
               })
-              .success(function () {
+              .onError(function () {
                 fail("Mobile authentication request succeeded, but should have failed");
               });
 
@@ -486,16 +486,16 @@ exports.defineAutoTests = function () {
           var counter = 0;
 
           onegini.mobileAuthentication.on("confirmation")
-              .shouldAccept(function (request, accept, reject) {
+              .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
                 expect(request.profileId).toBeDefined();
-                accept();
+                actions.accept();
               })
-              .catch(function () {
+              .onError(function () {
                 fail('Mobile authentication request failed, but should have succeeded');
               })
-              .success(function () {
+              .onSuccess(function () {
                 counter++;
                 if (counter === 2) {
                   done();
@@ -508,7 +508,7 @@ exports.defineAutoTests = function () {
 
         it('Should accept a mobile pin request', function (done) {
           onegini.mobileAuthentication.on("pin")
-              .providePin(function (request, accept, reject) {
+              .onPinRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
                 expect(request.profileId).toBeDefined();
@@ -516,16 +516,16 @@ exports.defineAutoTests = function () {
                 expect(request.remainingFailureCount).toBeDefined();
 
                 if (request.remainingFailureCount === request.maxFailureCount - 1) {
-                  accept(pin);
+                  actions.accept(pin);
                 }
                 else {
-                  accept('invalid');
+                  actions.accept('invalid');
                 }
               })
-              .catch(function () {
+              .onError(function () {
                 fail('Mobile authentication request failed, but should have succeeded');
               })
-              .success(function () {
+              .onSuccess(function () {
                 done();
               });
 
@@ -534,18 +534,18 @@ exports.defineAutoTests = function () {
 
         it('Should reject a mobile pin request', function (done) {
           onegini.mobileAuthentication.on("pin")
-              .providePin(function (request, accept, reject) {
+              .onPinRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
                 expect(request.profileId).toBeDefined();
                 expect(request.maxFailureCount).toBeDefined();
                 expect(request.remainingFailureCount).toBeDefined();
-                reject();
+                actions.deny();
               })
-              .catch(function () {
+              .onError(function () {
                 done();
               })
-              .success(function () {
+              .onSuccess(function () {
                 fail('Mobile authentication request succeeded, but should have failed');
               });
 
@@ -782,17 +782,17 @@ exports.defineAutoTests = function () {
         describe("on", function () {
           it("Should accept a mobile fingerprint request", function (done) {
             onegini.mobileAuthentication.on("fingerprint")
-                .shouldAccept(function (request, accept, reject) {
+                .onFingerprintRequest(function (actions, request) {
                   console.log("Please provide correct fingerprint");
                   expect(request.type).toBeDefined();
                   expect(request.message).toBeDefined();
                   expect(request.profileId).toBeDefined();
-                  accept();
+                  actions.accept();
                 })
-                .catch(function () {
+                .onError(function () {
                   fail("Mobile authentication request failed, but should have succeeded");
                 })
-                .success(function () {
+                .onSuccess(function () {
                   done();
                 });
 
@@ -801,16 +801,16 @@ exports.defineAutoTests = function () {
 
           it("Should reject a mobile fingerprint request", function (done) {
             onegini.mobileAuthentication.on("fingerprint")
-                .shouldAccept(function (request, accept, reject) {
+                .onFingerprintRequest(function (actions, request) {
                   expect(request.type).toBeDefined();
                   expect(request.message).toBeDefined();
                   expect(request.profileId).toBeDefined();
-                  reject();
+                  actions.deny();
                 })
-                .catch(function () {
+                .onError(function () {
                   done();
                 })
-                .success(function () {
+                .onSuccess(function () {
                   fail("Mobile authentication request succeeded, but should have failed");
                 });
 
@@ -821,18 +821,20 @@ exports.defineAutoTests = function () {
             it("Should be notified on fingerprint captured", function (done) {
               var didCallCaptured = false;
               onegini.mobileAuthentication.on("fingerprint")
-                  .shouldAccept(function (request, accept, reject) {
+                  .onFingerprintRequest(function (actions, request) {
                     console.log("Please provide any fingerprint");
-                    accept();
+                    expect(request).toBeDefined();
+                    actions.accept();
                   })
                   .onFingerprintCaptured(function () {
                     console.log("Please remove your finger");
                     didCallCaptured = true;
                   })
-                  .catch(function () {
+                  .onError(function (err) {
+                    expect(err).toBeUndefined();
                     fail("Mobile fingerprint authentication threw instead of triggering fingerprint capture event");
                   })
-                  .success(function () {
+                  .onSuccess(function () {
                     expect(didCallCaptured).toBe(true);
                     setTimeout(done, 500);
                   });
@@ -842,18 +844,19 @@ exports.defineAutoTests = function () {
 
             it("Should request fingerprint authentication again on incorrect fingerprint", function (done) {
               onegini.mobileAuthentication.on("fingerprint")
-                  .shouldAccept(function (request, accept, reject) {
+                  .onFingerprintRequest(function (actions, request) {
                     console.log("Please provide incorrect fingerprint");
-                    accept();
+                    expect(request).toBeDefined();
+                    actions.accept();
                   })
-                  .onFingerprintNextAttempt(function () {
+                  .onFingerprintFailed(function () {
                     expect(true).toBe(true);
                     done();
                   })
-                  .catch(function () {
+                  .onError(function () {
                     fail("Mobile fingerprint authentication threw instead of requesting another attempt");
                   })
-                  .success(function () {
+                  .onSuccess(function () {
                     fail("Mobile fingerprint authentication didn't request another attempt (or you supplied a correct fingerprint)")
                   });
 
