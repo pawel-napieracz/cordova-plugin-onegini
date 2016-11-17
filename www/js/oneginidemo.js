@@ -15,22 +15,73 @@ var OneginiDemo = (function () {
 
     registerHandlers: function () {
       onegini.mobileAuthentication.on("confirmation")
-          .shouldAccept(function (request, accept, reject) {
+          .onConfirmationRequest(function (actions, request) {
+            console.log("Mobile Authentication Confirmation request", request);
+
             navigator.notification.confirm(request.message, function (buttonIndex) {
               if (buttonIndex === 1) {
-                accept();
+                actions.accept();
               }
               else {
-                reject();
+                actions.deny();
               }
-            }, 'Mobile Authentication Request', ['Accept', 'Reject']);
+            }, "Mobile Authentication Request", ["Accept", "Reject"]);
           })
-          .success(function () {
-            console.log('Handled mobile authentication request!');
+          .onSuccess(function () {
+            alert("Mobile authentication request success!");
           })
-          .catch(function (err) {
-            console.log("Mobile authentication request err: ", err);
+          .onError(function (err) {
+            alert("Mobile authentication request failed!");
+            console.error("Mobile authentication request failed: ", err);
           });
+
+      onegini.mobileAuthentication.on("pin")
+          .onPinRequest(function (actions, request) {
+            console.log("Mobile Authentication PIN request", request);
+
+            navigator.notification.prompt(request.message, function (results) {
+              if (results.buttonIndex === 1) {
+                actions.accept(results.input1);
+              }
+              else {
+                actions.deny();
+              }
+            }, "Mobile Authentication Request", ["Accept", "Reject"], "12346");
+          })
+          .onSuccess(function () {
+            alert("Mobile authentication request success!");
+          })
+          .onError(function (err) {
+            alert("Mobile authentication request failed!");
+            console.error("Mobile authentication request failed: ", err);
+          });
+
+      onegini.mobileAuthentication.on("fingerprint")
+          .onFingerprintRequest(function (actions, request) {
+            console.log("Mobile authentication fingerprint request", request);
+
+            navigator.notification.confirm(request.message, function (buttonIndex) {
+              if (buttonIndex === 1) {
+                actions.accept();
+              }
+              else {
+                actions.deny();
+              }
+            }, "Mobile Authentication Request", ["Accept", "Reject"]);
+          })
+          .onFingerprintCaptured(function () {
+            console.info("Mobile Authentication event: fingerprint captured");
+          })
+          .onFingerprintFailed(function () {
+            console.info("Mobile Authentication event: fingerprint failed");
+          })
+          .onSuccess(function (actions, request) {
+            alert("Mobile authentication request success!");
+          })
+          .onError(function (err) {
+            alert("Mobile authentication request failed!");
+            console.error("Mobile authentication request failed: ", err);
+          })
     },
 
     isRegistered: function () {
@@ -205,7 +256,6 @@ var OneginiDemo = (function () {
       if (!profileId) {
         return;
       }
-      var that = this;
       onegini.user.isUserRegistered(
           {
             profileId: profileId
