@@ -4,7 +4,7 @@ The end-user can authenticate himself using any registered authenticators, for i
 
 <!-- TODO verify correctness, also: in case nr of remaining attempts is available in the successCb we could document that in the example and an additional reason for this two-step approach -->
 
-This two-step approach is necessary since the user may have multiple means of authentication, and you need to show the correct UI. Additionall, the user's profile may have been invalidated serverside, so showing an authentication dialog is not the best next step in that case.
+This two-step approach is necessary since the user may have multiple means of authentication, and you need to show the correct UI. Additional, the user's profile may have been invalidated serverside, so showing an authentication dialog is not the best next step in that case.
 
 ## `onegini.user.authenticate.start`
 
