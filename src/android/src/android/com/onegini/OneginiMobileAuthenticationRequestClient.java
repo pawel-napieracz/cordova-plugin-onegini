@@ -1,5 +1,8 @@
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
@@ -11,6 +14,7 @@ import com.onegini.mobileAuthentication.ConfirmationCallback;
 import com.onegini.mobileAuthentication.FingerprintCallback;
 import com.onegini.mobileAuthentication.PinCallback;
 import com.onegini.util.ActionArgumentsUtil;
+import com.onegini.util.PluginResultBuilder;
 
 public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
 
@@ -61,6 +65,10 @@ public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
     } else if (callback instanceof FingerprintCallback) {
       final FingerprintCallback fingerprintCallback = (FingerprintCallback) callback;
       replyToFingerprintChallenge(fingerprintCallback, shouldAccept);
+    } else {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withPluginError(ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD, ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD)
+          .build());
     }
   }
 

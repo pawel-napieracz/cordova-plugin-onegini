@@ -34,7 +34,9 @@
 - (void)providePin:(CDVInvokedUrlCommand *)command
 {
     if (!self.pinChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoPinChallenge andMessage:OGCDVPluginErrDescriptionNoPinChallenge];
+        [self sendErrorResultForCallbackId:command.callbackId
+                             withErrorCode:OGCDVPluginErrCodeProvidePinNoAuthenticationInProgress
+                                andMessage:OGCDVPluginErrDescriptionProvidePinNoAuthenticationInProgress];
         return;
     }
 

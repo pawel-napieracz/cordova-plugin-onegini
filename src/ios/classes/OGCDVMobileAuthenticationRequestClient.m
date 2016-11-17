@@ -123,6 +123,10 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
         } else if ([OGCDVPluginMobileAuthenticationMethodFingerprint isEqualToString:method]) {
             [delegate mobileAuthenticationRequestClient:self didReceiveFingerprintChallengeResponse:result
                                          withCallbackId:command.callbackId];
+        } else {
+            [self sendErrorResultForCallbackId:command.callbackId
+                                 withErrorCode:OGCDVPluginErrCodeInvalidMobileAuthenticationMethod
+                                    andMessage:OGCDVPluginErrDescriptionInvalidMobileAuthenticationMethod];
         }
     }];
 }
