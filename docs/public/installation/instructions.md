@@ -16,14 +16,7 @@ Example:
 
 The Onegini plugin can be added like any other "Plugman compatible" Cordova plugin. From the root of your project do:
 
-    cordova plugin add <PATH TO THE PLUGIN>
-
-Example:
-
-    cd myapp
-    cordova plugin add ../../cordova-plugin-onegini
-
-## Configuring the plugin
+    cordova plugin add https://github.com/Onegini/cordova-plugin-onegini
 
 ### Installing the SDK's
 TODO

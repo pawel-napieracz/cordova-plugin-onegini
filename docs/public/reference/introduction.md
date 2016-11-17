@@ -12,36 +12,37 @@ This section describes the APIs that are exposed by the Onegini Cordova Plugin.
 
 All API functions accept an optional success callback and error callback function.
 
-If Promises are more your style then you may be happy to learn that all functions can be used as a Promise as well.
+If Promises are more your style then you may be happy to learn that all methods that would only call their success or error callbacks once,
+return a Promise if no success callback is supplied.
 
-For example, if you want to use `start` with callbacks, do:
+For example, say you want to get all the authenticators available for a certain user. With callbacks you might use:
 
 ```js
-onegini.user.authenticate.start(
+onegini.user.authenticators.getAll(
   {
     profileId: "W8DUJ2"
   },
 
   // success callback
-  function () {
-    console.log("The provided profile ID is allowed to authenticate");
+  function (authenticators) {
+    console.log("Authenticators available:", authenticators);
   },
 
   // error callback
   function (err) {
-    console.log("Error: " + err.description);
+    console.log("Something went wrong! Error: " + err.description);
   }
 );
 ```
 
-...or as a Promise, do:
+...or as a Promise, you might use:
 
 ```js
-onegini.user.authenticate.start({
+onegini.user.authenticators.getAll({
     profileId: "W8DUJ2"
 }).then(function () {
-    console.log("The provided profile ID is allowed to authenticate");
-}, function (err) {
-    console.log("Error: " + err.description);
+    console.log("Authenticators available:", authenticators);
+}).catch(function(err) {
+    console.log("Something went wrong! Error: " + err.description);
 });
 ```
