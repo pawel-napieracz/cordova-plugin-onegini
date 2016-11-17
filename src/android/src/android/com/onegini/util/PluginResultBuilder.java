@@ -87,16 +87,6 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder withMobileAuthenticationEvent(final String eventName) {
-    try {
-      payload.put("mobileAuthenticationEvent", eventName);
-    } catch (JSONException e) {
-      handleException(e);
-    }
-
-    return this;
-  }
-
   public PluginResultBuilder withAuthenticationEvent(final String eventName) {
     try {
       payload.put("authenticationEvent", eventName);

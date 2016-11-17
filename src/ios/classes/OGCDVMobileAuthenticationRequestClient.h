@@ -6,11 +6,13 @@
 @interface OGCDVMobileAuthenticationRequestClient : CDVPlugin<ONGMobileAuthenticationRequestDelegate> {
     NSOperationQueue *operationQueue;
     NSMutableDictionary *challengeReceiversCallbackIds;
+    NSDictionary *authenticationEventsForMethods;
     id delegate;
 }
 
 @property (nonatomic, retain) NSOperationQueue *operationQueue;
 @property (nonatomic, retain) NSMutableDictionary *challengeReceiversCallbackIds;
+@property (nonatomic, retain) NSDictionary *authenticationEventsForMethods;
 
 + (id)sharedInstance;
 - (void)setDelegate:(id)newDelegate;

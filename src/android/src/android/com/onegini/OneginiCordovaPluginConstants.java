@@ -25,9 +25,6 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = "Onegini: createPin called, but no registration in progress.";
   String ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS = "Onegini: providePin called, but no pin authentication in progress.";
   String ERROR_DESCRIPTION_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS = "Onegini: received reply for fingerprint authentication, but no fingerprint authentication in progress.";
-  String ERROR_DESCRIPTION_NO_CONFIRMATION_CHALLENGE = "Onegini: Cannot reply to confirmation challenge, no challenge open";
-  String ERROR_DESCRIPTION_NO_PIN_CHALLENGE = "Onegini: Cannot reply to pin challenge, no challenge open";
-  String ERROR_DESCRIPTION_NO_FINGERPRINT_CHALLENGE = "Onegini: Cannot reply to fingerprint challenge, no challenge open";
   String ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD = "Onegini: Invalid mobile authentication method";
   String ERROR_DESCRIPTION_INCORRECT_PIN = "Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
 
@@ -43,15 +40,13 @@ public interface OneginiCordovaPluginConstants {
   int ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = 8007;
   int ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS = 8008;
   int ERROR_CODE_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS = 8009;
-  int ERROR_CODE_NO_CONFIRMATION_CHALLENGE = 8010;
-  int ERROR_CODE_NO_PIN_CHALLENGE = 8011;
-  int ERROR_CODE_NO_FINGERPRINT_CHALLENGE = 8012;
-  int ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD = 8013;
-  int ERROR_CODE_IO_EXCEPTION = 8014;
-  int ERROR_CODE_INCORRECT_PIN = 8015;
+  int ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD = 8010;
+  int ERROR_CODE_IO_EXCEPTION = 8011;
+  int ERROR_CODE_INCORRECT_PIN = 8012;
 
   // Authentication methods
   String AUTH_EVENT_SUCCESS = "onSuccess";
+  String AUTH_EVENT_CONFIRMATION_REQUEST = "onConfirmationRequest";
   String AUTH_EVENT_PIN_REQUEST = "onPinRequest";
   String AUTH_EVENT_CREATE_PIN_REQUEST = "onCreatePinRequest";
   String AUTH_EVENT_FINGERPRINT_REQUEST = "onFingerprintRequest";
