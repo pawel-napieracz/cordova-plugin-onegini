@@ -6,8 +6,8 @@ The Fingerprint authenticator is only available on devices with a fingerprint se
 
 ## `onegini.user.authenticators.getAll`
 
-Used to get an array of authenticators available for a specific user.
-Requires an object with a `profileId`:
+- Used to get an array of authenticators available for a specific user.
+- Requires an object containing a `profileId`.
 
 | Property | Example | Description |
 | --- | --- | --- |
@@ -46,7 +46,8 @@ The error callback contains an object with these properties:
 
 ## `onegini.user.authenticators.getNotRegistered`
 
-Used to get an array of authenticators that are _not currently registered_ for a specific user.
+- Used to get an array of authenticators that are _not currently registered_ for a specific user.
+- Requires an object containing a `profileId`:
 
 | Property | Example | Description |
 | --- | --- | --- |
