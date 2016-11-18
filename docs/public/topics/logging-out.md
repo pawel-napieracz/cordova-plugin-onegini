@@ -9,11 +9,13 @@ In the Onegini Cordova plugin, a user is treated as logged in as long as the use
 **Example code to logout a user:**
 
 ```js
-onegini.user.logout().then(function () {
-  alert("User logged out!");
-}, function (err) {
-  alert("Logout error!\n\n" + err.description);
-});
+onegini.user.logout()
+  .then(() => {
+    alert("User logged out!");
+  })
+  .catch((err) => {
+    alert("Logout error!" + err);
+  });
 ```
 
 If a refresh token is stored on the device, it will persist after the logout action. It can then be used to login again later.
