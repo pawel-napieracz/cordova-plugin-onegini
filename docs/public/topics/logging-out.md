@@ -14,7 +14,7 @@ onegini.user.logout()
     alert("User logged out!");
   })
   .catch((err) => {
-    alert("Logout error!" + err);
+    alert("Logout error!\n\n" + err.description);
   });
 ```
 
