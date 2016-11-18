@@ -14,19 +14,20 @@ It should be noted that there are significant differences between Fingerprint on
 
 In order to enable fingerprint authentication for a user, the Onegini Cordova plugin provides the [`onegini.user.authenticators.registerNew`](../reference/user/registerNew.md). This function requires the user to authenticate. As a result, it is necessary to implement the UI associated with the `onPinRequest` method, in addition to the `onSuccess` and `onError` methods.
 
-**Example code for registering the fingerprint authenticator**
+**Example code for registering the fingerprint authenticator:**
 
 ```js
-onegini.user.authenticators.registerNew({
-  authenticatorType: "Fingerprint"
-}).onPinRequest(function (actions, options) {
-  var pin = prompt("Please enter your PIN");
-  actions.providePin(pin);
-}).onSuccess(function () {
-  alert("Success!");
-}).onError(function (err) {
-  alert("Error!\n\n" + err.description);
-});
+onegini.user.authenticators.registerNew({ authenticatorType: "Fingerprint" })
+    .onPinRequest((actions, options) => {
+      var pin = prompt("Please enter your PIN");
+      actions.providePin(pin);
+    })
+    .onSuccess(() => {
+      alert("Success!");
+    })
+    .onError((err) => {
+      alert("Error!\n\n" + err.description);
+    });
 ```
 
 Fingerprint authentication may not be available on every device. In this case, or if the authenticator has already been registered, the above method will return an error.
@@ -35,18 +36,41 @@ To request a list of available authenticators that have not yet been registered,
 
 Note that registering a new authenticator does not set it as the preferred authenticator for the user, which is PIN by default. To change this, [`onegini.user.authenticators.setPreferred`](../reference/user/setPreferredAuthenticator.md) can be used.
 
-**Example code to set fingerprint as the preferred authenticator**
+**Example code to set fingerprint as the preferred authenticator:**
 
-```
-onegini.user.authenticators.setPreferred({
-  authenticatorType: "Fingerprint"
-}).then(function () {
-  alert("Fingerprint set as preferred authenticator!");
-}, function(err) {
-  alert("Error!\n\n" + err.description);
-});
+```js
+onegini.user.authenticators.setPreferred({ authenticatorType: "Fingerprint" })
+    .then(() => {
+      alert("Fingerprint set as preferred authenticator!");
+    })
+    .catch((err) => {
+      alert("Error!\n\n" + err.description);
+    });
 ```
 
 ## Authenticating with fingerprint
 
 Once the fingerprint authenticator has been registered and set as the preferred authententicator, the user is able to authenticate using fingerprint. The method to do so is the same as for PIN, the [`onegini.user.authenticate`](../reference/user/authenticate.md) method.
+
+However, if fingerprint authentication is a possibility for the user, additional handler methods must be implemented, in addition to the PIN specific methods (which are necessary in case of fallback to PIN).
+
+**Example code to log in a user with fingerprint:**
+
+```js
+onegini.user.authenticate({ profileId: "profileIdOfUser" })
+    .onPinRequest((actions, options) => {
+      var pin = prompt("Please enter your PIN");
+      actions.providePin(pin);
+    })
+    .onFingerprintRequest((actions) => {
+      alert("Accepting fingerprint authentication request");
+      actions.acceptFingerprint({ iosPrompt: "Log in to Cordova Example App" });
+    })
+    .onFingerprintCaptured(() => {
+      alert("Fingerprint captured!");
+    })
+    .onFingerprintFailed(() => {
+      alert("Incorrect fingerprint! Please try again.");
+    })
+    .onSuccess(()
+```

@@ -17,16 +17,17 @@ The `onegini.user.register` function returns an `AuthenticationHandler` object, 
 **Example code to register a user:**
 
 ```js
-onegini.user.register({
-  scopes: ["read"]
-}).onCreatePinRequest(function (actions, options) {
-  var pin = prompt("Create your " + options.pinLength + "digit pin");
-  actions.createPin(pin);
-}).onSuccess(function (result) {
-  alert("Registration success! Profile ID: " + result.profileId);
-}).onError(function (err) {
-  alert("Registration error!\n\n" + err.description);
-});
+onegini.user.register({ scopes: ["read"] })
+    .onCreatePinRequest((actions, options) => {
+      var pin = prompt("Create your " + options.pinLength + "digit pin");
+      actions.createPin(pin);
+    })
+    .onSuccess((result) => {
+      alert("Registration success! Profile ID: " + result.profileId);
+    })
+    .onError((err) => {
+      alert("Registration error!\n\n" + err.description);
+    });
 ```
 
 The `onSuccess` method indicates the user has been registered and also logged in. The `profileId` property of the resulting object can be stored for future use.
@@ -40,15 +41,17 @@ While it is possible to keep track of registered users oneself, the Onegini Cord
 **Example code to get registered users:**
 
 ```js
-onegini.user.getUserProfiles().then(function (result) {
-  if (result.length > 0) {
-    alert("Found some registered users!");
-  } else {
-    alert("No registered users found.");
-  }
-}, function (err) {
-  alert("Get profiles error!\n\n" + err.description);
-});
+onegini.user.getUserProfiles()
+  .then((result) => {
+    if (result.length > 0) {
+      alert("Found some registered users!");
+    } else {
+      alert("No registered users found.");
+    }
+  })
+  .catch((err) => {
+    alert("Get profiles error!\n\n" + err.description);
+  });
 ```
 
 It is also possible to check if a specific profile ID is registered. See [`onegini.user.isUserRegistered`](../reference/user/isUserRegistered.md).
@@ -60,16 +63,17 @@ Once a user has been registered, they can be logged in using the [`onegini.user.
 **Example code to log in a user:**
 
 ```js
-onegini.user.authenticate({
-  profileId: "stored profile ID"
-}).onPinRequest(function (actions, options) {
-  var pin = prompt("Please enter your PIN");
-  actions.providePin(pin);
-}).onSuccess(function () {
-  alert("Authentication success!");
-}).onError(function (err) {
-  alert("Authentication error!\n\n" + err.description);
-});
+onegini.user.authenticate({ profileId: "profileIdOfUser" })
+    .onPinRequest((actions, options) => {
+      var pin = prompt("Please enter your PIN");
+      actions.providePin(pin);
+    })
+    .onSuccess(() => {
+      alert("Authentication success!");
+    })
+    .onError((err) => {
+      alert("Authentication error!\n\n" + err.description);
+    });
 ```
 
 The result of authentication is an access token with an optional refresh token, depending on the scopes. The `onSuccess` method indicates the user has been authenticated. At this point, it is possible to request data on behalf of the user.
