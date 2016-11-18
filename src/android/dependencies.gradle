@@ -1,5 +1,5 @@
 ext {
-  ONEGINI_SDK = 'com.onegini.mobile.sdk.android:library:5.03.03:release@aar'
+  ONEGINI_SDK = 'com.onegini.mobile.sdk.android:library:5.04.01:release@aar'
   ONEGINI_OCRA = 'com.onegini.misc:og-ocra:100.00.00'
   OK_HTTP = [
       'com.squareup.okhttp:okhttp:2.3.0',
