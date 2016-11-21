@@ -35,7 +35,7 @@ The success callback contains an _array of objects_ with these properties:
 | Property | Example | Description |
 | --- | --- | --- |
 | `authenticatorType` | "PIN" | The authenticator type
-| `authenticatorId` | "PIN" | The authenticator ID, which distinguishes between authenticators of type "Custom"
+| `authenticatorId` | "PIN" | The authenticator ID, which distinguishes between authenticators of type "Custom". (Only required for custom authenticators)
 
 The error callback contains an object with these properties:
 
@@ -54,7 +54,7 @@ The error callback contains an object with these properties:
 | `profileID` | "W8DUJ2" | The profile ID as received from `onegini.user.register`
 
 ```js
-onegini.user.authenticators.getAll(
+onegini.user.authenticators.getNotRegistered(
   {
     profileId: "W8DUJ2"
   })
@@ -75,7 +75,133 @@ The success callback contains an _array of objects_ with these properties:
 | Property | Example | Description |
 | --- | --- | --- |
 | `authenticatorType` | "PIN" | The authenticator type
-| `authenticatorId` | "PIN" | The authenticator ID, which distinguishes between authenticators of type "Custom"
+| `authenticatorId` | "PIN" | The authenticator ID, which distinguishes between authenticators of type "Custom". (Only required for custom authenticators)
+
+The error callback contains an object with these properties:
+
+| Property | Example | Description |
+| --- | --- | --- |
+| `code` | 8003 | The error code
+| `description` | "Onegini: No registered user found." | Human readable error description
+
+## `onegini.user.authenticators.getPreferred`
+
+- Used to get the preferred authenticator for the currently authenticated user.
+- Does not require any arguments.
+
+```js
+onegini.user.authenticators.getPreferred()
+  .then(function(authenticator) {
+    console.log("Prefered authenticator:", authenticator);
+  })
+  .catch(function(err) {
+    if (err.code === 8003) {
+      console.log("That user does not exist!");
+    } else {
+      console.log("Something went wrong! Error:", err);
+    }
+  });
+```
+
+The success callback contains an object with these properties:
+
+| Property | Example | Description |
+| --- | --- | --- |
+| `authenticatorType` | "PIN" | The authenticator type
+| `authenticatorId` | "PIN" | The authenticator ID, which distinguishes between authenticators of type "Custom". (Only required for custom authenticators)
+
+The error callback contains an object with these properties:
+
+| Property | Example | Description |
+| --- | --- | --- |
+| `code` | 8003 | The error code
+| `description` | "Onegini: No registered user found." | Human readable error description
+
+## `onegini.user.authenticators.setPreffered`
+
+- Used to set the preferred authenticator for the currently authenticated user.
+- Requires an argument with an `authenticatorType`:
+
+| Property | Example | Description |
+| --- | --- | --- |
+| `authenticatorType` | "PIN" | The authenticator type
+| `authenticatorId` | "PIN" | The authenticator ID, which distinguishes between authenticators of type "Custom". (Only required for custom authenticators)
+
+```js
+onegini.user.authenticators.setPreferred({
+    authenticatorType: "PIN"
+  })
+  .then(() => {
+    console.log("New authenticator set!");
+  })
+  .catch((err) => {
+    console.log("Something went wrong! Error:", err);
+  });
+```
+
+The error callback contains an object with these properties:
+
+| Property | Example | Description |
+| --- | --- | --- |
+| `code` | 8003 | The error code
+| `description` | "Onegini: No registered user found." | Human readable error description
+
+## `onegini.user.authenticators.registerNew`
+
+- Used to register a new authenticator for the currently authenticated user.
+- Return a new [AuthenticationHandler](AuthenticaionHandler.md)
+- Requires an argument with an `authenticatorType`:
+
+
+| Property | Example | Description |
+| --- | --- | --- |
+| `authenticatorType` | "PIN" | The authenticator type
+| `authenticatorId` | "PIN" | The authenticator ID, which distinguishes between authenticators of type "Custom". (Only required for custom authenticators)
+
+```js
+onegini.user.authenticators.registerNew({
+    authenticatorType: "Fingerprint"
+  })
+  .onPinRequest((actions) => {
+    var pin = prompt("Please enter your PIN code");
+    actions.providePin(pin);
+  })
+  .onSuccess(() => {
+    console.log("Authenticator registered!")
+  })
+  .onError((err) => {
+    console.log("Failed to register authenticator!", err)
+  });
+```
+
+The error callback contains an object with these properties:
+
+| Property | Example | Description |
+| --- | --- | --- |
+| `code` | 8003 | The error code
+| `description` | "Onegini: No registered user found." | Human readable error description
+
+## `onegini.user.authenticators.deregister`
+
+- Used to deregister an authenticator for the currently authenticated user.
+- Requires an argument with an `authenticatorType`:
+
+| Property | Example | Description |
+| --- | --- | --- |
+| `authenticatorType` | "Fingerprint" | The authenticator type
+| `authenticatorId` | "Fingerprint" | The authenticator ID, which distinguishes between authenticators of type "Custom". (Only required for custom authenticators)
+
+```js
+onegini.user.authenticators.deregister({
+    authenticatorType: "Fingerprint"
+  })
+  .then(() => {
+    console.log("Authenticator deregistered!");
+  })
+  .catch((err) => {
+    console.log("Failed to deregister authenticator!", err);
+  });
+```
 
 The error callback contains an object with these properties:
 
