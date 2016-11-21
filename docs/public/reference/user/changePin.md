@@ -1,73 +1,27 @@
-# Change Pin
+# changePin
 
-Once authenticated, a user is able to change his PIN code.
+Once authenticated, a user is able to change his PIN code. Changing a users PinCode is done through an [AuthenticationHandler](AuthenticationHandler.md)
 
-It is recommended to implement this process in two steps: first request and validate the currently configured PIN, then request and validate the new PIN. To accomodate this the plugin provides the two following functions.
+## `onegini.user.changePin`
 
-## `onegini.user.changePin.start`
-
-This function takes a mandatory first argument with the following properties:
-
-| Property | Default | Description |
-| --- | --- | --- |
-| `pin` | - | The currently configured PIN
+This functions takes no arguments, it uses the currently authenticated user.
+After calling this method. You have to supply an `onPinRequest` and `onCreatePinRequest` callback. These callbacks will be verify the current pin and create a new pin.
+If the flow fails completely the (e.g user is deregistered because as a result of exceeding the maximum allowed pin entries) the `onError` callback will be called with an error object.
 
 ```js
-onegini.user.changePin.start(
-  {
-    pin: "28649"
-  },
-
-  // success callback
-  function () {
-    console.log("The current Pin was correctly entered");
-  },
-
-  // error callback
-  function (err) {
-    console.log("Error: " + err.description);
-  }
-);
+onegini.user.changePin()
+  .onPinRequest((actions, options) => {
+    var pin = prompt("Please enter your pin");
+    actions.providePin(pin);
+  })
+  .onCreatePinRequest((actions) => {
+    var pin = prompt("Enter your new pin");
+    actions.createPin(pin);
+  })
+  .onSuccess(() => {
+    alert('Change pin success!');
+  })
+  .onError((err) => {
+    alert('Change pin Error!\n\n' + err.description)
+  });
 ```
-
-The error callback contains an object with these properties:
-
-| Property | Example | Description |
-| --- | --- | --- |
-| `code` | 9001 | The error code
-| `description` | "Invalid Pin" | Human readable error description
-| `maxFailureCount ` | 3 | The maximum amount of consecutive Pin failures
-| `remainingFailureCount ` | 1 | The amount of remaining Pin failures
-
-## `onegini.user.changePin.createPin`
-
-After the success callback of `onegini.user.changePin.start ` has been invoked and a Pin code is required, ask the user the Pin he wants to configure. Once done send this Pin to this function: 
-
-| Property | Default | Description |
-| --- | --- | --- |
-| `pin` | - | The new Pin the user wants to configure
-
-```js
-onegini.user.changePin.createPin(
-  {
-    pin: "93621"
-  },
-
-  // success callback
-  function () {
-    console.log("Pin successfully changed");
-  },
-
-  // error callback
-  function (err) {
-    console.log("Error: " + err.description);
-  }
-);
-```
-
-The error callback contains an object with these properties:
-
-| Property | Example | Description |
-| --- | --- | --- |
-| `code` | 9001 | The error code
-| `description` | "Invalid Pin" | Human readable error description
