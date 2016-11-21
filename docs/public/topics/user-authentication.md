@@ -1,4 +1,4 @@
-# Authenticate user
+# User authentication
 
 <!-- toc -->
 

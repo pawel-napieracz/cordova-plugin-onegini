@@ -1,4 +1,4 @@
-# Authenticate user with fingerprint
+# User authentication with fingerprint
 
 <!-- toc -->
 
@@ -67,7 +67,7 @@ onegini.user.authenticate({ profileId: "profileIdOfUser" })
       actions.acceptFingerprint({ iosPrompt: "Log in to Cordova Example App" });
     })
     .onFingerprintCaptured(() => {
-      alert("Fingerprint captured! Waiting for authentication.");
+      alert("Fingerprint captured! Waiting for verification.");
     })
     .onFingerprintFailed(() => {
       alert("Incorrect fingerprint! Please try again.");

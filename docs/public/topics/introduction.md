@@ -4,4 +4,12 @@ The topic guides describe key components and concepts at a fairly high level, an
 
 Currently we have the following topic guides:
 
-* [Getting started with the Cordova Plugin](getting-started.md)
+* [Getting started](getting-started.md)
+* [User authentication](user-authentication.md)
+* [User authentication with fingerprint](user-authentication-with-fingerprint.md)
+* [Change PIN](change-pin.md)
+* [Logging out](logging-out.md)
+* [Deregister user](deregister-used.md)
+* [Mobile authentication](mobile-authentication.md)
+* [Secure resource access](secure-resource-access.md)
+* [Error handling](error-handling.md)
