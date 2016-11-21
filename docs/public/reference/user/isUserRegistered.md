@@ -11,20 +11,22 @@ This function takes a mandatory first argument with the following properties:
 | `profileId` | - | A profile ID you want to check
 
 ```js
-onegini.user.isUserRegistered(
-  {
+onegini.user.isUserRegistered({
     profileId: "W8DUJ2"
-  },
-
-  // success callback
-  function (registered) {
-    console.log(registered ? "Yes" : "No");
-  },
-
-  // error callback
-  function (err) {
-    console.log("Error: " + err.description);
-  }
+  })
+  .then((isRegistered) => {
+    if (isRegistered) {
+      // The userProfile is already registered.
+      console.log("That userProfile is registered!");
+    } else {
+      // The userProfile is not yet registered.
+      // Use oneigni.user.register to register a userProfile.
+      console.log("That user is not registered.");
+    }
+  })
+  .catch((err) => {
+    console.log("Something went wrong!", err);
+  });
 );
 ```
 
