@@ -48,11 +48,11 @@ onegini.user.authenticators.setPreferred({ authenticatorType: "Fingerprint" })
     });
 ```
 
-## Authenticating with fingerprint
+## Authenticating a user with fingerprint
 
 Once the fingerprint authenticator has been registered and set as the preferred authententicator, the user is able to authenticate using fingerprint. The method to do so is the same as for PIN, the [`onegini.user.authenticate`](../reference/user/authenticate.md) method.
 
-However, if fingerprint authentication is a possibility for the user, additional handler methods must be implemented, in addition to the PIN specific methods (which are necessary in case of fallback to PIN).
+However, if fingerprint authentication is a possibility for the user, extra handler methods must be implemented. This is in addition to the PIN specific methods (which are necessary in case of fallback to PIN).
 
 **Example code to log in a user with fingerprint:**
 
@@ -67,10 +67,19 @@ onegini.user.authenticate({ profileId: "profileIdOfUser" })
       actions.acceptFingerprint({ iosPrompt: "Log in to Cordova Example App" });
     })
     .onFingerprintCaptured(() => {
-      alert("Fingerprint captured!");
+      alert("Fingerprint captured! Waiting for authentication.");
     })
     .onFingerprintFailed(() => {
       alert("Incorrect fingerprint! Please try again.");
     })
-    .onSuccess(()
+    .onSuccess(() => {
+      alert("Authentication success!");
+    })
+    .onError(() => {
+      alert("Authentication error!\n\n" + err.description);
+    });
 ```
+
+Note that `onFingerprintCaptured` and `onFingerprintFailed` will only be called on Android, as Touch ID on iOS is much more restrictive.
+
+If the user fails to authenticate using fingerprint too many times (this limit is set by the OS), the fingerprint authenticator is automatically deregistered and the relevant tokens are revoked by the Onegini Cordova plugin. At this point, a fallback to PIN is performed, and the user is request to enter their PIN via `onPinRequest`. If this too, fails, `onError` will be called, signalling the authentication has failed.

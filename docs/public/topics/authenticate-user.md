@@ -1,4 +1,4 @@
-# Authenticate user with PIN
+# Authenticate user
 
 <!-- toc -->
 
@@ -6,7 +6,7 @@
 
 The Onegini Cordova plugin uses the OAuth 2.0 protocol to authenticate the device to access protected resources. To support this, the Onegini Cordova plugin acts as an OAuth 2.0 client.
 
-## Register user
+## Registering a user
 
 The OAuth 2.0 protocol begins with registration. The [`onegini.user.register`](../reference/user/register.md) function can be used to register a user. This function can take an array of scopes that authentication is requested for as argument. If no scopes are requested, the default scopes of the application will be used.
 
@@ -19,7 +19,7 @@ The `onegini.user.register` function returns an `AuthenticationHandler` object, 
 ```js
 onegini.user.register({ scopes: ["read"] })
     .onCreatePinRequest((actions, options) => {
-      var pin = prompt("Create your " + options.pinLength + "digit pin");
+      var pin = prompt("Create your " + options.pinLength + "digit PIN");
       actions.createPin(pin);
     })
     .onSuccess((result) => {
@@ -56,7 +56,7 @@ onegini.user.getUserProfiles()
 
 It is also possible to check if a specific profile ID is registered. See [`onegini.user.isUserRegistered`](../reference/user/isUserRegistered.md).
 
-## Authenticate registered user
+## Authenticating a registered user
 
 Once a user has been registered, they can be logged in using the [`onegini.user.authenticate`](../reference/user/authenticate.md) function. This function takes the `profileId` of the user wishing to log in as argument.
 
@@ -77,3 +77,5 @@ onegini.user.authenticate({ profileId: "profileIdOfUser" })
 ```
 
 The result of authentication is an access token with an optional refresh token, depending on the scopes. The `onSuccess` method indicates the user has been authenticated. At this point, it is possible to request data on behalf of the user.
+
+If the authentication fails, the refresh token is removed from the device.
