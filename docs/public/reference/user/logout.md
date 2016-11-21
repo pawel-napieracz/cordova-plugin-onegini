@@ -7,17 +7,13 @@ For security reasons it is always a good idea to explicitly logout a user. You c
 - Logs out the currently authenticated user.
 
 ```js
-onegini.user.logout(
-  // success callback
-  function () {
+onegini.user.logout()
+  .then(() => {
     console.log("Logout successful");
-  },
-
-  // error callback
-  function (err) {
-    console.log("Error: " + err.description);
-  }
-);
+  })
+  .catch((err) => {
+    console.log("Something went wrong! " + err.description);
+  });
 ```
 
 The error callback contains an object with the following properties.

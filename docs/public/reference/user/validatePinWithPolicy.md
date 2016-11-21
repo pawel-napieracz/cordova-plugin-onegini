@@ -24,8 +24,6 @@ onegini.user.validatePinWithPolicy(
   .catch((err) => {
     console.log("This PIN is invalid. Error:", err);
   });
-  }
-);
 ```
 
 The error callback contains an object with these properties:
