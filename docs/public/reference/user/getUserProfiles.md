@@ -1,24 +1,17 @@
 # Get User Profiles
 
-A user may have multiple profiles. This function offers a way to retrieve them:
+- Used to get an _array_ of all existing userProfiles.
 
 ## `onegini.user.getUserProfiles`
 
 ```js
-onegini.user.getUserProfiles(
-  // success callback
-  function (result) {
-    for (var r in result) {
-      var profile = result[r];
-      console.log("Profile: " + profile.profileId);
-    }
-  },
-
-  // error callback
-  function (err) {
-    console.log("Error: " + err.description);
-  }
-);
+onegini.user.getUserProfiles()
+  .then((userProfiles) => {
+    console.log("User profiles registered: ", userProfiles);
+  })
+  .catch((err) => {
+    console.log("Something went wrong!", err)
+  });
 ```
 
 The success callback contains an _Array of objects_ with these properties:

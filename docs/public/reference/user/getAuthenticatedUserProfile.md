@@ -1,21 +1,17 @@
 # Get Authenticated User Profile
 
-A user may have multiple profiles. This function offers check if, and which one is currently authenticated:
+This method returns the currently authenticated User Profile. The method fails when no user is authenticated 
 
 ## `onegini.user.getAuthenticatedUserProfile`
 
 ```js
-onegini.user.getAuthenticatedUserProfile(
-  // success callback
-  function (result) {
-    console.log("Profile: " + result.profileId);
-  },
-
-  // error callback
-  function (err) {
-    console.log("No authenticated user found. Description: " + err.description);
-  }
-);
+onegini.user.getAuthenticatedUserProfile()
+  .then((userProfile) => {
+    console.log("Authenticated userProfile:", userProfile);
+  })
+  .catch(() => {
+    console.log("No user authenticated");
+  })
 ```
 
 The success callback contains an object with these properties:
