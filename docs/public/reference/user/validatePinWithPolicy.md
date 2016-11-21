@@ -1,10 +1,11 @@
 # Validate Pin with Policy
 
 At any moment in the app's lifecycle you can check whether or not a certain Pin code meets the policy you've configured server side.
+A Pin Policy can be used to ensure your users can not register with an unsecure PIN.
 
 ## `onegini.user.validatePinWithPolicy`
 
-This function takes a mandatory first argument with the following properties:
+- Requires an object with a `pin` property:
 
 | Property | Default | Description |
 | --- | --- | --- |
@@ -16,17 +17,13 @@ The success callback will be invoked if the Pin is valid according to the policy
 onegini.user.validatePinWithPolicy(
   {
     pin: "28649"
-  },
-  
-  // success callback
-  function () {
-    console.log("The Pin is OK");
-  },
-  
-  // error callback
-  function (err) {
-    // the Pin is invalid
-    console.log("Error: " + err.description);
+  })
+  .then(() => {
+    console.log("The PIN is OK");
+  })
+  .catch((err) => {
+    console.log("This PIN is invalid. Error:", err);
+  });
   }
 );
 ```
@@ -35,5 +32,5 @@ The error callback contains an object with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
-| `code` | 9001 | The error code
-| `description` | "Invalid Pin" | Human readable error description
+| `code` | 9011 | The error code
+| `description` | "Provided PIN was marked as blacklisted on the Token Server." | Human readable error description

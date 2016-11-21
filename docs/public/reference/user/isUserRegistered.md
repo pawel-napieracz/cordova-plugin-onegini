@@ -1,10 +1,10 @@
 # Is User Registered
 
-You can check at any time if a certain profile ID has been registered by using this function:
+You can check at any time if a certain profile ID has been registered by using this method:
 
 ## `onegini.user.isUserRegistered`
 
-This function takes a mandatory first argument with the following properties:
+- Requires an object with a `profileId`:
 
 | Property | Default | Description |
 | --- | --- | --- |

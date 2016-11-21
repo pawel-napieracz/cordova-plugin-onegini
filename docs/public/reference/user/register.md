@@ -1,81 +1,32 @@
 # Registration
 
-Registering a user is a two-step process: first the user needs to perform OAuth authorization, then he needs to configure a PIN. These steps are reflected by the plugin API. Just take the steps in this order:
+Before a user can authenticate using PIN or Fingerprint, a user will have to register with your Token Server. Registration can be initiated with this method.
 
-## `onegini.user.register.start`
+## `onegini.user.register`
 
-This function takes an optional first argument with the following properties:
-
-| Property | Default | Description |
-| --- | --- | --- |
-| `scopes` | server configuration | An array of scopes the user will register for
-
-```js
-onegini.user.register.start(
-  {
-    scopes: ["read"]
-  },
-
-  // success callback
-  function (result) {
-    console.log("Required PIN length: " + result.pinLength);
-  },
-  
-  // error callback
-  function (err) {
-    console.log("Error: " + err.description);
-  }
-);
-```
-
-The success callback contains an object with these properties:
-
-| Property | Example | Description |
-| --- | --- | --- |
-| `pinLength` | 5 | The required PIN length that's configured on the server
-
-The error callback contains an object with these properties:
-
-| Property | Example | Description |
-| --- | --- | --- |
-| `code` | 9001 | The error code
-| `description` | "Invalid Pin" | Human readable error description
-
-## `onegini.user.register.createPin`
-
-The success callback of `onegini.user.register.start` will provide you with the PIN length. Use this information to ask the user the PIN code he wants to configure. Once done send the PIN to this function, which takes a mandatory first argument with the following properties:
+- Returns a new `AuthenticationHandler`.
+- Takes an optional object with a `scopes` property:
 
 | Property | Default | Description |
 | --- | --- | --- |
-| `pin` | - | The Pin the user wants to register himself with
+| `scopes` | server configuration | An array of scopes the user will register for (optional)
 
 ```js
-onegini.user.register.createPin(
-  {
-    pin: "28649"
-  },
-  
-  // success callback
-  function (result) {
-    console.log("Created Profile Id: " + profileId);
-  },
-  
-  // error callback
-  function (err) {
-    console.log("Error: " + err.description);
-  }
-);
+onegini.user.register()
+  .onCreatePinRequest(function (actions, options) {
+    var pin = prompt("Create your " + options.pinLength + " digit PIN");
+    actions.createPin(pin);
+  })
+  .onSuccess(function () {
+    alert('Registration success!');
+  })
+  .onError(function (err) {
+    alert('Registration error!\n\n' + err.description)
+  });
 ```
 
-The success callback returns an object with these properties:
+The success callback contains an _Array of objects_ with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
-| `profileId` | W8DUJ2 | The profile ID identifying the registered user
-
-The error callback contains an object with these properties:
-
-| Property | Example | Description |
-| --- | --- | --- |
-| `code` | 9001 | The error code
-| `description` | "Invalid Pin" | Human readable error description
+| `profileId` | "W8DUJ2" | A Profile Id associated with the user

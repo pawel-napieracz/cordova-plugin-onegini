@@ -1,8 +1,10 @@
 # Get User Profiles
 
-- Used to get an _array_ of all existing userProfiles.
+The Onegini SDK keeps a set of profiles that you have created in the SDK. This method allows you to receive all existing profiles.
 
 ## `onegini.user.getUserProfiles`
+
+- Used to get an _array_ of all existing userProfiles.
 
 ```js
 onegini.user.getUserProfiles()
