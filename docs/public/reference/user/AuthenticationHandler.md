@@ -5,7 +5,7 @@
 When a user is required to Authenticate for certain methods, the Onegini Cordova Plugin will return an `AuthenticationHandler`.
 This object can be used to register callbacks which will be called when certain authentication steps are required.
 
-Example: when a users PIN code is required, the `onPinRequest` callback will be called.
+Example: when a user's PIN is required, the `onPinRequest` callback will be called.
 ```js
 let handler = onegini.user.authenticate({
   profileId: "W8DUJ2"
@@ -29,7 +29,7 @@ handler.onPinRequest((actions, options) => {
 
 If the PIN entered is incorrect the `onPinRequest` handler will be called with a new request.
 The `options` parameters contains additional parameters like max allowed entry attempts and remaining attempts.
-If the PIN code is correct, the `onSuccess` handler will be called.
+If the PIN is correct, the `onSuccess` handler will be called.
 
 ```js
 handler.onSuccess(() => {
@@ -92,16 +92,37 @@ This method can be used to provide feedback to your users so they are aware the 
 
 Note: this method is never called on iOS. TouchID on iOS uses it's own native UI to provide feedback to users.
 
+```js
+handler.onFingerprintCaptured(() => {
+  console.log("Fingerprint captured");
+});
+```
 ### `onFingerprintFailed`
 
 This method is called when the fingerprint previously detected was not recognized as the correct fingerprint.
 This method can be used to provide feedback to your users so the are aware the device did not recognize their fingerprint.
+```js
+handler.onFingerprintCaptured(() => {
+  console.log("Fingerprint incorrect!");
+});
+```
 
 ### `onSuccess`
-
 This method is called when the user has been successfully authenticated. You now perform actions that require authentication.
+
+```js
+handler.onSuccess(() => {
+  console.log("You have been successfully authenticated!");
+});
+```
 
 ### `onError`
 
 This method is called when the authentication has failed.
 The failure can be due to several errors like failed to connect to network or when the user has exceeded the maximum attempts at entering a PIN and has been deregistered.
+
+```js
+handler.onError((err) => {
+  console.log("Something went wrong while trying to authenticate! ", err);
+})
+```
