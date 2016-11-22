@@ -149,7 +149,7 @@ The error callback contains an object with these properties:
 ## `onegini.user.authenticators.registerNew`
 
 - Used to register a new authenticator for the currently authenticated user.
-- Return a new [AuthenticationHandler](AuthenticaionHandler.md)
+- Return a new [AuthenticationHandler](AuthenticationHandler.md)
 - Requires an argument with an `authenticatorType`:
 
 

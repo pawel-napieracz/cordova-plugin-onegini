@@ -2,6 +2,7 @@
 
 This section describes the API's that are available on the global `onegini.user` object.
 
+* [AuthenticationHandler](AuthenticationHandler.md)
 * [authenticate](authenticate.md)
 * [authenticators](authenticators.md)
 * [changePin](changePin.md)
@@ -13,6 +14,3 @@ This section describes the API's that are available on the global `onegini.user`
 * [reauthenticate](reauthenticate.md)
 * [register](register.md)
 * [validatePinWithPolicy](validatePinWithPolicy.md)
-
-TODO:
-  * Mobile auth-related functions
