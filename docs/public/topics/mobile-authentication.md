@@ -40,6 +40,8 @@ To handle a push mobile authentication request, the handler returned by [`onegin
 
 **Example code to handle push mobile authentication requests:**
 
+TODO: change confirm prompt or show how to add relevant plugin
+
 ```js
 onegini.mobileAuthentication.on("confirmation")
     .onConfirmationRequest((actions, request) => {

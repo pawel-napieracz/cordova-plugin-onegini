@@ -1,6 +1,6 @@
 # User API Reference
 
-This section describes the API's that are available on the global `onegini.user` object.
+This section describes the APIs that are available on the global `onegini.user` object.
 
 * [AuthenticationHandler](AuthenticationHandler.md)
 * [authenticate](authenticate.md)

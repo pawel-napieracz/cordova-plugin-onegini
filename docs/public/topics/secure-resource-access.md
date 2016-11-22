@@ -43,7 +43,7 @@ The same function as before (`onegini.resource.fetch`) is used to perform resour
 onegini.resource.fetch({
       url: "https://my.server.com/resources/user/transaction-history",
       headers: {
-        "My-Header-String": "String"
+        "My-Header-String": "String",
         "My-Header-Int": 42
       }
     })

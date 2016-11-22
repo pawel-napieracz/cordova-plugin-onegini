@@ -32,5 +32,7 @@
         * [validatePinWithPolicy](reference/user/validatePinWithPolicy.md)
     * [device](reference/device/introduction.md)
         * [Authentication](reference/device/authentication.md)
+    * [resource](reference/resource/introduction.md)
+        * [fetch](reference/resource/fetch.md)
 * [Release notes](release-notes/introduction.md)
     * [1.0.0](release-notes/1.0.0.md)
