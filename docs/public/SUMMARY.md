@@ -16,7 +16,7 @@
     * [Mobile authentication](topics/mobile-authentication.md)
     * [Secure resource access](topics/secure-resource-access.md)
     * [Error handling](topics/error-handling.md)
-* [API Reference](reference/introduction.md)
+* [Reference guides](reference/introduction.md)
     * [start](reference/start.md)
     * [user](reference/user/introduction.md)
         * [AuthenticationHandler](reference/user/AuthenticationHandler.md)

@@ -11,24 +11,16 @@ This function takes an optional first argument with the following properties:
 | `secureXhr` | `false` | Allow the plugin to intercept XHR GET/POST/... webview requests and route them through the plugin for added security
 
 ```js
-// As with all Cordova plugins you must wait for `deviceready` to fire
+// As with all Cordova plugins you must wait for "deviceready" to fire
 document.addEventListener("deviceready", () => {
-  onegini.start(
-      {
-        secureXhr: true
-      },
-
-      // success callback
-      function () {
+  onegini.start({ secureXhr: true })
+      .then(() => {
         // you can now call any other method on the Onegini object
-        console.log("Onegini is ready");
-      },
-
-      // error callback
-      function (err) {
-        console.log("Error: " + err.description);
-      }
-  );
+        console.log("Onegini is ready!");
+      })
+      .catch((err) => {
+        console.log("Start error!\n\n" + err.description);
+      });
 }, false);
 ```
 
@@ -36,5 +28,5 @@ The error callback contains an object with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
-| `code` | 9001 | The error code
-| `description` | "Invalid Pin" | Human readable error description
+| `code` | 10001 | The error code
+| `description` | "Onegini: Configuration error" | Human readable error description

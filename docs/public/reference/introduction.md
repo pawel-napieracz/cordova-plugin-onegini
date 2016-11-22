@@ -2,12 +2,13 @@
 
 This section describes the APIs that are exposed by the Onegini Cordova Plugin.
 
-## API
+## APIs
 
-  * [Bootstrapping, do this first: `onegini.start`](start.md)
-  * [User-related APIs: `onegini.user.*`](user/introduction.md)
-  * [Device-related APIs: `onegini.device.*`](device/introduction.md)
-  * [Resource-related APIs: `onegini.resource.*`](resource/introduction.md)
+  * [`onegini.start`](start.md)
+  * [`onegini.user.*`](user/introduction.md)
+  * [`onegini.device.*`](device/introduction.md)
+  * [`onegini.resource.*`](resource/introduction.md)
+  * [`onegini.mobileAuthentication.*`](mobileAuthentication/introduction.md)
 
 ## Using promises instead of callbacks
 
