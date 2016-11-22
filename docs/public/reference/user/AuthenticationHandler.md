@@ -1,6 +1,8 @@
 # Authentication Handler
 
-## Overview
+<!-- toc -->
+
+## Introduction
 
 When a user is required to Authenticate for certain methods, the Onegini Cordova Plugin will return an `AuthenticationHandler`.
 This object can be used to register callbacks which will be called when certain authentication steps are required.
@@ -12,7 +14,7 @@ let handler = onegini.user.authenticate({
 });
 
 handler.onPinrequest((actions, options) => {
-  // Called when the SDK requests a users pincode.
+  // Called when the SDK requests a users PIN.
 });
 ```
 
@@ -71,9 +73,9 @@ handler.onCreatePinRequest((actions, options) => {
 
 This method is called when the user is required to be authenticated with fingerprint.
 The following three actions can be called in response:
-- acceptFingerprint _Start reading fingerprint sensor_
-- denyFingerprint _Cancel this authentication attempt_ 
-- fallbackToPin _Ask for a PIN instead_
+- acceptFingerprint. _Start reading fingerprint sensor_
+- denyFingerprint. _Cancel this authentication attempt_ 
+- fallbackToPin. _Ask for a PIN instead, you will receive a PIN request._
 
 The `acceptFingerprint` actions can take and object with an `iosPrompt` value to display on the TouchID prompt.
 
@@ -97,6 +99,7 @@ handler.onFingerprintCaptured(() => {
   console.log("Fingerprint captured");
 });
 ```
+
 ### `onFingerprintFailed`
 
 This method is called when the fingerprint previously detected was not recognized as the correct fingerprint.
