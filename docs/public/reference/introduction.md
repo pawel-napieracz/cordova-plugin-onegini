@@ -1,4 +1,4 @@
-# API Reference
+# Reference guides
 
 This section describes the APIs that are exposed by the Onegini Cordova Plugin.
 
@@ -12,8 +12,7 @@ This section describes the APIs that are exposed by the Onegini Cordova Plugin.
 
 All API functions accept an optional success callback and error callback function.
 
-If Promises are more your style then you may be happy to learn that all methods that would only call their success or error callbacks once,
-return a Promise if no success callback is supplied.
+If Promises are more your style then you may be happy to learn that all methods that would only call their success or error callbacks once return a Promise if no success callback is supplied.
 
 For example, say you want to get all the authenticators available for a certain user. With callbacks you might use:
 
@@ -38,11 +37,11 @@ onegini.user.authenticators.getAll(
 ...or as a Promise, you might use:
 
 ```js
-onegini.user.authenticators.getAll({
-    profileId: "W8DUJ2"
-}).then(function () {
-    console.log("Authenticators available:", authenticators);
-}).catch(function(err) {
-    console.log("Something went wrong! Error: " + err.description);
-});
+onegini.user.authenticators.getAll({ profileId: "W8DUJ2" })
+    .then(() => {
+      console.log("Authenticators available:", authenticators);
+    })
+    .catch((err) => {
+      console.log("Something went wrong! Error: " + err.description);
+    });
 ```
