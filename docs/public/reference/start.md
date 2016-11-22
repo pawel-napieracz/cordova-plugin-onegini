@@ -12,7 +12,7 @@ This function takes an optional first argument with the following properties:
 
 ```js
 // As with all Cordova plugins you must wait for `deviceready` to fire
-document.addEventListener('deviceready', function () {
+document.addEventListener("deviceready", () => {
   onegini.start(
       {
         secureXhr: true

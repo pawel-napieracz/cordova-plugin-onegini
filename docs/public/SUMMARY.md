@@ -17,6 +17,7 @@
     * [Secure resource access](topics/secure-resource-access.md)
     * [Error handling](topics/error-handling.md)
 * [API Reference](reference/introduction.md)
+    * [start](reference/start.md)
     * [user](reference/user/introduction.md)
         * [AuthenticationHandler](reference/user/AuthenticationHandler.md)
         * [authenticate](reference/user/authenticate.md)
