@@ -1,5 +1,7 @@
 # Authenticators
 
+<!-- toc -->
+
 Authenticators are used to verify the identity of a user.
 The Onegini Cordova Plugin currently supports PIN and Fingerprint authenticators.
 The Fingerprint authenticator is only available on devices with a fingerprint sensor.

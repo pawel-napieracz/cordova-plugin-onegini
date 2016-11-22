@@ -1,5 +1,7 @@
 # Get Authenticated User Profile
 
+<!-- toc -->
+
 This method returns the currently authenticated User Profile. The method fails when no user is authenticated 
 
 ## `onegini.user.getAuthenticatedUserProfile`

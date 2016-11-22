@@ -42,13 +42,13 @@ handler.onSuccess(() => {
 ## Methods
 
 The following methods can registered to handle different authentication events:
-- [onPinRequest](#onpinrequest)
-- [onCreatePinRequest](#oncreatepinrequest)
-- [onFingerprintRequest](#onfingerprintrequest)
-- [onFingerprintCaptured](#onfingerprintcaptured)
-- [onFingerprintFailed](#onfingerprintfailed)
-- [onSuccess](#onsuccess)
-- [onError](#onerror)
+- [`onPinRequest`](#onpinrequest)
+- [`onCreatePinRequest`](#oncreatepinrequest)
+- [`onFingerprintRequest`](#onfingerprintrequest)
+- [`onFingerprintCaptured`](#onfingerprintcaptured)
+- [`onFingerprintFailed`](#onfingerprintfailed)
+- [`onSuccess`](#onsuccess)
+- [`onError`](#onerror)
 
 ### `onPinRequest`
 This method is called when the user's PIN is required. The pin can be supplied using `actions.providePin`

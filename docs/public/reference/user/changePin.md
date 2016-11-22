@@ -1,5 +1,7 @@
 # changePin
 
+<!-- toc -->
+
 Once authenticated, a user is able to change his PIN code. Changing a users PinCode is done through an [AuthenticationHandler](AuthenticationHandler.md)
 
 ## `onegini.user.changePin`

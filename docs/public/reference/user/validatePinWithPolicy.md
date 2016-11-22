@@ -1,5 +1,7 @@
 # Validate Pin with Policy
 
+<!-- toc -->
+
 At any moment in the app's lifecycle you can check whether or not a certain Pin code meets the policy you've configured server side.
 A Pin Policy can be used to ensure your users can not register with an unsecure PIN.
 

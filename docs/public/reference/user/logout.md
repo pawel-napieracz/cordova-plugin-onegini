@@ -1,5 +1,7 @@
 # Logout
 
+<!-- toc -->
+
 For security reasons it is always a good idea to explicitly logout a user. You can use this function to do so.
 
 ## `onegini.user.logout`

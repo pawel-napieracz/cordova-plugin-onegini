@@ -1,5 +1,7 @@
 # User API Reference
 
+<!-- toc -->
+
 This section describes the APIs that are available on the global `onegini.user` object.
 
 * [AuthenticationHandler](AuthenticationHandler.md)

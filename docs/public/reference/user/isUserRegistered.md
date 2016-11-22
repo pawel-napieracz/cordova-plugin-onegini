@@ -1,5 +1,7 @@
 # Is User Registered
 
+<!-- toc -->
+
 You can check at any time if a certain profile ID has been registered by using this method:
 
 ## `onegini.user.isUserRegistered`

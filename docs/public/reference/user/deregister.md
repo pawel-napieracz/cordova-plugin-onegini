@@ -1,5 +1,7 @@
 # Deregistration
 
+<!-- toc -->
+
 Deregistration is the process of removing a user (profile) from the device and the server.
 
 ## `onegini.user.deregister`

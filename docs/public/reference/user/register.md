@@ -1,5 +1,7 @@
 # Registration
 
+<!-- toc -->
+
 Before a user can authenticate using PIN or Fingerprint, a user will have to register with your Token Server. Registration can be initiated with this method.
 
 ## `onegini.user.register`

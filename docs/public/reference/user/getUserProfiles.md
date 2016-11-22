@@ -1,5 +1,7 @@
 # Get User Profiles
 
+<!-- toc -->
+
 The Onegini SDK keeps a set of profiles that you have created in the SDK. This method allows you to receive all existing profiles.
 
 ## `onegini.user.getUserProfiles`

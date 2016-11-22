@@ -1,5 +1,7 @@
 # Reuthentication
 
+<!-- toc -->
+
 In cases where you want to reassure the user is who you expect him to be, a reauthentication can be triggered.
 Just like the [`authenticate`](authenticate.md) method this method returns an `AuthenticationHandler`.
 
