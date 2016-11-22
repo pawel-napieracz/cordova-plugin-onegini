@@ -40,18 +40,20 @@ To handle a push mobile authentication request, the handler returned by [`onegin
 
 **Example code to handle push mobile authentication requests:**
 
-TODO: change confirm prompt or show how to add relevant plugin
-
 ```js
 onegini.mobileAuthentication.on("confirmation")
     .onConfirmationRequest((actions, request) => {
-      navigator.notification.confirm(request.message, (buttonIndex) => {
-        if (buttonIndex === 1) {
-          actions.accept();
-        } else {
-          actions.deny();
-        }
-      }, "Mobile Authentication Request", ["Accept", "Reject"]);
+      console.log("New mobile authentication request", request);
+
+      // Ask user if they want to accept or deny the request. In this
+      // example, the user accepts the request.
+      let userAcceptedRequest = true;
+
+      if (userAcceptedRequest) {
+        actions.accept();
+      } else {
+        actions.deny();
+      }
     })
     .onSuccess(() => {
       alert("Mobile authentication request success!");
@@ -67,20 +69,26 @@ The method `onConfirmationRequest` will be called when the Onegini Cordova plugi
 
 It is also possible to require the user to enter their PIN in order to confirm their identity before accepting a mobile authentication request. The push with PIN type of mobile authentication request adds another layer of security to the two factor authentication in your product.
 
-Handling a push with PIN is similar to the simpler push, except the parameter given to [`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) is `"pin"`. It also requires the implementation of a different, but familiar method.
+Handling a push with PIN is similar to the simpler push, except the parameter given to [`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) is `"pin"`. It also requires the implementation of a different, but familiar handler method.
 
 **Example code to handle push with PIN mobile authentication requests:**
 
 ```js
 onegini.mobileAuthentication.on("pin")
     .onPinRequest((actions, request) => {
-      navigator.notification.prompt(request.message, (results) => {
-        if (results.buttonIndex === 1) {
-          actions.accept(results.input1);
-        } else {
-          actions.deny();
-        }
-      }, "Mobile Authentication Request", ["Accept", "Reject"]);
+      console.log("New mobile authentication request", request);
+
+      // Ask the user if they want to accept or deny the request, and enter
+      // their PIN in case of accept. In this example, the user accepts the
+      // request and enters a PIN of "12346".
+      let userAcceptedRequest = true;
+      let pin = "12346";
+
+      if (userAcceptedRequest) {
+        actions.accept(pin);
+      } else {
+        actions.deny();
+      }
     })
     .onSuccess(() => {
       alert("Mobile authentication request success!");
@@ -104,24 +112,34 @@ Handling a push with fingerprint is very similar to the other types of mobile au
 
 ```js
 onegini.mobileAuthentication.on("fingerprint")
-    .onPinRequest((actions, options) => {
-      var pin = prompt("Please enter your PIN");
-      actions.providePin(pin);
+    .onPinRequest((actions, request) => {
+      console.log("New mobile authentication request", request);
+
+      // We assume that on fallback, the user still accepts the request
+      // and provides a pin of "12346".
+      let pin = "12346"
+
+      actions.accept(pin);
     })
     .onFingerprintRequest((actions, request) => {
-      navigator.notification.confirm(request.message, function (buttonIndex) {
-        if (buttonIndex === 1) {
-          actions.accept();
-        } else {
-          actions.deny();
-        }
-      }, "Mobile Authentication Request", ["Accept", "Reject"]);
+      console.log("New mobile authentication request", request);
+
+      // Ask the user if they want to accept or deny the request. After
+      // they accept, the OS will prompt them for a fingerprint scan. In
+      // this example, the user accepts the request.
+      let userAcceptedRequest = true;
+
+      if (userAcceptedRequest) {
+        actions.accept();
+      } else {
+        actions.deny();
+      }
     })
     .onFingerprintCaptured(() => {
-      alert("Fingerprint captured, waiting for verification.");
+      console.log("Fingerprint captured, waiting for verification.");
     })
     .onFingerprintFailed(() => {
-      alert("Fingerprint failed! Please try again.");
+      console.log("Fingerprint failed! Please try again.");
     })
     .onSuccess(() => {
       alert("Mobile authentication request success!");
