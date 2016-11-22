@@ -1,5 +1,7 @@
 # Fetch
 
+<!-- toc -->
+
 Resources can be fetched by the device anonymously, or on behalf of a logged in user.
 
 ## `onegini.resource.fetch`

@@ -30,4 +30,6 @@ Every error returns an object that contains a `code` and `description` property.
 
 ## SDK error codes
 
-As the Onegini Cordova plugin is a wrapper for the Onegini Android and iOS SDKs, some errors that are returned may come directly from the SDK themselves. This is true for error codes in the ranges 9000 and higher. See the error handling documentation for the [Android SDK](https://docs.onegini.com/android-sdk/topics/error-handling.html) and the [iOS SDK](https://docs.onegini.com/ios-sdk/topics/error-handling.html) for details.
+As the Onegini Cordova plugin is a wrapper for the Onegini Android and iOS SDKs, many errors that are returned come directly from the SDKs themselves. This is true for error codes in the ranges 9000 and higher.
+
+These error codes are mostly consistent. However, there may be some small differences between the two platforms. See the error handling documentation for the [Android SDK](https://docs.onegini.com/android-sdk/topics/error-handling.html) and the [iOS SDK](https://docs.onegini.com/ios-sdk/topics/error-handling.html) for details. Both sets of documentation also include a helpful error map at the bottom of the page.

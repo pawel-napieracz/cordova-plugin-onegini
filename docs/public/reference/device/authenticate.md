@@ -1,5 +1,7 @@
 # Authenticate device
 
+<!-- toc -->
+
 The device can be authenticated for specific (or the default) scopes.
 
 ## `onegini.device.authenticate`
