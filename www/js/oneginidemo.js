@@ -101,11 +101,11 @@ var OneginiDemo = (function () {
             var pin = prompt("Create your " + options.pinLength + "digit pin", "12346");
             actions.createPin(pin);
           })
-          .onSuccess(function () {
-            alert('Registration success!');
+          .onSuccess(function (result) {
+            alert("Registration success! Profile ID: " + result.profileId);
           })
           .onError(function (err) {
-            alert('Registration error!\n\n' + err.description)
+            alert('Registration error!\n\n' + err.description);
           });
     },
 
@@ -133,24 +133,6 @@ var OneginiDemo = (function () {
           function (err) {
             alert("Error!\n\n" + err.description);
           });
-    },
-
-    registrationCreatePin: function (pinLength) {
-      var pin = prompt("Please enter your " + pinLength + " digit Pin", "12346");
-      if (!pin) {
-        return;
-      }
-      onegini.user.register.createPin(
-          {
-            pin: pin
-          },
-          function (result) {
-            alert("Success!\n\nProfile created: " + result.profileId);
-          },
-          function (err) {
-            alert("Error!\n\n" + err.description);
-          }
-      );
     },
 
     getUserProfiles: function () {
