@@ -31,7 +31,7 @@
         * [register](reference/user/register.md)
         * [validatePinWithPolicy](reference/user/validatePinWithPolicy.md)
     * [device](reference/device/introduction.md)
-        * [Authentication](reference/device/authentication.md)
+        * [authenticate](reference/device/authenticate.md)
     * [resource](reference/resource/introduction.md)
         * [fetch](reference/resource/fetch.md)
 * [Release notes](release-notes/introduction.md)

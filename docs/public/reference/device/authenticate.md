@@ -1,6 +1,6 @@
-# Device authentication
+# Authenticate device
 
-This function can be used to authenticate a device for specific (or the default) scopes.
+The device can be authenticated for specific (or the default) scopes.
 
 ## `onegini.device.authenticate`
 
@@ -11,21 +11,13 @@ This function takes an optional first argument with the following properties:
 | `scopes` | server configuration | An array of scopes the device will authenticate for
 
 ```js
-onegini.device.authenticate(
-  {
-    scopes: ["read"]
-  },
-
-  // success callback
-  function () {
-    console.log("The device has been authenticated");
-  },
-
-  // error callback
-  function (err) {
-    console.log("Error: " + err.description);
-  }
-);
+onegini.device.authenticate({ scopes: ["read"] })
+    .then(() => {
+      alert("The device has been authenticated!");
+    })
+    .catch((err) => {
+      alert("Device authentication error!\n\n" + err.description);
+    });
 ```
 
 The error callback contains an object with these properties:
