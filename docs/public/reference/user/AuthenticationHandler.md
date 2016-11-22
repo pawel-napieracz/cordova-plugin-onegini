@@ -39,11 +39,69 @@ handler.onSuccess(() => {
 
 ## Methods
 
-The following methods can be called when certain events occur:
+The following methods can registered to handle different authentication events:
+- [onPinRequest](#onpinrequest)
+- [onCreatePinRequest](#oncreatepinrequest)
+- [onFingerprintRequest](#onfingerprintrequest)
+- [onFingerprintCaptured](#onfingerprintcaptured)
+- [onFingerprintFailed](#onfingerprintfailed)
+- [onSuccess](#onsuccess)
+- [onError](#onerror)
 
-- onPinRequest
-- onCreatePinRequest
-- onFingerprintRequest
-- onFingerprintCaptured
-- onFingerprintFailed
-- onError
+### `onPinRequest`
+This method is called when the user's PIN is required. The pin can be supplied using `actions.providePin`
+
+```js
+handler.onPinRequest((actions, options) => {
+  actions.providePin('12346');
+});
+```
+
+### `onCreatePinRequest`
+This method is called when a new PIN needs to be created. The new PIN can be created with `actions.createPin`
+
+```js
+handler.onCreatePinRequest((actions, options) => {
+  console.log("Creating a new PIN with of length " + options.pinLength);
+  actions.createPin('12346');
+});
+```
+
+### `onFingerprintRequest`
+
+This method is called when the user is required to be authenticated with fingerprint.
+The following three actions can be called in response:
+- acceptFingerprint _Start reading fingerprint sensor_
+- denyFingerprint _Cancel this authentication attempt_ 
+- fallbackToPin _Ask for a PIN instead_
+
+The `acceptFingerprint` actions can take and object with an `iosPrompt` value to display on the TouchID prompt.
+
+```js
+handler.onFingerprintRequest((actions) => {
+  console.log("Accepting fingerprint request");
+  actions.acceptFingerprint({ iosPrompt: 'Login to myApp' });
+});
+```
+
+### `onFingerprintCaptured`
+
+This method is called when the fingerprint sensor detects a finger is placed on the sensor.
+It is not yet determined if the fingerprint is correct.
+This method can be used to provide feedback to your users so they are aware the device has detected their finger.
+
+Note: this method is never called on iOS. TouchID on iOS uses it's own native UI to provide feedback to users.
+
+### `onFingerprintFailed`
+
+This method is called when the fingerprint previously detected was not recognized as the correct fingerprint.
+This method can be used to provide feedback to your users so the are aware the device did not recognize their fingerprint.
+
+### `onSuccess`
+
+This method is called when the user has been successfully authenticated. You now perform actions that require authentication.
+
+### `onError`
+
+This method is called when the authentication has failed.
+The failure can be due to several errors like failed to connect to network or when the user has exceeded the maximum attempts at entering a PIN and has been deregistered.
