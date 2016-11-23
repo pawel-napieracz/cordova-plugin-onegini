@@ -136,9 +136,11 @@ onegini.mobileAuthentication.on("fingerprint")
       }
     })
     .onFingerprintCaptured(() => {
+      // Only called on Android
       console.log("Fingerprint captured, waiting for verification.");
     })
     .onFingerprintFailed(() => {
+      // Only called on Android
       console.log("Fingerprint failed! Please try again.");
     })
     .onSuccess(() => {
