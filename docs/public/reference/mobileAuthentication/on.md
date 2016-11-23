@@ -12,6 +12,10 @@ This method is used to register handlers for different mobile authentication met
 | --- | --- |
 | `method` | The mobile authentication method you wish to register a handler for
 
+Currently, the available method strings are `"confirmation"` (push), `"pin"` (push with PIN), and `"fingerprint"` (push with fingerprint).
+
+The `on` method returns a [`MobileAuthenticationHandler`](MobileAuthenticationHandler.md) object, which can be used to implement the various handler methods.
+
 **Example handler registration for push with PIN:**
 
 ```js
@@ -39,4 +43,4 @@ onegini.mobileAuthentication.on("pin")
     });
 ```
 
-
+See the documentation for `MobileAuthenticationHandler` for more details on how to implement the UI.

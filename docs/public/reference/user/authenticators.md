@@ -2,9 +2,7 @@
 
 <!-- toc -->
 
-Authenticators are used to verify the identity of a user.
-The Onegini Cordova Plugin currently supports PIN and Fingerprint authenticators.
-The Fingerprint authenticator is only available on devices with a fingerprint sensor.
+Authenticators are used to verify the identity of a user. The Onegini Cordova Plugin currently supports PIN and fingerprint authenticators. The fingerprint authenticator is only available on devices with a fingerprint sensor.
 
 ## `onegini.user.authenticators.getAll`
 
@@ -16,23 +14,22 @@ The Fingerprint authenticator is only available on devices with a fingerprint se
 | `profileID` | "W8DUJ2" | The profile ID as received from `onegini.user.registration`
 
 ```js
-onegini.user.authenticators.getAll(
-  {
-    profileId: "W8DUJ2"
-  })
-  .then(function(authenticators) {
-    console.log("Avaialbe authenticators", authenticators);
-  })
-  .catch(function(err) {
-    if (err.code === 8003) {
-      console.log("That user does not exist!");
-    } else {
-      console.log("Something went wrong! Error:", err);
-    }
-  });
+onegini.user.authenticators.getAll({
+      profileId: "W8DUJ2"
+    })
+    .then((authenticators) => {
+      console.log("Available authenticators", authenticators);
+    })
+    .catch((err) => {
+      if (err.code === 8003) {
+        console.log("That user does not exist!");
+      } else {
+        console.log("Something went wrong! Error:", err);
+      }
+    });
 ```
 
-The success callback contains an _array of objects_ with these properties:
+The success callback contains an array of objects with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
@@ -56,23 +53,22 @@ The error callback contains an object with these properties:
 | `profileID` | "W8DUJ2" | The profile ID as received from `onegini.user.register`
 
 ```js
-onegini.user.authenticators.getNotRegistered(
-  {
-    profileId: "W8DUJ2"
-  })
-  .then(function(authenticators) {
-    console.log("Avaialbe authenticators", authenticators);
-  })
-  .catch(function(err) {
-    if (err.code === 8003) {
-      console.log("That user does not exist!");
-    } else {
-      console.log("Something went wrong! Error:", err);
-    }
-  });
+onegini.user.authenticators.getNotRegistered({
+      profileId: "W8DUJ2"
+    })
+    .then((authenticators) => {
+      console.log("Available authenticators", authenticators);
+    })
+    .catch((err) => {
+      if (err.code === 8003) {
+        console.log("That user does not exist!");
+      } else {
+        console.log("Something went wrong! Error:", err);
+      }
+    });
 ```
 
-The success callback contains an _array of objects_ with these properties:
+The success callback contains an array of objects with these properties:
 
 | Property | Example | Description |
 | --- | --- | --- |
@@ -93,16 +89,16 @@ The error callback contains an object with these properties:
 
 ```js
 onegini.user.authenticators.getPreferred()
-  .then(function(authenticator) {
-    console.log("Prefered authenticator:", authenticator);
-  })
-  .catch(function(err) {
-    if (err.code === 8003) {
-      console.log("That user does not exist!");
-    } else {
-      console.log("Something went wrong! Error:", err);
-    }
-  });
+    .then((authenticator) => {
+      console.log("Preferred authenticator:", authenticator);
+    })
+    .catch((err) => {
+      if (err.code === 8003) {
+        console.log("That user does not exist!");
+      } else {
+        console.log("Something went wrong! Error:", err);
+      }
+    });
 ```
 
 The success callback contains an object with these properties:
@@ -119,7 +115,7 @@ The error callback contains an object with these properties:
 | `code` | 8003 | The error code
 | `description` | "Onegini: No registered user found." | Human readable error description
 
-## `onegini.user.authenticators.setPreffered`
+## `onegini.user.authenticators.setPreferred`
 
 - Used to set the preferred authenticator for the currently authenticated user.
 - Requires an argument with an `authenticatorType`:
@@ -131,14 +127,14 @@ The error callback contains an object with these properties:
 
 ```js
 onegini.user.authenticators.setPreferred({
-    authenticatorType: "PIN"
-  })
-  .then(() => {
-    console.log("New authenticator set!");
-  })
-  .catch((err) => {
-    console.log("Something went wrong! Error:", err);
-  });
+      authenticatorType: "PIN"
+    })
+    .then(() => {
+      console.log("New authenticator set!");
+    })
+    .catch((err) => {
+      console.log("Something went wrong! Error:", err);
+    });
 ```
 
 The error callback contains an object with these properties:
@@ -154,7 +150,6 @@ The error callback contains an object with these properties:
 - Return a new [AuthenticationHandler](AuthenticationHandler.md)
 - Requires an argument with an `authenticatorType`:
 
-
 | Property | Example | Description |
 | --- | --- | --- |
 | `authenticatorType` | "PIN" | The authenticator type
@@ -162,18 +157,18 @@ The error callback contains an object with these properties:
 
 ```js
 onegini.user.authenticators.registerNew({
-    authenticatorType: "Fingerprint"
-  })
-  .onPinRequest((actions) => {
-    var pin = prompt("Please enter your PIN code");
-    actions.providePin(pin);
-  })
-  .onSuccess(() => {
-    console.log("Authenticator registered!")
-  })
-  .onError((err) => {
-    console.log("Failed to register authenticator!", err)
-  });
+      authenticatorType: "Fingerprint"
+    })
+    .onPinRequest((actions) => {
+      var pin = prompt("Please enter your PIN code");
+      actions.providePin(pin);
+    })
+    .onSuccess(() => {
+      console.log("Authenticator registered!")
+    })
+    .onError((err) => {
+      console.log("Failed to register authenticator!", err)
+    });
 ```
 
 The error callback contains an object with these properties:
@@ -195,14 +190,14 @@ The error callback contains an object with these properties:
 
 ```js
 onegini.user.authenticators.deregister({
-    authenticatorType: "Fingerprint"
-  })
-  .then(() => {
-    console.log("Authenticator deregistered!");
-  })
-  .catch((err) => {
-    console.log("Failed to deregister authenticator!", err);
-  });
+      authenticatorType: "Fingerprint"
+    })
+    .then(() => {
+      console.log("Authenticator deregistered!");
+    })
+    .catch((err) => {
+      console.log("Failed to deregister authenticator!", err);
+    });
 ```
 
 The error callback contains an object with these properties:

@@ -2,8 +2,7 @@
 
 <!-- toc -->
 
-Your users can authenticate themselves using any [authenticator](authenticators.md) registered to them. Authentication is done through an [AuthenticationHandler](AuthenticationHandler.md).
-If a user is already authenticated, the `onSuccess` handler will be called immediately.
+Your users can authenticate themselves using any [authenticator](authenticators.md) registered to them. Authentication is done via an [AuthenticationHandler](AuthenticationHandler.md). If a user is already authenticated, the `onSuccess` handler will be called immediately.
 
 ## `onegini.user.authenticate`
 
@@ -15,7 +14,7 @@ If a user is already authenticated, the `onSuccess` handler will be called immed
 | --- | --- | --- |
 | `profileId` | - | The profile ID you previously stored during registration
 
-Example for authentication with PIN.
+**Example for authentication with PIN:**
 
 ```js
 onegini.user.authenticate({

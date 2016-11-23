@@ -7,7 +7,8 @@
 When a user is required to Authenticate for certain methods, the Onegini Cordova Plugin will return an `AuthenticationHandler`.
 This object can be used to register callbacks which will be called when certain authentication steps are required.
 
-Example: when a user's PIN is required, the `onPinRequest` callback will be called.
+**Example: When a user's PIN is required, the `onPinRequest` callback will be called.**
+
 ```js
 let handler = onegini.user.authenticate({
   profileId: "W8DUJ2"
@@ -18,19 +19,19 @@ handler.onPinrequest((actions, options) => {
 });
 ```
 
-The moment `onPinRequest` is called is the time to ask a user for his PIN.
-After the user has entered his PIN, you can supply it to the SDK by calling an `action`, in this case `providePin`.
-This simple code will use the `prompt` to as for the PIN.
+When `onPinRequest` is called, the user should asked for their PIN. After the user has entered their PIN, you can supply it to the SDK by calling an `action`, in this case `providePin`.
+
+**Example using the `prompt` to ask for the PIN:**
 
 ```js
 handler.onPinRequest((actions, options) => {
-  let pin = prompt("Please enter your PIN. You have " + options.remainingFailureCount + " attempts remaining");
+  let pin = prompt("Please enter your PIN. You have " + options.remainingFailureCount + " attempts remaining.");
   actions.providePin(pin);
 })
 ```
 
-If the PIN entered is incorrect the `onPinRequest` handler will be called with a new request.
-The `options` parameters contains additional parameters like max allowed entry attempts and remaining attempts.
+If the PIN entered is incorrect, the `onPinRequest` handler will be called with a new request. The `options` parameter contains additional parameters like max allowed attempts and remaining attempts.
+
 If the PIN is correct, the `onSuccess` handler will be called.
 
 ```js
@@ -42,6 +43,7 @@ handler.onSuccess(() => {
 ## Methods
 
 The following methods can registered to handle different authentication events:
+
 - [`onPinRequest`](#onpinrequest)
 - [`onCreatePinRequest`](#oncreatepinrequest)
 - [`onFingerprintRequest`](#onfingerprintrequest)
@@ -51,33 +53,35 @@ The following methods can registered to handle different authentication events:
 - [`onError`](#onerror)
 
 ### `onPinRequest`
-This method is called when the user's PIN is required. The pin can be supplied using `actions.providePin`
+
+This method is called when the user's PIN is required. The pin can be supplied using `actions.providePin`.
 
 ```js
 handler.onPinRequest((actions, options) => {
-  actions.providePin('12346');
+  actions.providePin("12346");
 });
 ```
 
 ### `onCreatePinRequest`
-This method is called when a new PIN needs to be created. The new PIN can be created with `actions.createPin`
+
+This method is called when a new PIN needs to be created. The new PIN can be provided using `actions.createPin`.
 
 ```js
 handler.onCreatePinRequest((actions, options) => {
-  console.log("Creating a new PIN with of length " + options.pinLength);
-  actions.createPin('12346');
+  console.log("Creating a new PIN of length " + options.pinLength);
+  actions.createPin("12346");
 });
 ```
 
 ### `onFingerprintRequest`
 
-This method is called when the user is required to be authenticated with fingerprint.
-The following three actions can be called in response:
-- acceptFingerprint. _Start reading fingerprint sensor_
-- denyFingerprint. _Cancel this authentication attempt_ 
-- fallbackToPin. _Ask for a PIN instead, you will receive a PIN request._
+This method is called when the user is required to authenticate with fingerprint. The following three actions can be called in response:
 
-The `acceptFingerprint` actions can take and object with an `iosPrompt` value to display on the TouchID prompt.
+- `acceptFingerprint`: _Start reading fingerprint sensor_.
+- `denyFingerprint`: _Cancel this authentication attempt_.
+- `fallbackToPin`: _Ask for a PIN instead, you will receive a PIN request_.
+
+The `acceptFingerprint` actions can take an object with an `iosPrompt` value to display on the TouchID prompt.
 
 ```js
 handler.onFingerprintRequest((actions) => {
@@ -88,11 +92,9 @@ handler.onFingerprintRequest((actions) => {
 
 ### `onFingerprintCaptured`
 
-This method is called when the fingerprint sensor detects a finger is placed on the sensor.
-It is not yet determined if the fingerprint is correct.
-This method can be used to provide feedback to your users so they are aware the device has detected their finger.
+This method is called when the fingerprint sensor detects that a finger has been placed on the sensor. It has not yet been determined if the fingerprint is correct. This method can be used to provide feedback to the user so that they are aware the device has detected their finger.
 
-Note: this method is never called on iOS. TouchID on iOS uses it's own native UI to provide feedback to users.
+**Note:** this method is never called on iOS. TouchID on iOS uses its own native UI to provide feedback to users.
 
 ```js
 handler.onFingerprintCaptured(() => {
@@ -102,16 +104,17 @@ handler.onFingerprintCaptured(() => {
 
 ### `onFingerprintFailed`
 
-This method is called when the fingerprint previously detected was not recognized as the correct fingerprint.
-This method can be used to provide feedback to your users so the are aware the device did not recognize their fingerprint.
+This method is called when the fingerprint previously detected was not recognized as the correct fingerprint. This method can be used to provide feedback to your users so the are aware the device did not recognize their fingerprint. Additionally, the user should be able to try again.
+
 ```js
 handler.onFingerprintCaptured(() => {
-  console.log("Fingerprint incorrect!");
+  console.log("Fingerprint incorrect! The user should try again.");
 });
 ```
 
 ### `onSuccess`
-This method is called when the user has been successfully authenticated. You now perform actions that require authentication.
+
+This method is called when the user has been successfully authenticated. You can now perform actions that require the user to be authenticated.
 
 ```js
 handler.onSuccess(() => {
@@ -121,8 +124,7 @@ handler.onSuccess(() => {
 
 ### `onError`
 
-This method is called when the authentication has failed.
-The failure can be due to several errors like failed to connect to network or when the user has exceeded the maximum attempts at entering a PIN and has been deregistered.
+This method is called when the authentication has failed. The failure can be due to several errors, like failing to connect to the network, or when the user has exceeded the maximum attempts at entering a PIN and has been deregistered.
 
 ```js
 handler.onError((err) => {

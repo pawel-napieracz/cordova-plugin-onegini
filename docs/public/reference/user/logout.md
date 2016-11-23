@@ -2,7 +2,7 @@
 
 <!-- toc -->
 
-For security reasons it is always a good idea to explicitly logout a user. You can use this function to do so.
+For security reasons, it is always advisable to explicitly logout a user. The Onegini Cordova plugin exposes the following function to do so.
 
 ## `onegini.user.logout`
 
@@ -10,12 +10,12 @@ For security reasons it is always a good idea to explicitly logout a user. You c
 
 ```js
 onegini.user.logout()
-  .then(() => {
-    console.log("Logout successful");
-  })
-  .catch((err) => {
-    console.log("Something went wrong! " + err.description);
-  });
+    .then(() => {
+      console.log("Logout successful!");
+    })
+    .catch((err) => {
+      console.log("Something went wrong! " + err.description);
+    });
 ```
 
 The error callback contains an object with the following properties.
