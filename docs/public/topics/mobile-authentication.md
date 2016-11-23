@@ -8,7 +8,11 @@ The **Onegini Mobile Security Platform** offers a mobile authentication mechanis
 
 ## Setup and requirements
 
-TODO
+The setup and requirements to enable mobile authentication differ per platform. For Android devices, the medium used to send push messages is **Google Cloud Messaging (GCM)**. For iOS devices, the **Apple Push Notification Service (APNS)** is used.
+
+To set up GCM/APNS for your app, please refer to Google/Apple's documentation. Once this is done, mobile authentication must be enabled in the Token Server. Please follow the steps described in the Token Server [documentation](https://docs.onegini.com/public/token-server/topics/mobile-apps/mobile-authentication/mobile-authentication.html) to do so.
+
+From here, getting mobile authentication to work using the Onegini Cordova plugin is easy.
 
 ## Enrollment
 

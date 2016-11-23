@@ -76,3 +76,5 @@ onegini.start({
       console.log("Onegini failed to initialize.\n\n" + err.description);
     });
 ```
+
+Currently, only non-anonymous requests are supported using XHR intercepts.
