@@ -14,17 +14,21 @@ module.exports = (function () {
 
         utils.callbackExec(client, 'providePin', options, self.callbacks.onSuccess, self.callbacks.onError);
       },
+
       fallbackToPin: function () {
         utils.promiseOrCallbackExec(client, 'fallbackToPin');
       },
+
       acceptFingerprint: function (options) {
         options = utils.getOptionsWithDefaults(options, {}, 'iosPrompt');
         options.accept = true;
         utils.callbackExec(client, 'respondToFingerprintRequest', options, self.callbacks.onSuccess, self.callbacks.onError);
       },
+
       denyFingerprint: function () {
         utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
       },
+
       createPin: function (options) {
         options = utils.getOptionsWithDefaults(options, {}, 'pin');
         if (!options || !options.pin) {
@@ -39,7 +43,9 @@ module.exports = (function () {
       var event = options.authenticationEvent;
       delete options.authenticationEvent;
 
-      self.callbacks[event](self.callbackActions, options);
+      if (self.callbacks[event]) {
+        self.callbacks[event](self.callbackActions, options);
+      }
     }
 
     function callErrorCallback(err) {

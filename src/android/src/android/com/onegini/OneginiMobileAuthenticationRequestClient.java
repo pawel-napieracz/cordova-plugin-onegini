@@ -10,6 +10,9 @@ import org.json.JSONException;
 
 import com.onegini.handler.MobileAuthenticationHandler;
 import com.onegini.mobileAuthentication.Callback;
+import com.onegini.mobileAuthentication.ConfirmationCallback;
+import com.onegini.mobileAuthentication.FingerprintCallback;
+import com.onegini.mobileAuthentication.PinCallback;
 import com.onegini.util.ActionArgumentsUtil;
 import com.onegini.util.PluginResultBuilder;
 
@@ -43,19 +46,46 @@ public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
     });
   }
 
-  private void replyToConfirmationChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final Boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
+  private void replyToChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    final Callback callback = MobileAuthenticationHandler.getInstance().getCurrentCallback();
+    final boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
 
+    if (callback == null) {
+      return;
+    }
+
+    callback.setChallengeResponseCallbackContext(callbackContext);
+
+    if (callback instanceof ConfirmationCallback) {
+      final ConfirmationCallback confirmationCallback = (ConfirmationCallback) callback;
+      replyToConfirmationChallenge(confirmationCallback, shouldAccept);
+    } else if (callback instanceof PinCallback) {
+      final PinCallback pinCallback = (PinCallback) callback;
+      replyToPinChallenge(pinCallback, args, shouldAccept);
+    } else if (callback instanceof FingerprintCallback) {
+      final FingerprintCallback fingerprintCallback = (FingerprintCallback) callback;
+      replyToFingerprintChallenge(fingerprintCallback, shouldAccept);
+    } else {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withPluginError(ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD, ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD)
+          .build());
+    }
+  }
+
+  private void replyToConfirmationChallenge(final ConfirmationCallback confirmationCallback, final boolean shouldAccept) throws JSONException {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        MobileAuthenticationHandler.getInstance().replyToConfirmationChallenge(callbackContext, shouldAccept);
+        if (shouldAccept) {
+          confirmationCallback.getAcceptDenyCallback().acceptAuthenticationRequest();
+        } else {
+          confirmationCallback.getAcceptDenyCallback().denyAuthenticationRequest();
+        }
       }
     });
   }
 
-  private void replyToPinChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
+  private void replyToPinChallenge(final PinCallback pinCallback, final JSONArray args, final boolean shouldAccept) throws JSONException {
     final char[] pin;
 
     if (shouldAccept) {
@@ -67,40 +97,25 @@ public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        MobileAuthenticationHandler.getInstance().replyToPinChallenge(callbackContext, shouldAccept, pin);
+        if (shouldAccept) {
+          pinCallback.getPinCallback().acceptAuthenticationRequest(pin);
+        } else {
+          pinCallback.getPinCallback().denyAuthenticationRequest();
+        }
       }
     });
   }
 
-  private void replyToFingerprintChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
-
+  private void replyToFingerprintChallenge(final FingerprintCallback fingerprintCallback, final boolean shouldAccept) throws JSONException {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        MobileAuthenticationHandler.getInstance().replyToFingerprintChallenge(callbackContext, shouldAccept);
+        if (shouldAccept) {
+          fingerprintCallback.getFingerprintCallback().acceptAuthenticationRequest();
+        } else {
+          fingerprintCallback.getFingerprintCallback().denyAuthenticationRequest();
+        }
       }
     });
-  }
-
-  private void replyToChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final Callback.Method method = ActionArgumentsUtil.getCallbackMethodFromArguments(args);
-
-    switch (method) {
-      case CONFIRMATION:
-        replyToConfirmationChallenge(args, callbackContext);
-        break;
-      case PIN:
-        replyToPinChallenge(args, callbackContext);
-        break;
-      case FINGERPRINT:
-        replyToFingerprintChallenge(args, callbackContext);
-        break;
-      default:
-        callbackContext.sendPluginResult(new PluginResultBuilder()
-            .withPluginError(ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD, ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD)
-            .build());
-        break;
-    }
   }
 }

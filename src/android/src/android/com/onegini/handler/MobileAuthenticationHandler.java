@@ -1,11 +1,9 @@
 package com.onegini.handler;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_CONFIRMATION_CHALLENGE;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_FINGERPRINT_CHALLENGE;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_PIN_CHALLENGE;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_CONFIRMATION_CHALLENGE;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_FINGERPRINT_CHALLENGE;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_PIN_CHALLENGE;
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_CAPTURED;
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_FAILED;
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
+import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_SUCCESS;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -50,6 +48,14 @@ public class MobileAuthenticationHandler
     return instance;
   }
 
+  public Callback getCurrentCallback() {
+    if (!isRunning) {
+      return null;
+    }
+
+    return callbackQueue.peek();
+  }
+
   public void registerAuthenticationChallengeReceiver(final Callback.Method method, final CallbackContext callbackContext) {
     challengeReceivers.put(method, callbackContext);
     handleNextAuthenticationRequest();
@@ -62,26 +68,6 @@ public class MobileAuthenticationHandler
                                   final OneginiAcceptDenyCallback acceptDenyCallback) {
     final ConfirmationCallback confirmationCallback = new ConfirmationCallback(mobileAuthenticationRequest, acceptDenyCallback);
     addAuthenticationRequestToQueue(confirmationCallback);
-  }
-
-  public void replyToConfirmationChallenge(final CallbackContext callbackContext, final boolean shouldAccept) {
-    boolean isCallbackOfInvalidType = !(callbackQueue.peek() instanceof ConfirmationCallback);
-    if (isCallbackOfInvalidType) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_DESCRIPTION_NO_CONFIRMATION_CHALLENGE, ERROR_CODE_NO_CONFIRMATION_CHALLENGE)
-          .build());
-
-      return;
-    }
-
-    final ConfirmationCallback confirmationCallback = (ConfirmationCallback) callbackQueue.peek();
-    confirmationCallback.setChallengeResponseCallbackContext(callbackContext);
-
-    if (shouldAccept) {
-      confirmationCallback.getAcceptDenyCallback().acceptAuthenticationRequest();
-    } else {
-      confirmationCallback.getAcceptDenyCallback().denyAuthenticationRequest();
-    }
   }
 
   // *END*
@@ -105,30 +91,11 @@ public class MobileAuthenticationHandler
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
+        .withAuthenticationEvent(AUTH_EVENT_PIN_REQUEST)
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withOneginiMobileAuthenticationRequest(pinCallback.getMobileAuthenticationRequest())
         .build());
-  }
-
-  public void replyToPinChallenge(final CallbackContext callbackContext, final boolean shouldAccept, final char[] pin) {
-    boolean isCallbackOfInvalidType = !(callbackQueue.peek() instanceof PinCallback);
-    if (isCallbackOfInvalidType) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_DESCRIPTION_NO_PIN_CHALLENGE, ERROR_CODE_NO_PIN_CHALLENGE)
-          .build());
-
-      return;
-    }
-
-    final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
-    pinCallback.setChallengeResponseCallbackContext(callbackContext);
-
-    if (shouldAccept) {
-      pinCallback.getPinCallback().acceptAuthenticationRequest(pin);
-    } else {
-      pinCallback.getPinCallback().denyAuthenticationRequest();
-    }
   }
 
   // *END*
@@ -150,7 +117,7 @@ public class MobileAuthenticationHandler
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withMobileAuthenticationEvent("FingerprintNextAttempt")
+        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_FAILED)
         .withOneginiMobileAuthenticationRequest(fingerprintCallback.getMobileAuthenticationRequest())
         .build());
   }
@@ -163,29 +130,9 @@ public class MobileAuthenticationHandler
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withMobileAuthenticationEvent("FingerprintCaptured")
+        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_CAPTURED)
         .withOneginiMobileAuthenticationRequest(fingerprintCallback.getMobileAuthenticationRequest())
         .build());
-  }
-
-  public void replyToFingerprintChallenge(final CallbackContext callbackContext, final boolean shouldAccept) {
-    boolean isCallbackOfInvalidType = !(callbackQueue.peek() instanceof FingerprintCallback);
-    if (isCallbackOfInvalidType) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_DESCRIPTION_NO_FINGERPRINT_CHALLENGE, ERROR_CODE_NO_FINGERPRINT_CHALLENGE)
-          .build());
-
-      return;
-    }
-
-    final FingerprintCallback fingerprintCallback = (FingerprintCallback) callbackQueue.peek();
-    fingerprintCallback.setChallengeResponseCallbackContext(callbackContext);
-
-    if (shouldAccept) {
-      fingerprintCallback.getFingerprintCallback().acceptAuthenticationRequest();
-    } else {
-      fingerprintCallback.getFingerprintCallback().denyAuthenticationRequest();
-    }
   }
 
   // *END*
@@ -224,6 +171,7 @@ public class MobileAuthenticationHandler
     pluginResultBuilder
         .withSuccess()
         .shouldKeepCallback()
+        .withAuthenticationEvent(callback.getAuthenticationRequestEventName())
         .withOneginiMobileAuthenticationRequest(mobileAuthenticationRequest);
 
     if (callback instanceof PinCallback) {
