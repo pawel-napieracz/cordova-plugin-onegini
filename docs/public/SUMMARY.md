@@ -1,11 +1,5 @@
 # Documentation Onegini Cordova plugin
 
-* [Installation](installation/introduction.md)
-    * [Requirements](installation/requirements.md)
-    * [Instructions](installation/instructions.md)
-* [Quick start](quickstart/introduction.md)
-    * [Adding to an existing app](quickstart/adding-to-an-existing-app.md)
-    * [Starting fresh](quickstart/starting-fresh.md)
 * [Topic guides](topics/introduction.md)
     * [Getting started](topics/getting-started.md)
     * [User authentication](topics/user-authentication.md)
