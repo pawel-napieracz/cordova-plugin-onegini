@@ -54,7 +54,7 @@ The following methods can be registered to handle different mobile authenticatio
 
 ### `onConfirmationRequest`
 
-This method is called on a mobile authentication request with the push method. The request can either be accepted using `actions.accept` or denied using `actions.deny`.
+This method is called on a mobile authentication request with the **push** method. The request can either be accepted using `actions.accept` or denied using `actions.deny`.
 
 ```js
 handler.onConfirmationRequest((actions, request) => {
@@ -64,7 +64,7 @@ handler.onConfirmationRequest((actions, request) => {
 
 ### `onPinRequest`
 
-This method is called on a mobile authentication request with the push with PIN method. The request can either be accepted using `actions.accept` taking the PIN as argument, or denied using `actions.deny`.
+This method is called on a mobile authentication request with the **push with PIN** method. It can also be called on the **push with fingerprint** method, in case of PIN fallback. The request can either be accepted using `actions.accept` taking the PIN as argument, or denied using `actions.deny`.
 
 ```js
 handler.onPinRequest((actions, request) => {
@@ -72,17 +72,19 @@ handler.onPinRequest((actions, request) => {
 });
 ```
 
-Note that if the PIN was incorrect, this method will be called again (until the user has exceeded the attempt limit)..
+Note that if the PIN was incorrect, this method will be called again (until the user has exceeded the attempt limit). As always, the PIN should **not** be stored on the device.
 
 ### `onFingerprintRequest`
 
-This method is called on a mobile authentication request with the push with fingerprint method. The request can either be accepted using `actions.accept` or denied using `actions.deny`.
+This method is called on a mobile authentication request with the **push with fingerprint method.** The request can either be accepted using `actions.accept` or denied using `actions.deny`.
 
 ```js
 handler.onFingerprintRequest((actions, request) => {
   actions.accept();
 });
 ```
+
+Unlike `onPinRequest`, this method will only be called once. Touch ID on iOS uses its own native UI to provide feedback to users, and the whole process is atomic. On Android, `onFingerprintFailed` will be called if the user needs to scan their fingerprint again.
 
 ### `onFingerprintCaptured`
 
@@ -118,4 +120,10 @@ handler.onSuccess(() => {
 
 ### `onError`
 
-This method is called when the user 
+This method is called when the user has denied the mobile authentication request, the user has failed to authenticate themselves, or an error has occurred. At this point, the authentication request is considered completed, albeit failed. Another push notification can be handled.
+
+```js
+handler.onError(() => {
+  alert("Mobile authentication request failed!");
+});
+```
