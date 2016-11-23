@@ -1,6 +1,6 @@
-# Bootstrapping the Onegini SDK
+# Bootstrapping the Onegini Cordova Plugin
 
-The first thing that needs to be done when the app starts is to initizialize the Onegini SDK. This will perform a few checks and report an error in case of trouble.
+The first thing that needs to be done when the app starts is to initizialize the Onegini Cordova Plugin. This will perform a few checks and report an error in case of trouble.
 
 ## `onegini.start`
 

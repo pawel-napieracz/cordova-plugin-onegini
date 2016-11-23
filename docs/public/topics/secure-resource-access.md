@@ -59,4 +59,20 @@ For details of the response and error objects, see the documention for [fetch](.
 
 ## Intercepting XHR requests
 
-TODO: This section
+While it is best to use `onegini.resource.fetch` to access secured resources, it is also possible to initiate `XMLHTTPRequest` calls yourself, and allow the Onegini Cordova plugin to intercept the outgoing requests. The requests will be authenticated and encrypted as necessary. Similarly, responses will be decrypted if necessary, allowing you to use the response as normal.
+
+This option must be set upon initialization of the Onegini Cordova plugin. It is implemented as an argument to [`onegini.start`](../reference/start.md).
+
+**Example code to initialize the plugin with XHR interception:**
+
+```js
+onegini.start({
+      secureXhr: true
+    })
+    .then(() => {
+      console.log("Onegini is ready!");
+    })
+    .catch((err) => {
+      console.log("Onegini failed to initialize.\n\n" + err.description);
+    });
+```
