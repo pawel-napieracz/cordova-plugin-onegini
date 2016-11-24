@@ -34,4 +34,5 @@
         * [enroll](reference/mobileAuthentication/enroll.md)
         * [on](reference/mobileAuthentication/on.md)
 * [Release notes](release-notes/introduction.md)
-    * [1.0.0](release-notes/1.0.0.md)
+    * [1.x](release-notes/1.x.md)
+    * [2.x](release-notes/2.x.md)
