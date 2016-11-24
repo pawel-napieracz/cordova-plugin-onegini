@@ -7,6 +7,7 @@ cordova/
 build/
 **/*.iml
 local.properties
+npm-debug.log*
 **/*--
 
 # iOS specific
@@ -24,6 +25,5 @@ DerivedData
 src/ios/OneginiSDKiOS
 
 # Android specific
-src/android/.gradle
 src/android/CordovaLib/build
 src/android/build
