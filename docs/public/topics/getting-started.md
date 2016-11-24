@@ -22,6 +22,13 @@ cordova create ./myapp com.mycompany.myapp "My App"
 ## Access the Onegini Repository
 
 The Onegini Cordova Plugin is a wrapper for the Onegini SDK. For your Cordova app to access the Onegini SDK you will need access to the [Onegini Repository](https://repo.onegini.com/). If you do not have login credentials for the Onegini Repository, you will need to [obtain those first](https://docs.onegini.com/app-developer-quickstart.html#step1). 
+After obtaining credentials, store them in your local `gradle.properties` file.
+
+In `~/.gradle/gradle.properties`:
+```
+artifactory_user=<username>
+artifactory_password=<password>
+```
 
 ## Install the SDK Configurator
 
