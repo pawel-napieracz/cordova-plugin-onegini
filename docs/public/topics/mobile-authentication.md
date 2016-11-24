@@ -42,7 +42,7 @@ If you want to use mobile fingerprint authentication, you will need to register 
 
 ## Handling mobile authentication requests
 
-You can configure different mobile authentication types in the Token Server [mobile authentication configuration](https://docs.onegini.com/public/token-server/topics/mobile-apps/mobile-authentication/mobile-authentication.html#configure-authentication-properties) panel. There are currently three different methods of authentication. These are **push**, **push with PIN**, and **push with fingerprint**. Only once the authentication type has been configured on the Token Server can it be used.
+You can configure different mobile authentication types in the Token Server [mobile authentication configuration](https://docs.onegini.com/token-server/topics/mobile-apps/mobile-authentication/mobile-authentication.html#configure-authentication-properties) panel. There are currently three different methods of authentication. These are **push**, **push with PIN**, and **push with fingerprint**. Only once the authentication type has been configured on the Token Server can it be used.
 
 ### Push
 
