@@ -25,7 +25,6 @@ public class ResourceRequest {
         return new ResourceRequest(args.getString(0), args.getString(1), args.getJSONObject(2), args.getJSONObject(3));
       }
     } catch (final JSONException e) {
-      e.printStackTrace();
       return null;
     }
   }
@@ -84,7 +83,6 @@ public class ResourceRequest {
         map.put(key, value);
       }
     } catch (final JSONException e) {
-      e.printStackTrace();
       return null;
     }
     return map;
