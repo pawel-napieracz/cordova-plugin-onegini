@@ -12,7 +12,7 @@ It should be noted that there are significant differences between Fingerprint on
 
 ## Enabling fingerprint authentication
 
-In order to enable fingerprint authentication for a user, the Onegini Cordova plugin provides the [`onegini.user.authenticators.registerNew`](../reference/user/registerNew.md). This function requires the user to authenticate. As a result, it is necessary to implement the UI associated with the `onPinRequest` method, in addition to the `onSuccess` and `onError` methods.
+In order to enable fingerprint authentication for a user, the Onegini Cordova plugin provides the [`onegini.user.authenticators.registerNew`](../reference/user/authenticators.md#oneginiuserauthenticatorsregisternew). This function requires the user to authenticate. As a result, it is necessary to implement the UI associated with the `onPinRequest` method, in addition to the `onSuccess` and `onError` methods.
 
 **Example code for registering the fingerprint authenticator:**
 
@@ -32,9 +32,9 @@ onegini.user.authenticators.registerNew({ authenticatorType: "Fingerprint" })
 
 Fingerprint authentication may not be available on every device. In this case, or if the authenticator has already been registered, the above method will return an error.
 
-To request a list of available authenticators that have not yet been registered, the plugin exposes the [`onegini.user.authenticators.getNotRegistered`](../reference/user/getNotRegisteredAuthenticators.md) function, which takes the `profileId` of the desired user as argument. If the device does not meet the fingerprint requirements, the fingerprint authenticator will not be present in the returned array of of authenticators.
+To request a list of available authenticators that have not yet been registered, the plugin exposes the [`onegini.user.authenticators.getNotRegistered`](../reference/user/authenticators.md#oneginiuserauthenticatorsgetnotregistered) function, which takes the `profileId` of the desired user as argument. If the device does not meet the fingerprint requirements, the fingerprint authenticator will not be present in the returned array of of authenticators.
 
-Note that registering a new authenticator does not set it as the preferred authenticator for the user, which is PIN by default. To change this, [`onegini.user.authenticators.setPreferred`](../reference/user/setPreferredAuthenticator.md) can be used.
+Note that registering a new authenticator does not set it as the preferred authenticator for the user, which is PIN by default. To change this, [`onegini.user.authenticators.setPreferred`](../reference/user/authenticators#oneginiuserauthenticatorssetpreferred) can be used.
 
 **Example code to set fingerprint as the preferred authenticator:**
 

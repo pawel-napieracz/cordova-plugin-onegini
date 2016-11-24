@@ -9,7 +9,6 @@ The following topic guides are available:
 * [User authentication with fingerprint](user-authentication-with-fingerprint.md)
 * [Change PIN](change-pin.md)
 * [Logging out](logging-out.md)
-* [Deregister user](deregister-used.md)
 * [Mobile authentication](mobile-authentication.md)
 * [Secure resource access](secure-resource-access.md)
 * [Error handling](error-handling.md)
