@@ -89,7 +89,7 @@ Once you have obtained the zip file for your platform place it in your project r
 
 Alternatively, you can [run the configurator from the command line](https://github.com/Onegini/onegini-sdk-configurator#usage).
 
-### Add the Cordova platform
+### Add a Cordova platform
 
 When you add a platform to your Cordova app, the plugin will automatically resolve the SDK dependencies.
 

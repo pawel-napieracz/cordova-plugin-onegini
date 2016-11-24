@@ -7,8 +7,10 @@
 
 ## An introduction
 
-Our `cordova-plugin-onegini` is an [Apache Cordova](https://cordova.apache.org/) plugin build
+The Onegini Cordova Plugin is an [Apache Cordova](https://cordova.apache.org/) plugin build
 to allow the use of Onegini's native SDK's to create Cordova / PhoneGap applications for iOS and Android.
+
+To start using the Onegini Cordova Plugin, refer to the [getting started guide](topics/getting-started.md).
 
 ## How the documentation is organized
 

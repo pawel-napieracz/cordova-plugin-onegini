@@ -1,8 +1,8 @@
 # Topic guides
 
-The topic guides describe key components and concepts at a fairly high level, and provide useful background information and explanation. Each guide is specific to a certain topic.
+Topic guides give a high level overview with practical examples for using the Onegini Cordova Plugin.
 
-Currently we have the following topic guides:
+The following topic guides are available:
 
 * [Getting started](getting-started.md)
 * [User authentication](user-authentication.md)

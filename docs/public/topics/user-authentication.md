@@ -4,15 +4,15 @@
 
 ## Introduction
 
-The Onegini Cordova plugin uses the OAuth 2.0 protocol to authenticate the device to access protected resources. To support this, the Onegini Cordova plugin acts as an OAuth 2.0 client.
+The Cordova Cordova Plugin uses the OAuth 2.0 protocol to authenticate the device to access protected resources. To support this, the Cordova Cordova Plugin acts as an OAuth 2.0 client.
 
 ## Registering a user
 
 The OAuth 2.0 protocol begins with registration. The [`onegini.user.register`](../reference/user/register.md) function can be used to register a user. This function can take an array of scopes that authentication is requested for as argument. If no scopes are requested, the default scopes of the application will be used.
 
-When registering a user, the Onegini Cordova plugin redirects the user to the authentication endpoint on the Token Server via the browser. Once the client credentials have been validated, and an authorization grant has been issued, the user will be redirected to the app. Based on this authorization grant, the client will request an access token for the specified set of scopes. If the grant includes a refresh token, the user will need to create a PIN.
+When registering a user, the Cordova Cordova Plugin redirects the user to the authentication endpoint on the Token Server via the browser. Once the client credentials have been validated, and an authorization grant has been issued, the user will be redirected to the app. Based on this authorization grant, the client will request an access token for the specified set of scopes. If the grant includes a refresh token, the user will need to create a PIN.
 
-The `onegini.user.register` function returns an `AuthenticationHandler` object, for which we need to implement the UI for the methods `onCreatePinRequest`, `onSuccess`, and `onError`.
+The `onegini.user.register` function returns a new [`AuthenticationHandler`](../reference/user/AuthenticationHandler.md), for which we need to implement the UI for the methods `onCreatePinRequest`, `onSuccess`, and `onError`.
 
 **Example code to register a user:**
 
@@ -32,11 +32,11 @@ onegini.user.register({ scopes: ["read"] })
 
 The `onSuccess` method indicates the user has been registered and also logged in. The `profileId` property of the resulting object can be stored for future use.
 
-Note that the PIN entered by the user should **not** be stored on the device or elsewhere in any shape or form. The Onegini Cordova plugin takes care of this for you in a secure manner.
+Note that the PIN entered by the user should **not** be stored on the device or elsewhere in any shape or form. The Cordova Cordova Plugin takes care of this for you in a secure manner.
 
 ## Getting registered users
 
-While it is possible to keep track of registered users oneself, the Onegini Cordova plugin also provides a function to retrieve all registered profiles.
+While it is possible to keep track of registered users oneself, the Cordova Cordova Plugin also provides a function to retrieve all registered profiles.
 
 **Example code to get registered users:**
 
