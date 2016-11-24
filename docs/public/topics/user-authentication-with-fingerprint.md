@@ -80,6 +80,6 @@ onegini.user.authenticate({ profileId: "profileIdOfUser" })
     });
 ```
 
-Note that `onFingerprintCaptured` and `onFingerprintFailed` will only be called on Android, as Touch ID on iOS is much more restrictive.
+Note that `onFingerprintCaptured` and `onFingerprintFailed` will only be called on Android, as Touch ID on iOS does not emit these events.
 
 If the user fails to authenticate using fingerprint too many times (this limit is set by the OS), the fingerprint authenticator is automatically deregistered and the relevant tokens are revoked by the Onegini Cordova plugin. At this point, a fallback to PIN is performed, and the user is request to enter their PIN via `onPinRequest`. If this too, fails, `onError` will be called, signalling the authentication has failed.
