@@ -2,7 +2,7 @@
 
 <!-- toc -->
 
-For security reasons, it is always advisable to explicitly logout a user. The Onegini Cordova plugin exposes the following function to do so.
+For security reasons, it is always advisable to explicitly logout a user. The Onegini Cordova Plugin exposes the following function to do so.
 
 ## `onegini.user.logout`
 

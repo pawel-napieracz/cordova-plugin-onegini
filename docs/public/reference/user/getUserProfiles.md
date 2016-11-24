@@ -2,7 +2,7 @@
 
 <!-- toc -->
 
-The Onegini Cordova plugin maintains a set of profiles that you have created. This method allows you to retrieve all existing profiles.
+The Onegini Cordova Plugin maintains a set of profiles that you have created. This method allows you to retrieve all existing profiles.
 
 ## `onegini.user.getUserProfiles`
 

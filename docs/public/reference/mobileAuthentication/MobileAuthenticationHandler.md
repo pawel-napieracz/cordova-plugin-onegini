@@ -4,7 +4,7 @@
 
 ## Introduction
 
-When a user is enrolled for mobile authentication, they are able to receive and respond to mobile authentication requests. After receiving a push notification containing such a request, the Onegini Cordova plugin needs to know how to handle it. This is done via a `MobileAuthenticationHandler` object, which can be used to register callbacks which will be called when certain mobile authentication steps are required.
+When a user is enrolled for mobile authentication, they are able to receive and respond to mobile authentication requests. After receiving a push notification containing such a request, the Onegini Cordova Plugin needs to know how to handle it. This is done via a `MobileAuthenticationHandler` object, which can be used to register callbacks which will be called when certain mobile authentication steps are required.
 
 **Example:** When a mobile authentication request of type **push** is received, the `onConfirmationRequest` callback will be called.
 
@@ -16,7 +16,7 @@ handler.onConfirmationRequest((actions, request) => {
 });
 ```
 
-When `onConfirmationRequest` is called, the user should be prompted to either accept or deny the mobile authentication request. Once the user has made a choice, it can be supplied to the Onegini Cordova plugin by calling an `action`, in this case `accept` or `deny`. The UI to do this is left up to the developer. The following example shows the general strategy to do this.
+When `onConfirmationRequest` is called, the user should be prompted to either accept or deny the mobile authentication request. Once the user has made a choice, it can be supplied to the Onegini Cordova Plugin by calling an `action`, in this case `accept` or `deny`. The UI to do this is left up to the developer. The following example shows the general strategy to do this.
 
 ```js
 handler.onConfirmationRequest((actions, request) => {

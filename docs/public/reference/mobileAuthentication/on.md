@@ -2,7 +2,7 @@
 
 <!-- toc -->
 
-When a user is enrolled for mobile authentication, they are able to receive and respond to mobile authentication requests. The Onegini Cordova plugin facilitates this by allowing you to register handler methods that implement the UI.
+When a user is enrolled for mobile authentication, they are able to receive and respond to mobile authentication requests. The Onegini Cordova Plugin facilitates this by allowing you to register handler methods that implement the UI.
 
 ## `onegini.mobileAuthentication.on`
 
