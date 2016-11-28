@@ -57,6 +57,10 @@ exports.defineAutoTests = function () {
     xhr.send("callback_uri=https://wwww.onegini.com&message=Test&type=" + type + "&user_id=testclientuserid");
   }
 
+  function setURLHandler(userId, successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiURLClient', 'setURLHandler', userId, successCb, failureCb);
+  }
+
   /******** onegini *********/
 
   describe('onegini', function () {
@@ -82,7 +86,10 @@ exports.defineAutoTests = function () {
               expect(err).toBeUndefined();
             });
       });
+
     });
+
+    setURLHandler();
   });
 
 

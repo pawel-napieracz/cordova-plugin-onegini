@@ -24,6 +24,7 @@ import com.onegini.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.client.OneginiClientBuilder;
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
+import com.onegini.mobile.sdk.android.handlers.OneginiURLHandler;
 
 public class OneginiSDK {
   private static OneginiSDK instance;
@@ -43,24 +44,33 @@ public class OneginiSDK {
   public OneginiClient getOneginiClient(final Context context) {
     OneginiClient oneginiClient = OneginiClient.getInstance();
     if (oneginiClient == null) {
-      oneginiClient = buildSDK(context);
+      oneginiClient = buildSDK(context, null);
     }
     return oneginiClient;
   }
 
-  private static OneginiClient buildSDK(final Context context) {
+  public void setURLHandler(final Context context, final OneginiURLHandler urlHandler) {
+    oneginiClient = buildSDK(context, urlHandler);
+  }
+
+  private static OneginiClient buildSDK(final Context context, final OneginiURLHandler urlHandler) {
     final Context applicationContext = context.getApplicationContext();
     final CreatePinRequestHandler createPinRequestHandler = CreatePinRequestHandler.getInstance();
     final PinAuthenticationRequestHandler pinAuthenticationRequestHandler = PinAuthenticationRequestHandler.getInstance();
     final FingerprintAuthenticationRequestHandler fingerprintAuthenticationRequestHandler = FingerprintAuthenticationRequestHandler.getInstance();
     final MobileAuthenticationHandler mobileAuthenticationHandler = MobileAuthenticationHandler.getInstance();
 
-    return new OneginiClientBuilder(applicationContext, createPinRequestHandler, pinAuthenticationRequestHandler)
+    final OneginiClientBuilder builder = new OneginiClientBuilder(applicationContext, createPinRequestHandler, pinAuthenticationRequestHandler)
         .setMobileAuthenticationRequestHandler(mobileAuthenticationHandler)
         .setMobileAuthenticationPinRequestHandler(mobileAuthenticationHandler)
         .setFingerprintAuthenticatioRequestHandler(fingerprintAuthenticationRequestHandler)
-        .setMobileAuthenticationFingerprintRequestHandler(mobileAuthenticationHandler)
-        .build();
+        .setMobileAuthenticationFingerprintRequestHandler(mobileAuthenticationHandler);
+
+    if (urlHandler != null) {
+      builder.setOneginiURLHandler(urlHandler);
+    }
+
+    return builder.build();
   }
 
   public boolean isStarted() {

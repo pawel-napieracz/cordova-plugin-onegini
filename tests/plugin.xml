@@ -20,6 +20,19 @@
         version="1.0.0">
 
   <name>Cordova Onegini Plugin Tests</name>
-  <js-module src="tests.js" name="tests">
-  </js-module>
+  <js-module src="tests.js" name="tests" />
+
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="OneginiURLClient">
+        <param name="android-package" value="com.onegini.tests.OneginiURLClient"/>
+        <param name="onload" value="false"/>
+      </feature>
+    </config-file>
+
+    <source-file src="tests/src/android/classes/OneginiURLClient.java"
+                 target-dir="tests/src/com/onegini"/>
+    <source-file src="tests/src/android/classes/URLHandler.java"
+                 target-dir="tests/src/com/onegini"/>
+  </platform>
 </plugin>
