@@ -107,7 +107,7 @@ handler.onFingerprintCaptured(() => {
 This method is called when the fingerprint previously detected was not recognized as the correct fingerprint. This method can be used to provide feedback to your users so the are aware the device did not recognize their fingerprint. Additionally, the user should be able to try again.
 
 ```js
-handler.onFingerprintCaptured(() => {
+handler.onFingerprintFailed(() => {
   console.log("Fingerprint incorrect! The user should try again.");
 });
 ```
