@@ -16,6 +16,7 @@
 
 package com.onegini.util;
 
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_BODY;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_HEADERS;
@@ -76,12 +77,48 @@ public class ActionArgumentsUtil {
   @Nullable
   public static OneginiAuthenticator getAuthenticatorFromArguments(final JSONArray args,
                                                                    final Set<OneginiAuthenticator> availableAuthenticators) throws JSONException {
-    // TODO: Logic to search for authenticator id in the case of authenticator type = CUSTOM
-    final String authenticatorType = args.getJSONObject(0).getString(PARAM_AUTHENTICATOR_TYPE);
 
+    final JSONObject options = args.getJSONObject(0);
+    final String authenticatorType = options.getString(PARAM_AUTHENTICATOR_TYPE);
+    final boolean hasAuthenticatorId = options.has(PARAM_AUTHENTICATOR_ID);
+
+    if (hasAuthenticatorId) {
+      final String authenticatorId = options.getString(PARAM_AUTHENTICATOR_ID);
+      return getAuthenticatorByTypeAndId(availableAuthenticators, authenticatorType, authenticatorId);
+    } else {
+      return getAuthenticatorByType(availableAuthenticators, authenticatorType);
+    }
+  }
+
+  @Nullable
+  private static OneginiAuthenticator getAuthenticatorByType(final Set<OneginiAuthenticator> availableAuthenticators, final String targetType) {
     for (OneginiAuthenticator authenticator : availableAuthenticators) {
       final String type = AuthenticatorUtil.authenticatorTypeToString(authenticator.getType());
-      if (type != null && type.equals(authenticatorType)) {
+
+      if (type == null) {
+        continue;
+      }
+
+      if (type.equals(targetType)) {
+        return authenticator;
+      }
+    }
+
+    return null;
+  }
+
+  @Nullable
+  private static OneginiAuthenticator getAuthenticatorByTypeAndId(final Set<OneginiAuthenticator> availableAuthenticators, final String targetType,
+                                                                  final String targetId) {
+    for (OneginiAuthenticator authenticator : availableAuthenticators) {
+      final String type = AuthenticatorUtil.authenticatorTypeToString(authenticator.getType());
+      final String id = authenticator.getId();
+
+      if (type == null || id == null) {
+        continue;
+      }
+
+      if (type.equals(targetType) && id.equals(targetId)) {
         return authenticator;
       }
     }

@@ -19,7 +19,6 @@ package com.onegini.handler;
 import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_CAPTURED;
 import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_FAILED;
 import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_SUCCESS;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,22 +30,26 @@ import org.apache.cordova.PluginResult;
 import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthenticationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthenticationError;
+import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthenticationFidoRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthenticationFingerprintRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthenticationPinRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiAcceptDenyCallback;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFidoCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFingerprintCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.AuthenticationAttemptCounter;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobileAuthentication.Callback;
 import com.onegini.mobileAuthentication.ConfirmationCallback;
+import com.onegini.mobileAuthentication.FidoCallback;
 import com.onegini.mobileAuthentication.FingerprintCallback;
 import com.onegini.mobileAuthentication.PinCallback;
 import com.onegini.util.PluginResultBuilder;
 
 public class MobileAuthenticationHandler
-    implements OneginiMobileAuthenticationHandler, OneginiMobileAuthenticationRequestHandler, OneginiMobileAuthenticationPinRequestHandler, OneginiMobileAuthenticationFingerprintRequestHandler {
+    implements OneginiMobileAuthenticationHandler, OneginiMobileAuthenticationRequestHandler,
+    OneginiMobileAuthenticationPinRequestHandler, OneginiMobileAuthenticationFingerprintRequestHandler, OneginiMobileAuthenticationFidoRequestHandler {
 
   private static MobileAuthenticationHandler instance = null;
   private final HashMap<Callback.Method, CallbackContext> challengeReceivers = new HashMap<Callback.Method, CallbackContext>();
@@ -95,8 +98,6 @@ public class MobileAuthenticationHandler
                                   final AuthenticationAttemptCounter authenticationAttemptCounter) {
     final PinCallback pinCallback = new PinCallback(oneginiMobileAuthenticationRequest, oneginiPinCallback, authenticationAttemptCounter);
     addAuthenticationRequestToQueue(pinCallback);
-
-    // TODO: Check if this request is a fallback from another request.
   }
 
   @Override
@@ -149,6 +150,16 @@ public class MobileAuthenticationHandler
         .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_CAPTURED)
         .withOneginiMobileAuthenticationRequest(fingerprintCallback.getMobileAuthenticationRequest())
         .build());
+  }
+
+  // *END*
+
+  // *START* Handling mobile authentication with Fido
+
+  @Override
+  public void startAuthentication(final OneginiMobileAuthenticationRequest oneginiMobileAuthenticationRequest, final OneginiFidoCallback oneginiFidoCallback) {
+    final FidoCallback fidoCallback = new FidoCallback(oneginiMobileAuthenticationRequest, oneginiFidoCallback);
+    addAuthenticationRequestToQueue(fidoCallback);
   }
 
   // *END*

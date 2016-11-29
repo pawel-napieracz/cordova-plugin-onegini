@@ -83,6 +83,11 @@ module.exports = (function () {
     return this;
   };
 
+  MobileAuthenticationHandler.prototype.onFidoRequest = function (cb) {
+    this.callbacks.onFidoRequest = cb;
+    return this;
+  };
+
   MobileAuthenticationHandler.prototype.onError = function (cb) {
     this.callbacks.onError = cb;
     return this;
