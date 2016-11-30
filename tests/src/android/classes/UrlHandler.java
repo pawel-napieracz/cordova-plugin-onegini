@@ -16,41 +16,43 @@
 
 package com.onegini.tests;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.Uri.Builder;
 
 import com.onegini.mobile.sdk.android.handlers.OneginiURLHandler;
 
-public class URLHandler implements OneginiURLHandler {
+public class UrlHandler implements OneginiURLHandler {
 
   private final static String PARAMETER_KEY_USER_ID = "user_id";
-  private final static String PARAMETER_DEFAULT_USER_ID = "devnull";
+
+  private Context context;
+
+  public void setUserId(final String userId) {
+    this.userId = userId;
+  }
 
   private String userId;
 
-  public URLHandler(final String userId) {
-    if (userId == null || userId.isEmpty()) {
-      this.userId = PARAMETER_DEFAULT_USER_ID;
-    } else {
-      this.userId = userId;
-    }
+  public UrlHandler(final Context context) {
+    this.context = context;
   }
 
   @Override
-  public void onOpenURL(final Uri uri) {
-    final Uri newUri = addParameter(uri, PARAMETER_KEY_USER_ID, userId);
+  public void onOpenURL(Uri uri) {
+    if (userId != null) {
+      uri = addParameter(uri, PARAMETER_KEY_USER_ID, userId);
+    }
+
     final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    startActivity(intent);
+    context.startActivity(intent);
   }
 
   private Uri addParameter(final Uri uri, final String key, final String value) {
-    String newQuery = uri.getQuery();
-    if (newQuery == null) {
-      newQuery = key + "=" + value;
-    } else {
-      newQuery += "&" + key + "=" + value;
-    }
-    return new Uri(uri.getScheme(), uri.getAuthority(), uri.getPath(), newQuery, uri.getFragment());
+    Builder builder = uri.buildUpon();
+    builder.appendQueryParameter(key, value);
+    return builder.build();
   }
 }

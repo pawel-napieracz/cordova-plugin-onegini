@@ -18,7 +18,7 @@
 
 exports.defineAutoTests = function () {
   var config = {
-    testForMultipleAuthenticators: true,
+    testForMultipleAuthenticators: false,
     testForMobileFingerprintAuthentication: false,
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
@@ -54,11 +54,19 @@ exports.defineAutoTests = function () {
       }
     };
 
-    xhr.send("callback_uri=https://wwww.onegini.com&message=Test&type=" + type + "&user_id=testclientuserid");
+    xhr.send("callback_uri=https://www.onegini.com&message=Test&type=" + type + "&user_id=devnull");
   }
 
-  function setURLHandler(userId, successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiURLClient', 'setURLHandler', userId, successCb, failureCb);
+  function setUrlHandlerUserId(userId, successCb, failureCb) {
+    userId = userId || {};
+    if (typeof(userId) !== 'object') {
+      var value = userId;
+      userId = {};
+      userId["userId"] = value;
+    }
+    userId = [userId];
+
+    cordova.exec(successCb, failureCb, "OneginiUrlClient", "setUserId", userId);
   }
 
   /******** onegini *********/
@@ -87,9 +95,17 @@ exports.defineAutoTests = function () {
             });
       });
 
+      it("should set url handler to 'devnull'", function (done) {
+        setUrlHandlerUserId("devnull",
+            function () {
+              expect(true).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+            });
+      });
     });
-
-    setURLHandler();
   });
 
 

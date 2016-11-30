@@ -49,8 +49,8 @@ public class OneginiSDK {
     return oneginiClient;
   }
 
-  public void setURLHandler(final Context context, final OneginiURLHandler urlHandler) {
-    oneginiClient = buildSDK(context, urlHandler);
+  public void setUrlHandler(final Context context, final OneginiURLHandler urlHandler) {
+    buildSDK(context, urlHandler);
   }
 
   private static OneginiClient buildSDK(final Context context, final OneginiURLHandler urlHandler) {

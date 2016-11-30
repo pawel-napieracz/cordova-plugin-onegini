@@ -24,15 +24,15 @@
 
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="OneginiURLClient">
-        <param name="android-package" value="com.onegini.tests.OneginiURLClient"/>
-        <param name="onload" value="false"/>
+      <feature name="OneginiUrlClient">
+        <param name="android-package" value="com.onegini.tests.OneginiUrlClient"/>
+        <param name="onload" value="true"/>
       </feature>
     </config-file>
 
-    <source-file src="tests/src/android/classes/OneginiURLClient.java"
-                 target-dir="tests/src/com/onegini"/>
-    <source-file src="tests/src/android/classes/URLHandler.java"
-                 target-dir="tests/src/com/onegini"/>
+    <source-file src="src/android/classes/OneginiUrlClient.java"
+                 target-dir="src/com/onegini/tests"/>
+    <source-file src="src/android/classes/UrlHandler.java"
+                 target-dir="src/com/onegini/tests"/>
   </platform>
 </plugin>
