@@ -62,7 +62,7 @@ dependencies {
   compile 'com.onegini.misc:og-ocra:100.00.00'
 
   // Google cloud messaging (GCM)
-  compile "com.google.android.gms:play-services-gcm:9.4.0"
+  compile 'com.google.android.gms:play-services-gcm:9.4.0'
 
   // Spongy castle
   compile 'com.madgag.spongycastle:core:1.54.0.0'
@@ -73,11 +73,6 @@ dependencies {
 
   // Google guava
   compile 'com.google.guava:guava:19.0'
-
-  // Fido
-  compile 'com.samsung.sds.fido.uaf.sdk:fido-client:1.4.1@aar'
-  compile 'org.fidoalliance.uaf.client.common:samsungsds-ccom:1.4.1@aar'
-  compile 'com.samsung.sds.fido.uaf.message:samsungsds-um:1.4.1'
 }
 
 afterEvaluate {
