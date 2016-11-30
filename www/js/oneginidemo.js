@@ -49,11 +49,11 @@ var OneginiDemo = (function () {
             }, "Mobile Authentication Request", ["Accept", "Reject"], "12346");
           })
           .onSuccess(function () {
-            alert("Mobile authentication request success!");
+            alert("PIN Mobile authentication request success!");
           })
           .onError(function (err) {
-            alert("Mobile authentication request failed!");
-            console.error("Mobile authentication request failed: ", err);
+            alert("PIN Mobile authentication request failed!");
+            console.error("PIN Mobile authentication request failed: ", err);
           });
 
       onegini.mobileAuthentication.on("fingerprint")
@@ -76,11 +76,30 @@ var OneginiDemo = (function () {
             console.info("Mobile Authentication event: fingerprint failed");
           })
           .onSuccess(function (actions, request) {
-            alert("Mobile authentication request success!");
+            alert("Fingerprint Mobile authentication request success!");
           })
           .onError(function (err) {
-            alert("Mobile authentication request failed!");
-            console.error("Mobile authentication request failed: ", err);
+            alert("Fingerprint Mobile authentication request failed!");
+            console.error("Fingerprint Mobile authentication request failed: ", err);
+          });
+
+      onegini.mobileAuthentication.on("fido")
+          .onFidoRequest(function (actions, request) {
+            navigator.notification.confirm(request.message, function (buttonIndex) {
+              if (buttonIndex === 1) {
+                actions.accept();
+              }
+              else {
+                actions.deny();
+              }
+            }, "Mobile Authentication Request", ["Accept", "Reject"]);
+          })
+          .onSuccess(function () {
+            alert("FIDO Mobile Authentication request success!");
+          })
+          .onError(function (err) {
+            alert("FIDO Mobile authentication request failed!");
+            console.error("FIDO Mobile authentication request failed: ", err);
           })
     },
 
@@ -281,7 +300,14 @@ var OneginiDemo = (function () {
     },
 
     getRegisteredAuthenticators: function () {
-      onegini.user.authenticators.getRegistered(
+      var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
+      profileId = prompt("Please enter the profileId", profileId);
+      if (!profileId) {
+        return;
+      }
+      onegini.user.authenticators.getRegistered({
+            profileId: profileId
+          },
           function (result) {
             alert("Success!\n\n" + JSON.stringify(result));
           },
@@ -292,7 +318,14 @@ var OneginiDemo = (function () {
     },
 
     getNotRegisteredAuthenticators: function () {
-      onegini.user.authenticators.getNotRegistered(
+      var profileId = this.userProfiles && this.userProfiles.length > 0 ? this.userProfiles[0].profileId : null;
+      profileId = prompt("Please enter the profileId", profileId);
+      if (!profileId) {
+        return;
+      }
+      onegini.user.authenticators.getNotRegistered({
+            profileId: profileId
+          },
           function (result) {
             alert("Success!\n\n" + JSON.stringify(result));
           },
