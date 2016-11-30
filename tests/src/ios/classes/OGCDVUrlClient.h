@@ -15,17 +15,9 @@
  */
 
 #import "CDVPlugin+OGCDV.h"
-#import "OneginiSDK.h"
 
-@interface OGCDVUserRegistrationClient : CDVPlugin<ONGRegistrationDelegate>
+@interface OGCDVUrlClient : CDVPlugin
 
-@property (nonatomic, copy) NSString *callbackId;
-@property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
-@property (nonatomic, copy) NSString *userId;
-
-- (void)start:(CDVInvokedUrlCommand *)command;
-- (void)createPin:(CDVInvokedUrlCommand *)command;
-- (void)getUserProfiles:(CDVInvokedUrlCommand *)command;
-- (void)isUserRegistered:(CDVInvokedUrlCommand *)command;
+- (void)setUserId:(NSString *)userId;
 
 @end

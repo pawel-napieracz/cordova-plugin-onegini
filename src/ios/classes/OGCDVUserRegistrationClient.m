@@ -100,7 +100,12 @@
     // run on the main thread; we initiated registration in a background thread, but now we need to manipulate the UI
     dispatch_async(dispatch_get_main_queue(), ^{
         OGCDVWebBrowserViewController *webBrowserViewController = [OGCDVWebBrowserViewController new];
-        webBrowserViewController.url = url;
+        if (self.userId != nil) {
+            NSString *query = [@"?user_id=" stringByAppendingString:self.userId];
+            webBrowserViewController.url = [NSURL URLWithString:query relativeToURL:url];
+        } else {
+            webBrowserViewController.url = url;
+        }
         webBrowserViewController.completionBlock = ^(NSURL *completionURL) {
         };
         [self.viewController presentViewController:webBrowserViewController animated:YES completion:nil];

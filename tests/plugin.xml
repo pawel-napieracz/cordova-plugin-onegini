@@ -22,6 +22,18 @@
   <name>Cordova Onegini Plugin Tests</name>
   <js-module src="tests.js" name="tests" />
 
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="OneginiUrlClient">
+        <param name="ios-package" value="OGCDVUrlClient" />
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+    <header-file src="src/ios/classes/OGCDVUrlClient.h"/>
+    <source-file src="src/ios/classes/OGCDVUrlClient.m"/>
+  </platform>
+
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="OneginiUrlClient">
