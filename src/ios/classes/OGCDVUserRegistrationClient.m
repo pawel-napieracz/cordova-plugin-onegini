@@ -113,8 +113,9 @@ static OGCDVUserRegistrationClient *sharedInstance;
     dispatch_async(dispatch_get_main_queue(), ^{
         OGCDVWebBrowserViewController *webBrowserViewController = [OGCDVWebBrowserViewController new];
         if (self.userId != nil) {
-            NSString *query = [@"?user_id=" stringByAppendingString:self.userId];
-            webBrowserViewController.url = [NSURL URLWithString:query relativeToURL:url];
+            webBrowserViewController.url = [OGCDVUserRegistrationClient addQueryParameterToUrl:url
+                                                                                 withQueryName:@"user_id"
+                                                                                withQueryValue:self.userId];
         } else {
             webBrowserViewController.url = url;
         }
@@ -138,6 +139,21 @@ static OGCDVUserRegistrationClient *sharedInstance;
 {
     [self.viewController dismissViewControllerAnimated:YES completion:nil];
     [self sendErrorResultForCallbackId:self.callbackId withError:error];
+}
+
++ (NSURL *)addQueryParameterToUrl:(NSURL *)url withQueryName:(NSString *)name withQueryValue:(NSString *)value
+{
+    NSURLComponents *components = [[NSURLComponents alloc] initWithURL:url resolvingAgainstBaseURL:false];
+    NSURLQueryItem *newQueryItem = [[NSURLQueryItem alloc] initWithName:name value:value];
+    NSMutableArray *queryItems = [NSMutableArray arrayWithCapacity:[components.queryItems count] + 1];
+    for (NSURLQueryItem *qi in components.queryItems) {
+        if (![qi.name isEqual:newQueryItem.name]) {
+            [queryItems addObject:qi];
+        }
+    }
+    [queryItems addObject:newQueryItem];
+    [components setQueryItems:queryItems];
+    return [components URL];
 }
 
 @end

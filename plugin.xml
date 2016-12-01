@@ -43,6 +43,7 @@
       </feature>
       <feature name="OneginiUserRegistrationClient">
         <param name="ios-package" value="OGCDVUserRegistrationClient" />
+        <param name="onload" value="true" />
       </feature>
       <feature name="OneginiUserDeregistrationClient">
         <param name="ios-package" value="OGCDVUserDeregistrationClient" />
