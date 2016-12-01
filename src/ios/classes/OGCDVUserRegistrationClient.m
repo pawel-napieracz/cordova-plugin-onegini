@@ -19,7 +19,19 @@
 #import "OGCDVUserClientHelper.h"
 #import "OGCDVConstants.h"
 
+static OGCDVUserRegistrationClient *sharedInstance;
+
 @implementation OGCDVUserRegistrationClient {
+}
+
++ (id)sharedInstance
+{
+    return sharedInstance;
+}
+
+- (void)pluginInitialize
+{
+    sharedInstance = self;
 }
 
 - (void)start:(CDVInvokedUrlCommand *)command

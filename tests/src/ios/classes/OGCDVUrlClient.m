@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
+#import "OGCDVUrlClient.h"
 #import "OGCDVUserRegistrationClient.h"
 
 NSString *const PARAM_USER_ID = @"userId";
-NSString *const OGCDVPluginClassUserRegistrationClient = @"OGCDVUserRegistrationClient";
 
 @implementation OGCDVUrlClient {
 }
@@ -26,7 +26,7 @@ NSString *const OGCDVPluginClassUserRegistrationClient = @"OGCDVUserRegistration
 {
     NSDictionary *options = command.arguments[0];
     NSString *userId = options[PARAM_USER_ID];
-    [[self.viewController getCommandInstance:OGCDVPluginClassUserRegistrationClient] setUserId:userId];
+    [[OGCDVUserRegistrationClient sharedInstance] setUserId:userId];
 
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }

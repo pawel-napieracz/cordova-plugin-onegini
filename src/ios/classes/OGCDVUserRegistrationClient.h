@@ -23,6 +23,7 @@
 @property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
 @property (nonatomic, copy) NSString *userId;
 
++ (id)sharedInstance;
 - (void)start:(CDVInvokedUrlCommand *)command;
 - (void)createPin:(CDVInvokedUrlCommand *)command;
 - (void)getUserProfiles:(CDVInvokedUrlCommand *)command;
