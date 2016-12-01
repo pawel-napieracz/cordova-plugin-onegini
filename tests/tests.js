@@ -18,7 +18,7 @@
 
 exports.defineAutoTests = function () {
   var config = {
-    testForMultipleAuthenticators: false,
+    testForMultipleAuthenticators: true,
     testForMobileFingerprintAuthentication: false,
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
