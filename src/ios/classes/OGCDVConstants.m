@@ -39,12 +39,14 @@ NSString *const OGCDVPluginClassMobileAuthenticationRequestClient = @"OneginiMob
 
 NSString *const OGCDVPluginAuthenticatorTypePin = @"PIN";
 NSString *const OGCDVPluginAuthenticatorTypeTouchId = @"Fingerprint";
+NSString *const OGCDVPluginAuthenticatorTypeFido = @"FIDO";
 
 NSString *const OGCDVPluginAuthEventSuccess = @"onSuccess";
 NSString *const OGCDVPluginAuthEventConfirmationRequest = @"onConfirmationRequest";
 NSString *const OGCDVPluginAuthEventPinRequest = @"onPinRequest";
 NSString *const OGCDVPluginAuthEventCreatePinRequest = @"onCreatePinRequest";
 NSString *const OGCDVPluginAuthEventFingerprintRequest = @"onFingerprintRequest";
+NSString *const OGCDVPluginAuthEventFidoRequest = @"onFidoRequest";
 
 NSString *const OGCDVPluginErrDescriptionInternalError = @"Onegini: Internal plugin error";
 NSString *const OGCDVPluginErrDescriptionIllegalArgumentProfile = @"Onegini: Argument Provided is not a valid profile object";

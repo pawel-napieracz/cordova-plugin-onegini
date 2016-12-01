@@ -22,6 +22,7 @@
 NSString *const OGCDVPluginMobileAuthenticationMethodConfirmation = @"confirmation";
 NSString *const OGCDVPluginMobileAuthenticationMethodPin = @"pin";
 NSString *const OGCDVPluginMobileAuthenticationMethodFingerprint = @"fingerprint";
+NSString *const OGCDVPluginMobileAuthenticationMethodFido = @"fido";
 static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 @implementation OGCDVMobileAuthenticationRequestClient {
@@ -44,7 +45,8 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
     authenticationEventsForMethods = @{
         OGCDVPluginMobileAuthenticationMethodConfirmation: OGCDVPluginAuthEventConfirmationRequest,
         OGCDVPluginMobileAuthenticationMethodPin: OGCDVPluginAuthEventPinRequest,
-        OGCDVPluginMobileAuthenticationMethodFingerprint: OGCDVPluginAuthEventFingerprintRequest
+        OGCDVPluginMobileAuthenticationMethodFingerprint: OGCDVPluginAuthEventFingerprintRequest,
+        OGCDVPluginMobileAuthenticationMethodFido: OGCDVPluginAuthEventFidoRequest
     };
 
     sharedInstance = self;
@@ -71,7 +73,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 - (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge forRequest:(ONGMobileAuthenticationRequest *)request
 {
-    if (challenge.error.code == ONGPinAuthenticationErrorInvalidPin) {
+    if (challenge.error.code == ONGAuthenticationErrorInvalidPin) {
         [delegate setPinChallenge:challenge];
         [delegate sendChallenge:challengeReceiversCallbackIds[OGCDVPluginMobileAuthenticationMethodPin]];
         return;
@@ -82,8 +84,6 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
                   forRequest:request
                    forMethod:OGCDVPluginMobileAuthenticationMethodPin];
     [operationQueue addOperation:operation];
-
-    // TODO: Check if this request is a fallback from another request
 }
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveFingerprintChallenge:(ONGFingerprintChallenge *)challenge
@@ -93,6 +93,16 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
         initWithFingerprintChallenge:challenge
                           forRequest:request
                            forMethod:OGCDVPluginMobileAuthenticationMethodFingerprint];
+    [operationQueue addOperation:operation];
+}
+
+- (void)userClient:(ONGUserClient *)userClient didReceiveFIDOChallenge:(ONGFIDOChallenge *)challenge
+        forRequest:(ONGMobileAuthenticationRequest *)request
+{
+    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+        initWithFidoChallenge:challenge
+                   forRequest:request
+                    forMethod:OGCDVPluginMobileAuthenticationMethodFido];
     [operationQueue addOperation:operation];
 }
 
@@ -136,6 +146,9 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
                                          withCallbackId:command.callbackId];
         } else if ([OGCDVPluginMobileAuthenticationMethodFingerprint isEqualToString:method]) {
             [delegate mobileAuthenticationRequestClient:self didReceiveFingerprintChallengeResponse:result
+                                         withCallbackId:command.callbackId];
+        } else if ([OGCDVPluginMobileAuthenticationMethodFido isEqualToString:method]) {
+            [delegate mobileAuthenticationRequestClient:self didReceiveFidoChallengeResponse:result
                                          withCallbackId:command.callbackId];
         } else {
             [self sendErrorResultForCallbackId:command.callbackId

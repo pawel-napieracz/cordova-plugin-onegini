@@ -38,18 +38,46 @@
     return dictionary;
 }
 
-+ (ONGAuthenticator *)authenticatorFromArguments:(NSSet<ONGAuthenticator *> *)registeredAuthenticators options:
++ (ONGAuthenticator *)authenticatorFromArguments:(NSSet<ONGAuthenticator *> *)authenticators options:
     (NSDictionary *)options
 {
     NSString *authenticatorType = options[OGCDVPluginKeyAuthenticatorType];
+    NSString *authenticatorId = options[OGCDVPluginKeyAuthenticatorId];
 
-    // TODO: Implement search on authenticatorId once custom authenticators have been implemented
+    if (authenticatorId == nil) {
+        return [self findAuthenticator:authenticators byType:authenticatorType];
+    } else {
+        return [self findAuthenticator:authenticators byType:authenticatorType andId:authenticatorId];
+    }
+}
 
-    for (ONGAuthenticator *authenticator in registeredAuthenticators) {
-        if ([[self typeStringFromAuthenticatorType:authenticator.type] isEqualToString:authenticatorType]) {
++ (ONGAuthenticator *)findAuthenticator:(NSSet<ONGAuthenticator *> *)authenticators byType:(NSString *)authenticatorType
+{
+    for (ONGAuthenticator *authenticator in authenticators) {
+        NSString *type = [self typeStringFromAuthenticatorType:authenticator.type];
+        if ([ type isEqualToString:authenticatorType]) {
             return authenticator;
         }
     }
+
+    return nil;
+}
+
++ (ONGAuthenticator *)findAuthenticator:(NSSet<ONGAuthenticator *> *)authenticators byType:(NSString *)authenticatorType andId:(NSString *)authenticatorId
+{
+    for (ONGAuthenticator *authenticator in authenticators) {
+        NSString *type = [self typeStringFromAuthenticatorType:authenticator.type];
+        NSString *id = authenticator.identifier;
+
+        if (id == nil) {
+            continue;
+        }
+
+        if ([type isEqualToString:authenticatorType] && [id isEqualToString:authenticatorId]) {
+            return authenticator;
+        }
+    }
+
     return nil;
 }
 
@@ -60,6 +88,8 @@
             return OGCDVPluginAuthenticatorTypePin;
         case ONGAuthenticatorTouchID:
             return OGCDVPluginAuthenticatorTypeTouchId;
+        case ONGAuthenticatorFIDO:
+            return OGCDVPluginAuthenticatorTypeFido;
         default:
             return nil;
     }

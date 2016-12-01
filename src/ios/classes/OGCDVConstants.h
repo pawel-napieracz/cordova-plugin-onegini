@@ -37,12 +37,14 @@ extern NSString *const OGCDVPluginClassMobileAuthenticationRequestClient;
 
 extern NSString *const OGCDVPluginAuthenticatorTypePin;
 extern NSString *const OGCDVPluginAuthenticatorTypeTouchId;
+extern NSString *const OGCDVPluginAuthenticatorTypeFido;
 
 extern NSString *const OGCDVPluginAuthEventSuccess;
 extern NSString *const OGCDVPluginAuthEventConfirmationRequest;
 extern NSString *const OGCDVPluginAuthEventPinRequest;
 extern NSString *const OGCDVPluginAuthEventCreatePinRequest;
 extern NSString *const OGCDVPluginAuthEventFingerprintRequest;
+extern NSString *const OGCDVPluginAuthEventFidoRequest;
 
 extern NSString *const OGCDVPluginErrDescriptionInternalError;
 extern NSString *const OGCDVPluginErrDescriptionIllegalArgumentProfile;
