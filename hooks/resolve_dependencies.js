@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-const fs = require("fs");
+const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const spawn = require('child_process').spawn;
@@ -30,7 +30,7 @@ module.exports = function (context) {
     cwd: cwd,
     shell: true
   };
-  executable = getGradleExecutableForPlatform()
+  executable = getGradleExecutableForPlatform();
   const gradle = spawn(executable, ['clean', 'resolveDependencies'], options);
 
   gradle.stdout.on('data', (data) => {
