@@ -42,9 +42,9 @@ exports.defineAutoTests = function () {
 
     type = type || "push";
 
-    xhr.open("POST", "https://demo-msp.onegini.com/oauth/api/v2/authenticate/user");
+    xhr.open("POST", "https://onegini-msp-snapshot.test.onegini.io/oauth/api/v2/authenticate/user");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.setRequestHeader("Authorization", "Basic ODgyMzRCMEU5MzIzNzFCNzY3N0I2QkZCNUFGQTJGMTI1QjY3NkNGNTNBMTExREFGRjQyNjQ3NzM5QzRGMDVDNTo1MTE2NzA5OTM4QUE1MkY2RkI5NDkwRDc3MUE1QzQ0Rjk4N0QxRUE3ODJERUMwNEQwRTM4NzA5NEJBMzVGMzM5");
+    xhr.setRequestHeader("Authorization", "Basic MjNBMDIxQTgyNzFGNDdEODUwRTM2Qjc2NDgwMEQ0NjQ0MDM4RUZDODAzMTFGN0U1QjNDMTE4QTgzNTgwOUMwQTpGMkM4MzYwMDJBODVCNEQxMkU5MzRDREFCNEZFRUMwQzk4QkExRjNEMzM2NzM2RkJCNTMxNzE3MzVGMzZCM0Mx");
 
     xhr.onreadystatechange = function () {
       if (this.readyState === 4) {
@@ -95,7 +95,7 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it("should set url handler to 'devnull'", function (done) {
+      afterAll(function (done) {
         setUrlHandlerUserId("devnull",
             function () {
               expect(true).toBe(true);
@@ -956,7 +956,7 @@ exports.defineAutoTests = function () {
       it('should fetch a non-anonymous resource', function (done) {
         onegini.resource.fetch(
             {
-              url: 'https://demo-msp.onegini.com/resources/devices',
+              url: 'https://onegini-msp-snapshot.test.onegini.io/resources/devices',
               headers: {
                 'X-Test-String': 'foobar',
                 'X-Test-Int': 1337
@@ -986,7 +986,7 @@ exports.defineAutoTests = function () {
       it('should return error context when request fails', function (done) {
         onegini.resource.fetch({
               method: 'POST',
-              url: 'https://demo-msp.onegini.com/resources/devices'
+              url: 'https://onegini-msp-snapshot.test.onegini.io/resources/devices'
             }, function (response) {
               expect(response).toBeUndefined();
               fail('Success callback called, but method should have failed');
@@ -1000,7 +1000,7 @@ exports.defineAutoTests = function () {
 
       it('should intercept an XMLHttpRequest', function (done) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://demo-msp.onegini.com/resources/devices');
+        xhr.open('GET', 'https://onegini-msp-snapshot.test.onegini.io/resources/devices');
         xhr.onload = function () {
           expect(this.readyState).toEqual(4);
           expect(this.status).toBe(200);
@@ -1219,7 +1219,7 @@ exports.defineAutoTests = function () {
   describe('onegini.resource', function () {
     it('should fetch an anonymous resource', function (done) {
       onegini.resource.fetch({
-            url: 'https://demo-msp.onegini.com/resources/application-details',
+            url: 'https://onegini-msp-snapshot.test.onegini.io/resources/application-details',
             anonymous: true
           },
           function (response) {
