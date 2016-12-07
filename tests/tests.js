@@ -20,6 +20,7 @@ exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
     testForMobileFingerprintAuthentication: false,
+    userId: "devnull-cordovatests",
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
     }
@@ -54,7 +55,7 @@ exports.defineAutoTests = function () {
       }
     };
 
-    xhr.send("callback_uri=https://www.onegini.com&message=Test&type=" + type + "&user_id=devnull");
+    xhr.send("callback_uri=https://www.onegini.com&message=Test&type=" + type + "&user_id=" + config.userId);
   }
 
   function setUrlHandlerUserId(userId, successCb, failureCb) {
@@ -96,7 +97,7 @@ exports.defineAutoTests = function () {
       });
 
       afterAll(function (done) {
-        setUrlHandlerUserId("devnull",
+        setUrlHandlerUserId(config.userId,
             function () {
               expect(true).toBe(true);
               done();
@@ -534,10 +535,10 @@ exports.defineAutoTests = function () {
                 actions.deny();
               })
               .onSuccess(function () {
-                done();
+                fail("Mobile authentication request succeeded, but should have failed");
               })
               .onError(function () {
-                fail("Mobile authentication request succeeded, but should have failed");
+                done();
               });
 
           sendMobileAuthenticationRequest();
