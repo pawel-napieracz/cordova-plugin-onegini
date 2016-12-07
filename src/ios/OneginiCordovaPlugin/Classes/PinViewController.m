@@ -80,6 +80,7 @@
     [self.pinForgottenButton setTitleColor:[OGNColorFileParser colorForKey:kOGNPinscreenForgottenLabel] forState:UIControlStateNormal];
     self.backgroundView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinscreenBackground];
     self.pinBackgroundView.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinKeyboardBackground];
+    self.errorLabel.textColor = [OGNColorFileParser colorForKey:kOGNPinscreenErrorText];
 
     for (UIButton *keyboardButton in @[self.key1, self.key2, self.key3, self.key4, self.key5, self.key6, self.key7, self.key8, self.key9, self.key0, self.backKey]) {
         keyboardButton.backgroundColor = [OGNColorFileParser colorForKey:kOGNPinKeyboardButtonBackground];
