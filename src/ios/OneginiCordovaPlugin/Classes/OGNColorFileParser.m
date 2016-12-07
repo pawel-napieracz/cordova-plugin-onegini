@@ -37,6 +37,8 @@ NSString *const kOGNPinKeyboardButtonText = @"pin_keyboard_button_text";
 
 NSString *const kOGNPinscreenForgottenLabel = @"pinscreen_forgotten_label";
 
+NSString *const kOGNPinscreenErrorText = @"error_message_text";
+
 @interface OGNColorFileParser ()<NSXMLParserDelegate>
 
 @property (nonatomic) NSMutableDictionary<NSString *, UIColor *> *parsedColors;

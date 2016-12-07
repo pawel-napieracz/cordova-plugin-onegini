@@ -36,6 +36,8 @@ extern NSString *const kOGNPinKeyboardButtonText;
 
 extern NSString *const kOGNPinscreenForgottenLabel;
 
+extern NSString *const kOGNPinscreenErrorText;
+
 @interface OGNColorFileParser : NSObject
 
 + (UIColor *)colorForKey:(NSString *)key;
