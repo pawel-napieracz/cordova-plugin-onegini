@@ -19,7 +19,19 @@
 #import "OGCDVUserClientHelper.h"
 #import "OGCDVConstants.h"
 
+static OGCDVUserRegistrationClient *sharedInstance;
+
 @implementation OGCDVUserRegistrationClient {
+}
+
++ (id)sharedInstance
+{
+    return sharedInstance;
+}
+
+- (void)pluginInitialize
+{
+    sharedInstance = self;
 }
 
 - (void)start:(CDVInvokedUrlCommand *)command
@@ -100,7 +112,13 @@
     // run on the main thread; we initiated registration in a background thread, but now we need to manipulate the UI
     dispatch_async(dispatch_get_main_queue(), ^{
         OGCDVWebBrowserViewController *webBrowserViewController = [OGCDVWebBrowserViewController new];
-        webBrowserViewController.url = url;
+        if (self.userId != nil) {
+            webBrowserViewController.url = [OGCDVUserRegistrationClient addQueryParameterToUrl:url
+                                                                                 withQueryName:@"user_id"
+                                                                                withQueryValue:self.userId];
+        } else {
+            webBrowserViewController.url = url;
+        }
         webBrowserViewController.completionBlock = ^(NSURL *completionURL) {
         };
         [self.viewController presentViewController:webBrowserViewController animated:YES completion:nil];
@@ -121,6 +139,21 @@
 {
     [self.viewController dismissViewControllerAnimated:YES completion:nil];
     [self sendErrorResultForCallbackId:self.callbackId withError:error];
+}
+
++ (NSURL *)addQueryParameterToUrl:(NSURL *)url withQueryName:(NSString *)name withQueryValue:(NSString *)value
+{
+    NSURLComponents *components = [[NSURLComponents alloc] initWithURL:url resolvingAgainstBaseURL:false];
+    NSURLQueryItem *newQueryItem = [[NSURLQueryItem alloc] initWithName:name value:value];
+    NSMutableArray *queryItems = [NSMutableArray arrayWithCapacity:[components.queryItems count] + 1];
+    for (NSURLQueryItem *qi in components.queryItems) {
+        if (![qi.name isEqual:newQueryItem.name]) {
+            [queryItems addObject:qi];
+        }
+    }
+    [queryItems addObject:newQueryItem];
+    [components setQueryItems:queryItems];
+    return [components URL];
 }
 
 @end
