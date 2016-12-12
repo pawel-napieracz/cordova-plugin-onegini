@@ -1,75 +1,14 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta name="format-detection" content="telephone=no">
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-  <link rel="stylesheet" type="text/css" href="css/index.css">
-  <title>Onegini demo</title>
-  <script>
-    window.onerror = function (msg, line, file) {
-      alert(msg + ", " + line + ", " + file);
-    }
-  </script>
-</head>
-<body>
-<div class="app">
-  <div id="deviceready" class="blink">
-    <p class="event listening">Connecting to Device</p>
-    <p class="event received">Onegini SDK is Ready</p>
-
-    <script>
-      // First thing to do is calling OneginiDemo.start(), but we make sure
-      // it's called after 'deviceready' fired (as any other Cordova plugin call).
-      document.addEventListener('deviceready', function () {
-        OneginiDemo.start();
-      }, false)
-    </script>
-
-    <button onclick="window.location='cdvtests/index.html'">Run Jasmine tests</button>
-
-    <h3>User Registration</h3>
-    <p>
-      <button onclick="OneginiDemo.getUserProfiles()">get user profiles</button>
-      <button onclick="OneginiDemo.isUserRegistered()">is user registered?</button>
-      <br/>
-      <button onclick="OneginiDemo.startRegistration()">register</button>
-      <button onclick="OneginiDemo.deregister()">deregister</button>
-    </p>
-
-    <h3>Device Authentication</h3>
-    <p>
-      <button onclick="OneginiDemo.startDeviceAuthentication()">authenticate</button>
-    </p>
-
-    <h3>User Authentication</h3>
-    <p>
-      <button onclick="OneginiDemo.startUserAuthentication()">authenticate</button>
-      <button onclick="OneginiDemo.getAuthenticatedUserProfile()">get authenticated user profile</button>
-      <button onclick="OneginiDemo.reauthenticate()">reauthenticate</button>
-      <button onclick="OneginiDemo.logout()">logout</button>
-    </p>
-
-    <h3>Change Pin</h3>
-    <p>
-      <button onclick="OneginiDemo.startChangePin()">start change pin</button>
-    </p>
-
-    <h3>Authenticators</h3>
-    <p>
-      <button onclick="OneginiDemo.getRegisteredAuthenticators()">registered</button>
-      <button onclick="OneginiDemo.getNotRegisteredAuthenticators()">not registered</button>
-      <button onclick="OneginiDemo.registerFingerprintAuthenticator()">Register Fingerprint</button>
-      <button onclick="OneginiDemo.setFingerprintAuthenticator()">Prefer Fingerprint</button>
-    </p>
-
-    <h3>Mobile Authentication</h3>
-    <p>
-    <button onclick="OneginiDemo.enrollForMobileAuthentication()">enroll</button>
-  </div>
-  <br/><br/>
-</div>
-<script type="text/javascript" src="cordova.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript" src="js/oneginidemo.js"></script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Cordova Example App</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="cordova.js"></script>
+    <script src="dist/build.js"></script>
+  </body>
 </html>
