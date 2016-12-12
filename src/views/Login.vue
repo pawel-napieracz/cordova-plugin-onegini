@@ -4,18 +4,23 @@
     <select-profile v-if="userProfiles.length > 0" @select="selectProfileId" :user-profiles="userProfiles" />
     <button-lg v-if="userProfiles.length > 0" @click="login" text="Login" />
     <button-lg @click="register" text="Register" />
+    <fingerprint-modal v-if="showFingerprintModal" :status="fingerprintStatus" :actions="fingerprintActions" />
   </div>
 </template>
 
 <script>
 import ButtonLarge from '../components/Button-large.vue';
 import SelectProfile from '../components/Select-profile.vue';
+import FingerprintModal from '../components/Fingerprint-modal.vue';
 
 export default {
   data () {
     return {
       userProfiles: [],
-      selectedProfileId: null
+      selectedProfileId: null,
+      showFingerprintModal: false,
+      fingerprintStatus: null,
+      fingerprintActions: null
     }
   },
 
@@ -46,19 +51,37 @@ export default {
 
       onegini.user.authenticate(this.selectedProfileId)
         .onPinRequest((actions, options) => {
-          window.plugins.pinDialog.prompt(
-                `Please enter your pin.\n${options.remainingFailureCount } out of ${options.maxFailureCount } attempts remaining`,
-                callback,
-                'Authenticate',
-                ['Login','Cancel']);
+          this.showFingerprintModal = false;
+          let callback = (results) => {
+            if (results.buttonIndex == 1) {
+              actions.providePin(results.input1);
+            }
+          }
 
-                function callback(results) {
-                  if (results.buttonIndex == 1) {
-                    actions.providePin(results.input1);
-                  }
-                }
+          window.plugins.pinDialog.prompt(
+              `Please enter your pin.\n${options.remainingFailureCount } out of ${options.maxFailureCount } attempts remaining`,
+              callback, 'Authenticate', ['Login','Cancel']);
+        })
+        .onFingerprintRequest((actions) => {
+          let callback = (result) => {
+            if (result == 1) {
+              this.showFingerprintModal = true;
+              this.fingerprintActions = actions;
+              this.fingerprintStatus = 'Touch sensor to start';
+              actions.acceptFingerprint();
+            }
+          }
+
+          navigator.notification.confirm('Login using your fingerprint?', callback, 'Authenticate', ['Continue','Cancel']);
+        })
+        .onFingerprintCaptured(() => {
+          this.fingerprintStatus = 'Verifying...';
+        })
+        .onFingerprintFailed(() => {
+          this.fingerprintStatus = 'No match!';
         })
         .onSuccess(() => {
+          this.showFingerprintModal = false;
           navigator.notification.alert('Authentication success. You are now logged in!');
         })
         .onError((err) => {
@@ -70,17 +93,13 @@ export default {
     register: function() {
       onegini.user.register()
           .onCreatePinRequest((actions, options) => {
-            window.plugins.pinDialog.prompt(
-              'Create your ' + options.pinLength + ' digit pin',
-              callback,
-              'Register',
-              ['Create','Cancel']);
-
-              function callback(results) {
-                if (results.buttonIndex == 1) {
-                  actions.createPin(results.input1);
-                }
+            let callback = (results) => {
+              if (results.buttonIndex == 1) {
+                actions.createPin(results.input1);
               }
+            }
+
+            window.plugins.pinDialog.prompt('Create your ' + options.pinLength + ' digit pin', callback, 'Register', ['Create','Cancel']);
           })
           .onSuccess((result) => {
             this.getUserProfiles();
@@ -94,7 +113,8 @@ export default {
 
   components: {
     'button-lg': ButtonLarge,
-    'select-profile': SelectProfile
+    'select-profile': SelectProfile,
+    'fingerprint-modal': FingerprintModal
   }
 }
 </script>
