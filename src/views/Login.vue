@@ -1,15 +1,16 @@
 <template>
   <div>
     <h1>Login</h1>
-    <select v-if="userProfiles.length > 0" v-model="selectedProfileId">
-      <option v-for="userProfile in userProfiles">{{userProfile.profileId}}</option>
-    </select>
-    <button @click="login">Login</button>
-    <button @click="register">Register</button>
+    <select-profile v-if="userProfiles.length > 0" @select="selectProfileId" :user-profiles="userProfiles" />
+    <button-lg v-if="userProfiles.length > 0" @click="login" text="Login" />
+    <button-lg @click="register" text="Register" />
   </div>
 </template>
 
 <script>
+import ButtonLarge from '../components/Button-large.vue';
+import SelectProfile from '../components/Select-profile.vue';
+
 export default {
   data () {
     return {
@@ -33,7 +34,16 @@ export default {
             });
     },
 
+    selectProfileId: function(profileId) {
+      this.selectedProfileId = profileId;
+    },
+
     login: function() {
+      if(!this.selectedProfileId) {
+        navigator.notification.alert('Please select a User Profile first');
+        return;
+      }
+
       onegini.user.authenticate(this.selectedProfileId)
         .onPinRequest((actions, options) => {
           window.plugins.pinDialog.prompt(
@@ -52,7 +62,8 @@ export default {
           navigator.notification.alert('Authentication success. You are now logged in!');
         })
         .onError((err) => {
-          navigator.notification.alert('Authentication failed. ' + err.reason);
+          console.error(err);
+          navigator.notification.alert('Authentication failed. ' + err.description);
         });
     },
 
@@ -76,9 +87,14 @@ export default {
             navigator.notification.alert('Registration success! Profile ID: ' + result.profileId);
           })
           .onError((err) => {
-            navigator.notification.alert('Registration failed. ' + err.reason);
+            navigator.notification.alert('Registration failed. ' + err.description);
           });
     }
+  },
+
+  components: {
+    'button-lg': ButtonLarge,
+    'select-profile': SelectProfile
   }
 }
 </script>
