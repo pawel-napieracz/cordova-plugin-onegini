@@ -65,10 +65,13 @@ export default {
         .onFingerprintRequest((actions) => {
           let callback = (result) => {
             if (result == 1) {
-              this.showFingerprintModal = true;
-              this.fingerprintActions = actions;
-              this.fingerprintStatus = 'Touch sensor to start';
-              actions.acceptFingerprint();
+              actions.acceptFingerprint({ iosPrompt: 'Login to the Example App'});
+
+              if (cordova.platformId === 'android'){
+                this.showFingerprintModal = true;
+                this.fingerprintActions = actions;
+                this.fingerprintStatus = 'Touch sensor to start';
+              }
             }
           }
 

@@ -1,21 +1,19 @@
 <template>
-  <transition name="fade">
-    <div class="mask">
-      <div class="wrapper">
-        <div class="container">
-          <div class="header">
-            <h4>Login with your fingerprint</h4>
-          <div>
-          <div class="body">
-            <p>{{status}}</p>
-          </div>
-          <div class="footer">
-            <button-lg text="Use PIN instead" @click="fallbackToPin"/>
-          </div>    
+  <div class="mask">
+    <div class="wrapper">
+      <div class="container">
+        <div class="header">
+          <h4>Login with your fingerprint</h4>
+        <div>
+        <div class="body">
+          <p>{{status}}</p>
         </div>
+        <div class="footer">
+          <button-lg text="Use PIN instead" @click="fallbackToPin"/>
+        </div>    
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
