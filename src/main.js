@@ -7,11 +7,11 @@ Vue.config.devtools = true;
 Vue.config.debug = true;
 Vue.config.silent = false;
 
-import App from './components/App.vue'
-import Login from './components/Login.vue'
+import App from './views/App.vue'
+import Login from './views/Login.vue'
 
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'abstract',
   routes: [
     {path: '/login', component: Login}
   ]

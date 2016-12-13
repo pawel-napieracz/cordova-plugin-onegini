@@ -1,11 +1,6 @@
 <template>
   <div id="app">
     <img src="img/logo.png" />
-    <div v-if="ready">
-      <router-link to="/">App</router-link>
-      <router-link to="/login">Login</router-link>
-    </div>
-
     <template v-if="$route.matched.length">
       <router-view></router-view>
     </template>
@@ -20,7 +15,6 @@ export default {
   data () {
     return {
       state: 'Waiting for device...',
-      ready: false
     }
   },
 
@@ -34,7 +28,7 @@ export default {
       onegini.start()
         .then(() => {
           this.state = 'Ready!';
-          this.ready = true;
+          this.$router.push('login');
         })
         .catch((err) => {
           this.state = err.description;
@@ -42,7 +36,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>
@@ -62,20 +55,6 @@ img {
 
 h1, h2 {
   font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
 }
 
 </style>
