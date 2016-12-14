@@ -25,14 +25,22 @@ export default {
   methods: {
     startOnegini: function() {
       this.state = 'Waiting for Onegini Plugin...';
+
       onegini.start()
-        .then(() => {
-          this.state = 'Ready!';
-          this.$router.push('login');
-        })
-        .catch((err) => {
-          this.state = err.description;
-        })
+          .then(() => {
+            this.state = 'Ready!';
+            return onegini.user.getAuthenticatedUserProfile()
+          })
+          .then(() => {
+            this.$router.push('dashboard');
+          })
+          .catch((err) => {
+            if (err.code == 8005) {
+              this.$router.push('login');
+            } else {
+              this.state = err.description;
+            }
+          });
     }
   }
 }

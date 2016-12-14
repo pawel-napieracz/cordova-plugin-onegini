@@ -85,7 +85,9 @@ export default {
         })
         .onSuccess(() => {
           this.showFingerprintModal = false;
-          navigator.notification.alert('Authentication success. You are now logged in!');
+          navigator.notification.alert('Authentication success. You are now logged in!', () => {
+            this.$router.push('dashboard');
+          });
         })
         .onError((err) => {
           console.error(err);
@@ -106,7 +108,9 @@ export default {
           })
           .onSuccess((result) => {
             this.getUserProfiles();
-            navigator.notification.alert('Registration success! Profile ID: ' + result.profileId);
+            navigator.notification.alert('Registration success! Profile ID: ' + result.profileId, () => {
+              this.$router.push('dashboard');
+            });
           })
           .onError((err) => {
             navigator.notification.alert('Registration failed. ' + err.description);
