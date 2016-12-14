@@ -21,7 +21,7 @@ export default {
     -webkit-appearance: none;
     display: block;
     padding: .5em;
-    min-width: 80%;
+    width: 80%;
     margin: .5em auto;
 
     color: #fff;

@@ -1,5 +1,5 @@
 <template>
-  <ul v-if="devices.length > 0" class="block-list">
+  <ul class="block-list">
     <li v-for="device in devices" class="block">
       <h5>{{device.name}}</h5>
       <ul class="prop-list">
@@ -30,7 +30,7 @@ export default {
             this.devices = JSON.parse(result.body).devices;
           })
           .catch((err) => {
-            navigator.notfication.alert('Error while fetching device list! ' + err.description)
+            navigator.notification.alert('Error while fetching device list! ' + err.description)
           });
     }
   },

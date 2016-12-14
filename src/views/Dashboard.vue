@@ -1,10 +1,10 @@
 <template>
   <div>
     <h3>Hello!</h3>
-    <button-lg text="Settings" />
+    <button-lg text="Settings" @click="$router.push('settings')" />
     <button-lg text="Logout" @click="logout" />
     <button-lg text="Deregister" @click="deregister" />
-    <h3>Your devices:</h3>
+    <h3>Your devices</h3>
     <device-list />
   </div>
 </template>
