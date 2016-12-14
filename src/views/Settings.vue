@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="view">
     <h1>Settings</h1>
     <button-lg text="Enable Mobile Authentication" @click="enrollForMobileAuthentication" />
     <button-lg text="Change PIN" @click="changePin" />
@@ -16,6 +16,7 @@
         </div>
       </li>
     </ul>
+    <button-lg text="‹ Back to Dashboard" @click="$router.push('dashboard')" />
   </div>
 </template>
 
@@ -153,6 +154,8 @@ export default {
 <style scoped>
 ul {
   padding: 0;
+  margin: 0 auto;
+  width: 80%;
   list-style-type: none;
 }
 
@@ -161,7 +164,7 @@ li {
   align-items: center;
 
   padding: .5em;
-  margin: 1.2em;
+  margin: 1.2em 0;
 
   background-color: rgba(0, 0, 0, .05);
   box-shadow: 0 0 5px rgba(0, 0, 0, .3);

@@ -25,7 +25,7 @@ export default {
     margin: .5em auto;
 
     color: #fff;
-    font-size: 1.5em;
+    font-size: 1.2em;
     text-transform: uppercase;
     
     background-color: #00aeef;
