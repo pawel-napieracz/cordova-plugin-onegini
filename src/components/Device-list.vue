@@ -30,7 +30,7 @@ export default {
             this.devices = JSON.parse(result.body).devices;
           })
           .catch((err) => {
-            navigator.notification.alert('Error while fetching device list! ' + err.description)
+            navigator.notification.alert('Error while fetching device list: ' + err.description);
           });
     }
   },

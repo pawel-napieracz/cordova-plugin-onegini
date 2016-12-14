@@ -91,6 +91,7 @@ export default {
         })
         .onError((err) => {
           console.error(err);
+          this.getUserProfiles();
           navigator.notification.alert('Authentication failed. ' + err.description);
         });
     },

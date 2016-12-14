@@ -134,7 +134,8 @@ export default {
 
     prefer: function(authenticator) {
       if (!authenticator.isRegistered) {
-        navigator.notification.alert('Authenticator needs to be registered before it can be set as preferred');  
+        navigator.notification.alert('Authenticator needs to be registered before it can be set as preferred');
+        return;
       }
 
       onegini.user.authenticators.setPreferred(authenticator)
