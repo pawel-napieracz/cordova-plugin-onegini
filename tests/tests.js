@@ -695,6 +695,9 @@ exports.defineAutoTests = function () {
                 for (var r in result) {
                   var authenticator = result[r];
                   expect(authenticator.authenticatorType).toBeDefined();
+                  expect(authenticator.authenticatorId).toBeDefined();
+                  expect(authenticator.isPreferred).toBeDefined();
+                  expect(authenticator.isRegistered).toBeDefined();
                   if (authenticator.authenticatorType === "PIN") {
                     foundPin = true;
                   }
@@ -729,6 +732,9 @@ exports.defineAutoTests = function () {
                 for (var r in result) {
                   var authenticator = result[r];
                   expect(authenticator.authenticatorType).toBeDefined();
+                  expect(authenticator.authenticatorId).toBeDefined();
+                  expect(authenticator.isPreferred).toBe(true);
+                  expect(authenticator.isRegistered).toBeDefined();
                   if (authenticator.authenticatorType === "PIN") {
                     done();
                     return;
@@ -751,6 +757,13 @@ exports.defineAutoTests = function () {
               },
               function (result) {
                 expect(result).toBeDefined();
+                for (var r in result) {
+                  var authenticator = result[r];
+                  expect(authenticator.authenticatorType).toBeDefined();
+                  expect(authenticator.authenticatorId).toBeDefined();
+                  expect(authenticator.isPreferred).toBe(false);
+                  expect(authenticator.isRegistered).toBeDefined();
+                }
                 done();
               },
               function (err) {
@@ -765,6 +778,7 @@ exports.defineAutoTests = function () {
               function (result) {
                 expect(result).toBeDefined();
                 expect(result.authenticatorType).toBe("PIN");
+                expect(result.authenticatorId).toBeDefined();
                 done();
               },
               function (err) {

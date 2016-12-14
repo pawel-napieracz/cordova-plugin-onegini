@@ -23,6 +23,8 @@ extern NSString *const OGCDVPluginKeyScopes;
 extern NSString *const OGCDVPluginKeyResourceBaseURL;
 extern NSString *const OGCDVPluginKeyAuthenticatorType;
 extern NSString *const OGCDVPluginKeyAuthenticatorId;
+extern NSString *const OGCDVPluginKeyAuthenticatorIsPreferred;
+extern NSString *const OGCDVPluginKeyAuthenticatorIsRegistered;
 extern NSString *const OGCDVPluginKeyMethod;
 extern NSString *const OGCDVPluginKeyType;
 extern NSString *const OGCDVPluginKeyMessage;

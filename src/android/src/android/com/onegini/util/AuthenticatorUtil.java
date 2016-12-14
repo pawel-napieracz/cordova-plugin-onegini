@@ -17,6 +17,8 @@
 package com.onegini.util;
 
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_IS_PREFERRED;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_IS_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
@@ -47,8 +49,9 @@ public class AuthenticatorUtil {
   public static JSONObject authenticatorToJSONObject(final OneginiAuthenticator authenticator) throws JSONException {
     final JSONObject authenticatorJSON = new JSONObject();
     authenticatorJSON.put(PARAM_AUTHENTICATOR_TYPE, authenticatorTypeToString(authenticator.getType()));
-    // TODO: Change getName() to getId() when it becomes available (e.g. for FIDO or custom authenticators)
-    authenticatorJSON.put(PARAM_AUTHENTICATOR_ID, authenticator.getName());
+    authenticatorJSON.put(PARAM_AUTHENTICATOR_ID, authenticator.getId());
+    authenticatorJSON.put(PARAM_AUTHENTICATOR_IS_REGISTERED, authenticator.isRegistered());
+    authenticatorJSON.put(PARAM_AUTHENTICATOR_IS_PREFERRED, authenticator.isPreferred());
     return authenticatorJSON;
   }
 
