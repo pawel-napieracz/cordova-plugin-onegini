@@ -29,10 +29,7 @@ export default {
       onegini.start()
           .then(() => {
             this.state = 'Ready!';
-            return onegini.user.getAuthenticatedUserProfile()
-          })
-          .then(() => {
-            this.$router.push('dashboard');
+            return onegini.user.getAuthenticatedUserProfile();
           })
           .catch((err) => {
             if (err.code == 8005) {
