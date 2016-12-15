@@ -56,6 +56,15 @@
     }];
 }
 
+- (void)cancelFlow:(CDVInvokedUrlCommand *)command
+{
+    if(!self.pinChallenge) {
+        return;
+    }
+
+    [self.pinChallenge.sender cancelChallenge:self.pinChallenge];
+}
+
 #pragma mark - ONGChangePinDelegate
 
 - (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge

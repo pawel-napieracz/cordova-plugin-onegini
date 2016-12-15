@@ -85,6 +85,16 @@ static OGCDVUserRegistrationClient *sharedInstance;
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isRegistered] callbackId:command.callbackId];
 }
 
+- (void)cancelFlow:(CDVInvokedUrlCommand *)command
+{
+    if (!self.createPinChallenge) {
+        return;
+    }
+
+    [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
+}
+
+
 #pragma mark - ONGRegistrationDelegate
 
 - (void)userClient:(ONGUserClient *)userClient didReceivePinRegistrationChallenge:(ONGCreatePinChallenge *)challenge
