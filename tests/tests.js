@@ -190,7 +190,7 @@ exports.defineAutoTests = function () {
         expect(onegini.user.register).toBeDefined();
       });
 
-      it("should be cancellable", function(done) {
+      it("should be cancellable", function (done) {
         onegini.user.register()
             .onCreatePinRequest(function (actions, options) {
               actions.cancel();
@@ -1053,7 +1053,7 @@ exports.defineAutoTests = function () {
         expect(onegini.user.changePin).toBeDefined();
       });
 
-      it("should be cancellable", function(done) {
+      it("should be cancellable", function (done) {
         onegini.user.changePin()
             .onPinRequest(function (actions, options) {
               actions.cancel();

@@ -16,10 +16,12 @@
 
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
@@ -46,6 +48,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   private static final String ACTION_CREATE_PIN = "createPin";
   private static final String ACTION_GET_USER_PROFILES = "getUserProfiles";
   private static final String ACTION_IS_USER_REGISTERED = "isUserRegistered";
+  private static final String ACTION_CANCEL_FOW = "cancelFlow";
 
   private RegistrationHandler registrationHandler;
 
@@ -62,6 +65,9 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
       return true;
     } else if (ACTION_IS_USER_REGISTERED.equals(action)) {
       isUserRegistered(args, callbackContext);
+    } else if (ACTION_CANCEL_FOW.equals(action)) {
+      cancelFlow(callbackContext);
+      return true;
     }
 
     return false;
@@ -135,6 +141,12 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
         callbackContext.success(resultPayload);
       }
     });
+  }
+
+  private void cancelFlow(final CallbackContext callbackContext) {
+    callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withPluginError(ERROR_DESCRIPTION_OPERATION_CANCELED, ERROR_CODE_OPERATION_CANCELED)
+        .build());
   }
 
   private OneginiClient getOneginiClient() {
