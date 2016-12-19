@@ -31,9 +31,7 @@ export default {
     fetchDeviceList: function() {
       onegini.resource.fetch('https://onegini-msp-snapshot.test.onegini.io/resources/devices')
           .then((result) => {
-            console.log('fetch success', result);
             this.devices = JSON.parse(result.body).devices;
-            console.log(this.devices);
           })
           .catch((err) => {
             console.error('Error while fetching devices:', err);
