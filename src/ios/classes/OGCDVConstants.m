@@ -27,6 +27,7 @@ NSString *const OGCDVPluginKeyAuthenticatorType = @"authenticatorType";
 NSString *const OGCDVPluginKeyAuthenticatorId = @"authenticatorId";
 NSString *const OGCDVPluginKeyAuthenticatorIsPreferred = @"isPreferred";
 NSString *const OGCDVPluginKeyAuthenticatorIsRegistered = @"isRegistered";
+NSString *const OGCDVPluginKeyAuthenticatorName = @"name";
 NSString *const OGCDVPluginKeyMethod = @"method";
 NSString *const OGCDVPluginKeyType = @"type";
 NSString *const OGCDVPluginKeyMessage = @"message";

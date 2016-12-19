@@ -19,6 +19,7 @@ package com.onegini.util;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_IS_PREFERRED;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_IS_REGISTERED;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_NAME;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
 import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
@@ -52,6 +53,7 @@ public class AuthenticatorUtil {
     authenticatorJSON.put(PARAM_AUTHENTICATOR_ID, authenticator.getId());
     authenticatorJSON.put(PARAM_AUTHENTICATOR_IS_REGISTERED, authenticator.isRegistered());
     authenticatorJSON.put(PARAM_AUTHENTICATOR_IS_PREFERRED, authenticator.isPreferred());
+    authenticatorJSON.put(PARAM_AUTHENTICATOR_NAME, authenticator.getName());
     return authenticatorJSON;
   }
 

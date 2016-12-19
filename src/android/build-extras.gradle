@@ -70,9 +70,6 @@ dependencies {
   compile 'com.madgag.spongycastle:pg:1.54.0.0'
   compile 'com.madgag.spongycastle:pkix:1.54.0.0'
   compile 'com.nimbusds:nimbus-jose-jwt:3.6'
-
-  // Google guava
-  compile 'com.google.guava:guava:19.0'
 }
 
 afterEvaluate {

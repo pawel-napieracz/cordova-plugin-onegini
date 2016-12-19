@@ -698,6 +698,7 @@ exports.defineAutoTests = function () {
                   expect(authenticator.authenticatorId).toBeDefined();
                   expect(authenticator.isPreferred).toBeDefined();
                   expect(authenticator.isRegistered).toBeDefined();
+                  expect(authenticator.name).toBeDefined();
                   if (authenticator.authenticatorType === "PIN") {
                     foundPin = true;
                   }
@@ -735,6 +736,7 @@ exports.defineAutoTests = function () {
                   expect(authenticator.authenticatorId).toBeDefined();
                   expect(authenticator.isPreferred).toBe(true);
                   expect(authenticator.isRegistered).toBeDefined();
+                  expect(authenticator.name).toBeDefined();
                   if (authenticator.authenticatorType === "PIN") {
                     done();
                     return;
@@ -763,6 +765,7 @@ exports.defineAutoTests = function () {
                   expect(authenticator.authenticatorId).toBeDefined();
                   expect(authenticator.isPreferred).toBe(false);
                   expect(authenticator.isRegistered).toBeDefined();
+                  expect(authenticator.name).toBeDefined();
                 }
                 done();
               },

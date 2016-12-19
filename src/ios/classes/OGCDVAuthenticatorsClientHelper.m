@@ -35,7 +35,8 @@
         OGCDVPluginKeyAuthenticatorType: type,
         OGCDVPluginKeyAuthenticatorId: identifier,
         OGCDVPluginKeyAuthenticatorIsRegistered: @(authenticator.isRegistered),
-        OGCDVPluginKeyAuthenticatorIsPreferred: @(authenticator.isPreferred)
+        OGCDVPluginKeyAuthenticatorIsPreferred: @(authenticator.isPreferred),
+        OGCDVPluginKeyAuthenticatorName: authenticator.name
     };
     return dictionary;
 }
