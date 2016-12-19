@@ -72,10 +72,12 @@ export default {
                 this.fingerprintActions = actions;
                 this.fingerprintStatus = 'Touch sensor to start';
               }
+            } else {
+              actions.fallbackToPin();
             }
           }
 
-          navigator.notification.confirm('Login using your fingerprint?', callback, 'Authenticate', ['Continue','Cancel']);
+          navigator.notification.confirm('Login using your fingerprint?', callback, 'Authenticate', ['Continue','Use PIN']);
         })
         .onFingerprintCaptured(() => {
           this.fingerprintStatus = 'Verifying...';
@@ -84,10 +86,7 @@ export default {
           this.fingerprintStatus = 'No match!';
         })
         .onSuccess(() => {
-          this.showFingerprintModal = false;
-          navigator.notification.alert('Authentication success. You are now logged in!', () => {
-            this.$router.push('dashboard');
-          });
+          this.$router.push('dashboard');
         })
         .onError((err) => {
           console.error(err);
@@ -108,10 +107,7 @@ export default {
             window.plugins.pinDialog.prompt('Create your ' + options.pinLength + ' digit pin', callback, 'Register', ['Create','Cancel']);
           })
           .onSuccess((result) => {
-            this.getUserProfiles();
-            navigator.notification.alert('Registration success! Profile ID: ' + result.profileId, () => {
-              this.$router.push('dashboard');
-            });
+            this.$router.push('dashboard');
           })
           .onError((err) => {
             navigator.notification.alert('Registration failed. ' + err.description);
