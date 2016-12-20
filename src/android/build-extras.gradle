@@ -49,27 +49,12 @@ allprojects {
 
 dependencies {
   // Onegini SDK
-  compile('com.onegini.mobile.sdk.android:onegini-sdk:6.02.00@aar')
-
-  // Http Client
-  compile 'com.squareup.okhttp:okhttp:2.4.0'
-  compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
-
-  // Rest Client
-  compile 'com.squareup.retrofit:retrofit:1.9.0'
-
-  //Onegini OCRA
-  compile 'com.onegini.misc:og-ocra:100.00.00'
+  compile('com.onegini.mobile.sdk.android:onegini-sdk:6.02.00@aar') {
+    transitive = true
+  }
 
   // Google cloud messaging (GCM)
   compile "com.google.android.gms:play-services-gcm:9.4.0"
-
-  // Spongy castle
-  compile 'com.madgag.spongycastle:core:1.54.0.0'
-  compile 'com.madgag.spongycastle:prov:1.54.0.0'
-  compile 'com.madgag.spongycastle:pg:1.54.0.0'
-  compile 'com.madgag.spongycastle:pkix:1.54.0.0'
-  compile 'com.nimbusds:nimbus-jose-jwt:3.6'
 }
 
 afterEvaluate {
