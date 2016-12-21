@@ -21,11 +21,11 @@ export default {
     -webkit-appearance: none;
     display: block;
     padding: .5em;
-    min-width: 80%;
+    width: 80%;
     margin: .5em auto;
 
     color: #fff;
-    font-size: 1.5em;
+    font-size: 1.2em;
     text-transform: uppercase;
     
     background-color: #00aeef;

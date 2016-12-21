@@ -1,21 +1,25 @@
 <template>
-  <ul v-if="devices.length > 0" class="block-list">
-    <li v-for="device in devices" class="block">
-      <h5>{{device.name}}</h5>
-      <ul class="prop-list">
-        <li>Application: {{ device.application }}</li>
-        <li>Platform: {{ device.platform }}</li>
-        <li>Mobile authentication: {{ device.mobile_authentication_enabled ? "YES" : "NO" }}</li>
-      </ul
-    </li>
-  </ul>
+  <div>
+    <h4 v-if="!devices.length">{{ status }}</h4>
+    <ul v-if="devices.length" class="block-list">
+      <li v-for="device in devices" class="block">
+        <h5>{{ device.name }}</h5>
+        <ul class="prop-list">
+          <li>Application: {{ device.application }}</li>
+          <li>Platform: {{ device.platform }}</li>
+          <li>Mobile authentication: {{ device.mobile_authentication_enabled ? "YES" : "NO" }}</li>
+        </ul
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
 export default {
   data () {
     return {
-      devices: []
+      devices: [],
+      status: 'Loading...'
     }
   },
 
@@ -30,7 +34,8 @@ export default {
             this.devices = JSON.parse(result.body).devices;
           })
           .catch((err) => {
-            navigator.notfication.alert('Error while fetching device list! ' + err.description)
+            console.error('Error while fetching devices:', err);
+            this.status = 'Could not fetch devices';
           });
     }
   },
@@ -38,18 +43,23 @@ export default {
 </script>
 
 <style scoped>
+h5 {
+  margin-top: 0;
+}
+
 ul {
   list-style-type: none;
-  margin: 0;
 }
 
 .block-list {
   padding: 0 1em;
+  margin: 0 auto;
+  width: 80%;
 }
 
 .block {
   padding: .5em;
-  margin: 1.2em;
+  margin: 1.2em 0;
   background-color: rgba(0, 0, 0, .05);
   box-shadow: 0 0 5px rgba(0, 0, 0, .3);
   text-align: left;
@@ -61,6 +71,7 @@ h5 {
 
 .prop-list {
   padding: 0;
+  margin: 0;
   font-size: .8em;
 }
 </style>

@@ -10,13 +10,21 @@ Vue.config.silent = false;
 import App from './views/App.vue';
 import Login from './views/Login.vue';
 import Dashboard from './views/Dashboard.vue';
+import Settings from './views/Settings.vue';
 
 const router = new VueRouter({
-  mode: 'abstract',
+  mode: 'hash',
   routes: [
     {path: '/login', component: Login},
-    {path: '/dashboard', component: Dashboard}
+    {path: '/dashboard', component: Dashboard},
+    {path: '/settings', component: Settings}
   ]
+});
+
+router.beforeEach((to, from, next) => {
+  document.addEventListener('deviceready', () => {
+    next();
+  });
 });
 
 new Vue({
