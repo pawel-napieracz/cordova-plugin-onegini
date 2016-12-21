@@ -198,7 +198,9 @@ exports.defineAutoTests = function () {
             .onError(function (err) {
               expect(err).toBeDefined();
               expect(err.code).toBe(9006);
-              done();
+              setTimeout(function() {
+                done();
+              }, 500);
             })
             .onSuccess(function () {
               fail("Registration should have failed, but succeeded");
