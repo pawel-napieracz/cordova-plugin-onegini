@@ -28,5 +28,6 @@
 - (void)createPin:(CDVInvokedUrlCommand *)command;
 - (void)getUserProfiles:(CDVInvokedUrlCommand *)command;
 - (void)isUserRegistered:(CDVInvokedUrlCommand *)command;
+- (void)cancelFlow:(CDVInvokedUrlCommand *)command;
 
 @end

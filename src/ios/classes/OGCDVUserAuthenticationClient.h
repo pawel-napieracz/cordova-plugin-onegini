@@ -25,5 +25,6 @@
 - (void)respondToFingerprintRequest:(CDVInvokedUrlCommand *)command;
 - (void)fallbackToPin:(CDVInvokedUrlCommand *)command;
 - (void)logout:(CDVInvokedUrlCommand *)command;
+- (void)cancelFlow: (CDVInvokedUrlCommand *)command;
 
 @end

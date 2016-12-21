@@ -46,6 +46,7 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_DESCRIPTION_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS = "Onegini: received reply for fingerprint authentication, but no fingerprint authentication in progress.";
   String ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD = "Onegini: Invalid mobile authentication method";
   String ERROR_DESCRIPTION_INCORRECT_PIN = "Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
+  String ERROR_DESCRIPTION_OPERATION_CANCELED = "Onegini: the operation was canceled";
 
   // Error codes
   int ERROR_CODE_PLUGIN_INTERNAL_ERROR = 8000;
@@ -62,6 +63,7 @@ public interface OneginiCordovaPluginConstants {
   int ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD = 8010;
   int ERROR_CODE_IO_EXCEPTION = 8011;
   int ERROR_CODE_INCORRECT_PIN = 8012;
+  int ERROR_CODE_OPERATION_CANCELED = 9006;
 
   // Authentication methods
   String AUTH_EVENT_SUCCESS = "onSuccess";

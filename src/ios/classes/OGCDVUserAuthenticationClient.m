@@ -135,4 +135,13 @@
     }];
 }
 
+- (void)cancelFlow:(CDVInvokedUrlCommand *)command
+{
+    if (self.fingerprintChallenge) {
+        [self.fingerprintChallenge.sender cancelChallenge:self.fingerprintChallenge];
+    } else if (self.pinChallenge) {
+        [self.pinChallenge.sender cancelChallenge:self.pinChallenge];
+    }
+}
+
 @end

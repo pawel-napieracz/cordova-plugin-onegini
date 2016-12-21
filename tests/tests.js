@@ -190,6 +190,24 @@ exports.defineAutoTests = function () {
         expect(onegini.user.register).toBeDefined();
       });
 
+      it("should be cancellable", function (done) {
+        onegini.user.register()
+            .onCreatePinRequest(function (actions, options) {
+              actions.cancel();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              expect(err.code).toBe(9006);
+              setTimeout(function() {
+                done();
+              }, 500);
+            })
+            .onSuccess(function () {
+              fail("Registration should have failed, but succeeded");
+              done();
+            });
+      });
+
       it("should succeed", function (done) {
         onegini.user.register()
             .onCreatePinRequest(function (actions, options) {
@@ -443,6 +461,22 @@ exports.defineAutoTests = function () {
         expect(function () {
           onegini.user.authenticate();
         }).toThrow(new TypeError("Onegini: missing 'profileId' argument for user.authenticate"));
+      });
+
+      it("should be cancellable", function (done) {
+        onegini.user.authenticate(registeredProfileId)
+            .onPinRequest(function (actions, options) {
+              actions.cancel();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              expect(err.code).toBe(9006);
+              done();
+            })
+            .onSuccess(function () {
+              fail("Authentication should have failed, but succeeded");
+              done();
+            });
       });
 
       it("should succeed with pin authentication", function (done) {
@@ -1036,6 +1070,22 @@ exports.defineAutoTests = function () {
     describe('changePin', function () {
       it("Should exist", function () {
         expect(onegini.user.changePin).toBeDefined();
+      });
+
+      it("should be cancellable", function (done) {
+        onegini.user.changePin()
+            .onPinRequest(function (actions, options) {
+              actions.cancel();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              expect(err.code).toBe(9006);
+              done();
+            })
+            .onSuccess(function () {
+              fail("Change pin should have failed, but succeeded");
+              done();
+            });
       });
 
       it("Should succeed", function (done) {
