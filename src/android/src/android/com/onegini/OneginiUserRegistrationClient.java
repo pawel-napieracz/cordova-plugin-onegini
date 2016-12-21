@@ -48,7 +48,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
   private static final String ACTION_CREATE_PIN = "createPin";
   private static final String ACTION_GET_USER_PROFILES = "getUserProfiles";
   private static final String ACTION_IS_USER_REGISTERED = "isUserRegistered";
-  private static final String ACTION_CANCEL_FOW = "cancelFlow";
+  private static final String ACTION_CANCEL_FLOW = "cancelFlow";
 
   private RegistrationHandler registrationHandler;
 
@@ -65,7 +65,7 @@ public class OneginiUserRegistrationClient extends CordovaPlugin {
       return true;
     } else if (ACTION_IS_USER_REGISTERED.equals(action)) {
       isUserRegistered(args, callbackContext);
-    } else if (ACTION_CANCEL_FOW.equals(action)) {
+    } else if (ACTION_CANCEL_FLOW.equals(action)) {
       cancelFlow(callbackContext);
       return true;
     }
