@@ -7,16 +7,16 @@
           <h4>For {{request.profileId}}</h4>
         <div>
         <div class="body">
-          <p>{{request.message}}</p>
-          <div v-if="request.type == 'push_with_pin'">
+          <p v-if="fingerprintStatus">{{fingerprintStatus}}</p>
+          <p v-else>{{request.message}}</p>
+          <div v-if="request.type === 'push_with_pin'">
             <input type="password" pattern="\d" v-model="pin" placeholder="Enter PIN" />
             <p>{{request.remainingFailureCount}} out of {{request.maxFailureCount}} attempts remaning</p>
           </div>
         </div>
-        <div class="footer">
-          <button-lg v-if="request.type == 'push'" text="✓ Accept" @click="actions.accept()"/>
-          <button-lg v-if="request.type == 'push_with_pin'"text="✓ Accept" @click="actions.accept({pin: pin})"/>
-          <button-lg text="✗ Deny" @click="actions.deny" />
+        <div v-if="!fingerprintStatus" class="footer">
+          <button-lg text="✓ Accept" @click="this.accept" />
+          <button-lg text="✗ Deny" @click="this.deny" />
         </div>    
       </div>
     </div>
@@ -31,7 +31,8 @@ export default {
     return {
       pin: null,
       request: null,
-      actions: null
+      actions: null,
+      fingerprintStatus: null
     }
   },
 
@@ -57,24 +58,61 @@ export default {
 
       onegini.mobileAuthentication.on('pin')
           .onPinRequest((actions, request) => {
-            this.pin = null;
+            console.log('request', request);
             this.actions = actions;
             this.request = request;
           })
           .onSuccess(() => {
-            navigator.notification.alert('PIN Entry success! You\'re in');
+            navigator.notification.alert('PIN Entry success! You win');
             this.complete();
           })
           .onError((err) => {
             navigator.notification.alert('Game over');
             this.complete();
           });
+
+      onegini.mobileAuthentication.on('fingerprint')
+          .onFingerprintRequest((actions, request) => {
+            this.actions = actions;
+            this.request = request;
+          })
+          .onFingerprintCaptured(() => {
+            this.fingerprintStatus = 'Verifying...';
+          })
+          .onFingerprintFailed(() => {
+            this.fingerprintStatus = 'No match!';
+          })
+          .onSuccess(() => {
+            navigator.notification.alert('Fingerprint authentication success! You win');
+            this.complete();
+          })
+          .onError(() => {
+            navigator.notification.alert('Game over');
+            this.complete();
+          });
+    },
+
+    accept: function() {
+      if (this.request.type === 'push') {
+        this.actions.accept();
+      } else if (this.request.type === 'push_with_pin') {
+        this.actions.accept({pin: this.pin});
+        this.pin = null;
+      } else if (this.request.type === 'push_with_fingerprint') {
+        this.actions.accept();
+        this.fingerprintStatus = 'Touch sensor to start';
+      }
+    },
+
+    deny: function() {
+      this.actions.deny();
     },
 
     complete: function() {
       this.pin = null;
       this.request = null;
       this.actions = null;
+      this.fingerprintStatus = null;
     }
   },
 
