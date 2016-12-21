@@ -28,6 +28,9 @@ public interface OneginiCordovaPluginConstants {
   String PARAM_BODY = "body";
   String PARAM_AUTHENTICATOR_TYPE = "authenticatorType";
   String PARAM_AUTHENTICATOR_ID = "authenticatorId";
+  String PARAM_AUTHENTICATOR_IS_PREFERRED = "isPreferred";
+  String PARAM_AUTHENTICATOR_IS_REGISTERED = "isRegistered";
+  String PARAM_AUTHENTICATOR_NAME = "name";
   String PARAM_ACCEPT = "accept";
 
   // Error descriptions

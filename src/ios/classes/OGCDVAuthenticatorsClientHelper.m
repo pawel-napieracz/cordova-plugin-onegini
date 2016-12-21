@@ -33,7 +33,10 @@
 
     NSDictionary *dictionary = @{
         OGCDVPluginKeyAuthenticatorType: type,
-        OGCDVPluginKeyAuthenticatorId: identifier
+        OGCDVPluginKeyAuthenticatorId: identifier,
+        OGCDVPluginKeyAuthenticatorIsRegistered: @(authenticator.isRegistered),
+        OGCDVPluginKeyAuthenticatorIsPreferred: @(authenticator.isPreferred),
+        OGCDVPluginKeyAuthenticatorName: authenticator.name
     };
     return dictionary;
 }
