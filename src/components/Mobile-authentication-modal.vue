@@ -8,9 +8,14 @@
         <div>
         <div class="body">
           <p>{{request.message}}</p>
+          <div v-if="request.type == 'push_with_pin'">
+            <input type="password" pattern="\d" v-model="pin" placeholder="Enter PIN" />
+            <p>{{request.remainingFailureCount}} out of {{request.maxFailureCount}} attempts remaning</p>
+          </div>
         </div>
         <div class="footer">
-          <button-lg text="✓ Accept" @click="actions.accept"/>
+          <button-lg v-if="request.type == 'push'" text="✓ Accept" @click="actions.accept()"/>
+          <button-lg v-if="request.type == 'push_with_pin'"text="✓ Accept" @click="actions.accept({pin: pin})"/>
           <button-lg text="✗ Deny" @click="actions.deny" />
         </div>    
       </div>
@@ -24,6 +29,7 @@ import ButtonLarge from '../components/Button-large.vue';
 export default {
   data () {
     return {
+      pin: null,
       request: null,
       actions: null
     }
@@ -41,15 +47,34 @@ export default {
             this.actions = actions;
           })
           .onSuccess(() => {
-            navigator.notification.alert("Yo win!");
-            this.actions = null;
-            this.request = null;
+            navigator.notification.alert("You win!");
+            this.complete();
           })
           .onError((err) => {
             navigator.notification.alert("Game over");
-            this.actions = null;
-            this.request = null;
+            this.complete();
           });
+
+      onegini.mobileAuthentication.on('pin')
+          .onPinRequest((actions, request) => {
+            this.pin = null;
+            this.actions = actions;
+            this.request = request;
+          })
+          .onSuccess(() => {
+            navigator.notification.alert('PIN Entry success! You\'re in');
+            this.complete();
+          })
+          .onError((err) => {
+            navigator.notification.alert('Game over');
+            this.complete();
+          });
+    },
+
+    complete: function() {
+      this.pin = null;
+      this.request = null;
+      this.actions = null;
     }
   },
 
@@ -101,6 +126,10 @@ export default {
 
   .footer {
     font-size: .5em;
+  }
+
+  input {
+    width: 80%;
   }
 
 </style>
