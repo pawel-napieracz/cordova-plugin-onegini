@@ -1,25 +1,21 @@
 <template>
-  <div class="mask" v-if="request">
-    <div class="wrapper">
-      <div class="container">
-        <div class="header">
-          <h4>Mobile Authentication Request</h4>
-          <h4>For {{request.profileId}}</h4>
-        <div>
-        <div class="body">
-          <p v-if="fingerprintStatus">{{fingerprintStatus}}</p>
-          <p v-else>{{request.message}}</p>
-          <div v-if="request.type === 'push_with_pin'">
-            <input type="password" pattern="\d" v-model="pin" placeholder="Enter PIN" />
-            <p>{{request.remainingFailureCount}} out of {{request.maxFailureCount}} attempts remaning</p>
-          </div>
-        </div>
-        <div v-if="!fingerprintStatus" class="footer">
-          <button-lg text="✓ Accept" @click="this.accept" />
-          <button-lg text="✗ Deny" @click="this.deny" />
-        </div>    
+  <div class="wrapper" v-if="request">
+    <div>
+      <h3>Mobile Authentication Request</h3>
+      <h3>For {{request.profileId}}</h3>
+    </div>
+    <div class="body">
+      <p v-if="fingerprintStatus">{{fingerprintStatus}}</p>
+      <p v-else>{{request.message}}</p>
+      <div v-if="request.type === 'push_with_pin'">
+        <input type="password" pattern="\d" v-model="pin" placeholder="Enter PIN" />
+        <p>{{request.remainingFailureCount}} out of {{request.maxFailureCount}} attempts remaning</p>
       </div>
     </div>
+    <div v-if="!fingerprintStatus">
+      <button-lg text="✓ Accept" @click="this.accept" />
+      <button-lg text="✗ Deny" @click="this.deny" />
+    </div>    
   </div>
 </template>
 
@@ -123,51 +119,57 @@ export default {
 </script>
 
 <style scoped>
-  .mask {
+  .wrapper {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    flex-direction: column;
+    box-sizing: border-box;
 
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    padding: 1em;
     
-    background-color: rgba(0, 0, 0, .1);
-  }
-
-  h4 {
-    margin-bottom: 0;
-  }
-
-  h4:last-of-type {
-    margin-top: .1em;
-  }
-
-  .wrapper {
-    display: flex;
-    width: 90%;
     background-color: #fff;
-    box-shadow: 0 0 10px #999;
+    box-shadow: 0 0 1em rgba(0, 0, 0, .7);
+
+    animation: slide .3s ease;
+    animation-iteration-count: 1;
+  }
+
+  .wrapper div {
+    width: 100%;
   }
 
   .body {
-    padding: 1.5em 0;
+    box-sizing: border-box;
+    margin: 3em 0;
+    padding: 0 1em;
   }
 
-  .container {
-    width: 100%;
-    display: border-box;
-    padding: 1em;
+  h3 {
+    margin-bottom: 0;
   }
 
-  .footer {
-    font-size: .5em;
+  h3:last-of-type {
+    margin-top: .1em;
+    font-weight: normal;
   }
 
   input {
     width: 80%;
   }
 
+  @keyframes slide {
+    from {
+      top: 100%;
+    }
+
+    to {
+      top: 0;
+    }
+  }
 </style>
