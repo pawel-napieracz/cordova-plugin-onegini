@@ -44,11 +44,11 @@ export default {
             this.actions = actions;
           })
           .onSuccess(() => {
-            navigator.notification.alert("You win!");
+            navigator.notification.alert('Authentication success!');
             this.complete();
           })
           .onError((err) => {
-            navigator.notification.alert("Game over");
+            navigator.notification.alert('Something went wrong! ' + err.description);
             this.complete();
           });
 
@@ -59,11 +59,11 @@ export default {
             this.request = request;
           })
           .onSuccess(() => {
-            navigator.notification.alert('PIN Entry success! You win');
+            navigator.notification.alert('PIN authentication success!');
             this.complete();
           })
           .onError((err) => {
-            navigator.notification.alert('Game over');
+            navigator.notification.alert('Something went wrong! ' + err.description);
             this.complete();
           });
 
@@ -79,11 +79,11 @@ export default {
             this.fingerprintStatus = 'No match!';
           })
           .onSuccess(() => {
-            navigator.notification.alert('Fingerprint authentication success! You win');
+            navigator.notification.alert('Fingerprint authentication success!');
             this.complete();
           })
-          .onError(() => {
-            navigator.notification.alert('Game over');
+          .onError((err) => {
+            navigator.notification.alert('Something went wrong! ' + err.description);
             this.complete();
           });
     },
@@ -93,7 +93,6 @@ export default {
         this.actions.accept();
       } else if (this.request.type === 'push_with_pin') {
         this.actions.accept({pin: this.pin});
-        this.pin = null;
       } else if (this.request.type === 'push_with_fingerprint') {
         this.actions.accept();
         this.fingerprintStatus = 'Touch sensor to start';

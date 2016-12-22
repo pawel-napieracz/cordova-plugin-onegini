@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import MobileAuthenitcationModal from '../components/Mobile-authentication-modal.vue';
+import MobileAuthenticationModal from '../components/Mobile-authentication-modal.vue';
 
 export default {
   data () {
@@ -45,7 +45,7 @@ export default {
   },
 
   components: {
-    'mobile-authentication-modal': MobileAuthenitcationModal
+    'mobile-authentication-modal': MobileAuthenticationModal
   }
 }
 </script>
