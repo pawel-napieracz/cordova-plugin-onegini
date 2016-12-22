@@ -61,7 +61,12 @@ export default {
           })
           .onError((err) => {
             navigator.notification.alert('Could not register authenticator: ' + err.description);
-            this.getAuthenticators();
+            
+            if (err.code === 9003) {
+              this.$router.push('login');
+            } else {
+              this.getAuthenticators();
+            }
           });
     },
 

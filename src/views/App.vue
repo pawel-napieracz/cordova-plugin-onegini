@@ -7,10 +7,13 @@
     <template v-else>
       <p>{{state}}</p>
     </template>
+    <mobile-authentication-modal />
   </div>
 </template>
 
 <script>
+import MobileAuthenticationModal from '../components/Mobile-authentication-modal.vue';
+
 export default {
   data () {
     return {
@@ -39,6 +42,10 @@ export default {
             }
           });
     }
+  },
+
+  components: {
+    'mobile-authentication-modal': MobileAuthenticationModal
   }
 }
 </script>
