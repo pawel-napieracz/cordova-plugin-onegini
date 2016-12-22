@@ -54,7 +54,7 @@ export default {
 
       onegini.mobileAuthentication.on('pin')
           .onPinRequest((actions, request) => {
-            console.log('request', request);
+            this.pin = null;
             this.actions = actions;
             this.request = request;
           })
