@@ -23,6 +23,7 @@ NSString *const OGCDVPluginKeyUrl = @"url";
 NSString *const OGCDVPluginKeyStatus = @"status";
 NSString *const OGCDVPluginKeyStatusText = @"statusText";
 NSString *const OGCDVPluginKeyHeaders = @"headers";
+NSString *const OGCDVPluginKeyHttpResponse = @"httpResponse";
 
 @implementation OGCDVResourceClient {
 }
@@ -65,16 +66,22 @@ NSString *const OGCDVPluginKeyHeaders = @"headers";
 
 - (void)handleResponse:(ONGResourceResponse *)response withError:(NSError *)error forCallbackId:(NSString *)callbackId
 {
-    NSDictionary *result = @{
+    NSDictionary *httpResponse = @{
         OGCDVPluginKeyBody: [self getBodyFromResponse:response],
         OGCDVPluginKeyStatus: @(response.statusCode),
         OGCDVPluginKeyStatusText: [self getStatusText:response.statusCode],
         OGCDVPluginKeyHeaders: response.allHeaderFields == nil ? @{} : response.allHeaderFields
     };
 
-    if (error == nil && response.statusCode >= 200 && response.statusCode <= 299) {
-        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:callbackId];
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:httpResponse] callbackId:callbackId];
     } else {
+        NSDictionary *result = @{
+            OGCDVPluginKeyHttpResponse: httpResponse,
+            OGCDVPluginKeyErrorCode: @(error.code),
+            OGCDVPluginKeyErrorDescription: error.description
+        };
+
         [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result] callbackId:callbackId];
     }
 }
