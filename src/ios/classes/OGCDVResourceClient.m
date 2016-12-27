@@ -35,7 +35,7 @@ NSString *const OGCDVPluginKeyHeaders = @"headers";
       NSString *url = options[OGCDVPluginKeyUrl];
       NSString *method = options[OGCDVPluginKeyMethod];
       NSDictionary *params = options[OGCDVPluginKeyBody];
-      NSMutableDictionary *headers = options[OGCDVPluginKeyHeaders]; // isKindOfClass:[NSNull class]] ? nil : options[OGCDVPluginKeyHeaders];
+      NSMutableDictionary *headers = options[OGCDVPluginKeyHeaders];
       NSDictionary *convertedHeaders = [self convertNumbersToStringsInDictionary:headers];
       BOOL anonymous = [options[OGCDVPluginKeyAnonymous] boolValue];
 
@@ -72,7 +72,7 @@ NSString *const OGCDVPluginKeyHeaders = @"headers";
       OGCDVPluginKeyHeaders: response.allHeaderFields == nil ? @{} : response.allHeaderFields
   };
 
-  if (error == nil && response.statusCode == 200) {
+  if (error == nil && response.statusCode >= 200 && response.statusCode <= 299) {
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:callbackId];
   } else {
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result] callbackId:callbackId];
@@ -94,11 +94,14 @@ NSString *const OGCDVPluginKeyHeaders = @"headers";
   if (!dictionary) {
     return nil;
   }
+
   NSMutableDictionary *convertedDictionary = [NSMutableDictionary new];
+
   for (NSString *key in dictionary.allKeys) {
     id value = dictionary[key];
     [convertedDictionary setValue:([value isKindOfClass:[NSNumber class]] ? [value stringValue] : value) forKey:key];
   }
+
   return convertedDictionary;
 }
 

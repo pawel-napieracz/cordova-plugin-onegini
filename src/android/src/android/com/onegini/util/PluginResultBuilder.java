@@ -155,7 +155,7 @@ public class PluginResultBuilder {
 
   public PluginResultBuilder withRetrofitResponse(Response response) {
     final int responseStatus = response.getStatus();
-    if (responseStatus == HttpURLConnection.HTTP_OK) {
+    if (responseStatus >= 200 && responseStatus <= 299) {
       this.status = OK;
     } else {
       this.status = ERROR;
