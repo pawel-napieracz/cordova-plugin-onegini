@@ -94,7 +94,9 @@ export default {
       } else if (this.request.type === 'push_with_pin') {
         this.actions.accept({pin: this.pin});
       } else if (this.request.type === 'push_with_fingerprint') {
-        this.actions.accept();
+        this.actions.accept({
+          iosPrompt: 'Authenticate for ' + this.request.profileId
+        });
         this.fingerprintStatus = 'Touch sensor to start';
       }
     },
