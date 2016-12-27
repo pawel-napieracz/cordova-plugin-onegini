@@ -1043,9 +1043,9 @@ exports.defineAutoTests = function () {
               expect(response).toBeUndefined();
               fail('Success callback called, but method should have failed');
             },
-            function (response) {
-              expect(response).toBeDefined();
-              expect(response.status).toEqual(405);
+            function (err) {
+              expect(err).toBeDefined();
+              expect(err.httpResponse.status).toEqual(405);
               done();
             })
       });
@@ -1298,8 +1298,8 @@ exports.defineAutoTests = function () {
             expect(response.statusText).toBeDefined();
             done();
           },
-          function (errResponse) {
-            expect(errResponse).toBeUndefined();
+          function (err) {
+            expect(err).toBeUndefined();
             fail('Error response called, but method should have succeeded');
           })
     })
