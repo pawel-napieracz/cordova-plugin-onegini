@@ -80,6 +80,8 @@ public interface OneginiCordovaPluginConstants {
   // Extras
   String EXTRA_MOBILE_AUTHENTICATION = "com.onegini.CordovaPluginMobileAuthenticationExtra";
 
+  String TAG = "oneginiCordovaPlugin";
+
   // Push message
   String PUSH_MSG_CONTENT = "content";
   String PUSH_MSG_TRANSACTION_ID = "og_transaction_id";

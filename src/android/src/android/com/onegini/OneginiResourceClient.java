@@ -18,16 +18,23 @@ package com.onegini;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_IO_EXCEPTION;
+import static com.onegini.OneginiCordovaPluginConstants.TAG;
+import static org.apache.cordova.PluginResult.Status.ERROR;
+import static org.apache.cordova.PluginResult.Status.OK;
 
 import java.io.IOException;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.util.Log;
 import com.onegini.util.ActionArgumentsUtil;
 import com.onegini.util.PluginResultBuilder;
+import com.onegini.util.RetrofitResponseUtil;
 import retrofit.client.OkClient;
 import retrofit.client.Request;
 import retrofit.client.Response;
@@ -35,6 +42,12 @@ import retrofit.client.Response;
 public class OneginiResourceClient extends CordovaPlugin {
 
   private static final String ACTION_FETCH = "fetch";
+
+  private static final String PARAM_STATUS = "status";
+  private static final String PARAM_STATUS_TEXT = "statusText";
+  private static final String PARAM_BODY = "body";
+  private static final String PARAM_HEADERS = "headers";
+  private static final String PARAM_HTTP_RESPONSE = "httpResponse";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -81,11 +94,50 @@ public class OneginiResourceClient extends CordovaPlugin {
           return;
         }
 
-        callbackContext.sendPluginResult(new PluginResultBuilder()
-            .withRetrofitResponse(response)
-            .build());
+        callbackContext.sendPluginResult(pluginResultFromRetrofitResponse(response));
       }
     });
+  }
+
+  private PluginResult pluginResultFromRetrofitResponse(final Response response) {
+    final PluginResult.Status resultStatus;
+    final JSONObject resultPayload;
+    final int httpStatusCode = response.getStatus();
+
+    if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+      resultStatus = OK;
+      resultPayload = retrofitResponseToJsonObject(response);
+    } else {
+      resultStatus = ERROR;
+      resultPayload = new JSONObject();
+
+      try {
+        resultPayload.put(PARAM_HTTP_RESPONSE, retrofitResponseToJsonObject(response));
+      } catch (JSONException e) {
+        Log.d(TAG, "Could not parse http response to JSON object");
+      }
+    }
+
+    return new PluginResult(resultStatus, resultPayload);
+  }
+
+  private JSONObject retrofitResponseToJsonObject(final Response response) {
+    final JSONObject responseJSON = new JSONObject();
+    final int statusCode = response.getStatus();
+    final String statusText = response.getReason();
+    final JSONObject headers = RetrofitResponseUtil.getJsonHeadersFromRetrofitResponse(response);
+    final String body = RetrofitResponseUtil.getBodyStringFromRetrofitResponse(response);
+
+    try {
+      responseJSON.put(PARAM_STATUS, statusCode);
+      responseJSON.put(PARAM_STATUS_TEXT, statusText);
+      responseJSON.put(PARAM_HEADERS, headers);
+      responseJSON.put(PARAM_BODY, body);
+    } catch (JSONException e) {
+      Log.e(TAG, "Could not parse http response to JSON object");
+    }
+
+    return responseJSON;
   }
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {

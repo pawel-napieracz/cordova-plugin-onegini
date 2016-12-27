@@ -21,7 +21,6 @@ import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 
-import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +32,6 @@ import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
-import retrofit.client.Response;
 
 public class PluginResultBuilder {
 
@@ -153,26 +151,6 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder withRetrofitResponse(Response response) {
-    final int responseStatus = response.getStatus();
-    if (responseStatus >= 200 && responseStatus <= 299) {
-      this.status = OK;
-    } else {
-      this.status = ERROR;
-    }
-
-    try {
-      payload.put("body", RetrofitResponseUtil.getBodyStringFromRetrofitResponse(response));
-      payload.put("status", responseStatus);
-      payload.put("statusText", response.getReason());
-      payload.put("headers", RetrofitResponseUtil.getJsonHeadersFromRetrofitResponse(response));
-    } catch (JSONException e) {
-      handleException(e);
-    }
-
-    return this;
-  }
-
   public PluginResultBuilder withOneginiConfigModel(final OneginiClientConfigModel configModel) {
     try {
       payload.put("resourceBaseURL", configModel.getResourceBaseUrl());
@@ -188,7 +166,7 @@ public class PluginResultBuilder {
 
     Map<String, Object> payload = new HashMap<String, Object>();
     payload.put("description", ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
-    payload.put("code",ERROR_CODE_PLUGIN_INTERNAL_ERROR);
+    payload.put("code", ERROR_CODE_PLUGIN_INTERNAL_ERROR);
     this.payload = new JSONObject(payload);
   }
 
