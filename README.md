@@ -5,7 +5,7 @@ This app serves as a simple example implementation for the [Onegini Cordova Plug
 ## Source structure
 This app is build with the [Vue.js](https://vuejs.org) framework.
 Every view has it's own component in `src/views`, containing all it's HTML, JS and CSS.
-Components (like buttons or lists for specific items) are placed in `src/components`.
+Components (like buttons or lists for specific items) are located in `src/components`.
 
 ## Running the Example app
 
@@ -31,10 +31,10 @@ npm run build
 
 Add the Android and/or iOS platform
 ```sh
-cordova platform add {android | ios}
+cordova platform add (android|ios)...
 ```
 
 Run the example app
 ```sh
-cordova run {android | ios}
+cordova run (android|ios)...
 ```
