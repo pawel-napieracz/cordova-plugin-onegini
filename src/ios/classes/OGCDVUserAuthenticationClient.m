@@ -81,10 +81,10 @@
 
     [self.commandDelegate runInBackground:^{
         NSDictionary *options = command.arguments[0];
-        BOOL shouldAccept = [options[OGCDVPluginKeyAccept] boolValue];
+        BOOL shouldNotAccept = ![options[OGCDVPluginKeyAccept] boolValue];
         NSString *prompt = options[OGCDVPluginKeyPrompt];
 
-        if (!shouldAccept) {
+        if (shouldNotAccept) {
             [self.fingerprintChallenge.sender cancelChallenge:self.fingerprintChallenge];
             return;
         }
