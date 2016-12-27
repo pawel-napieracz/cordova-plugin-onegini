@@ -18,7 +18,6 @@ package com.onegini;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_IO_EXCEPTION;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
 
 import java.io.IOException;
 
