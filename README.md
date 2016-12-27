@@ -1,6 +1,6 @@
 # Onegini Cordova Example app
 
-This app serves as a simple example implementation for the [Onegini Cordova Plugin](https://github.com/onegini/cordova-plugin-onegini).
+This app serves as a simple example for building an app using the [Onegini Cordova Plugin](https://github.com/onegini/cordova-plugin-onegini).
 
 ## Source structure
 This app is build with the [Vue.js](https://vuejs.org) framework.
@@ -9,12 +9,13 @@ Components (like buttons or lists for specific items) are located in `src/compon
 
 ## Running the Example app
 
-### Perquisites
+### Prerequisites
 To run the Example App, you need to be able to build Cordova apps for Android and iOS on your machine.
 Refer to the [Apache Cordova getting started guide](https://cordova.apache.org/#getstarted) if you need help setting up your Cordova environment.
 
 Make sure you have the [SDK Configurator](https://github.com/Onegini/onegini-sdk-configurator) installed in your `$PATH`.
-(See the [getting started guide](https://docs.onegini.com/msp/latest/cordova-plugin/topics/getting-started.html#install-the-sdk-configurator) of the Onegini Cordova Plugin)
+(See the [getting started guide](https://docs.onegini.com/msp/latest/cordova-plugin/topics/getting-started.html#install-the-sdk-configurator) of the Onegini 
+Cordova Plugin)
 
 ### Building
 Clone this repository
