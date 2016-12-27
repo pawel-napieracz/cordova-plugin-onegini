@@ -95,7 +95,7 @@ export default {
         this.actions.accept({pin: this.pin});
       } else if (this.request.type === 'push_with_fingerprint') {
         this.actions.accept({
-          iosPrompt: 'Authenticate for ' + this.request.profileId
+          iosPrompt: 'Authenticate as ' + this.request.profileId
         });
         this.fingerprintStatus = 'Touch sensor to start';
       }
