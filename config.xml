@@ -34,4 +34,5 @@
     </platform>
     <plugin name="cordova-plugin-dialogs" spec="~1.3.0" />
     <plugin name="cordova-plugin-pin-dialog" spec="~0.1.3" />
+    <plugin name="cordova-plugin-onegini" spec="https://github.com/Onegini/cordova-plugin-onegini" />
 </widget>
