@@ -45,7 +45,7 @@ module.exports = function (context) {
 
   context.opts.platforms.forEach((platform) => {
     if (arrayContains(platform, supportedPlatforms)) {
-      let platformArgs = args;
+      let platformArgs = args.slice();
 
       console.log(`Configuring the ${platform} platform`);
       console.log('--------------------------' + new Array(platform.length).join('-') + '\n');
