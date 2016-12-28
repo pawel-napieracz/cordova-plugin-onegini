@@ -22,10 +22,10 @@ const spawn = require('child_process').spawn;
 const supportedPlatforms = ['android', 'ios'];
 const envVariables = {
   enableAutoconfigure: 'ONEGINI_AUTOCONFIGURE',
-  configuratorName: 'ONEGINI_SDK_CONFIGURATOR',
+  configuratorName: 'ONEGINI_SDK_CONFIGURATOR_PATH',
   configFiles: {
-    android: 'ONEGINI_CONFIG_ANDROID',
-    ios: 'ONEGINI_CONFIG_IOS'
+    android: 'ONEGINI_CONFIG_ANDROID_PATH',
+    ios: 'ONEGINI_CONFIG_IOS_PATH'
   }
 };
 
