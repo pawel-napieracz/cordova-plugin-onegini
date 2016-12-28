@@ -25,6 +25,9 @@ NSString *const OGCDVPluginKeyStatusText = @"statusText";
 NSString *const OGCDVPluginKeyHeaders = @"headers";
 NSString *const OGCDVPluginKeyHttpResponse = @"httpResponse";
 
+int const OGCDVPluginErrCodeHttpError = 8013;
+NSString *const OGCDVPluginErrDescriptionHttpError = @"Onegini: HTTP Request failed. Check httpResponse for more info.";
+
 @implementation OGCDVResourceClient {
 }
 
@@ -66,6 +69,14 @@ NSString *const OGCDVPluginKeyHttpResponse = @"httpResponse";
 
 - (void)handleResponse:(ONGResourceResponse *)response withError:(NSError *)error forCallbackId:(NSString *)callbackId
 {
+    CDVPluginResult *pluginResult = [self getPluginResultFromResourceResponse:response withError:error];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+}
+
+- (CDVPluginResult *)getPluginResultFromResourceResponse:(ONGResourceResponse *)response withError:(NSError *)error
+{
+    BOOL didReceiveHttpReply = response.statusCode != nil;
+    BOOL didReceiveHttpReplySuccess = response.statusCode >= 200 && response.statusCode <= 299;
     NSDictionary *httpResponse = @{
         OGCDVPluginKeyBody: [self getBodyFromResponse:response],
         OGCDVPluginKeyStatus: @(response.statusCode),
@@ -73,17 +84,22 @@ NSString *const OGCDVPluginKeyHttpResponse = @"httpResponse";
         OGCDVPluginKeyHeaders: response.allHeaderFields == nil ? @{} : response.allHeaderFields
     };
 
-    if (response.statusCode >= 200 && response.statusCode <= 299) {
-        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:httpResponse] callbackId:callbackId];
-    } else {
-        NSDictionary *result = @{
-            OGCDVPluginKeyHttpResponse: httpResponse,
-            OGCDVPluginKeyErrorCode: @(error.code),
-            OGCDVPluginKeyErrorDescription: error.description
-        };
-
-        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result] callbackId:callbackId];
+    if (didReceiveHttpReplySuccess) {
+        return [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:httpResponse];
     }
+
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    result[OGCDVPluginKeyHttpResponse] = httpResponse;
+
+    if (didReceiveHttpReply) {
+        result[OGCDVPluginKeyErrorCode] = @(OGCDVPluginErrCodeHttpError);
+        result[OGCDVPluginKeyErrorDescription] = OGCDVPluginErrDescriptionHttpError;
+    } else {
+        result[OGCDVPluginKeyErrorCode] = @(error.code);
+        result[OGCDVPluginKeyErrorDescription] = error.description;
+    }
+
+    return [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result];
 }
 
 - (NSString *)getStatusText:(NSInteger)code
