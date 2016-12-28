@@ -1046,6 +1046,7 @@ exports.defineAutoTests = function () {
             function (err) {
               expect(err).toBeDefined();
               expect(err.httpResponse.status).toEqual(405);
+              expect(err.code).toEqual(8013);
               done();
             })
       });
