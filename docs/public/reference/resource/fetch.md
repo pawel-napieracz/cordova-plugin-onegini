@@ -16,6 +16,9 @@ This function takes one mandatory argument, the `url`. The `url` can be absolute
 | `headers` | `{}` | The headers of the REST request
 | `body` | - | The body of the REST request (only available for the methods that support a body)
 
+The method only succeeds when an http success status (within the 200-299 range) is returned by the server.
+If no request could be made to the server or if the server returns an error status the error callback is called.
+
 **Example anonymous resource call:**
 
 ```js
@@ -27,7 +30,7 @@ onegini.resource.fetch({
       alert("Anonymous resource call success!\n\nResponse: " + response.status);
     })
     .catch((err) => {
-      alert("Anonymous resource call error!\n\n" + err.description);
+      alert("Anonymous resource call error!");
     });
 ```
 
@@ -45,7 +48,7 @@ onegini.resource.fetch({
       alert("Resource call success!\n\nResponse: " + response.status);
     })
     .catch((err) => {
-      alert("Resource call error!\n\n" + err.description);
+      alert("Resource call error!");
     });
 ```
 
@@ -54,14 +57,17 @@ The success callback contains an object with these properties:
 | Property | Example | Description |
 | --- | --- | --- |
 | `status` | 200 | The HTTP status code of the server response
+| `statusText` | "OK"| The HTTP status text of the server response
 | `headers` | `{ Content-Type: "application/json" }` | The HTTP headers of the server response
 | `body` | - | The body of the server response
 
-The error callback differs depending on whether the plugin got a response from the server, or encountered an error in the plugin or SDK. In the former case, the error callback will contain an object similar to that of the success callback, except with a non-200 `status`.
+The error callback contains an object the usual error code and description.
 
-In the latter case, the error callback will contain an object with the following properties:
+In addition, it contains an `httpResponse` if an http request was performed (might not be the case, for example when an IOException occurs).
+The `httpResponse` object containing the same `status`, `statusText`, `headers` and `body` properties as the success response. 
 
 | Property | Example | Description |
 | --- | --- | --- |
+| `httpResponse` | See success callback | The HTTP Response from the server.
 | `code` | 8000 | The error code
 | `description` | "Onegini: Internal plugin error" | Human readable error description
