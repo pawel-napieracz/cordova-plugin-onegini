@@ -5,6 +5,7 @@ Topic guides give a high level overview with practical examples for using the On
 The following topic guides are available:
 
 * [Getting started](getting-started.md)
+* [Configuration](configuration.md)
 * [User authentication](user-authentication.md)
 * [User authentication with fingerprint](user-authentication-with-fingerprint.md)
 * [Change PIN](change-pin.md)
