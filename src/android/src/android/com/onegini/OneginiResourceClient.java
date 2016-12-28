@@ -16,8 +16,12 @@
 
 package com.onegini;
 
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_HTTP_ERROR;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_IO_EXCEPTION;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_HTTP_ERROR;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_ERROR_CODE;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_ERROR_DESCRIPTION;
 import static com.onegini.OneginiCordovaPluginConstants.TAG;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
@@ -101,24 +105,31 @@ public class OneginiResourceClient extends CordovaPlugin {
 
   private PluginResult pluginResultFromRetrofitResponse(final Response response) {
     final PluginResult.Status resultStatus;
+    final JSONObject responseJSON = retrofitResponseToJsonObject(response);
     final JSONObject resultPayload;
-    final int httpStatusCode = response.getStatus();
 
-    if (httpStatusCode >= 200 && httpStatusCode <= 299) {
+    if (isResponseHttpSuccess(response)) {
       resultStatus = OK;
-      resultPayload = retrofitResponseToJsonObject(response);
+      resultPayload = responseJSON;
     } else {
       resultStatus = ERROR;
       resultPayload = new JSONObject();
 
       try {
-        resultPayload.put(PARAM_HTTP_RESPONSE, retrofitResponseToJsonObject(response));
+        resultPayload.put(PARAM_ERROR_CODE, ERROR_CODE_HTTP_ERROR);
+        resultPayload.put(PARAM_ERROR_DESCRIPTION, ERROR_DESCRIPTION_HTTP_ERROR);
+        resultPayload.put(PARAM_HTTP_RESPONSE, responseJSON);
       } catch (JSONException e) {
         Log.d(TAG, "Could not parse http response to JSON object");
       }
     }
 
     return new PluginResult(resultStatus, resultPayload);
+  }
+
+  private Boolean isResponseHttpSuccess(final Response response) {
+    final int httpStatusCode = response.getStatus();
+    return httpStatusCode >= 200 && httpStatusCode <= 299;
   }
 
   private JSONObject retrofitResponseToJsonObject(final Response response) {

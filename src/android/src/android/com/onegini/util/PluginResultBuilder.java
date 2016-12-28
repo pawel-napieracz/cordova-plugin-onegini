@@ -18,6 +18,8 @@ package com.onegini.util;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_ERROR_CODE;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_ERROR_DESCRIPTION;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 
@@ -63,8 +65,8 @@ public class PluginResultBuilder {
     status = ERROR;
 
     try {
-      payload.put("description", description);
-      payload.put("code", code);
+      payload.put(PARAM_ERROR_DESCRIPTION, description);
+      payload.put(PARAM_ERROR_CODE, code);
     } catch (JSONException e) {
       handleException(e);
     }
@@ -80,8 +82,8 @@ public class PluginResultBuilder {
     }
 
     try {
-      payload.put("code", oneginiError.getErrorType());
-      payload.put("description", oneginiError.getErrorDescription());
+      payload.put(PARAM_ERROR_CODE, oneginiError.getErrorType());
+      payload.put(PARAM_ERROR_DESCRIPTION, oneginiError.getErrorDescription());
     } catch (JSONException e) {
       handleException(e);
     }
@@ -165,8 +167,8 @@ public class PluginResultBuilder {
     this.status = ERROR;
 
     Map<String, Object> payload = new HashMap<String, Object>();
-    payload.put("description", ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
-    payload.put("code", ERROR_CODE_PLUGIN_INTERNAL_ERROR);
+    payload.put(PARAM_ERROR_CODE, ERROR_CODE_PLUGIN_INTERNAL_ERROR);
+    payload.put(PARAM_ERROR_DESCRIPTION, ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
     this.payload = new JSONObject(payload);
   }
 
