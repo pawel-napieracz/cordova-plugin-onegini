@@ -93,6 +93,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
 
@@ -104,6 +105,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -163,6 +165,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -220,8 +223,8 @@ exports.defineAutoTests = function () {
               done();
             })
             .onError(function (err) {
+              fail("Registration failed, but should have succeeded");
               expect(err).toBeDefined();
-              fail("Registration failed, but should have suceeded");
             });
       });
     });
@@ -236,6 +239,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -256,6 +260,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -273,6 +278,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Logout failed, but should have succeeded');
             });
       });
     });
@@ -781,6 +787,7 @@ exports.defineAutoTests = function () {
               },
               function (err) {
                 expect(err).toBeUndefined();
+                fail('Error callback called, but method should have succeeded');
               });
         });
       });
@@ -805,6 +812,7 @@ exports.defineAutoTests = function () {
               },
               function (err) {
                 expect(err).toBeUndefined();
+                fail('Error callback called, but method should have succeeded');
               });
         });
       });
@@ -1149,6 +1157,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
 
@@ -1163,6 +1172,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -1206,6 +1216,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -1234,6 +1245,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -1278,6 +1290,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });

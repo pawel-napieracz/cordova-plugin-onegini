@@ -131,7 +131,7 @@
 {
     [self.commandDelegate runInBackground:^{
         [[ONGUserClient sharedInstance] logoutUser:^(ONGUserProfile *_Nonnull userProfile, NSError *_Nullable error) {
-            if (error != nil) {
+            if (error == nil) {
                 [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
             } else {
                 [self sendErrorResultForCallbackId:command.callbackId withError:error];

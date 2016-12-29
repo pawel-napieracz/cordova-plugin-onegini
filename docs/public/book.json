@@ -1,7 +1,7 @@
 {
   "gitbook": "2.x.x",
   "title": "Onegini Cordova plugin",
-  "description": "The official documentation of the Onegini Cordova plugin.",
+  "description": "Official documentation for the Onegini Cordova plugin.",
   "plugins": [
     "expandable-chapters",
     "toc",
