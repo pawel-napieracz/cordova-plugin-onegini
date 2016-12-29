@@ -18,8 +18,13 @@
 #import "OGCDVWebBrowserViewController.h"
 #import "OGCDVUserClientHelper.h"
 #import "OGCDVConstants.h"
+#import "SafariServices/SafariServices.h"
 
 static OGCDVUserRegistrationClient *sharedInstance;
+
+@interface OGCDVUserRegistrationClient ()<SFSafariViewControllerDelegate>
+
+@end
 
 @implementation OGCDVUserRegistrationClient {
 }
@@ -94,6 +99,18 @@ static OGCDVUserRegistrationClient *sharedInstance;
     [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
 }
 
+- (void)handleRegistrationCallbackUrl:(NSNotification *)notification
+{
+    NSURL *url = (NSURL *) notification.object;
+    [[ONGUserClient sharedInstance] handleRegistrationCallback:url];
+}
+
+#pragma mark - SFSafariViewControllerDelegate
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
+{
+    [self.viewController dismissViewControllerAnimated:true completion:nil];
+}
 
 #pragma mark - ONGRegistrationDelegate
 
@@ -119,25 +136,25 @@ static OGCDVUserRegistrationClient *sharedInstance;
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveRegistrationRequestWithUrl:(NSURL *)url
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRegistrationCallbackUrl:) name:OGCDVCloseSafariViewNotification object:nil];
+
+    if (self.userId != nil) {
+        url = [self addQueryParameterToUrl:url withQueryName:@"user_id" withQueryValue:self.userId];
+    }
+
     // run on the main thread; we initiated registration in a background thread, but now we need to manipulate the UI
     dispatch_async(dispatch_get_main_queue(), ^{
-        OGCDVWebBrowserViewController *webBrowserViewController = [OGCDVWebBrowserViewController new];
-        if (self.userId != nil) {
-            webBrowserViewController.url = [OGCDVUserRegistrationClient addQueryParameterToUrl:url
-                                                                                 withQueryName:@"user_id"
-                                                                                withQueryValue:self.userId];
-        } else {
-            webBrowserViewController.url = url;
-        }
-        webBrowserViewController.completionBlock = ^(NSURL *completionURL) {
-        };
-        [self.viewController presentViewController:webBrowserViewController animated:YES completion:nil];
+        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:url];
+        safariViewController.delegate = self;
+        [self.viewController presentViewController:safariViewController animated:true completion:nil];
     });
 }
 
 - (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile
 {
     self.createPinChallenge = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:OGCDVCloseSafariViewNotification object:nil];
+
     NSDictionary *result = @{
         OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventSuccess,
         OGCDVPluginKeyProfileId: userProfile.profileId
@@ -151,7 +168,7 @@ static OGCDVUserRegistrationClient *sharedInstance;
     [self sendErrorResultForCallbackId:self.callbackId withError:error];
 }
 
-+ (NSURL *)addQueryParameterToUrl:(NSURL *)url withQueryName:(NSString *)name withQueryValue:(NSString *)value
+- (NSURL *)addQueryParameterToUrl:(NSURL *)url withQueryName:(NSString *)name withQueryValue:(NSString *)value
 {
     NSURLComponents *components = [[NSURLComponents alloc] initWithURL:url resolvingAgainstBaseURL:false];
     NSURLQueryItem *newQueryItem = [[NSURLQueryItem alloc] initWithName:name value:value];

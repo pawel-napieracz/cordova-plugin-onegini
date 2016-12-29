@@ -49,6 +49,8 @@ NSString *const OGCDVPluginAuthEventPinRequest = @"onPinRequest";
 NSString *const OGCDVPluginAuthEventCreatePinRequest = @"onCreatePinRequest";
 NSString *const OGCDVPluginAuthEventFingerprintRequest = @"onFingerprintRequest";
 
+NSString *const OGCDVCloseSafariViewNotification = @"OGCDVCloseSafariViewNotification";
+
 NSString *const OGCDVPluginErrDescriptionInternalError = @"Onegini: Internal plugin error";
 NSString *const OGCDVPluginErrDescriptionIllegalArgumentProfile = @"Onegini: Argument Provided is not a valid profile object";
 NSString *const OGCDVPluginErrDescriptionProfileNotRegistered = @"Onegini: No registered user found.";

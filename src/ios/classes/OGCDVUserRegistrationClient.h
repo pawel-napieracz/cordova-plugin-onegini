@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#import <SafariServices/SafariServices.h>
 #import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
