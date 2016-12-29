@@ -93,7 +93,7 @@ function getConfigFileForPlatform(projectRoot, platform) {
   const defaultLocation = `${projectRoot}/onegini-config-${platform}.zip`;
 
   if (environmentLocation) {
-    console.log(`Using Token Server config zip: '${environmentLocation}' set in ${environmentVar}`);
+    console.log(`Using Token Server config zip: '${environmentLocation}' set in '${environmentVar}'`);
     return environmentLocation;
   }
 
@@ -107,7 +107,7 @@ function getConfiguratorName() {
   const defaultName = 'onegini-sdk-configurator';
 
   if (environmentName) {
-    console.log(`Using SDK Configurator executable in '${environmentName}' set in ${environmentVar}`);
+    console.log(`Using SDK Configurator executable in '${environmentName}' set in '${environmentVar}'`);
     return environmentName;
   }
 
