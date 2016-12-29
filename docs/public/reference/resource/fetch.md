@@ -61,10 +61,10 @@ The success callback contains an object with these properties:
 | `headers` | `{ Content-Type: "application/json" }` | The HTTP headers of the server response
 | `body` | - | The body of the server response
 
-The error callback contains an object the usual error code and description.
+The error callback contains an object with the usual error code and description.
 
 In addition, it contains an `httpResponse` if an http request was performed (might not be the case, for example when an IOException occurs).
-The `httpResponse` object containing the same `status`, `statusText`, `headers` and `body` properties as the success response. 
+The `httpResponse` object contains the same `status`, `statusText`, `headers` and `body` properties as a success response. 
 
 | Property | Example | Description |
 | --- | --- | --- |
