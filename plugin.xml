@@ -123,6 +123,7 @@
     <!-- SDK Headers -->
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticator.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticatorRegistrationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGChangePinDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGClientBuilder.h"/>
@@ -130,6 +131,7 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCreatePinChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGDeviceClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGErrors.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGFIDOChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGFingerprintChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthenticationRequest.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthenticationRequestDelegate.h"/>
@@ -144,7 +146,9 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserProfile.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
-    <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS-5.00.01.a" framework="true"/>
+
+    <!-- SDK binary -->
+    <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS-5.01.01.a" framework="true"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
