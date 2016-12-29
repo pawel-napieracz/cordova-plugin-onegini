@@ -61,7 +61,7 @@ The configuration hook is used to invoke the Configurator. The hook can be custo
 | ONEGINI_CONFIG_ANDROID_PATH   | &lt;project_root&gt;/onegini-config-android.zip  | Location of the Token Server configuration zip file for Android.
 | ONEGINI_CONFIG_IOS_PATH       | &lt;project_root&gt;/onegini-config-ios.zip      | Location of the Token Server configuration zip file for iOS.
 
-For example, to change location of the Android and iOS configuration zips are read from we can set:
+For example, to change location of the Android and iOS configuration zips we can set:
 
 ```bash
 export ONEGINI_CONFIG_ANDROID_PATH=/path/to/android-config.zip
