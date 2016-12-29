@@ -19,21 +19,24 @@ The easiest way the Plugin can find your Configurator is by setting the `ONEGINI
 export ONEGINI_SDK_CONFIGURATOR_PATH=/path/to/onegini-sdk-configurator
 ```
 
-The Plugin will also try to find the configurator in your `PATH` if `ONEGINI_SDK_CONFIGURATOR_PATH` is not set. If you set the Configurator in your `PATH`, you can also [run the configurator from the command line](https://github.com/Onegini/onegini-sdk-configurator#usage).
+The Plugin will also try to find the configurator in your `$PATH` if `ONEGINI_SDK_CONFIGURATOR_PATH` is not set. If you set the Configurator in your `PATH`, you 
+can also [run the configurator from the command line](https://github.com/Onegini/onegini-sdk-configurator#usage).
 
 ### Adding the Token Server configuration to your project
 
-Download the configuration zips from your Token Server admin panel under `Configuration > Applications > My App`. Under _Platform versions_ click `Actions > Export Platform version config`.
+Download the configuration zips from your Token Server admin panel under `Configuration > Applications > My App`. Under _Platform versions_ click `Actions > 
+Export Platform version config`.
 
-The easiest way the plugin can find your configuration files is to store them as `onegini-config-android.zip` and `onegini-config-ios.zip` in the root of your Cordova Project.
+The easiest way the plugin can find your configuration files is to store them as `onegini-config-android.zip` and `onegini-config-ios.zip` in the root of your 
+Cordova Project.
 
 You can specify alternative locations for these files by [Customizing the configuration hook](#customizing-the-configuration-hook).
 
 
 ### Setting application preferences
 
-Apart from your Token Server Configuration, the Configurator will read some properties from your `config.xml` file. Changes in these preferences are only picked up after re-running the Configurator.
-The following preferences can be set:
+Apart from your Token Server Configuration, the Configurator will read some properties from your `config.xml` file. Changes in these preferences are only 
+picked up after re-running the Configurator. The following preferences can be set:
 
 | Preference                   | Default value | Description
 |------------------------------|---------------|-----------------------------------------------------------------------------------------------------------------
@@ -52,16 +55,16 @@ For more information on Cordova Preferences refer to the [Cordova Documentation]
 
 ### Customizing the configuration hook
 
-The configuration hook is used to invoke the Configurator. The hook can be customized by setting following environment variables:
+The configuration hook is used to invoke the Configurator. The hook can be customized by setting the following environment variables:
 
 | Name                          | Default value                                    | Description
 |-------------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------
-| ONEGINI_AUTOCONFIGURE         | true                                             | Enable or disable the configuration hook, you will need to manually configure your platform if disabled.
+| ONEGINI_AUTOCONFIGURE         | true                                             | Enable or disable the configuration hook, you will need to manually configure your platforms if disabled.
 | ONEGINI_SDK_CONFIGURATOR_PATH | resolved from `$PATH`                            | Location of the Onegini SDK Configurator executable.
 | ONEGINI_CONFIG_ANDROID_PATH   | &lt;project_root&gt;/onegini-config-android.zip  | Location of the Token Server configuration zip file for Android.
 | ONEGINI_CONFIG_IOS_PATH       | &lt;project_root&gt;/onegini-config-ios.zip      | Location of the Token Server configuration zip file for iOS.
 
-For example, to change location of the Android and iOS configuration zips we can set:
+For example, to change the location of the Android and iOS configuration zips you can set:
 
 ```bash
 export ONEGINI_CONFIG_ANDROID_PATH=/path/to/android-config.zip
