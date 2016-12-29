@@ -24,6 +24,7 @@ Every error has a code which uniquely identifies the error. The errors specific 
 8010 = ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD;
 8011 = ERROR_CODE_IO_EXCEPTION;
 8012 = ERROR_CODE_INCORRECT_PIN;
+8013 = ERROR_CODE_HTTP_ERROR;
 ```
 
 Every error returns an object that contains a `code` and `description` property. These can provide helpful information on how to recover from or handle a given error.

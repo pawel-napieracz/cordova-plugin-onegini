@@ -18,10 +18,11 @@ package com.onegini.util;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_ERROR_CODE;
+import static com.onegini.OneginiCordovaPluginConstants.PARAM_ERROR_DESCRIPTION;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 
-import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,6 @@ import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
-import retrofit.client.Response;
 
 public class PluginResultBuilder {
 
@@ -65,8 +65,8 @@ public class PluginResultBuilder {
     status = ERROR;
 
     try {
-      payload.put("description", description);
-      payload.put("code", code);
+      payload.put(PARAM_ERROR_DESCRIPTION, description);
+      payload.put(PARAM_ERROR_CODE, code);
     } catch (JSONException e) {
       handleException(e);
     }
@@ -82,8 +82,8 @@ public class PluginResultBuilder {
     }
 
     try {
-      payload.put("code", oneginiError.getErrorType());
-      payload.put("description", oneginiError.getErrorDescription());
+      payload.put(PARAM_ERROR_CODE, oneginiError.getErrorType());
+      payload.put(PARAM_ERROR_DESCRIPTION, oneginiError.getErrorDescription());
     } catch (JSONException e) {
       handleException(e);
     }
@@ -153,26 +153,6 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder withRetrofitResponse(Response response) {
-    final int responseStatus = response.getStatus();
-    if (responseStatus == HttpURLConnection.HTTP_OK) {
-      this.status = OK;
-    } else {
-      this.status = ERROR;
-    }
-
-    try {
-      payload.put("body", RetrofitResponseUtil.getBodyStringFromRetrofitResponse(response));
-      payload.put("status", responseStatus);
-      payload.put("statusText", response.getReason());
-      payload.put("headers", RetrofitResponseUtil.getJsonHeadersFromRetrofitResponse(response));
-    } catch (JSONException e) {
-      handleException(e);
-    }
-
-    return this;
-  }
-
   public PluginResultBuilder withOneginiConfigModel(final OneginiClientConfigModel configModel) {
     try {
       payload.put("resourceBaseURL", configModel.getResourceBaseUrl());
@@ -187,8 +167,8 @@ public class PluginResultBuilder {
     this.status = ERROR;
 
     Map<String, Object> payload = new HashMap<String, Object>();
-    payload.put("description", ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
-    payload.put("code",ERROR_CODE_PLUGIN_INTERNAL_ERROR);
+    payload.put(PARAM_ERROR_CODE, ERROR_CODE_PLUGIN_INTERNAL_ERROR);
+    payload.put(PARAM_ERROR_DESCRIPTION, ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR + " : " + e.getMessage());
     this.payload = new JSONObject(payload);
   }
 
