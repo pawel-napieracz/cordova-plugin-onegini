@@ -17,8 +17,10 @@
 package com.onegini;
 
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
 
 import org.apache.cordova.CallbackContext;
@@ -40,6 +42,7 @@ public class OneginiChangePinClient extends CordovaPlugin {
   private final static String ACTION_START = "start";
   private final static String ACTION_CREATE_PIN = "createPin";
   private final static String ACTION_PROVIDE_PIN = "providePin";
+  private static final String ACTION_CANCEL_FLOW = "cancelFlow";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -51,6 +54,9 @@ public class OneginiChangePinClient extends CordovaPlugin {
       return true;
     } else if (ACTION_PROVIDE_PIN.equals(action)) {
       providePin(args, callbackContext);
+      return true;
+    } else if (ACTION_CANCEL_FLOW.equals(action)) {
+      cancelFlow(callbackContext);
       return true;
     }
 
@@ -99,6 +105,12 @@ public class OneginiChangePinClient extends CordovaPlugin {
       pinCallback.acceptAuthenticationRequest(pin.toCharArray());
     }
 
+  }
+
+  private void cancelFlow(final CallbackContext callbackContext) {
+    callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withPluginError(ERROR_DESCRIPTION_OPERATION_CANCELED, ERROR_CODE_OPERATION_CANCELED)
+        .build());
   }
 
   private OneginiClient getOneginiClient() {

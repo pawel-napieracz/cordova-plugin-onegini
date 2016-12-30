@@ -24,16 +24,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+import static com.onegini.OneginiCordovaPluginConstants.TAG;
 import retrofit.client.Header;
 import retrofit.client.Response;
 
 public class RetrofitResponseUtil {
 
-  public static JSONObject getJsonHeadersFromRetrofitResponse(Response response) throws JSONException {
+  public static JSONObject getJsonHeadersFromRetrofitResponse(Response response) {
     final JSONObject result = new JSONObject();
 
     for (Header header : response.getHeaders()) {
-      result.put(header.getName(), header.getValue());
+      try {
+        result.put(header.getName(), header.getValue());
+      } catch (JSONException e) {
+        Log.e(TAG, "Could not parse http response header '" + header.getName() + "' to JSON object");
+      }
     }
 
     return result;

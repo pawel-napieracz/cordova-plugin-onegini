@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-#import "CDVPlugin+OGCDV.h"
-#import "OneginiSDK.h"
+#import "OGCDVUrlClient.h"
+#import "OGCDVUserRegistrationClient.h"
 
-@interface OGCDVChangePinClient : CDVPlugin<ONGChangePinDelegate>
+NSString *const PARAM_USER_ID = @"userId";
 
-@property (nonatomic, copy) NSString *startCallbackId;
+@implementation OGCDVUrlClient {
+}
 
-@property (nonatomic) ONGPinChallenge *pinChallenge;
-@property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
+- (void)setUserId:(CDVInvokedUrlCommand *)command
+{
+    NSDictionary *options = command.arguments[0];
+    NSString *userId = options[PARAM_USER_ID];
+    [[OGCDVUserRegistrationClient sharedInstance] setUserId:userId];
 
-- (void)start:(CDVInvokedUrlCommand *)command;
-- (void)providePin:(CDVInvokedUrlCommand *)command;
-- (void)createPin:(CDVInvokedUrlCommand *)command;
-- (void)cancelFlow:(CDVInvokedUrlCommand *)command;
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+}
 
 @end

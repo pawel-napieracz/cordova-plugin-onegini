@@ -71,7 +71,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 - (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge forRequest:(ONGMobileAuthenticationRequest *)request
 {
-    if (challenge.error.code == ONGPinAuthenticationErrorInvalidPin) {
+    if (challenge.error.code == ONGAuthenticationErrorInvalidPin) {
         [delegate setPinChallenge:challenge];
         [delegate sendChallenge:challengeReceiversCallbackIds[OGCDVPluginMobileAuthenticationMethodPin]];
         return;
@@ -135,8 +135,9 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
             [delegate mobileAuthenticationRequestClient:self didReceivePinChallengeResponse:result withPin:pin
                                          withCallbackId:command.callbackId];
         } else if ([OGCDVPluginMobileAuthenticationMethodFingerprint isEqualToString:method]) {
+            NSString *prompt = options[OGCDVPluginKeyPrompt];
             [delegate mobileAuthenticationRequestClient:self didReceiveFingerprintChallengeResponse:result
-                                         withCallbackId:command.callbackId];
+                                         withPrompt:prompt withCallbackId:command.callbackId];
         } else {
             [self sendErrorResultForCallbackId:command.callbackId
                                  withErrorCode:OGCDVPluginErrCodeInvalidMobileAuthenticationMethod

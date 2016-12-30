@@ -52,6 +52,10 @@ module.exports = (function () {
         }
 
         utils.callbackExec(client, 'createPin', options, self.callbacks.onSuccess, self.callbacks.onError);
+      },
+
+      cancel: function () {
+        utils.callbackExec(client, 'cancelFlow', {}, self.callbacks.onSuccess, self.callbacks.onError);
       }
     };
 
@@ -134,7 +138,7 @@ module.exports = (function () {
   };
 
   var authenticators = {
-    getAll: function(options, successCb, failureCb) {
+    getAll: function (options, successCb, failureCb) {
       if (!options || !options.profileId) {
         throw new TypeError("Onegini: missing 'profileId' argument for authenticators.getAll");
       }

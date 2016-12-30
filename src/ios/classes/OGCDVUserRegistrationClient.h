@@ -21,10 +21,13 @@
 
 @property (nonatomic, copy) NSString *callbackId;
 @property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
+@property (nonatomic, copy) NSString *userId;
 
++ (id)sharedInstance;
 - (void)start:(CDVInvokedUrlCommand *)command;
 - (void)createPin:(CDVInvokedUrlCommand *)command;
 - (void)getUserProfiles:(CDVInvokedUrlCommand *)command;
 - (void)isUserRegistered:(CDVInvokedUrlCommand *)command;
+- (void)cancelFlow:(CDVInvokedUrlCommand *)command;
 
 @end

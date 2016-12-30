@@ -15,18 +15,9 @@
  */
 
 #import "CDVPlugin+OGCDV.h"
-#import "OneginiSDK.h"
 
-@interface OGCDVChangePinClient : CDVPlugin<ONGChangePinDelegate>
+@interface OGCDVUrlClient : CDVPlugin
 
-@property (nonatomic, copy) NSString *startCallbackId;
-
-@property (nonatomic) ONGPinChallenge *pinChallenge;
-@property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
-
-- (void)start:(CDVInvokedUrlCommand *)command;
-- (void)providePin:(CDVInvokedUrlCommand *)command;
-- (void)createPin:(CDVInvokedUrlCommand *)command;
-- (void)cancelFlow:(CDVInvokedUrlCommand *)command;
+- (void)setUserId:(NSString *)userId;
 
 @end

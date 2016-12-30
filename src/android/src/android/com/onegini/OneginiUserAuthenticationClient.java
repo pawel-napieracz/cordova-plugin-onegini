@@ -16,15 +16,17 @@
 
 package com.onegini;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_USER_ALREADY_AUTHENTICATED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
+import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_USER_ALREADY_AUTHENTICATED;
@@ -59,6 +61,7 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
   private static final String ACTION_REAUTHENTICATE = "reauthenticate";
   private final static String ACTION_LOGOUT = "logout";
   private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
+  private static final String ACTION_CANCEL_FLOW = "cancelFlow";
   private AuthenticationHandler authenticationHandler;
 
   @Override
@@ -83,6 +86,9 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
       return true;
     } else if (ACTION_FALLBACK_TO_PIN.equals(action)) {
       fallbackToPin(callbackContext);
+      return true;
+    } else if (ACTION_CANCEL_FLOW.equals(action)) {
+      cancelFlow(callbackContext);
       return true;
     }
 
@@ -285,6 +291,12 @@ public class OneginiUserAuthenticationClient extends CordovaPlugin {
         callbackContext.sendPluginResult(pluginResultBuilder.build());
       }
     });
+  }
+
+  private void cancelFlow(final CallbackContext callbackContext) {
+    callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withPluginError(ERROR_DESCRIPTION_OPERATION_CANCELED, ERROR_CODE_OPERATION_CANCELED)
+        .build());
   }
 
   private OneginiClient getOneginiClient() {

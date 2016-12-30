@@ -39,6 +39,7 @@ def upload_folder_to_s3(source, destination, bucket):
 @task
 def documentation(ctx):
     if 'SNAPSHOT' not in version:
+        run('cd docs && npm run clean'.encode('ascii', 'ignore'))
         run('cd docs && npm install'.encode('ascii', 'ignore'))
         run('./docs/node_modules/.bin/gitbook build docs/public')
         upload_folder_to_s3('docs/public/_book/', 'msp/cordova-plugin/%s' % version, 'onegini-documentation')
