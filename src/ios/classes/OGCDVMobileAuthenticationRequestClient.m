@@ -71,7 +71,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 - (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge forRequest:(ONGMobileAuthenticationRequest *)request
 {
-    if (challenge.error.code == ONGPinAuthenticationErrorInvalidPin) {
+    if (challenge.error.code == ONGAuthenticationErrorInvalidPin) {
         [delegate setPinChallenge:challenge];
         [delegate sendChallenge:challengeReceiversCallbackIds[OGCDVPluginMobileAuthenticationMethodPin]];
         return;

@@ -18,6 +18,9 @@
 #import "OGCDVConstants.h"
 #import "OGCDVAuthenticatorsClientHelper.h"
 
+@interface OGCDVAuthenticatorRegistrationClient ()<ONGAuthenticatorRegistrationDelegate>
+@end
+
 @implementation OGCDVAuthenticatorRegistrationClient {
 }
 
@@ -85,6 +88,23 @@
             }
         }];
     }];
+}
+
+#pragma mark - ONGAuthenticatorRegistrationDelegate
+
+- (void)userClient:(ONGUserClient *)userClient didRegisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile
+{
+    NSDictionary *message = @{
+        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventSuccess
+    };
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
+
+    [self.commandDelegate sendPluginResult:result callbackId:self.authenticationCallbackId];
+}
+
+- (void)userClient:(ONGUserClient *)userClient didFailToRegisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile error:(NSError *)error
+{
+    [self sendErrorResultForCallbackId:self.authenticationCallbackId withError:error];
 }
 
 @end
