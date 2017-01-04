@@ -33,16 +33,18 @@
   <js-module src="www/mobileAuthentication.js" name="mobileAuthentication" />
 
   <platform name="ios">
+    <preference name="ONEGINI_REDIRECT_URI" />
     <config-file target="*-Info.plist" parent="CFBundleURLTypes">
       <array>
         <dict>
           <key>CFBundleURLSchemes</key>
           <array>
-            <string>cordovaexample</string>
+            <string>$ONEGINI_REDIRECT_URI</string>
           </array>
         </dict>
       </array>
     </config-file>
+
     <config-file target="config.xml" parent="/*">
       <feature name="OneginiClient">
         <param name="ios-package" value="OGCDVClient" />
@@ -121,14 +123,16 @@
     <source-file src="src/ios/classes/OGCDVMobileAuthenticationClient.m"/>
     <header-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.h"/>
     <source-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.m"/>
-    <header-file src="src/ios/classes/OGCDVWebBrowserViewController.h"/>
-    <source-file src="src/ios/classes/OGCDVWebBrowserViewController.m"/>
     <header-file src="src/ios/classes/OGCDVMobileAuthenticationRequestClient.h"/>
     <source-file src="src/ios/classes/OGCDVMobileAuthenticationRequestClient.m"/>
     <header-file src="src/ios/classes/OGCDVMobileAuthenticationOperation.h"/>
     <source-file src="src/ios/classes/OGCDVMobileAuthenticationOperation.m"/>
 
-    <resource-file src="src/ios/classes/OGCDVWebBrowserViewController.xib"/>
+    <!-- Safari Services for SFSafariViewController -->
+    <framework src="SafariServices.framework" weak="true" />
+
+    <!-- WebKit for WKWebView (used if SFSafariViewController is not available -->
+    <framework src="WebKit.framework" weak="true" />
 
     <!-- SDK Headers -->
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticationDelegate.h"/>

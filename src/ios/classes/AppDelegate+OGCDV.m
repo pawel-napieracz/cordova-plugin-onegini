@@ -41,7 +41,7 @@
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:OGCDVCloseSafariViewNotification object:url];
+    [[NSNotificationCenter defaultCenter] postNotificationName:OGCDVDidReceiveRegistrationCallbackURL object:url];
 }
 
 @end

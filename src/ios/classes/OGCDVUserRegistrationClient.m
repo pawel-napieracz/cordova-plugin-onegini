@@ -15,18 +15,17 @@
  */
 
 #import "OGCDVUserRegistrationClient.h"
-#import "OGCDVWebBrowserViewController.h"
 #import "OGCDVUserClientHelper.h"
 #import "OGCDVConstants.h"
-#import "SafariServices/SafariServices.h"
 
 static OGCDVUserRegistrationClient *sharedInstance;
 
-@interface OGCDVUserRegistrationClient ()<SFSafariViewControllerDelegate>
+@interface OGCDVUserRegistrationClient ()<SFSafariViewControllerDelegate, WKNavigationDelegate>
 
 @end
 
 @implementation OGCDVUserRegistrationClient {
+    WKWebView *registrationWebView;
 }
 
 + (id)sharedInstance
@@ -99,10 +98,61 @@ static OGCDVUserRegistrationClient *sharedInstance;
     [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
 }
 
-- (void)handleRegistrationCallbackUrl:(NSNotification *)notification
+- (void)handleRegistrationCallbackNotification:(NSNotification *)notification
 {
-    NSURL *url = (NSURL *) notification.object;
+    NSURL *url = (NSURL *)notification.object;
+    [self handleRegistrationCallbackURL:url];
+}
+
+- (void)handleRegistrationCallbackURL:(NSURL *)url
+{
     [[ONGUserClient sharedInstance] handleRegistrationCallback:url];
+}
+
+- (void)openURLWithWKWebView:(NSURL *)url
+{
+    WKWebViewConfiguration *wkWebViewConfiguration = [[WKWebViewConfiguration alloc] init];
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        registrationWebView = [[WKWebView alloc] initWithFrame:self.viewController.view.frame configuration:wkWebViewConfiguration];
+        registrationWebView.navigationDelegate = self;
+        [registrationWebView loadRequest:urlRequest];
+
+        CATransition *transition = [CATransition new];
+        transition.type = kCATransitionPush;
+        transition.subtype = kCATransitionFromRight;
+        [self.viewController.view addSubview:registrationWebView];
+        [self.viewController.view.layer addAnimation:transition forKey:@"transition"];
+    });
+}
+
+- (void)openURLWithSafariViewController:(NSURL *)url
+{
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:url];
+    safariViewController.delegate = self;
+    [self.viewController presentViewController:safariViewController animated:true completion:nil];
+}
+
+#pragma mark - WKNavigationDelegate
+
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+{
+    NSString *redirectURL = [[[ONGClient sharedInstance] configModel] redirectURL];
+
+    if ([navigationAction.request.URL.absoluteString hasPrefix:redirectURL]) {
+        decisionHandler(WKNavigationActionPolicyCancel);
+        [self handleRegistrationCallbackURL:navigationAction.request.URL];
+
+        CATransition *transition = [CATransition new];
+        transition.type = kCATransitionPush;
+        transition.subtype = kCATransitionFromLeft;
+        [registrationWebView removeFromSuperview];
+        [self.viewController.view.layer addAnimation:transition forKey:@"transition"];
+        registrationWebView = nil;
+    } else {
+        decisionHandler(WKNavigationActionPolicyAllow);
+    }
 }
 
 #pragma mark - SFSafariViewControllerDelegate
@@ -136,24 +186,23 @@ static OGCDVUserRegistrationClient *sharedInstance;
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveRegistrationRequestWithUrl:(NSURL *)url
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRegistrationCallbackUrl:) name:OGCDVCloseSafariViewNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRegistrationCallbackNotification:) name:OGCDVDidReceiveRegistrationCallbackURL object:nil];
 
     if (self.userId != nil) {
         url = [self addQueryParameterToUrl:url withQueryName:@"user_id" withQueryValue:self.userId];
     }
 
-    // run on the main thread; we initiated registration in a background thread, but now we need to manipulate the UI
-    dispatch_async(dispatch_get_main_queue(), ^{
-        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:url];
-        safariViewController.delegate = self;
-        [self.viewController presentViewController:safariViewController animated:true completion:nil];
-    });
+    if (SFSafariViewController.class == nil) {
+        [self openURLWithWKWebView:url];
+    } else {
+        [self openURLWithSafariViewController:url];
+    }
 }
 
 - (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile
 {
     self.createPinChallenge = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:OGCDVCloseSafariViewNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:OGCDVDidReceiveRegistrationCallbackURL object:nil];
 
     NSDictionary *result = @{
         OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventSuccess,
