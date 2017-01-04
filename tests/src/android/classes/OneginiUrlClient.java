@@ -16,19 +16,14 @@
 
 package com.onegini.tests;
 
-import android.content.Context;
-
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.content.Context;
 import com.onegini.OneginiSDK;
 import com.onegini.util.PluginResultBuilder;
-
-import com.onegini.tests.UrlHandler;
 
 public class OneginiUrlClient extends CordovaPlugin {
 
@@ -41,13 +36,7 @@ public class OneginiUrlClient extends CordovaPlugin {
   protected void pluginInitialize() {
     final Context context = cordova.getActivity().getApplicationContext();
     urlHandler = new UrlHandler(context);
-
-    cordova.getThreadPool().execute(new Runnable() {
-      @Override
-      public void run() {
-        OneginiSDK.getInstance().setUrlHandler(context, urlHandler);
-      }
-    });
+    OneginiSDK.getInstance().setUrlHandler(context, urlHandler);
 
     super.pluginInitialize();
   }
