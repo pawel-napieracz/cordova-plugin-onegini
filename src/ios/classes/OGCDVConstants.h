@@ -47,7 +47,7 @@ extern NSString *const OGCDVPluginAuthEventPinRequest;
 extern NSString *const OGCDVPluginAuthEventCreatePinRequest;
 extern NSString *const OGCDVPluginAuthEventFingerprintRequest;
 
-extern NSString *const OGCDVDidReceiveRegistrationCallbackURL;
+extern NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification;
 
 extern NSString *const OGCDVPluginErrDescriptionInternalError;
 extern NSString *const OGCDVPluginErrDescriptionIllegalArgumentProfile;

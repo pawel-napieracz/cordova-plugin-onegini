@@ -186,7 +186,7 @@ static OGCDVUserRegistrationClient *sharedInstance;
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveRegistrationRequestWithUrl:(NSURL *)url
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRegistrationCallbackNotification:) name:OGCDVDidReceiveRegistrationCallbackURL object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRegistrationCallbackNotification:) name:OGCDVDidReceiveRegistrationCallbackURLNotification object:nil];
 
     if (self.userId != nil) {
         url = [self addQueryParameterToUrl:url withQueryName:@"user_id" withQueryValue:self.userId];
@@ -202,7 +202,7 @@ static OGCDVUserRegistrationClient *sharedInstance;
 - (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile
 {
     self.createPinChallenge = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:OGCDVDidReceiveRegistrationCallbackURL object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:OGCDVDidReceiveRegistrationCallbackURLNotification object:nil];
 
     NSDictionary *result = @{
         OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventSuccess,
