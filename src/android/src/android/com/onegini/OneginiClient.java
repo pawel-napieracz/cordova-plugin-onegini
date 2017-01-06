@@ -18,6 +18,7 @@ package com.onegini;
 
 import static com.onegini.OneginiCordovaPluginConstants.EXTRA_MOBILE_AUTHENTICATION;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +79,7 @@ public class OneginiClient extends CordovaPlugin {
     }
 
     if (OneginiSDK.getInstance().isStarted()) {
-      OneginiSDK.getInstance().getOneginiClient(getApplicationContext()).getUserClient()
+      getOneginiClient().getUserClient()
           .handleMobileAuthenticationRequest(pushMessage, MobileAuthenticationHandler.getInstance());
     } else {
       delayedMobileAuthenticationRequests.add(pushMessage);
@@ -86,15 +87,15 @@ public class OneginiClient extends CordovaPlugin {
   }
 
   private void handleDelayedMobileAuthenticationRequests() {
-    for (Bundle bundle : delayedMobileAuthenticationRequests) {
-      OneginiSDK.getInstance().getOneginiClient(getApplicationContext()).getUserClient()
-          .handleMobileAuthenticationRequest(bundle, MobileAuthenticationHandler.getInstance());
-      delayedMobileAuthenticationRequests.remove(bundle);
+    for (Iterator<Bundle> iterator = delayedMobileAuthenticationRequests.iterator(); iterator.hasNext(); ) {
+      Bundle request = iterator.next();
+      getOneginiClient().getUserClient().handleMobileAuthenticationRequest(request, MobileAuthenticationHandler.getInstance());
+      iterator.remove();
     }
   }
 
   private void handleRedirection(final Uri uri) {
-    final com.onegini.mobile.sdk.android.client.OneginiClient client = OneginiSDK.getInstance().getOneginiClient(getApplicationContext());
+    final com.onegini.mobile.sdk.android.client.OneginiClient client = getOneginiClient();
     if (uri != null && client.getConfigModel().getRedirectUri().startsWith(uri.getScheme())) {
       client.getUserClient().handleRegistrationCallback(uri);
     }
@@ -120,7 +121,7 @@ public class OneginiClient extends CordovaPlugin {
   }
 
   private void sendOneginiClientStartSuccessResult(final CallbackContext callbackContext) {
-    final OneginiClientConfigModel configModel = OneginiSDK.getInstance().getOneginiClient(getApplicationContext()).getConfigModel();
+    final OneginiClientConfigModel configModel = getOneginiClient().getConfigModel();
 
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
@@ -141,5 +142,9 @@ public class OneginiClient extends CordovaPlugin {
 
   private Context getApplicationContext() {
     return cordova.getActivity().getApplicationContext();
+  }
+
+  private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {
+    return OneginiSDK.getInstance().getOneginiClient(getApplicationContext());
   }
 }
