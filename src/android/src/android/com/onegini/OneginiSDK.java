@@ -43,9 +43,11 @@ public class OneginiSDK {
 
   public OneginiClient getOneginiClient(final Context context) {
     OneginiClient oneginiClient = OneginiClient.getInstance();
+
     if (oneginiClient == null) {
       oneginiClient = buildSDK(context, null);
     }
+
     return oneginiClient;
   }
 

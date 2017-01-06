@@ -51,6 +51,14 @@ public class OneginiClient extends CordovaPlugin {
   public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
     super.initialize(cordova, webView);
     final Bundle mobileAuthenticationBundle = cordova.getActivity().getIntent().getBundleExtra(EXTRA_MOBILE_AUTHENTICATION);
+
+    /*
+      Prepare an instance of the SDK.
+      Used to avoid the performance drag of building the SDK has when calling the first instance.
+      Especially when classes from a secondary dex file are required to start the SDK, this can be a significant performance improvement.
+     */
+    getOneginiClient();
+
     handleMobileAuthenticationRequest(mobileAuthenticationBundle);
   }
 
@@ -107,8 +115,8 @@ public class OneginiClient extends CordovaPlugin {
         OneginiSDK.getInstance().startSDK(getApplicationContext(), new OneginiInitializationHandler() {
           @Override
           public void onSuccess(final Set<UserProfile> set) {
-            handleDelayedMobileAuthenticationRequests();
             sendOneginiClientStartSuccessResult(callbackContext);
+            handleDelayedMobileAuthenticationRequests();
           }
 
           @Override
