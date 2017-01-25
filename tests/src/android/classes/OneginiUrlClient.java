@@ -43,7 +43,7 @@ public class OneginiUrlClient extends CordovaPlugin {
 
   private void setUserId(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String userId = args.getJSONObject(0).getString(PARAM_USER_ID);
-    RegistrationRequestHandler.getInstance().setUserId(userId);
+    RegistrationRequestHandler.setUserId(userId);
 
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()

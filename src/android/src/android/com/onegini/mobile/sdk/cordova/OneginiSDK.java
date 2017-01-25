@@ -60,7 +60,7 @@ public class OneginiSDK {
     }
 
     final Context applicationContext = context.getApplicationContext();
-    final RegistrationRequestHandler registrationRequestHandler = RegistrationRequestHandler.getInstance(applicationContext);
+    final RegistrationRequestHandler registrationRequestHandler = new RegistrationRequestHandler(applicationContext);
     final CreatePinRequestHandler createPinRequestHandler = CreatePinRequestHandler.getInstance();
     final PinAuthenticationRequestHandler pinAuthenticationRequestHandler = PinAuthenticationRequestHandler.getInstance();
     final FingerprintAuthenticationRequestHandler fingerprintAuthenticationRequestHandler = FingerprintAuthenticationRequestHandler.getInstance();

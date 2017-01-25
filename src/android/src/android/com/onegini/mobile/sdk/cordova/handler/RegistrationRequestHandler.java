@@ -26,33 +26,20 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
 
   private static final String PARAM_USER_ID = "user_id";
 
-  private static RegistrationRequestHandler instance = null;
+  private static String userId;
+  private static OneginiRegistrationCallback callback;
   private final Context context;
-  private OneginiRegistrationCallback callback;
-  private String userId;
 
-  protected RegistrationRequestHandler(final Context context) {
+  public RegistrationRequestHandler(final Context context) {
     this.context = context;
   }
 
-  public static RegistrationRequestHandler getInstance() {
-    return getInstance(null);
-  }
-
-  public static RegistrationRequestHandler getInstance(final Context context) {
-    if (instance == null) {
-      instance = new RegistrationRequestHandler(context);
-    }
-
-    return instance;
-  }
-
   @SuppressWarnings("unused")
-  public void setUserId(final String userId) {
-    this.userId = userId;
+  public static void setUserId(final String userId) {
+    RegistrationRequestHandler.userId = userId;
   }
 
-  public void handleRegistrationCallback(final Uri uri) {
+  public static void handleRegistrationCallback(final Uri uri) {
     if (callback != null) {
       callback.handleRegistrationCallback(uri);
       callback = null;

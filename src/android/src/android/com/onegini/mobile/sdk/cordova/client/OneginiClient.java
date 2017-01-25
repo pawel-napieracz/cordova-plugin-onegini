@@ -108,7 +108,7 @@ public class OneginiClient extends CordovaPlugin {
   private void handleRedirection(final Uri uri) {
     final com.onegini.mobile.sdk.android.client.OneginiClient client = getOneginiClient();
     if (uri != null && client.getConfigModel().getRedirectUri().startsWith(uri.getScheme())) {
-      RegistrationRequestHandler.getInstance().handleRegistrationCallback(uri);
+      RegistrationRequestHandler.handleRegistrationCallback(uri);
     }
   }
 
