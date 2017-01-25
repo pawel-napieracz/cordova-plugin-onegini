@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.tests;
+package  com.onegini.mobile.sdk.cordova.tests;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -22,9 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
-import com.onegini.OneginiSDK;
-import com.onegini.handler.RegistrationRequestHandler;
-import com.onegini.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class OneginiUrlClient extends CordovaPlugin {
 
@@ -50,4 +50,3 @@ public class OneginiUrlClient extends CordovaPlugin {
         .build());
   }
 }
-

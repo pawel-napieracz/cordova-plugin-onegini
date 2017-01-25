@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.onegini;
+package com.onegini.mobile.sdk.cordova;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_HTTP_ERROR;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_IO_EXCEPTION;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_HTTP_ERROR;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_ERROR_CODE;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_ERROR_DESCRIPTION;
-import static com.onegini.OneginiCordovaPluginConstants.TAG;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_HTTP_ERROR;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_IO_EXCEPTION;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_HTTP_ERROR;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ERROR_CODE;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ERROR_DESCRIPTION;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.TAG;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 
@@ -36,9 +36,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
-import com.onegini.util.ActionArgumentsUtil;
-import com.onegini.util.PluginResultBuilder;
-import com.onegini.util.RetrofitResponseUtil;
+import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.util.RetrofitResponseUtil;
 import retrofit.client.OkClient;
 import retrofit.client.Request;
 import retrofit.client.Response;

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.onegini;
+package com.onegini.mobile.sdk.cordova;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_CONFIGURATION;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_CONFIGURATION;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -29,9 +29,9 @@ import org.json.JSONException;
 import android.content.Context;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.onegini.handler.MobileAuthenticationEnrollmentHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationEnrollmentHandler;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
-import com.onegini.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class OneginiMobileAuthenticationClient extends CordovaPlugin {
 

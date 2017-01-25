@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.onegini.handler;
+package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_CAPTURED;
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_FAILED;
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_CAPTURED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_FAILED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_REQUEST;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -26,7 +26,7 @@ import org.apache.cordova.PluginResult;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiFingerprintAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFingerprintCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
-import com.onegini.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class FingerprintAuthenticationRequestHandler implements OneginiFingerprintAuthenticationRequestHandler {
   private static FingerprintAuthenticationRequestHandler instance;

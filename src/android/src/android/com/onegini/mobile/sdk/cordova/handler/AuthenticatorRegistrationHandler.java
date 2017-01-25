@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.onegini.handler;
+package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_SUCCESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_SUCCESS;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.sdk.android.handlers.OneginiAuthenticatorRegistrationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiAuthenticatorRegistrationError;
-import com.onegini.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class AuthenticatorRegistrationHandler implements OneginiAuthenticatorRegistrationHandler {
   private CallbackContext callbackContext;

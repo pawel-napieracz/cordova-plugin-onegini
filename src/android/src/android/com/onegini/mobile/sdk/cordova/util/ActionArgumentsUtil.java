@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.onegini.util;
+package com.onegini.mobile.sdk.cordova.util;
 
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_BODY;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_HEADERS;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_METHOD;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_PIN;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_SCOPES;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_URL;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_BODY;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_HEADERS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_METHOD;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PIN;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_SCOPES;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_URL;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,7 +35,7 @@ import org.json.JSONObject;
 
 import android.support.annotation.Nullable;
 import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
-import com.onegini.mobileAuthentication.Callback;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
 import com.squareup.okhttp.internal.http.HttpMethod;
 import retrofit.client.Header;
 import retrofit.client.Request;

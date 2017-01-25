@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.mobileAuthentication;
+package com.onegini.mobile.sdk.cordova.mobileAuthentication;
 
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.AuthenticationAttemptCounter;

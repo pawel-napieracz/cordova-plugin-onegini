@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.onegini;
+package com.onegini.mobile.sdk.cordova;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
 import java.util.Set;
 
@@ -33,14 +33,14 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.onegini.handler.CreatePinRequestHandler;
-import com.onegini.handler.RegistrationHandler;
+import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.RegistrationHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
-import com.onegini.util.ActionArgumentsUtil;
-import com.onegini.util.PluginResultBuilder;
-import com.onegini.util.UserProfileUtil;
+import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
 public class OneginiUserRegistrationClient extends CordovaPlugin {
 

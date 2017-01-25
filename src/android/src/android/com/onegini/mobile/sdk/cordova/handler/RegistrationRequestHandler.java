@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.handler;
+package com.onegini.mobile.sdk.cordova.handler;
 
 import android.content.Context;
 import android.content.Intent;

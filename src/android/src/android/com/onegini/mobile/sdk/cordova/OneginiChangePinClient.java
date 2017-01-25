@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.onegini;
+package com.onegini.mobile.sdk.cordova;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -29,13 +29,13 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.onegini.handler.ChangePinHandler;
-import com.onegini.handler.CreatePinRequestHandler;
-import com.onegini.handler.PinAuthenticationRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.ChangePinHandler;
+import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
-import com.onegini.util.ActionArgumentsUtil;
-import com.onegini.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class OneginiChangePinClient extends CordovaPlugin {
 

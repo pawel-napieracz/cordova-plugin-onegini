@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.onegini;
+package com.onegini.mobile.sdk.cordova;
 
 import android.content.Context;
 import android.util.Log;
-import com.onegini.handler.CreatePinRequestHandler;
-import com.onegini.handler.FingerprintAuthenticationRequestHandler;
-import com.onegini.handler.MobileAuthenticationHandler;
-import com.onegini.handler.PinAuthenticationRequestHandler;
-import com.onegini.handler.RegistrationRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.FingerprintAuthenticationRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationHandler;
+import com.onegini.mobile.sdk.cordova.handler.PinAuthenticationRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.client.OneginiClientBuilder;
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
 
-import static com.onegini.OneginiCordovaPluginConstants.TAG;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.TAG;
 
 public class OneginiSDK {
   private static OneginiSDK instance;

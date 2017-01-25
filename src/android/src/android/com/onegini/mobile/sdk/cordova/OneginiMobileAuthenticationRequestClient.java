@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package com.onegini;
+package com.onegini.mobile.sdk.cordova;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.onegini.handler.MobileAuthenticationHandler;
-import com.onegini.mobileAuthentication.Callback;
-import com.onegini.mobileAuthentication.ConfirmationCallback;
-import com.onegini.mobileAuthentication.FingerprintCallback;
-import com.onegini.mobileAuthentication.PinCallback;
-import com.onegini.util.ActionArgumentsUtil;
-import com.onegini.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationHandler;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.ConfirmationCallback;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.FingerprintCallback;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.PinCallback;
+import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
 

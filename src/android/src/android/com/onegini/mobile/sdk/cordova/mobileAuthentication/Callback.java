@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.onegini.mobileAuthentication;
+package com.onegini.mobile.sdk.cordova.mobileAuthentication;
 
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_CONFIRMATION_REQUEST;
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_REQUEST;
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_CONFIRMATION_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
 
 import org.apache.cordova.CallbackContext;
 

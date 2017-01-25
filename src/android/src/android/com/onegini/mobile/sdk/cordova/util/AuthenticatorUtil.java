@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.onegini.util;
+package com.onegini.mobile.sdk.cordova.util;
 
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_IS_PREFERRED;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_IS_REGISTERED;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_NAME;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_IS_PREFERRED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_IS_REGISTERED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_NAME;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
 import java.util.Set;
 

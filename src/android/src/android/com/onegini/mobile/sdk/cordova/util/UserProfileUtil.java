@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.onegini.util;
+package com.onegini.mobile.sdk.cordova.util;
 
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
 import java.util.Set;
 

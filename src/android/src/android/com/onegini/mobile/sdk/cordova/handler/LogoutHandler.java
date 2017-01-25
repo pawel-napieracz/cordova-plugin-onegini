@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.onegini.handler;
+package com.onegini.mobile.sdk.cordova.handler;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.sdk.android.handlers.OneginiLogoutHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiLogoutError;
-import com.onegini.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class LogoutHandler implements OneginiLogoutHandler{
 

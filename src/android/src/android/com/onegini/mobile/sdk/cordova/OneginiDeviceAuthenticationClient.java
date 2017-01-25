@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.onegini;
+package com.onegini.mobile.sdk.cordova;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.onegini.handler.DeviceAuthenticationHandler;
+import com.onegini.mobile.sdk.cordova.handler.DeviceAuthenticationHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
-import com.onegini.util.ActionArgumentsUtil;
+import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 
 public class OneginiDeviceAuthenticationClient extends CordovaPlugin {
 

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.onegini.handler;
+package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_CREATE_PIN_REQUEST;
-import static com.onegini.OneginiCordovaPluginConstants.PIN_LENGTH;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_CREATE_PIN_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PIN_LENGTH;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -26,7 +26,7 @@ import com.onegini.mobile.sdk.android.handlers.error.OneginiPinValidationError;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiCreatePinRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
-import com.onegini.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
 

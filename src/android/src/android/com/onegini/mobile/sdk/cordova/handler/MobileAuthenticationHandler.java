@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.onegini.handler;
+package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_CAPTURED;
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_FAILED;
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
-import static com.onegini.OneginiCordovaPluginConstants.AUTH_EVENT_SUCCESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_CAPTURED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_FAILED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_SUCCESS;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -39,11 +39,11 @@ import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFingerpri
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.AuthenticationAttemptCounter;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
-import com.onegini.mobileAuthentication.Callback;
-import com.onegini.mobileAuthentication.ConfirmationCallback;
-import com.onegini.mobileAuthentication.FingerprintCallback;
-import com.onegini.mobileAuthentication.PinCallback;
-import com.onegini.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.ConfirmationCallback;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.FingerprintCallback;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.PinCallback;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class MobileAuthenticationHandler
     implements OneginiMobileAuthenticationHandler, OneginiMobileAuthenticationRequestHandler, OneginiMobileAuthenticationPinRequestHandler, OneginiMobileAuthenticationFingerprintRequestHandler {

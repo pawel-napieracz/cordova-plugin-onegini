@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.onegini.gcm;
+package com.onegini.mobile.sdk.cordova.gcm;
 
-import static com.onegini.OneginiCordovaPluginConstants.EXTRA_MOBILE_AUTHENTICATION;
-import static com.onegini.OneginiCordovaPluginConstants.PUSH_MSG_CONTENT;
-import static com.onegini.OneginiCordovaPluginConstants.PUSH_MSG_TRANSACTION_ID;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EXTRA_MOBILE_AUTHENTICATION;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_CONTENT;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_TRANSACTION_ID;
 
 import org.json.JSONException;
 import org.json.JSONObject;

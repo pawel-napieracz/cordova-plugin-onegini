@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini;
+package com.onegini.mobile.sdk.cordova;
 
 public interface OneginiCordovaPluginConstants {
 

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.onegini;
+package com.onegini.mobile.sdk.cordova;
 
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_CODE_PROFILE_NOT_REGISTERED;
-import static com.onegini.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED;
-import static com.onegini.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PROFILE_NOT_REGISTERED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
 import java.util.Set;
 
@@ -27,10 +27,10 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.onegini.handler.DeregistrationHandler;
+import com.onegini.mobile.sdk.cordova.handler.DeregistrationHandler;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
-import com.onegini.util.PluginResultBuilder;
-import com.onegini.util.UserProfileUtil;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
 public class OneginiUserDeregistrationClient extends CordovaPlugin {
 

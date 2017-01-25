@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.util;
+package com.onegini.mobile.sdk.cordova.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import org.json.JSONObject;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import static com.onegini.OneginiCordovaPluginConstants.TAG;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.TAG;
 import retrofit.client.Header;
 import retrofit.client.Response;
 
