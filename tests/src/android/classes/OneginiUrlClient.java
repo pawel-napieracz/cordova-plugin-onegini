@@ -23,23 +23,13 @@ import org.json.JSONException;
 
 import android.content.Context;
 import com.onegini.OneginiSDK;
+import com.onegini.handler.RegistrationRequestHandler;
 import com.onegini.util.PluginResultBuilder;
 
 public class OneginiUrlClient extends CordovaPlugin {
 
   private static final String ACTION_SET_USER_ID = "setUserId";
   private static final String PARAM_USER_ID = "userId";
-
-  private UrlHandler urlHandler;
-
-  @Override
-  protected void pluginInitialize() {
-    final Context context = cordova.getActivity().getApplicationContext();
-    urlHandler = new UrlHandler(context);
-    OneginiSDK.getInstance().setUrlHandler(context, urlHandler);
-
-    super.pluginInitialize();
-  }
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -53,10 +43,11 @@ public class OneginiUrlClient extends CordovaPlugin {
 
   private void setUserId(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String userId = args.getJSONObject(0).getString(PARAM_USER_ID);
-    urlHandler.setUserId(userId);
+    RegistrationRequestHandler.getInstance().setUserId(userId);
 
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .build());
   }
 }
+

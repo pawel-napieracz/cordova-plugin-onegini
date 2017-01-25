@@ -24,9 +24,12 @@ import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiRegistrat
 
 public class RegistrationRequestHandler implements OneginiRegistrationRequestHandler {
 
+  private static final String PARAM_USER_ID = "user_id";
+
   private static RegistrationRequestHandler instance = null;
   private final Context context;
   private OneginiRegistrationCallback callback;
+  private String userId;
 
   protected RegistrationRequestHandler(final Context context) {
     this.context = context;
@@ -44,6 +47,11 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
     return instance;
   }
 
+  @SuppressWarnings("unused")
+  public void setUserId(final String userId) {
+    this.userId = userId;
+  }
+
   public void handleRegistrationCallback(final Uri uri) {
     if (callback != null) {
       callback.handleRegistrationCallback(uri);
@@ -52,7 +60,8 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
   }
 
   @Override
-  public void startRegistration(final Uri uri, final OneginiRegistrationCallback oneginiRegistrationCallback) {
+  public void startRegistration(Uri uri, final OneginiRegistrationCallback oneginiRegistrationCallback) {
+    uri = getRegistrationUriWithParameters(uri);
     callback = oneginiRegistrationCallback;
 
     final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -61,4 +70,16 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
 
     context.startActivity(intent);
   }
+
+  private Uri getRegistrationUriWithParameters(final Uri uri) {
+    if (userId == null) {
+      return uri;
+    }
+
+    final Uri.Builder builder = uri.buildUpon();
+    builder.appendQueryParameter(PARAM_USER_ID, userId);
+    return builder.build();
+  }
+
 }
+
