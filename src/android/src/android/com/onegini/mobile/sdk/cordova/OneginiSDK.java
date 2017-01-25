@@ -56,7 +56,7 @@ public class OneginiSDK {
 
   private static OneginiClient buildSDK(final Context context) {
     if (context == null) {
-      Log.w(TAG, "Initialising the Onegini SDK with Context = null. This might cause unexpected behaviour!");
+      Log.w(TAG, "Initialising the Onegini SDK with Context = null. This will cause unexpected behaviour!");
     }
 
     final Context applicationContext = context.getApplicationContext();

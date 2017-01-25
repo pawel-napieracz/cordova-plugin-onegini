@@ -82,4 +82,3 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
   }
 
 }
-
