@@ -157,51 +157,51 @@
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="OneginiClient">
-        <param name="android-package" value="com.onegini.OneginiClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.OneginiClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiUserClient">
-        <param name="android-package" value="com.onegini.OneginiUserClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.UserClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiDeviceAuthenticationClient">
-        <param name="android-package" value="com.onegini.OneginiDeviceAuthenticationClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.DeviceAuthenticationClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiUserAuthenticationClient">
-        <param name="android-package" value="com.onegini.OneginiUserAuthenticationClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.UserAuthenticationClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiUserRegistrationClient">
-        <param name="android-package" value="com.onegini.OneginiUserRegistrationClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.UserRegistrationClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiUserDeregistrationClient">
-        <param name="android-package" value="com.onegini.OneginiUserDeregistrationClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.UserDeregistrationClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiChangePinClient">
-        <param name="android-package" value="com.onegini.OneginiChangePinClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.ChangePinClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiResourceClient">
-        <param name="android-package" value="com.onegini.OneginiResourceClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.ResourceClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiAuthenticatorsClient">
-        <param name="android-package" value="com.onegini.OneginiAuthenticatorsClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.AuthenticatorsClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiAuthenticatorRegistrationClient">
-        <param name="android-package" value="com.onegini.OneginiAuthenticatorRegistrationClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.AuthenticatorRegistrationClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiMobileAuthenticationClient">
-        <param name="android-package" value="com.onegini.OneginiMobileAuthenticationClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.MobileAuthenticationClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiMobileAuthenticationRequestClient">
-        <param name="android-package" value="com.onegini.OneginiMobileAuthenticationRequestClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.MobileAuthenticationRequestClient"/>
         <param name="onload" value="false"/>
       </feature>
     </config-file>
@@ -232,7 +232,7 @@
         </intent-filter>
       </receiver>
       <service
-          android:name="com.onegini.gcm.OneginiGcmListenerService"
+          android:name="com.onegini.mobile.sdk.cordova.gcm.OneginiGcmListenerService"
           android:exported="false" >
         <intent-filter>
           <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -247,84 +247,92 @@
     <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
 
     <!-- Onegini Plugin -->
-    <source-file src="src/android/src/android/com/onegini/OneginiAuthenticatorsClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiUserClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiUserRegistrationClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiUserDeregistrationClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiUserAuthenticationClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiSDK.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiCordovaPluginConstants.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiChangePinClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiDeviceAuthenticationClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiResourceClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiAuthenticatorRegistrationClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiMobileAuthenticationClient.java"
-                 target-dir="src/com/onegini/"/>
-    <source-file src="src/android/src/android/com/onegini/OneginiMobileAuthenticationRequestClient.java"
-                 target-dir="src/com/onegini/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/OneginiSDK.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/OneginiCordovaPluginConstants.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/"/>
+
+    <!-- client -->
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/AuthenticatorsClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/OneginiClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/UserClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/UserRegistrationClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/UserDeregistrationClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/UserAuthenticationClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/ChangePinClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/DeviceAuthenticationClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/ResourceClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/AuthenticatorRegistrationClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/MobileAuthenticationClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/MobileAuthenticationRequestClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
 
     <!-- gcm -->
-    <source-file src="src/android/src/android/com/onegini/gcm/OneginiGcmListenerService.java"
-                 target-dir="src/com/onegini/gcm"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/gcm/OneginiGcmListenerService.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/gcm"/>
 
     <!-- util -->
-    <source-file src="src/android/src/android/com/onegini/util/PluginResultBuilder.java" target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/UserProfileUtil.java" target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/ActionArgumentsUtil.java" target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/AuthenticatorUtil.java" target-dir="src/com/onegini/util"/>
-    <source-file src="src/android/src/android/com/onegini/util/RetrofitResponseUtil.java"
-                 target-dir="src/com/onegini/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PluginResultBuilder.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/UserProfileUtil.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/ActionArgumentsUtil.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AuthenticatorUtil.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/RetrofitResponseUtil.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <!-- handler -->
-    <source-file src="src/android/src/android/com/onegini/handler/AuthenticationHandler.java"
-                 target-dir="src/com/onegini/handler"/>
-    <source-file src="src/android/src/android/com/onegini/handler/AuthenticatorRegistrationHandler.java"
-                 target-dir="src/com/onegini/handler"/>
-    <source-file src="src/android/src/android/com/onegini/handler/AuthenticatorDeregistrationHandler.java"
-                 target-dir="src/com/onegini/handler"/>
-    <source-file src="src/android/src/android/com/onegini/handler/LogoutHandler.java"
-                 target-dir="src/com/onegini/handler"/>
-    <source-file src="src/android/src/android/com/onegini/handler/RegistrationHandler.java"
-                 target-dir="src/com/onegini/handler"/>
-    <source-file src="src/android/src/android/com/onegini/handler/DeregistrationHandler.java"
-                 target-dir="src/com/onegini/handler"/>
-    <source-file src="src/android/src/android/com/onegini/handler/CreatePinRequestHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/PinAuthenticationRequestHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/FingerprintAuthenticationRequestHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/ChangePinHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/DeviceAuthenticationHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/PinValidationHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/MobileAuthenticationEnrollmentHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/handler/MobileAuthenticationHandler.java"
-                 target-dir="src/com/onegini/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticationHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticatorRegistrationHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticatorDeregistrationHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/LogoutHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/RegistrationHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/DeregistrationHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/CreatePinRequestHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PinAuthenticationRequestHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/FingerprintAuthenticationRequestHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/ChangePinHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/DeviceAuthenticationHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PinValidationHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthenticationEnrollmentHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthenticationHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/RegistrationRequestHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
 
     <!-- mobileAuthentication -->
-    <source-file src="src/android/src/android/com/onegini/mobileAuthentication/Callback.java"
-                 target-dir="src/com/onegini/mobileAuthentication/"/>
-    <source-file src="src/android/src/android/com/onegini/mobileAuthentication/ConfirmationCallback.java"
-                 target-dir="src/com/onegini/mobileAuthentication/"/>
-    <source-file src="src/android/src/android/com/onegini/mobileAuthentication/PinCallback.java"
-                 target-dir="src/com/onegini/mobileAuthentication/"/>
-    <source-file src="src/android/src/android/com/onegini/mobileAuthentication/FingerprintCallback.java"
-                 target-dir="src/com/onegini/mobileAuthentication/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/Callback.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/ConfirmationCallback.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/PinCallback.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/FingerprintCallback.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
   </platform>
 </plugin>
