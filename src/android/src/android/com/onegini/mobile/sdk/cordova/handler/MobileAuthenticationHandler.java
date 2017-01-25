@@ -19,7 +19,6 @@ package com.onegini.mobile.sdk.cordova.handler;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_CAPTURED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_FAILED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_SUCCESS;
 
 import java.util.HashMap;
 import java.util.LinkedList;

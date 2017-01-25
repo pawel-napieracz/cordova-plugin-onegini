@@ -23,10 +23,12 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.gms.gcm.GcmListenerService;
 
+@SuppressLint("Registered")
 public class OneginiGcmListenerService extends GcmListenerService {
 
   @Override
