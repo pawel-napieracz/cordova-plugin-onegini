@@ -129,7 +129,7 @@ onegini.mobileAuthentication.on("fingerprint")
 
       // We assume that on fallback, the user still accepts the request
       // and provides a pin of "12346".
-      let pin = "12346"
+      let pin = "12346";
 
       actions.accept(pin);
     })
