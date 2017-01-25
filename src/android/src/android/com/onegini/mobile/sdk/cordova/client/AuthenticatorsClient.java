@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova;
+package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
@@ -35,11 +35,12 @@ import org.json.JSONObject;
 
 import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.AuthenticatorUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
-public class OneginiAuthenticatorsClient extends CordovaPlugin {
+public class AuthenticatorsClient extends CordovaPlugin {
   private static final String ACTION_GET_REGISTERED_AUTHENTICATORS = "getRegistered";
   private static final String ACTION_GET_ALL_AUTHENTICATORS = "getAll";
   private static final String ACTION_GET_NOT_REGISTERED_AUTHENTICATORS = "getNotRegistered";

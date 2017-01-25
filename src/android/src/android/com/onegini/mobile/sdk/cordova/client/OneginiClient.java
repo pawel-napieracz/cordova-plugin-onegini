@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova;
+package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EXTRA_MOBILE_AUTHENTICATION;
 
@@ -35,13 +35,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationHandler;
-import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiInitializationError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationHandler;
+import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class OneginiClient extends CordovaPlugin {

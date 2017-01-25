@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova;
+package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_CONFIGURATION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
@@ -29,11 +29,12 @@ import org.json.JSONException;
 import android.content.Context;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationEnrollmentHandler;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
-public class OneginiMobileAuthenticationClient extends CordovaPlugin {
+public class MobileAuthenticationClient extends CordovaPlugin {
 
   private static final String ACTION_ENROLL = "enroll";
   private static final String PREF_GCM_SENDER_ID = "OneginiGcmSenderId";

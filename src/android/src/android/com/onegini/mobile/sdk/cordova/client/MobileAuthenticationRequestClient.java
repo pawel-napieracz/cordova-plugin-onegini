@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova;
+package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD;
@@ -32,7 +32,7 @@ import com.onegini.mobile.sdk.cordova.mobileAuthentication.PinCallback;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
-public class OneginiMobileAuthenticationRequestClient extends CordovaPlugin {
+public class MobileAuthenticationRequestClient extends CordovaPlugin {
 
   private static final String ACTION_REGISTER_CHALLENGE_RECEIVER = "registerChallengeReceiver";
   private static final String ACTION_REPLY_TO_CHALLENGE = "replyToChallenge";

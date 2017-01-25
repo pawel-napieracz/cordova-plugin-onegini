@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova;
+package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
@@ -33,6 +33,7 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
@@ -42,7 +43,7 @@ import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
-public class OneginiUserRegistrationClient extends CordovaPlugin {
+public class UserRegistrationClient extends CordovaPlugin {
 
   private static final String ACTION_START = "start";
   private static final String ACTION_CREATE_PIN = "createPin";

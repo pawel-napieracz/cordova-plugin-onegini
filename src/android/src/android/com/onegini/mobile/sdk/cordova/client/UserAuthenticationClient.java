@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova;
+package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
@@ -40,6 +40,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.AuthenticationHandler;
 import com.onegini.mobile.sdk.cordova.handler.FingerprintAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.LogoutHandler;
@@ -52,7 +53,7 @@ import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
-public class OneginiUserAuthenticationClient extends CordovaPlugin {
+public class UserAuthenticationClient extends CordovaPlugin {
 
   private static final String ACTION_START = "start";
   private static final String ACTION_PROVIDE_PIN = "providePin";

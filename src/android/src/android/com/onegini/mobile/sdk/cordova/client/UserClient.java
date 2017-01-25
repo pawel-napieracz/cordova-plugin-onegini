@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova;
+package com.onegini.mobile.sdk.cordova.client;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.PinValidationHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 
-public class OneginiUserClient extends CordovaPlugin {
+public class UserClient extends CordovaPlugin {
 
   private static final String ACTION_VALIDATE_PIN_WITH_POLICY = "validatePinWithPolicy";
 

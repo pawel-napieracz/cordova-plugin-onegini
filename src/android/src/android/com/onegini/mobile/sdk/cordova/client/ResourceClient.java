@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova;
+package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_HTTP_ERROR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
@@ -36,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.RetrofitResponseUtil;
@@ -43,7 +44,7 @@ import retrofit.client.OkClient;
 import retrofit.client.Request;
 import retrofit.client.Response;
 
-public class OneginiResourceClient extends CordovaPlugin {
+public class ResourceClient extends CordovaPlugin {
 
   private static final String ACTION_FETCH = "fetch";
 
