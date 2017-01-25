@@ -46,7 +46,5 @@
 
     <source-file src="src/android/classes/OneginiUrlClient.java"
                  target-dir="src/com/onegini/tests"/>
-    <source-file src="src/android/classes/UrlHandler.java"
-                 target-dir="src/com/onegini/tests"/>
   </platform>
 </plugin>
