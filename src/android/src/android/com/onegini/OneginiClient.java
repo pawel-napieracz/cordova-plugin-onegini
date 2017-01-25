@@ -35,7 +35,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import com.onegini.handler.MobileAuthenticationHandler;
+import com.onegini.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiInitializationError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
@@ -105,7 +107,7 @@ public class OneginiClient extends CordovaPlugin {
   private void handleRedirection(final Uri uri) {
     final com.onegini.mobile.sdk.android.client.OneginiClient client = getOneginiClient();
     if (uri != null && client.getConfigModel().getRedirectUri().startsWith(uri.getScheme())) {
-      client.getUserClient().handleRegistrationCallback(uri);
+      RegistrationRequestHandler.getInstance().handleRegistrationCallback(uri);
     }
   }
 

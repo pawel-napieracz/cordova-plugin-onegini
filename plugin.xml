@@ -316,6 +316,8 @@
                  target-dir="src/com/onegini/handler/"/>
     <source-file src="src/android/src/android/com/onegini/handler/MobileAuthenticationHandler.java"
                  target-dir="src/com/onegini/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/handler/RegistrationRequestHandler.java"
+                 target-dir="src/com/onegini/handler/"/>
 
     <!-- mobileAuthentication -->
     <source-file src="src/android/src/android/com/onegini/mobileAuthentication/Callback.java"
