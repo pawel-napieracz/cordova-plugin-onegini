@@ -33,6 +33,7 @@ import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
+@SuppressWarnings("unused")
 public class UserDeregistrationClient extends CordovaPlugin {
 
   private static final String ACTION_DEREGISTER = "deregister";

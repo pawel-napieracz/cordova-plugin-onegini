@@ -40,6 +40,7 @@ import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.AuthenticatorUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
+@SuppressWarnings("unused")
 public class AuthenticatorsClient extends CordovaPlugin {
   private static final String ACTION_GET_REGISTERED_AUTHENTICATORS = "getRegistered";
   private static final String ACTION_GET_ALL_AUTHENTICATORS = "getAll";

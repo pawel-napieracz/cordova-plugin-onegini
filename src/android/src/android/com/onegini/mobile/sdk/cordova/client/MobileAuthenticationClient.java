@@ -34,6 +34,7 @@ import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationEnrollmentHand
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
+@SuppressWarnings("unused")
 public class MobileAuthenticationClient extends CordovaPlugin {
 
   private static final String ACTION_ENROLL = "enroll";

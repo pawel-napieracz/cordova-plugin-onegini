@@ -26,6 +26,7 @@ import com.onegini.mobile.sdk.cordova.handler.PinValidationHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 
+@SuppressWarnings("unused")
 public class UserClient extends CordovaPlugin {
 
   private static final String ACTION_VALIDATE_PIN_WITH_POLICY = "validatePinWithPolicy";

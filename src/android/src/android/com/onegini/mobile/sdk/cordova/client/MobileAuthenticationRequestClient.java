@@ -32,6 +32,7 @@ import com.onegini.mobile.sdk.cordova.mobileAuthentication.PinCallback;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
+@SuppressWarnings("unused")
 public class MobileAuthenticationRequestClient extends CordovaPlugin {
 
   private static final String ACTION_REGISTER_CHALLENGE_RECEIVER = "registerChallengeReceiver";

@@ -38,6 +38,7 @@ import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallba
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
+@SuppressWarnings("unused")
 public class ChangePinClient extends CordovaPlugin {
 
   private final static String ACTION_START = "start";

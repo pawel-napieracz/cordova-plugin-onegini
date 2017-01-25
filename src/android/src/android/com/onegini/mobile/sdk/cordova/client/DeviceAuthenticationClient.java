@@ -26,6 +26,7 @@ import com.onegini.mobile.sdk.cordova.handler.DeviceAuthenticationHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 
+@SuppressWarnings("unused")
 public class DeviceAuthenticationClient extends CordovaPlugin {
 
   private static final String ACTION_AUTHENTICATE = "authenticate";

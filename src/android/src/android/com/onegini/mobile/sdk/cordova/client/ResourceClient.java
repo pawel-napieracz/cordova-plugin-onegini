@@ -44,6 +44,7 @@ import retrofit.client.OkClient;
 import retrofit.client.Request;
 import retrofit.client.Response;
 
+@SuppressWarnings("unused")
 public class ResourceClient extends CordovaPlugin {
 
   private static final String ACTION_FETCH = "fetch";

@@ -44,6 +44,7 @@ import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
+@SuppressWarnings("unused")
 public class OneginiClient extends CordovaPlugin {
 
   private static final String ACTION_START = "start";

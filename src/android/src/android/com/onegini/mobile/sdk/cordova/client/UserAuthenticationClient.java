@@ -53,6 +53,7 @@ import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
+@SuppressWarnings("unused")
 public class UserAuthenticationClient extends CordovaPlugin {
 
   private static final String ACTION_START = "start";
