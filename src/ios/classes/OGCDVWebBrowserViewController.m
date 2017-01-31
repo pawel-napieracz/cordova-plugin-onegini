@@ -25,12 +25,6 @@
 
 @implementation OGCDVWebBrowserViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeWebBrowser) name:ONGCloseWebViewNotification object:nil];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -48,11 +42,6 @@
         NSLog(@"cookie domain: %@", cookie.domain);
         [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
     }
-}
-
-- (void)closeWebBrowser
-{
-    self.completionBlock(self.webView.request.URL);
 }
 
 @end

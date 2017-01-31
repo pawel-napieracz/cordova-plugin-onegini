@@ -140,6 +140,7 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPublicCommons.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPublicDefines.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRegistrationDelegate.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRegistrationRequestChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRequestBuilder.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGResourceRequest.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGResourceResponse.h"/>
@@ -148,7 +149,7 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
     <!-- SDK binary -->
-    <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS-5.01.01.a" framework="true"/>
+    <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS-5.02.00.a" framework="true"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
