@@ -1,5 +1,9 @@
 .idea
+.npm-debug.log
+node_modules
 platforms
 plugins
+
+www/dist/
 
 onegini-config-*.zip
