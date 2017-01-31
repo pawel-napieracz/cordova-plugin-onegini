@@ -20,6 +20,7 @@ module.exports = (function () {
   function AuthenticationHandler(options, client, action) {
     var self = this;
     this.callbacks = {};
+    this.client = client;
 
     this.callbackActions = {
       providePin: function (options) {
@@ -28,7 +29,7 @@ module.exports = (function () {
           throw new TypeError('Onegini: missing "pin" argument for providePin');
         }
 
-        utils.callbackExec(client, 'providePin', options, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'providePin', options, callSuccessCallback, callErrorCallback);
       },
 
       fallbackToPin: function () {
@@ -38,11 +39,11 @@ module.exports = (function () {
       acceptFingerprint: function (options) {
         options = utils.getOptionsWithDefaults(options, {}, 'iosPrompt');
         options.accept = true;
-        utils.callbackExec(client, 'respondToFingerprintRequest', options, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'respondToFingerprintRequest', options, callSuccessCallback, callErrorCallback);
       },
 
       denyFingerprint: function () {
-        utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
+        utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, callSuccessCallback, callErrorCallback)
       },
 
       createPin: function (options) {
@@ -51,11 +52,11 @@ module.exports = (function () {
           throw new TypeError('Onegini: missing "pin" argument for createPin');
         }
 
-        utils.callbackExec(client, 'createPin', options, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'createPin', options, callSuccessCallback, callErrorCallback);
       },
 
       cancel: function () {
-        utils.onceExec(client, 'cancelFlow');
+        utils.callbackExec(client, 'cancelFlow', {}, callSuccessCallback, callErrorCallback);
       }
     };
 
@@ -63,13 +64,26 @@ module.exports = (function () {
       var event = options.authenticationEvent;
       delete options.authenticationEvent;
 
+      console.log('Success cb ', self.client, event);
+
+      if (!event) {
+        throw new TypeError('Onegini: event cannot be null');
+      }
+
       if (self.callbacks[event]) {
         self.callbacks[event](self.callbackActions, options);
+      } else {
+        console.warn('Onegini: Tried to call "' + event + '" callback but no callback was registered');
       }
     }
 
     function callErrorCallback(err) {
-      self.callbacks.onError(err);
+      if (self.callbacks.onError) {
+        self.callbacks.onError(err);
+      } else {
+        console.warn('Onegini: An Error occurred but no error callback was registered');
+        console.error('Onegini: ', err);
+      }
     }
 
     utils.callbackExec(client, action, options, callSuccessCallback, callErrorCallback)

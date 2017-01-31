@@ -20,7 +20,9 @@ exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
     testForMobileFingerprintAuthentication: false,
-    userId: "devnull-cordovatests",
+    get userId() {
+      return "devnull-cordovatest-" + Math.random().toString().substr(2, 5);
+    },
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
     }
@@ -29,6 +31,8 @@ exports.defineAutoTests = function () {
   var registeredProfileId,
       nrOfUserProfiles,
       pin = "12356";
+
+  console.log("User ID for this session: " + config.userId);
 
   if (!config.testForMultipleAuthenticators) {
     console.warn("Testing for multiple authenticators disabled");
@@ -201,9 +205,7 @@ exports.defineAutoTests = function () {
             .onError(function (err) {
               expect(err).toBeDefined();
               expect(err.code).toBe(9006);
-              setTimeout(function() {
-                done();
-              }, 500);
+              done();
             })
             .onSuccess(function () {
               fail("Registration should have failed, but succeeded");
@@ -858,7 +860,7 @@ exports.defineAutoTests = function () {
                 })
                 .onError(function (err) {
                   expect(err).toBeUndefined();
-                  fail('Authenticator registration failed, but should have suceeded');
+                  fail('Authenticator registration failed, but should have succeeded');
                 });
           });
         });

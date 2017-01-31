@@ -43,11 +43,6 @@ module.exports = (function () {
     return exec(successCb, failureCb, serviceName, methodName, args);
   }
 
-  function onceExec(serviceName, methodName, args) {
-    args = sanitizeCordovaArgs(args);
-    return exec(null, null, serviceName, methodName, args);
-  }
-
   function getOptionsWithDefaults(options, defaults, firstArg) {
     options = options || {};
 
@@ -79,7 +74,6 @@ module.exports = (function () {
     isArray: isArray,
     promiseOrCallbackExec: promiseOrCallbackExec,
     callbackExec: callbackExec,
-    onceExec: onceExec,
     getOptionsWithDefaults: getOptionsWithDefaults
   };
 })();

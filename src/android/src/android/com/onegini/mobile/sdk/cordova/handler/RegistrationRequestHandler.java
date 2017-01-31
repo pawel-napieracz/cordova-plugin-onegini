@@ -39,10 +39,13 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
     RegistrationRequestHandler.userId = userId;
   }
 
+  public static OneginiRegistrationCallback getCallback() {
+    return callback;
+  }
+
   public static void handleRegistrationCallback(final Uri uri) {
     if (callback != null) {
       callback.handleRegistrationCallback(uri);
-      callback = null;
     }
   }
 
