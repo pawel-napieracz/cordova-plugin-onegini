@@ -53,6 +53,16 @@ allprojects {
   }
 }
 
+configurations {
+  compile
+}
+
+dependencies {
+  // The onegini sdk
+  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.02.00@a'
+  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.02.00:headers@zip'
+}
+
 task prepareTargetDirectory {
   delete fileTree(dir: pluginSDKiOSDir)
   file(pluginSDKiOSDir).mkdirs()

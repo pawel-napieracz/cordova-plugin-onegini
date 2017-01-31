@@ -18,9 +18,23 @@
 
 const fs = require('fs');
 const spawn = require('child_process').spawn;
-const supportedPlatforms = ["ios", "android"];
+
+const supportedPlatforms = ['android', 'ios'];
+const envVariables = {
+  enableAutoconfigure: 'ONEGINI_AUTOCONFIGURE',
+  configuratorName: 'ONEGINI_SDK_CONFIGURATOR_PATH',
+  configFiles: {
+    android: 'ONEGINI_CONFIG_ANDROID_PATH',
+    ios: 'ONEGINI_CONFIG_IOS_PATH'
+  }
+};
 
 module.exports = function (context) {
+  if (process.env.ONEGINI_AUTOCONFIGURE === "false") {
+    console.log('ONEGINI_AUTOCONFIGURE is set to false. Skipping Onegini SDK Configuration');
+    return;
+  }
+
   const deferral = context.requireCordovaModule('q').defer();
   const args = [
     '--cordova',
@@ -31,12 +45,14 @@ module.exports = function (context) {
 
   context.opts.platforms.forEach((platform) => {
     if (arrayContains(platform, supportedPlatforms)) {
-      let platformArgs = args;
-      platformArgs.unshift(platform);
-      platformArgs.push('--config',`${context.opts.projectRoot}/onegini-config-${platform}.zip`)
+      let platformArgs = args.slice();
 
-      console.log(`Configuring the ${platform} platform`)
-      console.log('--------------------------' + Array(platform.length).join("-") + '\n')
+      console.log(`Configuring the ${platform} platform`);
+      console.log('--------------------------' + new Array(platform.length).join('-') + '\n');
+
+      platformArgs.unshift(platform);
+      platformArgs.push('--config', getConfigFileForPlatform(context.opts.projectRoot, platform));
+
       execConfigurator(platformArgs, deferral);
     } else {
       console.log(`Skipping unsupported platform: ${platform}`)
@@ -47,9 +63,12 @@ module.exports = function (context) {
 };
 
 function execConfigurator(args, deferral) {
-  console.log('Running command: ')
-  console.log('onegini-sdk-configurator ' + args.join(' ') + '\n')
-  const configurator = spawn('onegini-sdk-configurator', args);
+  const configuratorName = getConfiguratorName();
+
+  console.log('\nRunning command:');
+  console.log(`${configuratorName} ${args.join(' ')}\n`);
+
+  const configurator = spawn(configuratorName, args);
 
   configurator.stdout.on('data', (data) => {
     process.stdout.write(data);
@@ -60,14 +79,42 @@ function execConfigurator(args, deferral) {
   });
 
   configurator.on('close', (code) => {
-    if (code !== 0) {
+    if (code === 0) {
+      deferral.resolve();
+    } else {
       deferral.reject('Could not configure the Onegini SDK with your configuration');
     }
-
-    deferral.resolve();
   });
 }
 
+function getConfigFileForPlatform(projectRoot, platform) {
+  const environmentVar = envVariables.configFiles[platform];
+  const environmentLocation = process.env[environmentVar];
+  const defaultLocation = `${projectRoot}/onegini-config-${platform}.zip`;
+
+  if (environmentLocation) {
+    console.log(`Using Token Server config zip: '${environmentLocation}' set in '${environmentVar}'`);
+    return environmentLocation;
+  }
+
+  console.log(`Using default Token Server config zip: '${defaultLocation}'`);
+  return defaultLocation;
+}
+
+function getConfiguratorName() {
+  const environmentVar = envVariables.configuratorName;
+  const environmentName = process.env[environmentVar];
+  const defaultName = 'onegini-sdk-configurator';
+
+  if (environmentName) {
+    console.log(`Using SDK Configurator executable in '${environmentName}' set in '${environmentVar}'`);
+    return environmentName;
+  }
+
+  console.log('Using SDK Configurator from $PATH');
+  return defaultName;
+}
+
 function arrayContains(needle, arrhaystack) {
-    return (arrhaystack.indexOf(needle) > -1);
+  return (arrhaystack.indexOf(needle) > -1);
 }

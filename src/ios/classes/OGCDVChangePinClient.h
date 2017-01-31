@@ -27,5 +27,6 @@
 - (void)start:(CDVInvokedUrlCommand *)command;
 - (void)providePin:(CDVInvokedUrlCommand *)command;
 - (void)createPin:(CDVInvokedUrlCommand *)command;
+- (void)cancelFlow:(CDVInvokedUrlCommand *)command;
 
 @end

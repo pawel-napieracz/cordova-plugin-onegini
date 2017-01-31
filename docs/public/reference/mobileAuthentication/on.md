@@ -15,32 +15,4 @@ This method is used to register handlers for different mobile authentication met
 Currently, the available method strings are `"confirmation"` (push), `"pin"` (push with PIN), and `"fingerprint"` (push with fingerprint).
 
 The `on` method returns a [`MobileAuthenticationHandler`](MobileAuthenticationHandler.md) object, which can be used to implement the various handler methods.
-
-**Example handler registration for push with PIN:**
-
-```js
-onegini.mobileAuthentication.on("pin")
-    .onPinRequest((actions, request) => {
-      console.log("New mobile authentication request", request);
-
-      // Ask the user if they want to accept or deny the request, and enter
-      // their PIN in case of accept. In this example, the user accepts the
-      // request and enters a PIN of "12346".
-      let userAcceptedRequest = true;
-      let pin = "12346";
-
-      if (userAcceptedRequest) {
-        actions.accept(pin);
-      } else {
-        actions.deny();
-      }
-    })
-    .onSuccess(() => {
-      alert("Mobile authentication request success!");
-    })
-    .onError((err) => {
-      alert("Mobile authentication request failed!\n\n" + err.description);
-    });
-```
-
-See the documentation for `MobileAuthenticationHandler` for more details on how to implement the UI.
+Examples for implementing Mobile Authentication request can be found in the Mobile Authentication [topic guide](../../topics/mobile-authentication.md).

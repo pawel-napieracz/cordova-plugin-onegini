@@ -145,11 +145,11 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
             [delegate mobileAuthenticationRequestClient:self didReceivePinChallengeResponse:result withPin:pin
                                          withCallbackId:command.callbackId];
         } else if ([OGCDVPluginMobileAuthenticationMethodFingerprint isEqualToString:method]) {
+            NSString *prompt = options[OGCDVPluginKeyPrompt];
             [delegate mobileAuthenticationRequestClient:self didReceiveFingerprintChallengeResponse:result
-                                         withCallbackId:command.callbackId];
+                                         withPrompt:prompt withCallbackId:command.callbackId];
         } else if ([OGCDVPluginMobileAuthenticationMethodFido isEqualToString:method]) {
             [delegate mobileAuthenticationRequestClient:self didReceiveFidoChallengeResponse:result
-                                         withCallbackId:command.callbackId];
         } else {
             [self sendErrorResultForCallbackId:command.callbackId
                                  withErrorCode:OGCDVPluginErrCodeInvalidMobileAuthenticationMethod

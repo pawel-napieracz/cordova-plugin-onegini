@@ -20,6 +20,7 @@ exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
     testForMobileFingerprintAuthentication: false,
+    userId: "devnull-cordovatests",
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
     }
@@ -42,9 +43,9 @@ exports.defineAutoTests = function () {
 
     type = type || "push";
 
-    xhr.open("POST", "https://demo-msp.onegini.com/oauth/api/v2/authenticate/user");
+    xhr.open("POST", "https://onegini-msp-snapshot.test.onegini.io/oauth/api/v2/authenticate/user");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.setRequestHeader("Authorization", "Basic ODgyMzRCMEU5MzIzNzFCNzY3N0I2QkZCNUFGQTJGMTI1QjY3NkNGNTNBMTExREFGRjQyNjQ3NzM5QzRGMDVDNTo1MTE2NzA5OTM4QUE1MkY2RkI5NDkwRDc3MUE1QzQ0Rjk4N0QxRUE3ODJERUMwNEQwRTM4NzA5NEJBMzVGMzM5");
+    xhr.setRequestHeader("Authorization", "Basic MjNBMDIxQTgyNzFGNDdEODUwRTM2Qjc2NDgwMEQ0NjQ0MDM4RUZDODAzMTFGN0U1QjNDMTE4QTgzNTgwOUMwQTpGMkM4MzYwMDJBODVCNEQxMkU5MzRDREFCNEZFRUMwQzk4QkExRjNEMzM2NzM2RkJCNTMxNzE3MzVGMzZCM0Mx");
 
     xhr.onreadystatechange = function () {
       if (this.readyState === 4) {
@@ -54,7 +55,19 @@ exports.defineAutoTests = function () {
       }
     };
 
-    xhr.send("callback_uri=https://wwww.onegini.com&message=Test&type=" + type + "&user_id=testclientuserid");
+    xhr.send("callback_uri=https://www.onegini.com&message=Test&type=" + type + "&user_id=" + config.userId);
+  }
+
+  function setUrlHandlerUserId(userId, successCb, failureCb) {
+    userId = userId || {};
+    if (typeof(userId) !== 'object') {
+      var value = userId;
+      userId = {};
+      userId["userId"] = value;
+    }
+    userId = [userId];
+
+    cordova.exec(successCb, failureCb, "OneginiUrlClient", "setUserId", userId);
   }
 
   /******** onegini *********/
@@ -80,6 +93,19 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
+            });
+      });
+
+      afterAll(function (done) {
+        setUrlHandlerUserId(config.userId,
+            function () {
+              expect(true).toBe(true);
+              done();
+            },
+            function (err) {
+              expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -139,6 +165,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -166,6 +193,24 @@ exports.defineAutoTests = function () {
         expect(onegini.user.register).toBeDefined();
       });
 
+      it("should be cancellable", function (done) {
+        onegini.user.register()
+            .onCreatePinRequest(function (actions, options) {
+              actions.cancel();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              expect(err.code).toBe(9006);
+              setTimeout(function() {
+                done();
+              }, 500);
+            })
+            .onSuccess(function () {
+              fail("Registration should have failed, but succeeded");
+              done();
+            });
+      });
+
       it("should succeed", function (done) {
         onegini.user.register()
             .onCreatePinRequest(function (actions, options) {
@@ -178,8 +223,8 @@ exports.defineAutoTests = function () {
               done();
             })
             .onError(function (err) {
+              fail("Registration failed, but should have succeeded");
               expect(err).toBeDefined();
-              fail("Registration failed, but should have suceeded");
             });
       });
     });
@@ -194,6 +239,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -214,6 +260,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -231,6 +278,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Logout failed, but should have succeeded');
             });
       });
     });
@@ -421,6 +469,22 @@ exports.defineAutoTests = function () {
         }).toThrow(new TypeError("Onegini: missing 'profileId' argument for user.authenticate"));
       });
 
+      it("should be cancellable", function (done) {
+        onegini.user.authenticate(registeredProfileId)
+            .onPinRequest(function (actions, options) {
+              actions.cancel();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              expect(err.code).toBe(9006);
+              done();
+            })
+            .onSuccess(function () {
+              fail("Authentication should have failed, but succeeded");
+              done();
+            });
+      });
+
       it("should succeed with pin authentication", function (done) {
         onegini.user.authenticate(registeredProfileId)
             .onPinRequest(function (actions, options) {
@@ -511,10 +575,10 @@ exports.defineAutoTests = function () {
                 actions.deny();
               })
               .onSuccess(function () {
-                done();
+                fail("Mobile authentication request succeeded, but should have failed");
               })
               .onError(function () {
-                fail("Mobile authentication request succeeded, but should have failed");
+                done();
               });
 
           sendMobileAuthenticationRequest();
@@ -671,6 +735,10 @@ exports.defineAutoTests = function () {
                 for (var r in result) {
                   var authenticator = result[r];
                   expect(authenticator.authenticatorType).toBeDefined();
+                  expect(authenticator.authenticatorId).toBeDefined();
+                  expect(authenticator.isPreferred).toBeDefined();
+                  expect(authenticator.isRegistered).toBeDefined();
+                  expect(authenticator.name).toBeDefined();
                   if (authenticator.authenticatorType === "PIN") {
                     foundPin = true;
                   }
@@ -705,6 +773,10 @@ exports.defineAutoTests = function () {
                 for (var r in result) {
                   var authenticator = result[r];
                   expect(authenticator.authenticatorType).toBeDefined();
+                  expect(authenticator.authenticatorId).toBeDefined();
+                  expect(authenticator.isPreferred).toBe(true);
+                  expect(authenticator.isRegistered).toBeDefined();
+                  expect(authenticator.name).toBeDefined();
                   if (authenticator.authenticatorType === "PIN") {
                     done();
                     return;
@@ -715,6 +787,7 @@ exports.defineAutoTests = function () {
               },
               function (err) {
                 expect(err).toBeUndefined();
+                fail('Error callback called, but method should have succeeded');
               });
         });
       });
@@ -727,10 +800,19 @@ exports.defineAutoTests = function () {
               },
               function (result) {
                 expect(result).toBeDefined();
+                for (var r in result) {
+                  var authenticator = result[r];
+                  expect(authenticator.authenticatorType).toBeDefined();
+                  expect(authenticator.authenticatorId).toBeDefined();
+                  expect(authenticator.isPreferred).toBe(false);
+                  expect(authenticator.isRegistered).toBeDefined();
+                  expect(authenticator.name).toBeDefined();
+                }
                 done();
               },
               function (err) {
                 expect(err).toBeUndefined();
+                fail('Error callback called, but method should have succeeded');
               });
         });
       });
@@ -741,6 +823,7 @@ exports.defineAutoTests = function () {
               function (result) {
                 expect(result).toBeDefined();
                 expect(result.authenticatorType).toBe("PIN");
+                expect(result.authenticatorId).toBeDefined();
                 done();
               },
               function (err) {
@@ -933,7 +1016,7 @@ exports.defineAutoTests = function () {
       it('should fetch a non-anonymous resource', function (done) {
         onegini.resource.fetch(
             {
-              url: 'https://demo-msp.onegini.com/resources/devices',
+              url: 'https://onegini-msp-snapshot.test.onegini.io/resources/devices',
               headers: {
                 'X-Test-String': 'foobar',
                 'X-Test-Int': 1337
@@ -963,21 +1046,22 @@ exports.defineAutoTests = function () {
       it('should return error context when request fails', function (done) {
         onegini.resource.fetch({
               method: 'POST',
-              url: 'https://demo-msp.onegini.com/resources/devices'
+              url: 'https://onegini-msp-snapshot.test.onegini.io/resources/devices'
             }, function (response) {
               expect(response).toBeUndefined();
               fail('Success callback called, but method should have failed');
             },
-            function (response) {
-              expect(response).toBeDefined();
-              expect(response.status).toEqual(405);
+            function (err) {
+              expect(err).toBeDefined();
+              expect(err.httpResponse.status).toEqual(405);
+              expect(err.code).toEqual(8013);
               done();
             })
       });
 
       it('should intercept an XMLHttpRequest', function (done) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://demo-msp.onegini.com/resources/devices');
+        xhr.open('GET', 'https://onegini-msp-snapshot.test.onegini.io/resources/devices');
         xhr.onload = function () {
           expect(this.readyState).toEqual(4);
           expect(this.status).toBe(200);
@@ -995,6 +1079,22 @@ exports.defineAutoTests = function () {
     describe('changePin', function () {
       it("Should exist", function () {
         expect(onegini.user.changePin).toBeDefined();
+      });
+
+      it("should be cancellable", function (done) {
+        onegini.user.changePin()
+            .onPinRequest(function (actions, options) {
+              actions.cancel();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              expect(err.code).toBe(9006);
+              done();
+            })
+            .onSuccess(function () {
+              fail("Change pin should have failed, but succeeded");
+              done();
+            });
       });
 
       it("Should succeed", function (done) {
@@ -1057,6 +1157,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
 
@@ -1071,6 +1172,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -1114,6 +1216,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -1142,6 +1245,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -1186,6 +1290,7 @@ exports.defineAutoTests = function () {
             },
             function (err) {
               expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
             });
       });
     });
@@ -1196,7 +1301,7 @@ exports.defineAutoTests = function () {
   describe('onegini.resource', function () {
     it('should fetch an anonymous resource', function (done) {
       onegini.resource.fetch({
-            url: 'https://demo-msp.onegini.com/resources/application-details',
+            url: 'https://onegini-msp-snapshot.test.onegini.io/resources/application-details',
             anonymous: true
           },
           function (response) {
@@ -1207,8 +1312,8 @@ exports.defineAutoTests = function () {
             expect(response.statusText).toBeDefined();
             done();
           },
-          function (errResponse) {
-            expect(errResponse).toBeUndefined();
+          function (err) {
+            expect(err).toBeUndefined();
             fail('Error response called, but method should have succeeded');
           })
     })

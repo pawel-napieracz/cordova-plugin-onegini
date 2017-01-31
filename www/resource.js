@@ -16,7 +16,7 @@
 
 module.exports = (function (XMLHttpRequest) {
   var utils = require('./utils');
-  var ResourceBaseURL;
+  var resourceBaseUrl;
   var nativeXhrProperties = [
     'onabort',
     'onerror',
@@ -65,7 +65,7 @@ module.exports = (function (XMLHttpRequest) {
 
   function init(url) {
     window.XMLHttpRequest = OneginiXMLHttpRequest;
-    ResourceBaseURL = url;
+    resourceBaseUrl = url;
   }
 
   function disable() {
@@ -78,7 +78,7 @@ module.exports = (function (XMLHttpRequest) {
   }
 
   OneginiXMLHttpRequest.prototype.open = function (method, url) {
-    if (url.startsWith(ResourceBaseURL)) {
+    if (url.startsWith(resourceBaseUrl)) {
       setupXhrProxy(this, method, url);
     }
 
@@ -163,11 +163,11 @@ module.exports = (function (XMLHttpRequest) {
         url: xhr._url,
         headers: xhr._requestHeaders,
         body: body
-      }, function (successResult) {
-        populateXhrWithFetchResult(xhr, successResult);
+      }, function (successResponse) {
+        populateXhrWithFetchResponse(xhr, successResponse);
         xhr.dispatchEvent(new Event('load'));
-      }, function (errorResult) {
-        populateXhrWithFetchResult(xhr, errorResult);
+      }, function (err) {
+        populateXhrWithFetchResponse(xhr, err.httpResponse);
         xhr.dispatchEvent(new Event('error'));
       });
     });
@@ -191,7 +191,7 @@ module.exports = (function (XMLHttpRequest) {
     });
   }
 
-  function populateXhrWithFetchResult(xhr, result) {
+  function populateXhrWithFetchResponse(xhr, result) {
     defineProperty(xhr, 'readyState', 4);
     defineProperty(xhr, 'responseText', result.body);
     defineProperty(xhr, 'response', result.body);

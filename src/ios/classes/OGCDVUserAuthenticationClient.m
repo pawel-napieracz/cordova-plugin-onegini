@@ -81,13 +81,18 @@
 
     [self.commandDelegate runInBackground:^{
         NSDictionary *options = command.arguments[0];
-        BOOL shouldAccept = [options[OGCDVPluginKeyAccept] boolValue];
+        BOOL shouldNotAccept = ![options[OGCDVPluginKeyAccept] boolValue];
+        NSString *prompt = options[OGCDVPluginKeyPrompt];
 
-        if (shouldAccept) {
-            NSString *prompt = options[OGCDVPluginKeyPrompt];
-            [self.fingerprintChallenge.sender respondWithPrompt:prompt challenge:self.fingerprintChallenge];
-        } else {
+        if (shouldNotAccept) {
             [self.fingerprintChallenge.sender cancelChallenge:self.fingerprintChallenge];
+            return;
+        }
+
+        if (prompt == nil) {
+            [self.fingerprintChallenge.sender respondWithDefaultPromptForChallenge:self.fingerprintChallenge];
+        } else {
+            [self.fingerprintChallenge.sender respondWithPrompt:prompt challenge:self.fingerprintChallenge];
         }
     }];
 }
@@ -126,13 +131,22 @@
 {
     [self.commandDelegate runInBackground:^{
         [[ONGUserClient sharedInstance] logoutUser:^(ONGUserProfile *_Nonnull userProfile, NSError *_Nullable error) {
-            if (error != nil) {
-                [self sendErrorResultForCallbackId:command.callbackId withError:error];
-            } else {
+            if (error == nil) {
                 [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            } else {
+                [self sendErrorResultForCallbackId:command.callbackId withError:error];
             }
         }];
     }];
+}
+
+- (void)cancelFlow:(CDVInvokedUrlCommand *)command
+{
+    if (self.fingerprintChallenge) {
+        [self.fingerprintChallenge.sender cancelChallenge:self.fingerprintChallenge];
+    } else if (self.pinChallenge) {
+        [self.pinChallenge.sender cancelChallenge:self.pinChallenge];
+    }
 }
 
 @end

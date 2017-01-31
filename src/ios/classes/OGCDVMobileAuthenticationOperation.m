@@ -172,14 +172,19 @@
 }
 
 - (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
-   didReceiveFingerprintChallengeResponse:(BOOL)accept withCallbackId:(NSString *)callbackId
+   didReceiveFingerprintChallengeResponse:(BOOL)accept withPrompt:(NSString *)prompt withCallbackId:(NSString *)callbackId
 {
     [self setCompleteOperationCallbackId:callbackId];
 
-    if (accept) {
+    if (!accept) {
+        [self.fingerprintChallenge.sender cancelChallenge:fingerprintChallenge];
+        return;
+    }
+
+    if (prompt == nil) {
         [self.fingerprintChallenge.sender respondWithDefaultPromptForChallenge:fingerprintChallenge];
     } else {
-        [self.fingerprintChallenge.sender cancelChallenge:fingerprintChallenge];
+        [self.fingerprintChallenge.sender respondWithPrompt:prompt challenge:fingerprintChallenge];
     }
 }
 

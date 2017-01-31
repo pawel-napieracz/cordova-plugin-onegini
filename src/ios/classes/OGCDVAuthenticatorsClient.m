@@ -27,7 +27,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered andMessage:OGCDVPluginErrDescriptionProfileNotRegistered];
             return;
         }
 
@@ -45,7 +45,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered andMessage:OGCDVPluginErrDescriptionProfileNotRegistered];
             return;
         }
 
@@ -63,7 +63,7 @@
     [self.commandDelegate runInBackground:^{
         ONGUserProfile *user = [OGCDVAuthenticatorsClient userProfileFromCommand:command];
         if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered andMessage:OGCDVPluginErrDescriptionProfileNotRegistered];
             return;
         }
 

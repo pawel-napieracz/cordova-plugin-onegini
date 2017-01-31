@@ -19,7 +19,18 @@
 #import "OGCDVUserClientHelper.h"
 #import "OGCDVConstants.h"
 
-@implementation OGCDVUserRegistrationClient {
+static OGCDVUserRegistrationClient *sharedInstance;
+
+@implementation OGCDVUserRegistrationClient
+
++ (id)sharedInstance
+{
+    return sharedInstance;
+}
+
+- (void)pluginInitialize
+{
+    sharedInstance = self;
 }
 
 - (void)start:(CDVInvokedUrlCommand *)command
@@ -73,12 +84,24 @@
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isRegistered] callbackId:command.callbackId];
 }
 
+- (void)cancelFlow:(CDVInvokedUrlCommand *)command
+{
+    if (!self.createPinChallenge) {
+        return;
+    }
+
+    [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
+}
+
 #pragma mark - ONGRegistrationDelegate
 
 - (void)userClient:(ONGUserClient *)userClient didReceivePinRegistrationChallenge:(ONGCreatePinChallenge *)challenge
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.viewController dismissViewControllerAnimated:YES completion:nil];
+    });
+
     self.createPinChallenge = challenge;
-    [self.viewController dismissViewControllerAnimated:YES completion:nil];
 
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     result[OGCDVPluginKeyAuthenticationEvent] = OGCDVPluginAuthEventCreatePinRequest;
@@ -95,14 +118,19 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didReceiveRegistrationRequestWithUrl:(NSURL *)url
+- (void)userClient:(ONGUserClient *)userClient didReceiveRegistrationRequestChallenge:(ONGRegistrationRequestChallenge *)challenge
 {
-    // run on the main thread; we initiated registration in a background thread, but now we need to manipulate the UI
+    NSURL *url;
+
+    if (self.userId == nil) {
+        url = challenge.url;
+    } else {
+        url = [self addQueryParameterToUrl:challenge.url withQueryName:@"user_id" withQueryValue:self.userId];
+    }
+
     dispatch_async(dispatch_get_main_queue(), ^{
         OGCDVWebBrowserViewController *webBrowserViewController = [OGCDVWebBrowserViewController new];
         webBrowserViewController.url = url;
-        webBrowserViewController.completionBlock = ^(NSURL *completionURL) {
-        };
         [self.viewController presentViewController:webBrowserViewController animated:YES completion:nil];
     });
 }
@@ -121,6 +149,21 @@
 {
     [self.viewController dismissViewControllerAnimated:YES completion:nil];
     [self sendErrorResultForCallbackId:self.callbackId withError:error];
+}
+
+- (NSURL *)addQueryParameterToUrl:(NSURL *)url withQueryName:(NSString *)name withQueryValue:(NSString *)value
+{
+    NSURLComponents *components = [[NSURLComponents alloc] initWithURL:url resolvingAgainstBaseURL:false];
+    NSURLQueryItem *newQueryItem = [[NSURLQueryItem alloc] initWithName:name value:value];
+    NSMutableArray *queryItems = [NSMutableArray arrayWithCapacity:[components.queryItems count] + 1];
+    for (NSURLQueryItem *qi in components.queryItems) {
+        if (![qi.name isEqual:newQueryItem.name]) {
+            [queryItems addObject:qi];
+        }
+    }
+    [queryItems addObject:newQueryItem];
+    [components setQueryItems:queryItems];
+    return [components URL];
 }
 
 @end

@@ -2,6 +2,7 @@
 
 * [Topic guides](topics/introduction.md)
     * [Getting started](topics/getting-started.md)
+    * [Configuration](topics/configuration.md)
     * [User authentication](topics/user-authentication.md)
     * [User authentication with fingerprint](topics/user-authentication-with-fingerprint.md)
     * [Change PIN](topics/change-pin.md)
@@ -36,3 +37,5 @@
 * [Release notes](release-notes/introduction.md)
     * [1.x](release-notes/1.x.md)
     * [2.x](release-notes/2.x.md)
+* [Upgrade instructions](upgrade-instructions/introduction.md)
+    * [1.8](upgrade-instructions/1.8.md)
