@@ -32,7 +32,7 @@ module.exports = (function () {
       },
 
       fallbackToPin: function () {
-        utils.promiseOrCallbackExec(client, 'fallbackToPin');
+        utils.onceExec(client, 'fallbackToPin');
       },
 
       acceptFingerprint: function (options) {
@@ -55,7 +55,7 @@ module.exports = (function () {
       },
 
       cancel: function () {
-        utils.callbackExec(client, 'cancelFlow', {}, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.onceExec(client, 'cancelFlow');
       }
     };
 

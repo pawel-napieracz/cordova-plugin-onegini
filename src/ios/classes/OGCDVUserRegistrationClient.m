@@ -94,7 +94,6 @@ static OGCDVUserRegistrationClient *sharedInstance;
     [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
 }
 
-
 #pragma mark - ONGRegistrationDelegate
 
 - (void)userClient:(ONGUserClient *)userClient didReceivePinRegistrationChallenge:(ONGCreatePinChallenge *)challenge

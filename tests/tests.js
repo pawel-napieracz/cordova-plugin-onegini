@@ -835,6 +835,18 @@ exports.defineAutoTests = function () {
 
       if (config.testForMultipleAuthenticators) {
         describe("registerNew", function () {
+          it("should be cancellable", function (done) {
+            onegini.user.authenticators.registerNew({authenticatorType: "Fingerprint"})
+                .onPinRequest(function q(actions) {
+                  actions.cancel();
+                })
+                .onError(function (err) {
+                  expect(err).toBeDefined();
+                  expect(err.code).toBe(9006);
+                  done();
+                });
+          });
+
           it("should succeed", function (done) {
             onegini.user.authenticators.registerNew({authenticatorType: "Fingerprint"})
                 .onPinRequest(function (actions) {
