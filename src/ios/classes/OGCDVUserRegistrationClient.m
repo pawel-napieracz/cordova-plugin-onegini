@@ -166,8 +166,11 @@ static OGCDVUserRegistrationClient *sharedInstance;
 
 - (void)userClient:(ONGUserClient *)userClient didReceivePinRegistrationChallenge:(ONGCreatePinChallenge *)challenge
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.viewController dismissViewControllerAnimated:YES completion:nil];
+    });
+
     self.createPinChallenge = challenge;
-    [self.viewController dismissViewControllerAnimated:YES completion:nil];
 
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     result[OGCDVPluginKeyAuthenticationEvent] = OGCDVPluginAuthEventCreatePinRequest;
@@ -184,12 +187,16 @@ static OGCDVUserRegistrationClient *sharedInstance;
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didReceiveRegistrationRequestWithUrl:(NSURL *)url
+- (void)userClient:(ONGUserClient *)userClient didReceiveRegistrationRequestChallenge:(ONGRegistrationRequestChallenge *)challenge
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRegistrationCallbackNotification:) name:OGCDVDidReceiveRegistrationCallbackURLNotification object:nil];
 
-    if (self.userId != nil) {
-        url = [self addQueryParameterToUrl:url withQueryName:@"user_id" withQueryValue:self.userId];
+     NSURL *url;
+
+    if (self.userId == nil) {
+        url = challenge.url;
+    } else {
+        url = [self addQueryParameterToUrl:challenge.url withQueryName:@"user_id" withQueryValue:self.userId];
     }
 
     if (SFSafariViewController.class == nil) {

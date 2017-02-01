@@ -39,14 +39,12 @@
     <config-file target="res/xml/config.xml" parent="/*">
       <content src="cdvtests/index.html" />
       <feature name="OneginiUrlClient">
-        <param name="android-package" value="com.onegini.tests.OneginiUrlClient"/>
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.tests.OneginiUrlClient"/>
         <param name="onload" value="true"/>
       </feature>
     </config-file>
 
     <source-file src="src/android/classes/OneginiUrlClient.java"
-                 target-dir="src/com/onegini/tests"/>
-    <source-file src="src/android/classes/UrlHandler.java"
-                 target-dir="src/com/onegini/tests"/>
+                 target-dir="src/com/onegini/mobile/sdk/cordova/tests"/>
   </platform>
 </plugin>

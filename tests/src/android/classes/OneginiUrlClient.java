@@ -14,43 +14,22 @@
  * limitations under the License.
  */
 
-package com.onegini.tests;
-
-import android.content.Context;
+package  com.onegini.mobile.sdk.cordova.tests;
 
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.onegini.OneginiSDK;
-import com.onegini.util.PluginResultBuilder;
-
-import com.onegini.tests.UrlHandler;
+import android.content.Context;
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class OneginiUrlClient extends CordovaPlugin {
 
   private static final String ACTION_SET_USER_ID = "setUserId";
   private static final String PARAM_USER_ID = "userId";
-
-  private UrlHandler urlHandler;
-
-  @Override
-  protected void pluginInitialize() {
-    final Context context = cordova.getActivity().getApplicationContext();
-    urlHandler = new UrlHandler(context);
-
-    cordova.getThreadPool().execute(new Runnable() {
-      @Override
-      public void run() {
-        OneginiSDK.getInstance().setUrlHandler(context, urlHandler);
-      }
-    });
-
-    super.pluginInitialize();
-  }
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -64,7 +43,7 @@ public class OneginiUrlClient extends CordovaPlugin {
 
   private void setUserId(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String userId = args.getJSONObject(0).getString(PARAM_USER_ID);
-    urlHandler.setUserId(userId);
+    RegistrationRequestHandler.setUserId(userId);
 
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()

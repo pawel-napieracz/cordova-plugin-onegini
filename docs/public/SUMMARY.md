@@ -37,3 +37,5 @@
 * [Release notes](release-notes/introduction.md)
     * [1.x](release-notes/1.x.md)
     * [2.x](release-notes/2.x.md)
+* [Upgrade instructions](upgrade-instructions/introduction.md)
+    * [1.8](upgrade-instructions/1.8.md)
