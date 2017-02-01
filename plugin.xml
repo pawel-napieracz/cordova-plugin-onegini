@@ -147,10 +147,9 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserProfile.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGFIDOChallenge.h"/>
 
     <!-- SDK binary -->
-    <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS-5.02.00.a" framework="true"/>
+    <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS.a" framework="true"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>

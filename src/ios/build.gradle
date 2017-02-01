@@ -57,12 +57,6 @@ configurations {
   compile
 }
 
-dependencies {
-  // The onegini sdk
-  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.02.00@a'
-  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.02.00:headers@zip'
-}
-
 task prepareTargetDirectory {
   delete fileTree(dir: pluginSDKiOSDir)
   file(pluginSDKiOSDir).mkdirs()
@@ -73,7 +67,7 @@ task downloadLibs(type: Copy, dependsOn: prepareTargetDirectory) {
   into(pluginSDKiOSDir)
   from configurations.compile
 
-  rename('libOneginiSDKiOS-(.*).a$', "libOneginiSDKiOS.a")
+  rename('libOneginiSDKiOS(.*)-(.*).a$', "libOneginiSDKiOS.a")
 }
 
 task resolveDependencies(type: Copy, dependsOn: downloadLibs) {

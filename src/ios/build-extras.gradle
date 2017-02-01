@@ -19,6 +19,7 @@ configurations {
 }
 
 dependencies {
-  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.00.02@a'
-  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.00.02:headers@zip'
+  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.02.00@a'
+  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.02.00:headers@zip'
 }
+
