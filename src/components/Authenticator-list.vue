@@ -3,8 +3,8 @@
     <ul>
         <li v-for="authenticator in authenticators">
           <div class="properties">
-            <h5>{{authenticator.authenticatorType}}</h5>
-            <p>ID: {{authenticator.authenticatorId}}</p>
+            <h5>{{authenticator.name}}</h5>
+            <p>TYPE: {{authenticator.authenticatorType}}</p>
           </div>
           <div class="indicators">
             <div class="badge" v-bind:class="{active: authenticator.isPreferred}" @click="prefer(authenticator)">Preferred</div>
