@@ -150,6 +150,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
                                          withPrompt:prompt withCallbackId:command.callbackId];
         } else if ([OGCDVPluginMobileAuthenticationMethodFido isEqualToString:method]) {
             [delegate mobileAuthenticationRequestClient:self didReceiveFidoChallengeResponse:result
+                                         withCallbackId:command.callbackId];
         } else {
             [self sendErrorResultForCallbackId:command.callbackId
                                  withErrorCode:OGCDVPluginErrCodeInvalidMobileAuthenticationMethod
