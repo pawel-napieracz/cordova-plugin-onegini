@@ -540,11 +540,11 @@ exports.defineAutoTests = function () {
       });
 
       describe("on", function () {
-        it('Should exist', function () {
+        it('should exist', function () {
           expect(onegini.mobileAuthentication.on).toBeDefined();
         });
 
-        it('Should accept a mobile confirmation request', function (done) {
+        it('should accept a mobile confirmation request', function (done) {
           onegini.mobileAuthentication.on("confirmation")
               .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
@@ -562,7 +562,7 @@ exports.defineAutoTests = function () {
           sendMobileAuthenticationRequest();
         }, 10000);
 
-        it('Should reject a mobile confirmation request', function (done) {
+        it('should reject a mobile confirmation request', function (done) {
           onegini.mobileAuthentication.on("confirmation")
               .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
@@ -580,7 +580,7 @@ exports.defineAutoTests = function () {
           sendMobileAuthenticationRequest();
         }, 10000);
 
-        it('Should be able to handle multiple requests', function (done) {
+        it('should be able to handle multiple requests', function (done) {
           var counter = 0;
 
           onegini.mobileAuthentication.on("confirmation")
@@ -604,8 +604,8 @@ exports.defineAutoTests = function () {
           sendMobileAuthenticationRequest();
         }, 10000);
 
-        it('Should accept a mobile pin request', function (done) {
-          onegini.mobileAuthentication.on("config.pin")
+        it('should accept a mobile pin request', function (done) {
+          onegini.mobileAuthentication.on("pin")
               .onPinRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
@@ -630,8 +630,8 @@ exports.defineAutoTests = function () {
           sendMobileAuthenticationRequest("push_with_pin");
         }, 10000);
 
-        it('Should reject a mobile pin request', function (done) {
-          onegini.mobileAuthentication.on("config.pin")
+        it('should reject a mobile pin request', function (done) {
+          onegini.mobileAuthentication.on("pin")
               .onPinRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();

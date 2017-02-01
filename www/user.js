@@ -20,7 +20,6 @@ module.exports = (function () {
   function AuthenticationHandler(options, client, action) {
     var self = this;
     this.callbacks = {};
-    this.client = client;
 
     this.callbackActions = {
       providePin: function (options) {
@@ -63,8 +62,6 @@ module.exports = (function () {
     function callSuccessCallback(options) {
       var event = options.authenticationEvent;
       delete options.authenticationEvent;
-
-      console.log('Success cb ', self.client, event);
 
       if (!event) {
         throw new TypeError('Onegini: event cannot be null');
