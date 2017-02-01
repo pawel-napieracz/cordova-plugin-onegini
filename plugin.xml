@@ -337,6 +337,6 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/FingerprintCallback.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/FidoCallback.java"
-                 target-dir="src/com/onegini/mobileAuthentication/"/>
+                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
   </platform>
 </plugin>
