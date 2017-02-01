@@ -72,7 +72,6 @@ module.exports = (function () {
     return this;
   };
 
-
   MobileAuthenticationHandler.prototype.onFingerprintCaptured = function (cb) {
     this.callbacks.onFingerprintCaptured = cb;
     return this;
