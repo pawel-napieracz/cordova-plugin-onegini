@@ -19,6 +19,7 @@ package com.onegini.mobile.sdk.cordova.client;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_HTTP_ERROR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_IO_EXCEPTION;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_HTTP_ERROR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ERROR_CODE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ERROR_DESCRIPTION;
@@ -27,6 +28,7 @@ import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -38,11 +40,11 @@ import org.json.JSONObject;
 import android.util.Log;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
+import com.onegini.mobile.sdk.cordova.util.OkHttpResponseUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
-import com.onegini.mobile.sdk.cordova.util.RetrofitResponseUtil;
-import retrofit.client.OkClient;
-import retrofit.client.Request;
-import retrofit.client.Response;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 @SuppressWarnings("unused")
 public class ResourceClient extends CordovaPlugin {
@@ -67,10 +69,17 @@ public class ResourceClient extends CordovaPlugin {
 
   private void fetch(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final Request request;
-    final boolean isAnonymous = ActionArgumentsUtil.isFetchAnonymous(args);
+    final JSONObject options = args.getJSONObject(0);
+    final boolean isAnonymous = ActionArgumentsUtil.isFetchAnonymous(options);
 
     try {
-      request = ActionArgumentsUtil.getRequestFromArguments(args);
+      request = ActionArgumentsUtil.getRequestFromArguments(options);
+    } catch (InvalidParameterException e) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
+          .build());
+
+      return;
     } catch (IllegalArgumentException e) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withPluginError(e.getMessage(), ERROR_CODE_ILLEGAL_ARGUMENT)
@@ -82,17 +91,17 @@ public class ResourceClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        final OkClient okClient;
+        final OkHttpClient okClient;
         final Response response;
 
         if (isAnonymous) {
-          okClient = getOneginiClient().getDeviceClient().getAnonymousResourceRetrofitClient();
+          okClient = getOneginiClient().getDeviceClient().getAnonymousResourceOkHttpClient();
         } else {
-          okClient = getOneginiClient().getUserClient().getResourceRetrofitClient();
+          okClient = getOneginiClient().getUserClient().getResourceOkHttpClient();
         }
 
         try {
-          response = okClient.execute(request);
+          response = okClient.newCall(request).execute();
         } catch (IOException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
               .withPluginError(e.getMessage(), ERROR_CODE_IO_EXCEPTION)
@@ -100,17 +109,25 @@ public class ResourceClient extends CordovaPlugin {
           return;
         }
 
-        callbackContext.sendPluginResult(pluginResultFromRetrofitResponse(response));
+        callbackContext.sendPluginResult(pluginResultFromOkHttpResponse(response));
       }
     });
   }
 
-  private PluginResult pluginResultFromRetrofitResponse(final Response response) {
+  private PluginResult pluginResultFromOkHttpResponse(final Response response) {
     final PluginResult.Status resultStatus;
-    final JSONObject responseJSON = retrofitResponseToJsonObject(response);
+    final JSONObject responseJSON;
+    try {
+      responseJSON = okHttpResponseToJsonObject(response);
+    } catch (Exception e) {
+      return new PluginResultBuilder()
+          .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
+          .build();
+    }
+
     final JSONObject resultPayload;
 
-    if (isResponseHttpSuccess(response)) {
+    if (response.isSuccessful()) {
       resultStatus = OK;
       resultPayload = responseJSON;
     } else {
@@ -129,17 +146,12 @@ public class ResourceClient extends CordovaPlugin {
     return new PluginResult(resultStatus, resultPayload);
   }
 
-  private Boolean isResponseHttpSuccess(final Response response) {
-    final int httpStatusCode = response.getStatus();
-    return httpStatusCode >= 200 && httpStatusCode <= 299;
-  }
-
-  private JSONObject retrofitResponseToJsonObject(final Response response) {
+  private JSONObject okHttpResponseToJsonObject(final Response response) {
     final JSONObject responseJSON = new JSONObject();
-    final int statusCode = response.getStatus();
-    final String statusText = response.getReason();
-    final JSONObject headers = RetrofitResponseUtil.getJsonHeadersFromRetrofitResponse(response);
-    final String body = RetrofitResponseUtil.getBodyStringFromRetrofitResponse(response);
+    final int statusCode = response.code();
+    final String statusText = response.message();
+    final JSONObject headers = OkHttpResponseUtil.getJsonHeadersFromResponse(response);
+    final String body = OkHttpResponseUtil.getBodyStringFromResponse(response);
 
     try {
       responseJSON.put(PARAM_STATUS, statusCode);

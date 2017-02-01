@@ -17,7 +17,6 @@
 package com.onegini.mobile.sdk.cordova.handler;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_CREATE_PIN_REQUEST;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PIN_LENGTH;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -34,6 +33,7 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
   private OneginiPinCallback oneginiPinCallback = null;
   private CallbackContext onStartPinCreationCallback;
   private CallbackContext onNextPinCreationAttemptCallback;
+  private int pinLength;
 
   protected CreatePinRequestHandler() {
   }
@@ -59,14 +59,15 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
   }
 
   @Override
-  public void startPinCreation(final UserProfile userProfile, final OneginiPinCallback oneginiPinCallback) {
+  public void startPinCreation(final UserProfile userProfile, final OneginiPinCallback oneginiPinCallback, final int pinLength) {
     this.oneginiPinCallback = oneginiPinCallback;
+    this.pinLength = pinLength;
 
     PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
         .withAuthenticationEvent(AUTH_EVENT_CREATE_PIN_REQUEST)
-        .withPinLength(PIN_LENGTH)
+        .withPinLength(pinLength)
         .withProfileId(userProfile)
         .build();
 
@@ -80,7 +81,7 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
         .withSuccess()
         .shouldKeepCallback()
         .withAuthenticationEvent(AUTH_EVENT_CREATE_PIN_REQUEST)
-        .withPinLength(PIN_LENGTH)
+        .withPinLength(pinLength)
         .build();
 
     sendStartPinCreationResult(pluginResult);

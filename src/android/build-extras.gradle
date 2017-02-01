@@ -49,12 +49,12 @@ allprojects {
 
 dependencies {
   // Onegini SDK
-  compile('com.onegini.mobile.sdk.android:onegini-sdk:6.03.01@aar') {
+  compile('com.onegini.mobile.sdk.android:onegini-sdk:6.04.00@aar') {
     transitive = true
   }
 
   // Google cloud messaging (GCM)
-  compile "com.google.android.gms:play-services-gcm:9.4.0"
+  compile "com.google.android.gms:play-services-gcm:9.6.1"
 }
 
 afterEvaluate {
