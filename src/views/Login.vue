@@ -55,6 +55,8 @@ export default {
           let callback = (results) => {
             if (results.buttonIndex == 1) {
               actions.providePin(results.input1);
+            } else {
+              actions.cancel()
             }
           }
 
@@ -101,6 +103,8 @@ export default {
             let callback = (results) => {
               if (results.buttonIndex == 1) {
                 actions.createPin(results.input1);
+              } else {
+                actions.cancel();
               }
             }
 
