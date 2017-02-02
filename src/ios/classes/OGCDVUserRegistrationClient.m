@@ -19,8 +19,18 @@
 #import "OGCDVConstants.h"
 
 static OGCDVUserRegistrationClient *sharedInstance;
+NSString *const preferenceSFSafariViewController = @"SFSafariViewController";
+NSString *const eventRegistrationRequest = @"onRegistrationRequest";
+NSString *const keyPreferenceWebView = @"oneginiwebview";
+NSString *const keyURL = @"url";
 
 @interface OGCDVUserRegistrationClient ()<SFSafariViewControllerDelegate, WKNavigationDelegate>
+
+@property (nonatomic, copy) NSString *callbackId;
+@property (nonatomic, copy) NSString *userId;
+@property (nonatomic, copy) NSString *registrationRequestCallbackId;
+@property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
+@property (nonatomic) ONGRegistrationRequestChallenge *registrationRequestChallenge;
 
 @end
 
@@ -98,6 +108,41 @@ static OGCDVUserRegistrationClient *sharedInstance;
     [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
 }
 
+- (void)registerRegistrationRequestListener:(CDVInvokedUrlCommand *)command
+{
+    self.registrationRequestCallbackId = command.callbackId;
+}
+
+- (void)respondToRegistrationRequest:(CDVInvokedUrlCommand *)command
+{
+    NSDictionary *options = command.arguments[0];
+    NSString *urlString = options[@"url"];
+    NSURL *url = [NSURL URLWithString:urlString];
+
+    if (!self.registrationRequestChallenge) {
+        return;
+    }
+
+    [self handleRegistrationCallbackURL:url];
+}
+
+- (void)sendRegistrationRequestEvent:(NSURL *)url
+{
+    if (!self.registrationRequestCallbackId) {
+#ifdef DEBUG
+        NSLog(@"Warning: tried to send registration request event, but no listener was registered");
+#endif
+        return;
+    }
+
+    NSDictionary *message = @{
+        OGCDVPluginKeyAuthenticationEvent: eventRegistrationRequest,
+        keyURL: url.absoluteString
+    };
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
+    [self.commandDelegate sendPluginResult:result callbackId:self.registrationRequestCallbackId];
+}
+
 - (void)handleRegistrationCallbackNotification:(NSNotification *)notification
 {
     NSURL *url = (NSURL *)notification.object;
@@ -106,7 +151,7 @@ static OGCDVUserRegistrationClient *sharedInstance;
 
 - (void)handleRegistrationCallbackURL:(NSURL *)url
 {
-    [[ONGUserClient sharedInstance] handleRegistrationCallback:url];
+    [self.registrationRequestChallenge.sender respondWithURL:url challenge:self.registrationRequestChallenge];
 }
 
 - (void)openURLWithWKWebView:(NSURL *)url
@@ -131,12 +176,17 @@ static OGCDVUserRegistrationClient *sharedInstance;
 {
     SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:url];
     safariViewController.delegate = self;
-    [self.viewController presentViewController:safariViewController animated:true completion:nil];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.viewController presentViewController:safariViewController animated:true completion:nil];
+    });
 }
 
 #pragma mark - WKNavigationDelegate
 
-- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+- (void)                webView:(WKWebView *)webView
+decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
+                decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
     NSString *redirectURL = [[[ONGClient sharedInstance] configModel] redirectURL];
 
@@ -160,6 +210,9 @@ static OGCDVUserRegistrationClient *sharedInstance;
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
 {
     [self.viewController dismissViewControllerAnimated:true completion:nil];
+    if (self.registrationRequestChallenge) {
+        [self.registrationRequestChallenge.sender cancelChallenge:self.registrationRequestChallenge];
+    }
 }
 
 #pragma mark - ONGRegistrationDelegate
@@ -189,9 +242,15 @@ static OGCDVUserRegistrationClient *sharedInstance;
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveRegistrationRequestChallenge:(ONGRegistrationRequestChallenge *)challenge
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRegistrationCallbackNotification:) name:OGCDVDidReceiveRegistrationCallbackURLNotification object:nil];
-
-     NSURL *url;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleRegistrationCallbackNotification:)
+                                                 name:OGCDVDidReceiveRegistrationCallbackURLNotification
+                                               object:nil];
+    NSURL *url;
+    self.registrationRequestChallenge = challenge;
+    BOOL hasSFSafariViewController = SFSafariViewController.class != nil;
+    BOOL preferSFSafariViewController = [preferenceSFSafariViewController isEqualToString:self.commandDelegate.settings[keyPreferenceWebView]];
+    BOOL hasRegistrationRequestListener = self.registrationRequestCallbackId != nil;
 
     if (self.userId == nil) {
         url = challenge.url;
@@ -199,16 +258,20 @@ static OGCDVUserRegistrationClient *sharedInstance;
         url = [self addQueryParameterToUrl:challenge.url withQueryName:@"user_id" withQueryValue:self.userId];
     }
 
-    if (SFSafariViewController.class == nil) {
-        [self openURLWithWKWebView:url];
-    } else {
+    if (hasRegistrationRequestListener) {
+        [self sendRegistrationRequestEvent:url];
+    } else if (hasSFSafariViewController && preferSFSafariViewController) {
         [self openURLWithSafariViewController:url];
+    } else {
+        [self openURLWithWKWebView:url];
     }
 }
 
 - (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile
 {
     self.createPinChallenge = nil;
+    self.registrationRequestChallenge = nil;
+    self.registrationRequestCallbackId = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:OGCDVDidReceiveRegistrationCallbackURLNotification object:nil];
 
     NSDictionary *result = @{

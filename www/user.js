@@ -32,7 +32,7 @@ module.exports = (function () {
       },
 
       fallbackToPin: function () {
-        utils.promiseOrCallbackExec(client, 'fallbackToPin');
+        utils.onceExec(client, 'fallbackToPin');
       },
 
       acceptFingerprint: function (options) {
@@ -54,25 +54,30 @@ module.exports = (function () {
         utils.callbackExec(client, 'createPin', options, self.callbacks.onSuccess, self.callbacks.onError);
       },
 
+      handleRegistrationUrl: function(options) {
+        options = utils.getOptionsWithDefaults(options, {}, 'url');
+        utils.callbackExec(client, 'respondToRegistrationRequest', options, self.callbacks.onSuccess, self.callbacks.onError);
+      },
+
       cancel: function () {
         utils.callbackExec(client, 'cancelFlow', {}, self.callbacks.onSuccess, self.callbacks.onError);
       }
     };
 
-    function callSuccessCallback(options) {
+    this.callSuccessCallback = function (options) {
       var event = options.authenticationEvent;
       delete options.authenticationEvent;
 
       if (self.callbacks[event]) {
         self.callbacks[event](self.callbackActions, options);
       }
-    }
+    };
 
-    function callErrorCallback(err) {
+    this.callErrorCallback = function (err) {
       self.callbacks.onError(err);
-    }
+    };
 
-    utils.callbackExec(client, action, options, callSuccessCallback, callErrorCallback)
+    utils.callbackExec(client, action, options, this.callSuccessCallback, this.callErrorCallback)
   }
 
   AuthenticationHandler.prototype.onPinRequest = function (cb) {
@@ -97,6 +102,12 @@ module.exports = (function () {
 
   AuthenticationHandler.prototype.onFingerprintFailed = function (cb) {
     this.callbacks.onFingerprintFailed = cb;
+    return this;
+  };
+
+  AuthenticationHandler.prototype.onRegistrationRequest = function (cb) {
+    utils.callbackExec('OneginiUserRegistrationClient', 'registerRegistrationRequestListener', {}, this.callSuccessCallback, this.callErrorCallback);
+    this.callbacks.onRegistrationRequest = cb;
     return this;
   };
 
