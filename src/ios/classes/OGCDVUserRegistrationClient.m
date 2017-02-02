@@ -21,6 +21,15 @@
 
 static OGCDVUserRegistrationClient *sharedInstance;
 
+@interface OGCDVUserRegistrationClient ()
+
+@property (nonatomic, copy) NSString *callbackId;
+@property (nonatomic, copy) NSString *userId;
+@property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
+@property (nonatomic) ONGRegistrationRequestChallenge *registrationRequestChallenge;
+
+@end
+
 @implementation OGCDVUserRegistrationClient
 
 + (id)sharedInstance
@@ -86,11 +95,13 @@ static OGCDVUserRegistrationClient *sharedInstance;
 
 - (void)cancelFlow:(CDVInvokedUrlCommand *)command
 {
-    if (!self.createPinChallenge) {
-        return;
+    if (self.registrationRequestChallenge) {
+        [self.registrationRequestChallenge.sender cancelChallenge:self.registrationRequestChallenge];
     }
 
-    [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
+    if (self.createPinChallenge) {
+        [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
+    }
 }
 
 #pragma mark - ONGRegistrationDelegate

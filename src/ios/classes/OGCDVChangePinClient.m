@@ -58,11 +58,13 @@
 
 - (void)cancelFlow:(CDVInvokedUrlCommand *)command
 {
-    if(!self.pinChallenge) {
-        return;
+    if (self.pinChallenge) {
+        [self.pinChallenge.sender cancelChallenge:self.pinChallenge];
     }
 
-    [self.pinChallenge.sender cancelChallenge:self.pinChallenge];
+    if (self.createPinChallenge) {
+        [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
+    }
 }
 
 #pragma mark - ONGChangePinDelegate

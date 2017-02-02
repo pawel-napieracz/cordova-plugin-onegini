@@ -33,12 +33,14 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiRegistrationCallback;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationHandler;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
+import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
@@ -146,9 +148,13 @@ public class UserRegistrationClient extends CordovaPlugin {
   }
 
   private void cancelFlow(final CallbackContext callbackContext) {
-    callbackContext.sendPluginResult(new PluginResultBuilder()
-        .withPluginError(ERROR_DESCRIPTION_OPERATION_CANCELED, ERROR_CODE_OPERATION_CANCELED)
-        .build());
+    OneginiRegistrationCallback callback = RegistrationRequestHandler.getCallback();
+
+    if (callback == null) {
+      return;
+    }
+
+    callback.denyRegistration();
   }
 
   private OneginiClient getOneginiClient() {

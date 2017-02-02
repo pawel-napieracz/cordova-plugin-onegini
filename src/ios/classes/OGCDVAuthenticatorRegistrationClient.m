@@ -90,6 +90,17 @@
     }];
 }
 
+- (void)cancelFlow:(CDVInvokedUrlCommand *)command
+{
+    if (self.pinChallenge) {
+        [self.pinChallenge.sender cancelChallenge:self.pinChallenge];
+    }
+
+    if (self.fingerprintChallenge) {
+        [self.fingerprintChallenge.sender cancelChallenge:self.fingerprintChallenge];
+    }
+}
+
 #pragma mark - ONGAuthenticatorRegistrationDelegate
 
 - (void)userClient:(ONGUserClient *)userClient didRegisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile
