@@ -1089,9 +1089,28 @@ exports.defineAutoTests = function () {
         expect(onegini.user.changePin).toBeDefined();
       });
 
-      it("should be cancellable", function (done) {
+      it("should be cancellable at the authenticate with pin step", function (done) {
         onegini.user.changePin()
             .onPinRequest(function (actions, options) {
+              actions.cancel();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              expect(err.code).toBe(9006);
+              done();
+            })
+            .onSuccess(function () {
+              fail("Change pin should have failed, but succeeded");
+              done();
+            });
+      });
+
+      it("should be cancellable at the create pin step", function (done) {
+        onegini.user.changePin()
+            .onPinRequest(function (actions, options) {
+              actions.providePin(config.pin)
+            })
+            .onCreatePinRequest(function (actions, options) {
               actions.cancel();
             })
             .onError(function (err) {
