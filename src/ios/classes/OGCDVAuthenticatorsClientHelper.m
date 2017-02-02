@@ -23,13 +23,7 @@
 {
     NSString *type = [self typeStringFromAuthenticatorType:authenticator.type];
 
-    NSString *identifier;
-    if (authenticator.type == ONGAuthenticatorPIN || authenticator.type == ONGAuthenticatorTouchID) {
-        NSArray *identifierItems = [authenticator.identifier componentsSeparatedByString:@"."];
-        identifier = [identifierItems lastObject];
-    } else {
-        identifier = authenticator.identifier;
-    }
+    NSString *identifier = [self normalizeAuthenticatorId:authenticator];
 
     NSDictionary *dictionary = @{
         OGCDVPluginKeyAuthenticatorType: type,
@@ -39,6 +33,21 @@
         OGCDVPluginKeyAuthenticatorName: authenticator.name
     };
     return dictionary;
+}
+
+/*
+ * We need to normalize the authenticator ID in order to make them the equal between iOS and Android
+ */
++ (NSString *)normalizeAuthenticatorId:(ONGAuthenticator *)authenticator
+{
+    NSString *identifier;
+    if (authenticator.type == ONGAuthenticatorPIN || authenticator.type == ONGAuthenticatorTouchID) {
+        NSArray *identifierItems = [authenticator.identifier componentsSeparatedByString:@"."];
+        identifier = [identifierItems lastObject];
+    } else {
+        identifier = authenticator.identifier;
+    }
+    return identifier;
 }
 
 + (ONGAuthenticator *)authenticatorFromArguments:(NSSet<ONGAuthenticator *> *)authenticators options:
@@ -70,7 +79,7 @@
 {
     for (ONGAuthenticator *authenticator in authenticators) {
         NSString *type = [self typeStringFromAuthenticatorType:authenticator.type];
-        NSString *id = authenticator.identifier;
+        NSString *id = [self normalizeAuthenticatorId:authenticator];
 
         if (id == nil) {
             continue;
