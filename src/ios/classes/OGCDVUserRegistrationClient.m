@@ -120,6 +120,9 @@ NSString *const keyURL = @"url";
     NSURL *url = [NSURL URLWithString:urlString];
 
     if (!self.registrationRequestChallenge) {
+#ifdef DEBUG
+        NSLog(@"OneginiPlugin: Warning: tried to reply to registration challenge, but no registration challenge is active");
+#endif
         return;
     }
 
@@ -130,7 +133,7 @@ NSString *const keyURL = @"url";
 {
     if (!self.registrationRequestCallbackId) {
 #ifdef DEBUG
-        NSLog(@"Warning: tried to send registration request event, but no listener was registered");
+        NSLog(@"OneginiPlugin: Warning: tried to send registration request event, but no listener was registered");
 #endif
         return;
     }

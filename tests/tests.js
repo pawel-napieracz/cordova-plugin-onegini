@@ -201,9 +201,7 @@ exports.defineAutoTests = function () {
             .onError(function (err) {
               expect(err).toBeDefined();
               expect(err.code).toBe(9006);
-              setTimeout(function() {
-                done();
-              }, 500);
+              done();
             })
             .onSuccess(function () {
               fail("Registration should have failed, but succeeded");
@@ -216,7 +214,6 @@ exports.defineAutoTests = function () {
             .onCreatePinRequest(function (actions, options) {
               expect(options.profileId).toBeDefined();
               expect(options.pinLength).toBe(5);
-              registeredProfileId = options.profileId;
               actions.createPin(pin);
             })
             .onSuccess(function () {
@@ -225,6 +222,54 @@ exports.defineAutoTests = function () {
             .onError(function (err) {
               fail("Registration failed, but should have succeeded");
               expect(err).toBeDefined();
+            });
+      });
+
+      it("should work with the registrationRequest event", function (done) {
+        var iframe = document.createElement('iframe');
+
+        onegini.user.register()
+            .onRegistrationRequest(function (actions, options) {
+              expect(options.url).toBeDefined();
+              expect(actions.handleRegistrationUrl).toBeDefined();
+
+              iframe.style.display = 'none';
+              iframe.src = options.url;
+              iframe.onload = function() {
+                actions.handleRegistrationUrl(iframe.contentWindow.location.toString());
+              };
+              document.body.appendChild(iframe);
+            })
+            .onCreatePinRequest(function (actions, options) {
+              expect(options.profileId).toBeDefined();
+              expect(options.pinLength).toBe(5);
+              actions.createPin(pin);
+            })
+            .onSuccess(function () {
+              iframe.remove();
+              done();
+            })
+            .onError(function (err) {
+              iframe.remove();
+              expect(err).toBeUndefined();
+              fail("Registration failed, but should have succeeded");
+            });
+      });
+
+      it("should not fire the registrationRequest without handler", function (done) {
+        onegini.user.register()
+            .onCreatePinRequest(function (actions, options) {
+              expect(options.profileId).toBeDefined();
+              expect(options.pinLength).toBe(5);
+              registeredProfileId = options.profileId;
+              actions.createPin(pin);
+            })
+            .onSuccess(function () {
+              done();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              fail("Registration failed, but should have succeeded");
             });
       });
     });
