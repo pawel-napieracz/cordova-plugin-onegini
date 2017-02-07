@@ -27,11 +27,12 @@ important. If you don't do that FIDO authentication will not work.
 
 ### Setting up iOS
 
-In order to add 
+Because Cordova does not support an embedded binary out of the box, you must manually modify the Xcode project before you are able to build & run your 
+application.
 
-Because Cordova does not support an embedded framework out of the box you must manually modify the Xcode project before you are able to run your application.
-The Sensory
+The `SensoryBiometricsManager.framework` must be added as an 'embedded binary' to your application target. See the image below for an example:
 
+![Configure Embedded binary](../images/configure-embedded-binary.png)
 
 ## Registering a FIDO authenticator
 
