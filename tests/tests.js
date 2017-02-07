@@ -226,39 +226,6 @@ exports.defineAutoTests = function () {
               expect(err).toBeDefined();
             });
       });
-
-      it("should work with the registrationRequest event", function (done) {
-        var iframe = document.createElement('iframe');
-
-        onegini.user.register()
-            .onRegistrationRequest(function (actions, options) {
-              expect(options.url).toBeDefined();
-              expect(actions.handleRegistrationUrl).toBeDefined();
-
-              iframe.style.display = 'none';
-              iframe.src = options.url;
-              iframe.onload = function () {
-                actions.handleRegistrationUrl(iframe.contentWindow.location.toString());
-              };
-              document.body.appendChild(iframe);
-            })
-            .onCreatePinRequest(function (actions, options) {
-              expect(options.profileId).toBeDefined();
-              expect(options.pinLength).toBe(5);
-              expect(options.profileId).toBeDefined();
-              registeredProfileId = options.profileId;
-              actions.createPin(pin);
-            })
-            .onSuccess(function () {
-              iframe.remove();
-              done();
-            })
-            .onError(function (err) {
-              iframe.remove();
-              expect(err).toBeUndefined();
-              fail("Registration failed, but should have succeeded");
-            });
-      });
     });
 
     describe("getAuthenticatedUserProfile (2/3)", function () {
