@@ -38,6 +38,7 @@ public class RegistrationHandler implements OneginiRegistrationHandler {
 
   @Override
   public void onSuccess(final UserProfile userProfile) {
+    RegistrationRequestHandler.setRegistrationRequestCallbackContext(null);
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .withProfileId(userProfile)

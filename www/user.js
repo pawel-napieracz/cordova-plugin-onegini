@@ -106,7 +106,6 @@ module.exports = (function () {
   };
 
   AuthenticationHandler.prototype.onRegistrationRequest = function (cb) {
-    utils.callbackExec('OneginiUserRegistrationClient', 'registerRegistrationRequestListener', {}, this.callSuccessCallback, this.callErrorCallback);
     this.callbacks.onRegistrationRequest = cb;
     return this;
   };

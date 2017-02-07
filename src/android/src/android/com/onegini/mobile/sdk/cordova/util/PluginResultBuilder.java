@@ -20,6 +20,7 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ERROR_CODE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ERROR_DESCRIPTION;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_URL;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 
@@ -30,6 +31,7 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.net.Uri;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
@@ -156,6 +158,16 @@ public class PluginResultBuilder {
   public PluginResultBuilder withOneginiConfigModel(final OneginiClientConfigModel configModel) {
     try {
       payload.put("resourceBaseURL", configModel.getResourceBaseUrl());
+    } catch (JSONException e) {
+      handleException(e);
+    }
+
+    return this;
+  }
+
+  public PluginResultBuilder withUri(final Uri uri) {
+    try {
+      payload.put(PARAM_URL, uri.toString());
     } catch (JSONException e) {
       handleException(e);
     }

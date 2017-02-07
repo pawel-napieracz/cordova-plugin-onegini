@@ -77,6 +77,7 @@ public interface OneginiCordovaPluginConstants {
   String AUTH_EVENT_FINGERPRINT_REQUEST = "onFingerprintRequest";
   String AUTH_EVENT_FINGERPRINT_FAILED = "onFingerprintFailed";
   String AUTH_EVENT_FINGERPRINT_CAPTURED = "onFingerprintCaptured";
+  String AUTH_EVENT_ON_REGISTRATION_REQUEST = "onRegistrationRequest";
 
   // Values
   int PIN_LENGTH = 5;

@@ -20,7 +20,7 @@ exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
     testForMobileFingerprintAuthentication: false,
-    userId: "devnull-cordovatests",
+    userId: "devnull-cordovatests-" + Math.random().toString().substr(2, 5),
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
     }
@@ -201,7 +201,9 @@ exports.defineAutoTests = function () {
             .onError(function (err) {
               expect(err).toBeDefined();
               expect(err.code).toBe(9006);
-              done();
+              setTimeout(function () {
+                done();
+              }, 500);
             })
             .onSuccess(function () {
               fail("Registration should have failed, but succeeded");
@@ -235,7 +237,7 @@ exports.defineAutoTests = function () {
 
               iframe.style.display = 'none';
               iframe.src = options.url;
-              iframe.onload = function() {
+              iframe.onload = function () {
                 actions.handleRegistrationUrl(iframe.contentWindow.location.toString());
               };
               document.body.appendChild(iframe);
@@ -243,6 +245,8 @@ exports.defineAutoTests = function () {
             .onCreatePinRequest(function (actions, options) {
               expect(options.profileId).toBeDefined();
               expect(options.pinLength).toBe(5);
+              expect(options.profileId).toBeDefined();
+              registeredProfileId = options.profileId;
               actions.createPin(pin);
             })
             .onSuccess(function () {
@@ -252,23 +256,6 @@ exports.defineAutoTests = function () {
             .onError(function (err) {
               iframe.remove();
               expect(err).toBeUndefined();
-              fail("Registration failed, but should have succeeded");
-            });
-      });
-
-      it("should not fire the registrationRequest without handler", function (done) {
-        onegini.user.register()
-            .onCreatePinRequest(function (actions, options) {
-              expect(options.profileId).toBeDefined();
-              expect(options.pinLength).toBe(5);
-              registeredProfileId = options.profileId;
-              actions.createPin(pin);
-            })
-            .onSuccess(function () {
-              done();
-            })
-            .onError(function (err) {
-              expect(err).toBeDefined();
               fail("Registration failed, but should have succeeded");
             });
       });
