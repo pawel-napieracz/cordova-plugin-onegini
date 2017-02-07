@@ -50,7 +50,7 @@ onegini.user.authenticators.setPreferred({ authenticatorType: "Fingerprint" })
 
 ## Authenticating a user with fingerprint
 
-Once the fingerprint authenticator has been registered and set as the preferred authententicator, the user is able to authenticate using fingerprint. The method to do so is the same as for PIN, the [`onegini.user.authenticate`](../reference/user/authenticate.md) method.
+Once the fingerprint authenticator has been registered and set as the preferred authenticator, the user is able to authenticate using fingerprint. The method to do so is the same as for PIN, the [`onegini.user.authenticate`](../reference/user/authenticate.md) method.
 
 However, if fingerprint authentication is a possibility for the user, extra handler methods must be implemented. This is in addition to the PIN specific methods (which are necessary in case of fallback to PIN).
 
