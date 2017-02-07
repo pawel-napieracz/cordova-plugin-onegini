@@ -5,6 +5,7 @@
     * [Configuration](topics/configuration.md)
     * [User authentication](topics/user-authentication.md)
     * [User authentication with fingerprint](topics/user-authentication-with-fingerprint.md)
+    * [User authentication with FIDO](topics/user-authentication-with-fido.md)
     * [Change PIN](topics/change-pin.md)
     * [Logging out](topics/logging-out.md)
     * [Deregister user](topics/deregister-user.md)
