@@ -27,7 +27,6 @@
 - (void)getUserProfiles:(CDVInvokedUrlCommand *)command;
 - (void)isUserRegistered:(CDVInvokedUrlCommand *)command;
 - (void)cancelFlow:(CDVInvokedUrlCommand *)command;
-- (void)registerRegistrationRequestListener:(CDVInvokedUrlCommand *)command;
 - (void)respondToRegistrationRequest:(CDVInvokedUrlCommand *)command;
 
 @end

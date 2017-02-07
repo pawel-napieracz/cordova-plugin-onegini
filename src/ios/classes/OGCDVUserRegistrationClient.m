@@ -20,6 +20,7 @@
 
 static OGCDVUserRegistrationClient *sharedInstance;
 NSString *const preferenceSFSafariViewController = @"SFSafariViewController";
+NSString *const preferenceDisabled = @"disabled";
 NSString *const eventRegistrationRequest = @"onRegistrationRequest";
 NSString *const keyPreferenceWebView = @"oneginiwebview";
 NSString *const keyURL = @"url";
@@ -28,7 +29,6 @@ NSString *const keyURL = @"url";
 
 @property (nonatomic, copy) NSString *callbackId;
 @property (nonatomic, copy) NSString *userId;
-@property (nonatomic, copy) NSString *registrationRequestCallbackId;
 @property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
 @property (nonatomic) ONGRegistrationRequestChallenge *registrationRequestChallenge;
 
@@ -108,11 +108,6 @@ NSString *const keyURL = @"url";
     [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
 }
 
-- (void)registerRegistrationRequestListener:(CDVInvokedUrlCommand *)command
-{
-    self.registrationRequestCallbackId = command.callbackId;
-}
-
 - (void)respondToRegistrationRequest:(CDVInvokedUrlCommand *)command
 {
     NSDictionary *options = command.arguments[0];
@@ -131,19 +126,13 @@ NSString *const keyURL = @"url";
 
 - (void)sendRegistrationRequestEvent:(NSURL *)url
 {
-    if (!self.registrationRequestCallbackId) {
-#ifdef DEBUG
-        NSLog(@"OneginiPlugin: Warning: tried to send registration request event, but no listener was registered");
-#endif
-        return;
-    }
-
     NSDictionary *message = @{
         OGCDVPluginKeyAuthenticationEvent: eventRegistrationRequest,
         keyURL: url.absoluteString
     };
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
-    [self.commandDelegate sendPluginResult:result callbackId:self.registrationRequestCallbackId];
+    [result setKeepCallbackAsBool:YES];
+    [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
 }
 
 - (void)handleRegistrationCallbackNotification:(NSNotification *)notification
@@ -251,9 +240,9 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
                                                object:nil];
     NSURL *url;
     self.registrationRequestChallenge = challenge;
+    BOOL webViewDisabled = [preferenceDisabled isEqualToString:self.commandDelegate.settings[keyPreferenceWebView]];
     BOOL hasSFSafariViewController = SFSafariViewController.class != nil;
     BOOL preferSFSafariViewController = [preferenceSFSafariViewController isEqualToString:self.commandDelegate.settings[keyPreferenceWebView]];
-    BOOL hasRegistrationRequestListener = self.registrationRequestCallbackId != nil;
 
     if (self.userId == nil) {
         url = challenge.url;
@@ -261,9 +250,13 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
         url = [self addQueryParameterToUrl:challenge.url withQueryName:@"user_id" withQueryValue:self.userId];
     }
 
-    if (hasRegistrationRequestListener) {
-        [self sendRegistrationRequestEvent:url];
-    } else if (hasSFSafariViewController && preferSFSafariViewController) {
+    [self sendRegistrationRequestEvent:url];
+
+    if (webViewDisabled) {
+        return;
+    }
+
+    if (hasSFSafariViewController && preferSFSafariViewController) {
         [self openURLWithSafariViewController:url];
     } else {
         [self openURLWithWKWebView:url];
@@ -274,7 +267,6 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 {
     self.createPinChallenge = nil;
     self.registrationRequestChallenge = nil;
-    self.registrationRequestCallbackId = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:OGCDVDidReceiveRegistrationCallbackURLNotification object:nil];
 
     NSDictionary *result = @{
