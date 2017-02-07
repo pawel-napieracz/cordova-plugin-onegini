@@ -23,7 +23,7 @@ module.exports = function (context) {
   const pluginId = 'cordova-plugin-onegini';
   const deferral = context.requireCordovaModule('q').defer();
 
-  console.log(`${pluginId}: Resolving gradle dependencies...`);
+  console.log(`${pluginId}: Resolving Onegini iOS SDK dependencies...`);
 
   const cwd = path.join(context.opts.plugin.pluginInfo.dir, 'src/ios');
   const options = {
