@@ -20,15 +20,14 @@ exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
     testForMobileFingerprintAuthentication: false,
-    userId: "devnull-cordovatests-" + Math.random().toString().substr(2, 5),
-    get platform() {
-      return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
-    }
+    userId: "devnull-cordovatest-" + Math.random().toString().substr(2, 5),
+    pin: "12356"
   };
 
   var registeredProfileId,
-      nrOfUserProfiles,
-      pin = "12356";
+      nrOfUserProfiles;
+
+  console.log("User ID for this session: " + config.userId);
 
   if (!config.testForMultipleAuthenticators) {
     console.warn("Testing for multiple authenticators disabled");
@@ -111,7 +110,6 @@ exports.defineAutoTests = function () {
     });
   });
 
-
   /******** onegini.user (1/2) *********/
 
   describe('onegini.user', function () {
@@ -157,7 +155,7 @@ exports.defineAutoTests = function () {
       it("should succeed if pin is compliant to policy", function (done) {
         onegini.user.validatePinWithPolicy(
             {
-              pin: pin
+              pin: config.pin
             },
             function () {
               expect(true).toBe(true);
@@ -216,7 +214,8 @@ exports.defineAutoTests = function () {
             .onCreatePinRequest(function (actions, options) {
               expect(options.profileId).toBeDefined();
               expect(options.pinLength).toBe(5);
-              actions.createPin(pin);
+              registeredProfileId = options.profileId;
+              actions.createPin(config.pin);
             })
             .onSuccess(function () {
               done();
@@ -492,7 +491,7 @@ exports.defineAutoTests = function () {
               expect(options).toBeDefined();
 
               if (options.remainingFailureCount = options.maxFailureCount - 1) {
-                actions.providePin(pin);
+                actions.providePin(config.pin);
               }
               else {
                 console.log("remaining failure count", options.remainingFailureCount);
@@ -543,11 +542,11 @@ exports.defineAutoTests = function () {
       });
 
       describe("on", function () {
-        it('Should exist', function () {
+        it('should exist', function () {
           expect(onegini.mobileAuthentication.on).toBeDefined();
         });
 
-        it('Should accept a mobile confirmation request', function (done) {
+        it('should accept a mobile confirmation request', function (done) {
           onegini.mobileAuthentication.on("confirmation")
               .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
@@ -565,7 +564,7 @@ exports.defineAutoTests = function () {
           sendMobileAuthenticationRequest();
         }, 10000);
 
-        it('Should reject a mobile confirmation request', function (done) {
+        it('should reject a mobile confirmation request', function (done) {
           onegini.mobileAuthentication.on("confirmation")
               .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
@@ -583,7 +582,7 @@ exports.defineAutoTests = function () {
           sendMobileAuthenticationRequest();
         }, 10000);
 
-        it('Should be able to handle multiple requests', function (done) {
+        it('should be able to handle multiple requests', function (done) {
           var counter = 0;
 
           onegini.mobileAuthentication.on("confirmation")
@@ -607,7 +606,7 @@ exports.defineAutoTests = function () {
           sendMobileAuthenticationRequest();
         }, 10000);
 
-        it('Should accept a mobile pin request', function (done) {
+        it('should accept a mobile pin request', function (done) {
           onegini.mobileAuthentication.on("pin")
               .onPinRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
@@ -617,7 +616,7 @@ exports.defineAutoTests = function () {
                 expect(request.remainingFailureCount).toBeDefined();
 
                 if (request.remainingFailureCount === request.maxFailureCount - 1) {
-                  actions.accept(pin);
+                  actions.accept(config.pin);
                 }
                 else {
                   actions.accept('invalid');
@@ -633,7 +632,7 @@ exports.defineAutoTests = function () {
           sendMobileAuthenticationRequest("push_with_pin");
         }, 10000);
 
-        it('Should reject a mobile pin request', function (done) {
+        it('should reject a mobile pin request', function (done) {
           onegini.mobileAuthentication.on("pin")
               .onPinRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
@@ -670,7 +669,7 @@ exports.defineAutoTests = function () {
         onegini.user.reauthenticate({profileId: registeredProfileId})
             .onPinRequest(function (actions) {
               expect(actions).toBeDefined();
-              actions.providePin(pin);
+              actions.providePin(config.pin);
             })
             .onError(function (err) {
               expect(err).toBeDefined();
@@ -834,10 +833,22 @@ exports.defineAutoTests = function () {
 
       if (config.testForMultipleAuthenticators) {
         describe("registerNew", function () {
+          it("should be cancellable", function (done) {
+            onegini.user.authenticators.registerNew({authenticatorType: "Fingerprint"})
+                .onPinRequest(function q(actions) {
+                  actions.cancel();
+                })
+                .onError(function (err) {
+                  expect(err).toBeDefined();
+                  expect(err.code).toBe(9006);
+                  done();
+                });
+          });
+
           it("should succeed", function (done) {
             onegini.user.authenticators.registerNew({authenticatorType: "Fingerprint"})
                 .onPinRequest(function (actions) {
-                  actions.providePin(pin);
+                  actions.providePin(config.pin);
                 })
                 .onSuccess(function () {
                   expect(true).toBe(true);
@@ -845,7 +856,7 @@ exports.defineAutoTests = function () {
                 })
                 .onError(function (err) {
                   expect(err).toBeUndefined();
-                  fail('Authenticator registration failed, but should have suceeded');
+                  fail('Authenticator registration failed, but should have succeeded');
                 });
           });
         });
@@ -873,7 +884,7 @@ exports.defineAutoTests = function () {
                   actions.fallbackToPin();
                 })
                 .onPinRequest(function (actions) {
-                  actions.providePin(pin);
+                  actions.providePin(config.pin);
                 })
                 .onSuccess(function () {
                   expect(true).toBe(true);
@@ -946,7 +957,7 @@ exports.defineAutoTests = function () {
             sendMobileAuthenticationRequest("push_with_fingerprint");
           }, 10000);
 
-          if (config.platform == "android") {
+          if (cordova.platformId === "android") {
             it("Should be notified on fingerprint captured", function (done) {
               var didCallCaptured = false;
               onegini.mobileAuthentication.on("fingerprint")
@@ -1080,9 +1091,28 @@ exports.defineAutoTests = function () {
         expect(onegini.user.changePin).toBeDefined();
       });
 
-      it("should be cancellable", function (done) {
+      it("should be cancellable at the authenticate with pin step", function (done) {
         onegini.user.changePin()
             .onPinRequest(function (actions, options) {
+              actions.cancel();
+            })
+            .onError(function (err) {
+              expect(err).toBeDefined();
+              expect(err.code).toBe(9006);
+              done();
+            })
+            .onSuccess(function () {
+              fail("Change pin should have failed, but succeeded");
+              done();
+            });
+      });
+
+      it("should be cancellable at the create pin step", function (done) {
+        onegini.user.changePin()
+            .onPinRequest(function (actions, options) {
+              actions.providePin(config.pin)
+            })
+            .onCreatePinRequest(function (actions, options) {
               actions.cancel();
             })
             .onError(function (err) {
@@ -1104,7 +1134,7 @@ exports.defineAutoTests = function () {
               expect(actions).toBeDefined();
               expect(actions.providePin).toBeDefined();
               expect(options).toBeDefined();
-              actions.providePin(pin);
+              actions.providePin(config.pin);
             })
             .onCreatePinRequest(function (actions, options) {
               expect(options.pinLength).toBe(5);
@@ -1117,7 +1147,7 @@ exports.defineAutoTests = function () {
               }
               else {
                 expect(count).toBe(1);
-                actions.createPin(pin);
+                actions.createPin(config.pin);
               }
 
               count += 1;

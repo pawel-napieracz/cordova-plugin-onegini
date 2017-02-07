@@ -82,8 +82,6 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
                   forRequest:request
                    forMethod:OGCDVPluginMobileAuthenticationMethodPin];
     [operationQueue addOperation:operation];
-
-    // TODO: Check if this request is a fallback from another request
 }
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveFingerprintChallenge:(ONGFingerprintChallenge *)challenge

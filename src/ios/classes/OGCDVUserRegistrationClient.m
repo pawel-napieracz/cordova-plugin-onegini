@@ -101,11 +101,13 @@ NSString *const keyURL = @"url";
 
 - (void)cancelFlow:(CDVInvokedUrlCommand *)command
 {
-    if (!self.createPinChallenge) {
-        return;
+    if (self.registrationRequestChallenge) {
+        [self.registrationRequestChallenge.sender cancelChallenge:self.registrationRequestChallenge];
     }
 
-    [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
+    if (self.createPinChallenge) {
+        [self.createPinChallenge.sender cancelChallenge:self.createPinChallenge];
+    }
 }
 
 - (void)respondToRegistrationRequest:(CDVInvokedUrlCommand *)command
