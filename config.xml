@@ -38,7 +38,7 @@
         </edit-config>
         <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
             <application android:allowBackup="false" />
-            <application tools:replace="android:allowBackup" />
+            <application tools:replace="android:allowBackup, android:label, android:icon" />
         </edit-config>
     </platform>
     <platform name="ios">
