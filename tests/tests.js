@@ -19,7 +19,7 @@
 exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
-    testForMobileFingerprintAuthentication: false,
+    testForMobileFingerprintAuthentication: true,
     testForFidoAuthentication: true,
     userId: "devnull-cordovatests",
     get platform() {
@@ -76,7 +76,7 @@ exports.defineAutoTests = function () {
   }
 
   function findFidoFingerprintAuthenticator(successCb, failureCb) {
-    onegini.user.authenticators.getNotRegistered(
+    onegini.user.authenticators.getAll(
         {
           profileId: registeredProfileId
         },
@@ -1038,34 +1038,6 @@ exports.defineAutoTests = function () {
 
     if (config.testForFidoAuthentication) {
       describe("mobileAuthentication (3/4", function () {
-        var fidoAuthenticator;
-        describe("user.authenticator.registerNew", function () {
-          beforeAll(function (done) {
-            findFidoFingerprintAuthenticator(
-                function (authenticator) {
-                  fidoAuthenticator = authenticator;
-                  done();
-                }, function (err) {
-                  expect(err).toBeUndefined();
-                  fail('Failed to fetch FIDO fingerprint authenticator')
-                }
-            )
-          });
-          it("Should register the FIDO fingerprint authenticator", function (done) {
-            onegini.user.authenticators.registerNew(fidoAuthenticator)
-                .onFidoRequest(function (actions) {
-                  actions.acceptFido();
-                })
-                .onSuccess(function () {
-                  expect(true).toBe(true);
-                  done();
-                })
-                .onError(function (err) {
-                  expect(err).toBeUndefined();
-                  fail('FIDO Authenticator registration failed, but should have succeeded');
-                });
-          });
-        });
         describe("on mobile authentication with FIDO request", function () {
           it("Should accept a mobile authentication FIDO request", function (done) {
             onegini.mobileAuthentication.on("fido")
@@ -1090,7 +1062,19 @@ exports.defineAutoTests = function () {
             }
           }, 10000)        })
       });
-      describe("deregister", function () {
+      describe("deregister FIDO authenticator", function () {
+        var fidoAuthenticator;
+        beforeAll(function (done) {
+          findFidoFingerprintAuthenticator(
+              function (authenticator) {
+                fidoAuthenticator = authenticator;
+                done();
+              }, function (err) {
+                expect(err).toBeUndefined();
+                fail('Failed to fetch FIDO fingerprint authenticator')
+              }
+          )
+        });
         it("Should succeed with existing FIDO authenticator", function (done) {
           onegini.user.authenticators.deregister(
               fidoAuthenticator,
