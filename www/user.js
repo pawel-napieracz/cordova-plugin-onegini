@@ -45,10 +45,8 @@ module.exports = (function () {
         utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
       },
 
-      acceptFido: function (options) {
-        options = utils.getOptionsWithDefaults(options, {}, 'accept');
-        options.accept = true;
-        utils.callbackExec(client, 'respondToFidoRequest', options, self.callbacks.onSuccess, self.callbacks.onError);
+      acceptFido: function () {
+        utils.callbackExec(client, 'respondToFidoRequest', {accept: true}, self.callbacks.onSuccess, self.callbacks.onError);
       },
 
       denyFido: function () {
