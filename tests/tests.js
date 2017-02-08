@@ -20,6 +20,7 @@ exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
     testForMobileFingerprintAuthentication: false,
+    testForFidoAuthentication: false,
     userId: "devnull-cordovatests",
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
@@ -36,6 +37,10 @@ exports.defineAutoTests = function () {
 
   if (!config.testForMobileFingerprintAuthentication) {
     console.warn("Testing for mobile fingerprint authentication disabled (requires interaction)");
+  }
+
+  if (!config.testForFidoAuthentication) {
+    console.warn("Testing for FIDO authentication disabled (requires interaction)");
   }
 
   function sendMobileAuthenticationRequest(type) {
@@ -683,7 +688,7 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe("authenticators (2/2)", function () {
+    describe("authenticators (2/3)", function () {
       describe("setPreferred", function () {
         it("Should fail with a non-existing authenticator", function (done) {
           onegini.user.authenticators.setPreferred({
@@ -904,6 +909,132 @@ exports.defineAutoTests = function () {
       }
       else {
         console.warn("Skipping authenticators (2/2). Multiple authenticator tests disabled");
+      }
+    });
+
+    describe("authenticators (3/3)", function () {
+      if (config.testForFidoAuthentication) {
+        var fidoAuthenticator;
+        describe("registerNew", function () {
+          beforeAll(function (done) {
+            onegini.user.authenticators.getNotRegistered(
+                {
+                  profileId: registeredProfileId
+                },
+                function (result) {
+                  for (var r in result) {
+                    var authenticator = result[r];
+                    if (authenticator.authenticatorType === 'FIDO' && authenticator.name.includes("fingerprint")) {
+                      fidoAuthenticator = authenticator;
+                      done();
+                    }
+                  }
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                  fail('Error callback called, but method should have succeeded');
+                });
+          });
+          it("should succeed", function (done) {
+
+            onegini.user.authenticators.registerNew(fidoAuthenticator)
+                .onFidoRequest(function (actions) {
+                  actions.acceptFido();
+                })
+                .onSuccess(function () {
+                  expect(true).toBe(true);
+                  done();
+                })
+                .onError(function (err) {
+                  expect(err).toBeUndefined();
+                  fail('FIDO Authenticator registration failed, but should have succeeded');
+                });
+          });
+        });
+
+        describe("setPreferred", function () {
+          it("Should to set the FIDO authenticator as preferred", function (done) {
+            onegini.user.authenticators.setPreferred(
+                fidoAuthenticator,
+                function () {
+                  expect(true).toBe(true);
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                  fail("Error callback called, but method should have failed.");
+                });
+          });
+        });
+
+        describe("user.reauthenticate", function () {
+          it("should allow fallback from FIDO to pin", function (done) {
+            onegini.user.reauthenticate(registeredProfileId)
+                .onFidoRequest(function (actions) {
+                  actions.fallbackToPin();
+                })
+                .onPinRequest(function (actions) {
+                  actions.providePin(pin);
+                })
+                .onSuccess(function () {
+                  expect(true).toBe(true);
+                  done();
+                })
+                .onError(function (err) {
+                  expect(err).toBeUndefined();
+                  fail("Fingerprint authentication should have succeeded");
+                })
+          });
+        });
+
+        describe("user.logout", function () {
+          it("should succeed", function (done) {
+            onegini.user.logout(
+                function () {
+                  expect(true).toBe(true);
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                  fail('Logout failed, but should have succeeded');
+                });
+          });
+        });
+        describe("user.authenticate", function () {
+          it("should authenticate with FIDO", function (done) {
+            onegini.user.authenticate(registeredProfileId)
+                .onFidoRequest(function (actions, options) {
+                  expect(actions).toBeDefined();
+                  expect(actions.acceptFido).toBeDefined();
+
+                  actions.acceptFido();
+                })
+                .onSuccess(function () {
+                  done();
+                })
+                .onError(function (err) {
+                  expect(err).toBeUndefined();
+                  fail("User FIDO authentication failed, but should have succeeded");
+                });
+          });
+        });
+
+        describe("deregister", function () {
+          it("Should succeed with existing FIDO authenticator", function (done) {
+            onegini.user.authenticators.deregister(
+                fidoAuthenticator,
+                function () {
+                  expect(true).toBe(true);
+                  done();
+                }, function (err) {
+                  expect(err).toBeUndefined();
+                  fail("Error callback called, but method should have failed.");
+                });
+          });
+        });
+      }
+      else {
+        console.warn("Skipping authenticators (3/3). FIDO authenticator tests disabled");
       }
     });
 
