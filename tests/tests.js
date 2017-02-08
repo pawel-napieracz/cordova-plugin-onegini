@@ -1030,25 +1030,82 @@ exports.defineAutoTests = function () {
                 });
           });
         });
-
-        describe("deregister", function () {
-          it("Should succeed with existing FIDO authenticator", function (done) {
-            onegini.user.authenticators.deregister(
-                fidoAuthenticator,
-                function () {
-                  expect(true).toBe(true);
-                  done();
-                }, function (err) {
-                  expect(err).toBeUndefined();
-                  fail("Error callback called, but method should have failed.");
-                });
-          });
-        });
       }
       else {
         console.warn("Skipping authenticators (3/3). FIDO authenticator tests disabled");
       }
     });
+
+    if (config.testForFidoAuthentication) {
+      describe("mobileAuthentication (3/4", function () {
+        var fidoAuthenticator;
+        describe("user.authenticator.registerNew", function () {
+          beforeAll(function (done) {
+            findFidoFingerprintAuthenticator(
+                function (authenticator) {
+                  fidoAuthenticator = authenticator;
+                  done();
+                }, function (err) {
+                  expect(err).toBeUndefined();
+                  fail('Failed to fetch FIDO fingerprint authenticator')
+                }
+            )
+          });
+          it("Should register the FIDO fingerprint authenticator", function (done) {
+            onegini.user.authenticators.registerNew(fidoAuthenticator)
+                .onFidoRequest(function (actions) {
+                  actions.acceptFido();
+                })
+                .onSuccess(function () {
+                  expect(true).toBe(true);
+                  done();
+                })
+                .onError(function (err) {
+                  expect(err).toBeUndefined();
+                  fail('FIDO Authenticator registration failed, but should have succeeded');
+                });
+          });
+        });
+        describe("on mobile authentication with FIDO request", function () {
+          it("Should accept a mobile authentication FIDO request", function (done) {
+            onegini.mobileAuthentication.on("fido")
+                .onFidoRequest(function (actions, request) {
+                  console.log("Please authenticate with FIDO fingerprint authenticator");
+                  expect(request.type).toBeDefined();
+                  expect(request.message).toBeDefined();
+                  expect(request.profileId).toBeDefined();
+                  actions.accept();
+                })
+                .onError(function () {
+                  fail("Mobile authentication request failed, but should have succeeded");
+                })
+                .onSuccess(function () {
+                  done();
+                });
+
+            if (cordova.platformId === "ios") {
+              sendMobileAuthenticationRequest("push_with_fido_ios_sds_fingerprint");
+            } else {
+              sendMobileAuthenticationRequest("push_with_fido_android_sds_fingerprint");
+            }
+          }, 10000)        })
+      });
+      describe("deregister", function () {
+        it("Should succeed with existing FIDO authenticator", function (done) {
+          onegini.user.authenticators.deregister(
+              fidoAuthenticator,
+              function () {
+                expect(true).toBe(true);
+                done();
+              }, function (err) {
+                expect(err).toBeUndefined();
+                fail("Error callback called, but method should have failed.");
+              });
+        });
+      });
+    } else {
+      console.warn("Skipping mobileAuthentication (3/4). Mobile authentication FIDO tests disabled");
+    }
 
     if (config.testForMobileFingerprintAuthentication) {
       describe("mobileAuthentication (4/4)", function () {
@@ -1140,7 +1197,7 @@ exports.defineAutoTests = function () {
       });
     }
     else {
-      console.warn("Skipping mobileAuthentication (3/3). Mobile fingerprint authentication tests disabled");
+      console.warn("Skipping mobileAuthentication (4/4). Mobile fingerprint authentication tests disabled");
     }
   });
 
