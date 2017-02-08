@@ -19,8 +19,8 @@
 exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
-    testForMobileFingerprintAuthentication: true,
-    testForFidoAuthentication: true,
+    testForMobileFingerprintAuthentication: false,
+    testForFidoAuthentication: false,
     userId: "devnull-cordovatests",
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
@@ -1093,6 +1093,22 @@ exports.defineAutoTests = function () {
 
     if (config.testForMobileFingerprintAuthentication) {
       describe("mobileAuthentication (4/4)", function () {
+        describe("register Fingerprint authenticator", function () {
+          it("should succeed", function (done) {
+            onegini.user.authenticators.registerNew({authenticatorType: "Fingerprint"})
+                .onPinRequest(function (actions) {
+                  actions.providePin(pin);
+                })
+                .onSuccess(function () {
+                  expect(true).toBe(true);
+                  done();
+                })
+                .onError(function (err) {
+                  expect(err).toBeUndefined();
+                  fail('Authenticator registration failed, but should have suceeded');
+                });
+          });
+        });
         describe("on", function () {
           it("Should accept a mobile fingerprint request", function (done) {
             onegini.mobileAuthentication.on("fingerprint")
