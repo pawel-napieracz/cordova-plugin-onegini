@@ -45,6 +45,16 @@ module.exports = (function () {
         utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
       },
 
+      acceptFido: function (options) {
+        options = utils.getOptionsWithDefaults(options, {}, 'accept');
+        options.accept = true;
+        utils.callbackExec(client, 'respondToFidoRequest', options, self.callbacks.onSuccess, self.callbacks.onError);
+      },
+
+      denyFido: function () {
+        utils.callbackExec(client, 'respondToFidoRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
+      },
+
       createPin: function (options) {
         options = utils.getOptionsWithDefaults(options, {}, 'pin');
         if (!options || !options.pin) {
@@ -97,6 +107,11 @@ module.exports = (function () {
 
   AuthenticationHandler.prototype.onFingerprintFailed = function (cb) {
     this.callbacks.onFingerprintFailed = cb;
+    return this;
+  };
+
+  AuthenticationHandler.prototype.onFidoRequest = function (cb) {
+    this.callbacks.onFidoRequest = cb;
     return this;
   };
 

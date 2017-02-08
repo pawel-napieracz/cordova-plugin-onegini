@@ -311,6 +311,8 @@
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PinAuthenticationRequestHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/FidoAuthenticationRequestHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/FingerprintAuthenticationRequestHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/ChangePinHandler.java"
