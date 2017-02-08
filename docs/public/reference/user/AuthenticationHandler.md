@@ -49,6 +49,7 @@ The following methods can registered to handle different authentication events:
 - [`onFingerprintRequest`](#onfingerprintrequest)
 - [`onFingerprintCaptured`](#onfingerprintcaptured)
 - [`onFingerprintFailed`](#onfingerprintfailed)
+- [`onFidoRequest`](#onfidorequest)
 - [`onSuccess`](#onsuccess)
 - [`onError`](#onerror)
 
@@ -109,6 +110,21 @@ This method is called when the fingerprint previously detected was not recognize
 ```js
 handler.onFingerprintFailed(() => {
   console.log("Fingerprint incorrect! The user should try again.");
+});
+```
+
+### `onFidoRequest`
+
+This method is called when the user is required to authenticate with a FIDO authenticator. The following three actions can be called in response:
+
+- `acceptFido`: _Start FIDO authentication_.
+- `denyFido`: _Cancel this authentication attempt_.
+- `fallbackToPin`: _Ask for a PIN instead, you will receive a PIN request_.
+
+```js
+handler.onFidoRequest((actions) => {
+  console.log("Accepting fingerprint request");
+  actions.acceptFido();
 });
 ```
 

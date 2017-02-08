@@ -82,3 +82,39 @@ present in the returned array of of authenticators.
 
 Note that registering a new authenticator does not set it as the preferred authenticator for the user, which is PIN by default. 
 To change this, [`onegini.user.authenticators.setPreferred`](../reference/user/authenticators#oneginiuserauthenticatorssetpreferred) can be used.
+
+## Authenticating a user with FIDO
+
+Once a FIDO authenticator has been registered and set as the preferred authenticator, the user is able to authenticate with that authenticator. The method to 
+do so is the same as for PIN, the [`onegini.user.authenticate`](../reference/user/authenticate.md) method.
+
+However, if FIDO authentication is a possibility for the user, extra handler methods must be implemented. This is in addition to the PIN specific methods 
+(which are necessary in case of fallback to PIN).
+
+**Example code to log in a user with FIDO:**
+
+```js
+onegini.user.authenticate({ profileId: "profileIdOfUser" })
+    .onPinRequest((actions, options) => {
+      // for Fallback to PIN
+      var pin = prompt("Please enter your PIN");
+      actions.providePin(pin);
+    })
+    .onFidoRequest((actions) => {
+      let callback = (result) => {
+        if (result == 1) {
+          actions.acceptFido();
+        } else {
+          actions.fallbackToPin();
+       }
+     }
+
+      navigator.notification.confirm('Login using FIDO?', callback, 'Authenticate', ['Continue','Use PIN']);
+    })
+    .onSuccess(() => {
+      alert("Authentication success!");
+    })
+    .onError(() => {
+      alert("Authentication error!\n\n" + err.description);
+    });
+```
