@@ -66,4 +66,16 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
 }
 
+- (void)userClient:(ONGUserClient *)userClient didReceiveFIDOChallenge:(ONGFIDOChallenge *)challenge
+{
+    self.fidoChallenge = challenge;
+
+    NSDictionary *result = @{
+        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventFidoRequest
+    };
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+    [pluginResult setKeepCallbackAsBool:YES];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
+
+}
 @end
