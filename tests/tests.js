@@ -20,7 +20,7 @@ exports.defineAutoTests = function () {
   var config = {
     testForMultipleAuthenticators: true,
     testForMobileFingerprintAuthentication: false,
-    testForFidoAuthentication: false,
+    testForFidoAuthentication: true,
     userId: "devnull-cordovatests",
     get platform() {
       return navigator.userAgent.indexOf("Android") > -1 ? "android" : "ios"
@@ -73,6 +73,26 @@ exports.defineAutoTests = function () {
     userId = [userId];
 
     cordova.exec(successCb, failureCb, "OneginiUrlClient", "setUserId", userId);
+  }
+
+  function findFidoFingerprintAuthenticator(successCb, failureCb) {
+    onegini.user.authenticators.getNotRegistered(
+        {
+          profileId: registeredProfileId
+        },
+        function (result) {
+          for (var r in result) {
+            var authenticator = result[r];
+            if (authenticator.authenticatorType === 'FIDO' && authenticator.name.includes("fingerprint")) {
+              successCb(authenticator);
+              return;
+            }
+          }
+          failureCb();
+        },
+        function (err) {
+          failureCb(err);
+        });
   }
 
   /******** onegini *********/
@@ -917,26 +937,17 @@ exports.defineAutoTests = function () {
         var fidoAuthenticator;
         describe("registerNew", function () {
           beforeAll(function (done) {
-            onegini.user.authenticators.getNotRegistered(
-                {
-                  profileId: registeredProfileId
-                },
-                function (result) {
-                  for (var r in result) {
-                    var authenticator = result[r];
-                    if (authenticator.authenticatorType === 'FIDO' && authenticator.name.includes("fingerprint")) {
-                      fidoAuthenticator = authenticator;
-                      done();
-                    }
-                  }
-                },
-                function (err) {
+            findFidoFingerprintAuthenticator(
+                function (authenticator) {
+                  fidoAuthenticator = authenticator;
+                  done();
+                }, function (err) {
                   expect(err).toBeUndefined();
-                  fail('Error callback called, but method should have succeeded');
-                });
+                  fail('Failed to fetch FIDO fingerprint authenticator')
+                }
+            )
           });
           it("should succeed", function (done) {
-
             onegini.user.authenticators.registerNew(fidoAuthenticator)
                 .onFidoRequest(function (actions) {
                   actions.acceptFido();
@@ -1000,6 +1011,7 @@ exports.defineAutoTests = function () {
                 });
           });
         });
+
         describe("user.authenticate", function () {
           it("should authenticate with FIDO", function (done) {
             onegini.user.authenticate(registeredProfileId)
@@ -1039,7 +1051,7 @@ exports.defineAutoTests = function () {
     });
 
     if (config.testForMobileFingerprintAuthentication) {
-      describe("mobileAuthentication (3/3)", function () {
+      describe("mobileAuthentication (4/4)", function () {
         describe("on", function () {
           it("Should accept a mobile fingerprint request", function (done) {
             onegini.mobileAuthentication.on("fingerprint")
