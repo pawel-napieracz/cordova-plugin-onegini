@@ -25,26 +25,26 @@
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
       <content src="cdvtests/index.html" />
-      <feature name="OneginiUrlClient">
-        <param name="ios-package" value="OGCDVUrlClient" />
+      <feature name="OneginiTestUtils">
+        <param name="ios-package" value="OGCDVTestUtils" />
         <param name="onload" value="true" />
       </feature>
     </config-file>
 
-    <header-file src="src/ios/classes/OGCDVUrlClient.h"/>
-    <source-file src="src/ios/classes/OGCDVUrlClient.m"/>
+    <header-file src="src/ios/classes/OGCDVTestUtils.h"/>
+    <source-file src="src/ios/classes/OGCDVTestUtils.m"/>
   </platform>
 
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
       <content src="cdvtests/index.html" />
-      <feature name="OneginiUrlClient">
-        <param name="android-package" value="com.onegini.mobile.sdk.cordova.tests.OneginiUrlClient"/>
+      <feature name="OneginiTestUtils">
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.tests.TestUtils"/>
         <param name="onload" value="true"/>
       </feature>
     </config-file>
 
-    <source-file src="src/android/classes/OneginiUrlClient.java"
+    <source-file src="src/android/classes/TestUtils.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/tests"/>
   </platform>
 </plugin>
