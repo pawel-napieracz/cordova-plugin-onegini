@@ -63,6 +63,34 @@ exports.defineAutoTests = function () {
     xhr.send("callback_uri=https://www.onegini.com&message=Test&type=" + type + "&user_id=" + config.userId);
   }
 
+  function sendMobileAuthenticationRequestForFido() {
+    var xhr = new XMLHttpRequest();
+
+    xhr.open("GET", "https://onegini-msp-snapshot.test.onegini.io/oauth/api/v2/authenticate/user/" + config.userId + "/enabled");
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Authorization", "Basic MjNBMDIxQTgyNzFGNDdEODUwRTM2Qjc2NDgwMEQ0NjQ0MDM4RUZDODAzMTFGN0U1QjNDMTE4QTgzNTgwOUMwQTpGMkM4MzYwMDJBODVCNEQxMkU5MzRDREFCNEZFRUMwQzk4QkExRjNEMzM2NzM2RkJCNTMxNzE3MzVGMzZCM0Mx");
+
+    xhr.onreadystatechange = function () {
+      if (this.readyState === 4) {
+        if (this.status !== 200) {
+          console.error("Failed to fetch enabled mobile authentication types!", JSON.parse(this.responseText));
+        } else {
+          var enabledTypes = JSON.parse(this.responseText).enabled;
+          for (var i = 0; i < enabledTypes.length; i++) {
+            var type = enabledTypes[i];
+            if (type.toLowerCase().includes('fido')) {
+              sendMobileAuthenticationRequest(type);
+              return;
+            }
+          }
+          console.error("Could not find any FIDO mobile authentication types")
+        }
+      }
+    };
+
+    xhr.send();
+  }
+
   function setUrlHandlerUserId(userId, successCb, failureCb) {
     userId = userId || {};
     if (typeof(userId) !== 'object') {
@@ -83,7 +111,7 @@ exports.defineAutoTests = function () {
         function (result) {
           for (var r in result) {
             var authenticator = result[r];
-            if (authenticator.authenticatorType === 'FIDO' && authenticator.name.includes("fingerprint")) {
+            if (authenticator.authenticatorType === 'FIDO' && authenticator.name.toLowerCase().includes("fingerprint")) {
               successCb(authenticator);
               return;
             }
@@ -120,7 +148,7 @@ exports.defineAutoTests = function () {
               expect(err).toBeUndefined();
               fail('Error callback called, but method should have succeeded');
             });
-      });
+      }, 25000); // Timeout is increased because of permission popups on Android
 
       afterAll(function (done) {
         setUrlHandlerUserId(config.userId,
@@ -932,7 +960,7 @@ exports.defineAutoTests = function () {
       }
     });
 
-    describe("authenticators (3/3)", function () {
+    describe("authenticators FIDO (3/3)", function () {
       if (config.testForFidoAuthentication) {
         var fidoAuthenticator;
         describe("registerNew", function () {
@@ -948,6 +976,7 @@ exports.defineAutoTests = function () {
             )
           });
           it("should succeed", function (done) {
+            console.log("Please provide correct fingerprint");
             onegini.user.authenticators.registerNew(fidoAuthenticator)
                 .onFidoRequest(function (actions) {
                   actions.acceptFido();
@@ -960,11 +989,11 @@ exports.defineAutoTests = function () {
                   expect(err).toBeUndefined();
                   fail('FIDO Authenticator registration failed, but should have succeeded');
                 });
-          });
+          }, 25000); // Timeout is increased because the Android FIDO registration otherwise fails
         });
 
         describe("setPreferred", function () {
-          it("Should to set the FIDO authenticator as preferred", function (done) {
+          it("Should to set the FIDO as preferred", function (done) {
             onegini.user.authenticators.setPreferred(
                 fidoAuthenticator,
                 function () {
@@ -993,7 +1022,7 @@ exports.defineAutoTests = function () {
                 })
                 .onError(function (err) {
                   expect(err).toBeUndefined();
-                  fail("Fingerprint authentication should have succeeded");
+                  fail("FIDO authentication should have succeeded");
                 })
           });
         });
@@ -1014,6 +1043,7 @@ exports.defineAutoTests = function () {
 
         describe("user.authenticate", function () {
           it("should authenticate with FIDO", function (done) {
+            console.log("Please provide correct fingerprint")
             onegini.user.authenticate(registeredProfileId)
                 .onFidoRequest(function (actions, options) {
                   expect(actions).toBeDefined();
@@ -1022,13 +1052,14 @@ exports.defineAutoTests = function () {
                   actions.acceptFido();
                 })
                 .onSuccess(function () {
+                  expect(true).toBe(true);
                   done();
                 })
                 .onError(function (err) {
                   expect(err).toBeUndefined();
                   fail("User FIDO authentication failed, but should have succeeded");
                 });
-          });
+          }, 25000);
         });
       }
       else {
@@ -1037,12 +1068,12 @@ exports.defineAutoTests = function () {
     });
 
     if (config.testForFidoAuthentication) {
-      describe("mobileAuthentication (3/4", function () {
-        describe("on mobile authentication with FIDO request", function () {
-          it("Should accept a mobile authentication FIDO request", function (done) {
+      describe("mobileAuthentication FIDO (3/4)", function () {
+        describe("on request", function () {
+          it("Should accept", function (done) {
             onegini.mobileAuthentication.on("fido")
                 .onFidoRequest(function (actions, request) {
-                  console.log("Please authenticate with FIDO fingerprint authenticator");
+                  console.log("Please provide correct fingerprint");
                   expect(request.type).toBeDefined();
                   expect(request.message).toBeDefined();
                   expect(request.profileId).toBeDefined();
@@ -1055,12 +1086,9 @@ exports.defineAutoTests = function () {
                   done();
                 });
 
-            if (cordova.platformId === "ios") {
-              sendMobileAuthenticationRequest("push_with_fido_ios_sds_fingerprint");
-            } else {
-              sendMobileAuthenticationRequest("push_with_fido_android_sds_fingerprint");
-            }
-          }, 10000)        })
+            sendMobileAuthenticationRequestForFido();
+          }, 10000)
+        })
       });
       describe("deregister FIDO authenticator", function () {
         var fidoAuthenticator;
@@ -1075,7 +1103,7 @@ exports.defineAutoTests = function () {
               }
           )
         });
-        it("Should succeed with existing FIDO authenticator", function (done) {
+        it("Should succeed", function (done) {
           onegini.user.authenticators.deregister(
               fidoAuthenticator,
               function () {
