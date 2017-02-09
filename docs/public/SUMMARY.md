@@ -3,6 +3,7 @@
 * [Topic guides](topics/introduction.md)
     * [Getting started](topics/getting-started.md)
     * [Configuration](topics/configuration.md)
+    * [User registration](topics/user-registration.md)
     * [User authentication](topics/user-authentication.md)
     * [User authentication with fingerprint](topics/user-authentication-with-fingerprint.md)
     * [Change PIN](topics/change-pin.md)

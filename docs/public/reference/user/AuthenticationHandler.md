@@ -44,6 +44,7 @@ handler.onSuccess(() => {
 
 The following methods can registered to handle different authentication events:
 
+- [`onRegistrationRequest`](#onregistrationrequest)
 - [`onPinRequest`](#onpinrequest)
 - [`onCreatePinRequest`](#oncreatepinrequest)
 - [`onFingerprintRequest`](#onfingerprintrequest)
@@ -51,6 +52,22 @@ The following methods can registered to handle different authentication events:
 - [`onFingerprintFailed`](#onfingerprintfailed)
 - [`onSuccess`](#onsuccess)
 - [`onError`](#onerror)
+
+### `onRegistrationRequest`
+
+This method is called when the SDK start with the registration flow. The options object contains a URL to the registration endpoint.
+By default you will not have to register a handler for this event, as the plugin opens a browser automatically.
+If you handle opening the registration page yourself, you can pass back the callback URL with `actions.handleRegistrationUrl`. 
+
+```js
+handler.onPinRequest((actions, options) => {
+  // Some logic to fetch the callback URL
+  let registrationUrl = registerWithUrl(options.url);
+  actions.handleRegistrationUrl(registrationUrl);
+})
+```
+
+See also: [User registration topic guide](../../topics/user-registration.md).
 
 ### `onPinRequest`
 

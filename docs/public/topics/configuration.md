@@ -43,6 +43,7 @@ picked up after re-running the Configurator. The following preferences can be se
 | OneginiRootDetectionEnabled  | true          | Enable Root detection in your application. This disable your application on rooted Android devices.
 | OneginiDebugDetectionEnabled | true          | Enable Debug detection. This will disable attempts to attach a debugger to your application on Android and iOS.
 | OneginiGcmSenderId           | None          | The GCM Sender ID to receive push notifications on Android.
+| OneginiWebView               | None          | The webview used to handle registration. See also: [user registration topic guide](./user-registration.md).
 
 Add these to your `config.xml` file as follows:
 
