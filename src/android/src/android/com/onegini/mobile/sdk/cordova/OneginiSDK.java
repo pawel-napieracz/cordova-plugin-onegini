@@ -73,8 +73,7 @@ public class OneginiSDK {
         .setMobileAuthenticationFingerprintRequestHandler(mobileAuthenticationHandler)
         .setMobileAuthenticationFidoRequestHandler(mobileAuthenticationHandler);
 
-    return builder.setMobileAuthenticationFidoRequestHandler(mobileAuthenticationHandler)
-        .build();
+    return builder.build();
   }
 
   public boolean isStarted() {
