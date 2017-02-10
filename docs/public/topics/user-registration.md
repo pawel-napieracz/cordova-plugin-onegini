@@ -41,6 +41,24 @@ iOS also needs to know about your redirect URL scheme. This is done through sett
 refer to [Apple's documentation](https://developer.apple.com/library/content/documentation/Carbon/Conceptual/LaunchServicesConcepts/LSCConcepts/LSCConcepts.html) 
 for further details.
 
+We recommend to use a Cordova plugin to modify your `-Info.plist` file and not do it manually. The 
+[cordova-custom-config plugin](https://www.npmjs.com/package/cordova-custom-config) is a good plugin that can make the necessary changes.
+
+The example below shows a part of a `config.xml` to configure the custom URL scheme using the cordova-custom-config plugin:
+
+```xml
+    <config-file platform="ios" target="*-Info.plist" parent="CFBundleURLTypes">
+      <array>
+        <dict>
+          <key>CFBundleURLSchemes</key>
+          <array>
+            <string>__YOUR_CUSTOM_SCHEME__</string>
+          </array>
+        </dict>
+      </array>
+    </config-file>
+```
+
 The plugin will now use `SFSafariViewController` to open the registration endpoint. Note that the `SFSafariViewController` is only available on iOS 9 and later, 
 the plugin will fall back to WKWebView on iOS 8.
 
