@@ -31,7 +31,8 @@ Because Cordova does not support adding frameworks as embedded binaries, you mus
 application.
 
 The `SensoryBiometricsManager.framework` must be added as an embedded binary to your application target.
-Drag the `SensoryBiometricsManager.framework` from the 'Linked Frameworks and Libraries' to the 'Embedded Binaries' section as shown in the image below:
+Add the `SensoryBiometricsManager.framework` to the 'Embedded Binaries' by clicking the + sign and selecting `SensoryBiometricsManager.framework`.
+The result should look like the image below:
 ![Configure Embedded binary](../images/configure-embedded-binary.png)
 
 ## Registering a FIDO authenticator
@@ -39,7 +40,8 @@ Drag the `SensoryBiometricsManager.framework` from the 'Linked Frameworks and Li
 In order to register a FIDO authenticator for a user, the Onegini Cordova plugin provides the [`onegini.user.authenticators.registerNew`](../reference/user/authenticators.md#oneginiuserauthenticatorsregisternew). 
 To register a FIDO authenticator, you will need to implement the `onSuccess` and `onError` events. As part of the 
 FIDO authenticator registration flow the user is asked to perform a certain action. This could for instance be to place their face in front of the camera 
-(for face authentication) or place their finger on the fingerprint scanner (for FIDO fingerprint authentication). FIDO Authenticators that requires such actions come embedded with their own UI.
+(for face authentication) or place their finger on the fingerprint scanner (for FIDO fingerprint authentication).
+FIDO Authenticators that requires such actions come embedded with their own UI.
 
 **Example code for registering a FIDO authenticator:**
 
