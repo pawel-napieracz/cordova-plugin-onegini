@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+#import <SafariServices/SafariServices.h>
 #import "CDVPlugin+OGCDV.h"
+#import <WebKit/WebKit.h>
 #import "OneginiSDK.h"
 
 @interface OGCDVUserRegistrationClient : CDVPlugin<ONGRegistrationDelegate>
@@ -25,5 +27,6 @@
 - (void)getUserProfiles:(CDVInvokedUrlCommand *)command;
 - (void)isUserRegistered:(CDVInvokedUrlCommand *)command;
 - (void)cancelFlow:(CDVInvokedUrlCommand *)command;
+- (void)respondToRegistrationRequest:(CDVInvokedUrlCommand *)command;
 
 @end

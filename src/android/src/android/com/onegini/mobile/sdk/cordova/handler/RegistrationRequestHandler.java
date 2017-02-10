@@ -16,11 +16,16 @@
 
 package com.onegini.mobile.sdk.cordova.handler;
 
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_ON_REGISTRATION_REQUEST;
+
+import org.apache.cordova.CallbackContext;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiRegistrationRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiRegistrationCallback;
+import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class RegistrationRequestHandler implements OneginiRegistrationRequestHandler {
 
@@ -28,6 +33,8 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
 
   private static String userId;
   private static OneginiRegistrationCallback callback;
+  private static CallbackContext registrationRequestCallbackContext;
+  private static boolean shouldOpenBrowser;
   private final Context context;
 
   public RegistrationRequestHandler(final Context context) {
@@ -43,6 +50,14 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
     return callback;
   }
 
+  public static void setRegistrationRequestCallbackContext(final CallbackContext registrationRequestCallbackContext) {
+    RegistrationRequestHandler.registrationRequestCallbackContext = registrationRequestCallbackContext;
+  }
+
+  public static void setShouldOpenBrowser(final boolean shouldOpenBrowser) {
+    RegistrationRequestHandler.shouldOpenBrowser = shouldOpenBrowser;
+  }
+
   public static void handleRegistrationCallback(final Uri uri) {
     if (callback != null) {
       callback.handleRegistrationCallback(uri);
@@ -54,11 +69,10 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
     uri = getRegistrationUriWithParameters(uri);
     callback = oneginiRegistrationCallback;
 
-    final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
-    context.startActivity(intent);
+    sendRegistrationRequestEvent(uri);
+    if (shouldOpenBrowser) {
+      openBrowserForRegistration(uri);
+    }
   }
 
   private Uri getRegistrationUriWithParameters(final Uri uri) {
@@ -69,6 +83,25 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
     final Uri.Builder builder = uri.buildUpon();
     builder.appendQueryParameter(PARAM_USER_ID, userId);
     return builder.build();
+  }
+
+  private void openBrowserForRegistration(final Uri uri) {
+    final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+    context.startActivity(intent);
+  }
+
+  private void sendRegistrationRequestEvent(final Uri uri) {
+    registrationRequestCallbackContext.sendPluginResult(new PluginResultBuilder()
+        .shouldKeepCallback()
+        .withSuccess()
+        .withEvent(AUTH_EVENT_ON_REGISTRATION_REQUEST)
+        .withUri(uri)
+        .build());
+
+    registrationRequestCallbackContext = null;
   }
 
 }

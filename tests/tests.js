@@ -66,7 +66,11 @@ exports.defineAutoTests = function () {
     }
     userId = [userId];
 
-    cordova.exec(successCb, failureCb, "OneginiUrlClient", "setUserId", userId);
+    cordova.exec(successCb, failureCb, "OneginiTestUtils", "setUserId", userId);
+  }
+
+  function setWebViewPreference(preferenceValue) {
+    cordova.exec(null, null, 'OneginiTestUtils', 'setPreference', ['OneginiWebView', preferenceValue]);
   }
 
   /******** onegini *********/
@@ -192,14 +196,17 @@ exports.defineAutoTests = function () {
       });
 
       it("should be cancellable", function (done) {
+        setWebViewPreference('default');
         onegini.user.register()
-            .onCreatePinRequest(function (actions, options) {
+            .onCreatePinRequest(function (actions) {
               actions.cancel();
             })
             .onError(function (err) {
               expect(err).toBeDefined();
               expect(err.code).toBe(9006);
-              done();
+              setTimeout(function () {
+                done();
+              }, 500);
             })
             .onSuccess(function () {
               fail("Registration should have failed, but succeeded");
@@ -207,7 +214,36 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it("should succeed", function (done) {
+      it("should work with callback action through JS", function (done) {
+        setWebViewPreference('disabled');
+        onegini.user.register()
+            .onRegistrationRequest(function (actions, options) {
+              cordova.exec(function (registrationUrl) {
+                actions.handleRegistrationUrl(registrationUrl)
+              }, function (err) {
+                expect(err).toBeUndefined();
+                fail("Error while getting redirect url");
+              }, "OneginiTestUtils", "getRedirectUrl", [options]);
+            })
+            .onCreatePinRequest(function (actions, options) {
+              expect(options.profileId).toBeDefined();
+              expect(options.pinLength).toBe(5);
+              registeredProfileId = options.profileId;
+              actions.createPin(config.pin);
+            })
+            .onSuccess(function () {
+              setTimeout(function () {
+                done();
+              }, 100)
+            })
+            .onError(function (err) {
+              fail("Registration failed, but should have succeeded");
+              expect(err).toBeUndefined();
+            });
+      });
+
+      it("should work with default WebView", function (done) {
+        setWebViewPreference('default');
         onegini.user.register()
             .onCreatePinRequest(function (actions, options) {
               expect(options.profileId).toBeDefined();
@@ -220,9 +256,29 @@ exports.defineAutoTests = function () {
             })
             .onError(function (err) {
               fail("Registration failed, but should have succeeded");
-              expect(err).toBeDefined();
+              expect(err).toBeUndefined();
             });
       });
+
+      if (cordova.platformId === "ios") {
+        it("should work with SFSafariViewController", function (done) {
+          setWebViewPreference('SFSafariViewController');
+          onegini.user.register()
+              .onCreatePinRequest(function (actions, options) {
+                expect(options.profileId).toBeDefined();
+                expect(options.pinLength).toBe(5);
+                registeredProfileId = options.profileId;
+                actions.createPin(config.pin);
+              })
+              .onSuccess(function () {
+                done();
+              })
+              .onError(function (err) {
+                fail("Registration failed, but should have succeeded");
+                expect(err).toBeUndefined();
+              });
+        });
+      }
     });
 
     describe("getAuthenticatedUserProfile (2/3)", function () {

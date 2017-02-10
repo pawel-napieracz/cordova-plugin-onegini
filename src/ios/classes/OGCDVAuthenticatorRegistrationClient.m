@@ -106,7 +106,7 @@
 - (void)userClient:(ONGUserClient *)userClient didRegisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile
 {
     NSDictionary *message = @{
-        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventSuccess
+        OGCDVPluginKeyEvent: OGCDVPluginEventSuccess
     };
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
 

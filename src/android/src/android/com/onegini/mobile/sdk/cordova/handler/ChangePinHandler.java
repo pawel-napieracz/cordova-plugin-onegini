@@ -38,7 +38,7 @@ public class ChangePinHandler implements OneginiChangePinHandler {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .withPinLength(PIN_LENGTH)
-        .withAuthenticationEvent(AUTH_EVENT_SUCCESS)
+        .withEvent(AUTH_EVENT_SUCCESS)
         .build();
 
     sendPluginResult(pluginResult);

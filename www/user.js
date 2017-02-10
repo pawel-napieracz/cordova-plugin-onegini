@@ -54,23 +54,22 @@ module.exports = (function () {
         utils.callbackExec(client, 'createPin', options, callSuccessCallback, callErrorCallback);
       },
 
+      handleRegistrationUrl: function(options) {
+        options = utils.getOptionsWithDefaults(options, {}, 'url');
+        utils.callbackExec(client, 'respondToRegistrationRequest', options, callSuccessCallback, callErrorCallback);
+      },
+
       cancel: function () {
         utils.callbackExec(client, 'cancelFlow', {}, callSuccessCallback, callErrorCallback);
       }
     };
 
     function callSuccessCallback(options) {
-      var event = options.authenticationEvent;
-      delete options.authenticationEvent;
-
-      if (!event) {
-        throw new TypeError('Onegini: event cannot be null');
-      }
+      var event = options.pluginEvent;
+      delete options.pluginEvent;
 
       if (self.callbacks[event]) {
         self.callbacks[event](self.callbackActions, options);
-      } else {
-        console.warn('Onegini: Tried to call "' + event + '" callback but no callback was registered');
       }
     }
 
@@ -108,6 +107,11 @@ module.exports = (function () {
 
   AuthenticationHandler.prototype.onFingerprintFailed = function (cb) {
     this.callbacks.onFingerprintFailed = cb;
+    return this;
+  };
+
+  AuthenticationHandler.prototype.onRegistrationRequest = function (cb) {
+    this.callbacks.onRegistrationRequest = cb;
     return this;
   };
 

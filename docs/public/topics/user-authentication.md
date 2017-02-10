@@ -34,6 +34,8 @@ The `onSuccess` method indicates the user has been registered and also logged in
 
 Note that the PIN entered by the user should **not** be stored on the device or elsewhere in any shape or form. The Cordova Plugin takes care of this for you in a secure manner.
 
+See also: [User Registration topic guide](user-registration.md).
+
 ## Getting registered users
 
 While it is possible to keep track of registered users oneself, the Cordova Plugin also provides a function to retrieve all registered profiles.

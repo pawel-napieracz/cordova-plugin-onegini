@@ -16,14 +16,15 @@
 
 package com.onegini.mobile.sdk.cordova.client;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_URL;
 
 import java.util.Set;
 
@@ -34,12 +35,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiRegistrationCallback;
-import com.onegini.mobile.sdk.cordova.OneginiSDK;
-import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
-import com.onegini.mobile.sdk.cordova.handler.RegistrationHandler;
+import android.net.Uri;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.RegistrationHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
@@ -53,6 +55,12 @@ public class UserRegistrationClient extends CordovaPlugin {
   private static final String ACTION_GET_USER_PROFILES = "getUserProfiles";
   private static final String ACTION_IS_USER_REGISTERED = "isUserRegistered";
   private static final String ACTION_CANCEL_FLOW = "cancelFlow";
+  private static final String ACTION_REGISTER_REGISTRATION_REQUEST_LISTENER = "registerRegistrationRequestListener";
+  private static final String ACTION_RESPOND_TO_REGISTRATION_REQUEST = "respondToRegistrationRequest";
+
+  private static final String PREF_KEY_WEBVIEW = "oneginiwebview";
+  private static final String PREF_WEBVIEW_DISABLED = "disabled";
+  private static final String PREF_WEBVIEW_EXTERNAL = "external";
 
   private RegistrationHandler registrationHandler;
 
@@ -72,6 +80,9 @@ public class UserRegistrationClient extends CordovaPlugin {
     } else if (ACTION_CANCEL_FLOW.equals(action)) {
       cancelFlow(callbackContext);
       return true;
+    } else if (ACTION_RESPOND_TO_REGISTRATION_REQUEST.equals(action)) {
+      respondToRegistrationRequest(args, callbackContext);
+      return true;
     }
 
     return false;
@@ -80,6 +91,8 @@ public class UserRegistrationClient extends CordovaPlugin {
   private void startRegistration(final JSONArray args, final CallbackContext startRegistrationCallbackContext) throws JSONException {
     final String[] scopes = ActionArgumentsUtil.getScopesFromArguments(args);
 
+    RegistrationRequestHandler.setRegistrationRequestCallbackContext(startRegistrationCallbackContext);
+    RegistrationRequestHandler.setShouldOpenBrowser(shouldOpenBrowserForRegistration());
     CreatePinRequestHandler.getInstance().setOnStartPinCreationCallback(startRegistrationCallbackContext);
     registrationHandler = new RegistrationHandler(startRegistrationCallbackContext);
 
@@ -145,6 +158,30 @@ public class UserRegistrationClient extends CordovaPlugin {
         callbackContext.success(resultPayload);
       }
     });
+  }
+
+  private void respondToRegistrationRequest(final JSONArray args, final CallbackContext callbackContext) {
+    final Uri uri;
+
+    try {
+      uri = Uri.parse(args.getJSONObject(0).getString(PARAM_URL));
+    } catch (JSONException e) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withPluginError("Could not parse the given URL: " + e.getMessage(), ERROR_CODE_ILLEGAL_ARGUMENT)
+          .build());
+
+      return;
+    }
+
+    RegistrationRequestHandler.handleRegistrationCallback(uri);
+  }
+
+  private boolean shouldOpenBrowserForRegistration() {
+    return !isWebViewDisabled();
+  }
+
+  private boolean isWebViewDisabled() {
+    return preferences.getString(PREF_KEY_WEBVIEW, PREF_WEBVIEW_EXTERNAL).equals(PREF_WEBVIEW_DISABLED);
   }
 
   private void cancelFlow(final CallbackContext callbackContext) {

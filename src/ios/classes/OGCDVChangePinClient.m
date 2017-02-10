@@ -73,7 +73,7 @@
 {
     self.pinChallenge = challenge;
     NSDictionary *result = @{
-        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventPinRequest,
+        OGCDVPluginKeyEvent: OGCDVPluginEventPinRequest,
         OGCDVPluginKeyMaxFailureCount: @(challenge.maxFailureCount),
         OGCDVPluginKeyRemainingFailureCount: @(challenge.remainingFailureCount)
     };
@@ -89,7 +89,7 @@
     [self.viewController dismissViewControllerAnimated:YES completion:nil];
 
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
-    result[OGCDVPluginKeyAuthenticationEvent] = OGCDVPluginAuthEventCreatePinRequest;
+    result[OGCDVPluginKeyEvent] = OGCDVPluginEventCreatePinRequest;
     result[OGCDVPluginKeyPinLength] = @(challenge.pinLength);
 
     if (challenge.error != nil) {
@@ -105,7 +105,7 @@
 - (void)userClient:(ONGUserClient *)userClient didChangePinForUser:(ONGUserProfile *)userProfile
 {
     NSDictionary *result = @{
-        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventSuccess
+        OGCDVPluginKeyEvent: OGCDVPluginEventSuccess
     };
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];

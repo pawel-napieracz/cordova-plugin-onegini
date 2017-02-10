@@ -29,7 +29,7 @@ extern NSString *const OGCDVPluginKeyAuthenticatorName;
 extern NSString *const OGCDVPluginKeyMethod;
 extern NSString *const OGCDVPluginKeyType;
 extern NSString *const OGCDVPluginKeyMessage;
-extern NSString *const OGCDVPluginKeyAuthenticationEvent;
+extern NSString *const OGCDVPluginKeyEvent;
 extern NSString *const OGCDVPluginKeyAccept;
 extern NSString *const OGCDVPluginKeyPrompt;
 extern NSString *const OGCDVPluginKeyErrorCode;
@@ -41,11 +41,13 @@ extern NSString *const OGCDVPluginClassMobileAuthenticationRequestClient;
 extern NSString *const OGCDVPluginAuthenticatorTypePin;
 extern NSString *const OGCDVPluginAuthenticatorTypeTouchId;
 
-extern NSString *const OGCDVPluginAuthEventSuccess;
-extern NSString *const OGCDVPluginAuthEventConfirmationRequest;
-extern NSString *const OGCDVPluginAuthEventPinRequest;
-extern NSString *const OGCDVPluginAuthEventCreatePinRequest;
-extern NSString *const OGCDVPluginAuthEventFingerprintRequest;
+extern NSString *const OGCDVPluginEventSuccess;
+extern NSString *const OGCDVPluginEventConfirmationRequest;
+extern NSString *const OGCDVPluginEventPinRequest;
+extern NSString *const OGCDVPluginEventCreatePinRequest;
+extern NSString *const OGCDVPluginEventFingerprintRequest;
+
+extern NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification;
 
 extern NSString *const OGCDVPluginErrDescriptionInternalError;
 extern NSString *const OGCDVPluginErrDescriptionIllegalArgumentProfile;

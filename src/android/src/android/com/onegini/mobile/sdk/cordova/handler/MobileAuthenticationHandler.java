@@ -106,7 +106,7 @@ public class MobileAuthenticationHandler
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_PIN_REQUEST)
+        .withEvent(AUTH_EVENT_PIN_REQUEST)
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withOneginiMobileAuthenticationRequest(pinCallback.getMobileAuthenticationRequest())
@@ -132,7 +132,7 @@ public class MobileAuthenticationHandler
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_FAILED)
+        .withEvent(AUTH_EVENT_FINGERPRINT_FAILED)
         .withOneginiMobileAuthenticationRequest(fingerprintCallback.getMobileAuthenticationRequest())
         .build());
   }
@@ -145,7 +145,7 @@ public class MobileAuthenticationHandler
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_CAPTURED)
+        .withEvent(AUTH_EVENT_FINGERPRINT_CAPTURED)
         .withOneginiMobileAuthenticationRequest(fingerprintCallback.getMobileAuthenticationRequest())
         .build());
   }
@@ -186,7 +186,7 @@ public class MobileAuthenticationHandler
     pluginResultBuilder
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(callback.getAuthenticationRequestEventName())
+        .withEvent(callback.getAuthenticationRequestEventName())
         .withOneginiMobileAuthenticationRequest(mobileAuthenticationRequest);
 
     if (callback instanceof PinCallback) {
