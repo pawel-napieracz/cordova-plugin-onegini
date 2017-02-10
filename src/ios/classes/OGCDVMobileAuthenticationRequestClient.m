@@ -22,6 +22,7 @@
 NSString *const OGCDVPluginMobileAuthenticationMethodConfirmation = @"confirmation";
 NSString *const OGCDVPluginMobileAuthenticationMethodPin = @"pin";
 NSString *const OGCDVPluginMobileAuthenticationMethodFingerprint = @"fingerprint";
+NSString *const OGCDVPluginMobileAuthenticationMethodFido = @"fido";
 static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 @implementation OGCDVMobileAuthenticationRequestClient {
@@ -44,7 +45,8 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
     authenticationEventsForMethods = @{
         OGCDVPluginMobileAuthenticationMethodConfirmation: OGCDVPluginEventConfirmationRequest,
         OGCDVPluginMobileAuthenticationMethodPin: OGCDVPluginEventPinRequest,
-        OGCDVPluginMobileAuthenticationMethodFingerprint: OGCDVPluginEventFingerprintRequest
+        OGCDVPluginMobileAuthenticationMethodFingerprint: OGCDVPluginEventFingerprintRequest,
+        OGCDVPluginMobileAuthenticationMethodFido: OGCDVPluginEventFidoRequest
     };
 
     sharedInstance = self;
@@ -94,6 +96,16 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
     [operationQueue addOperation:operation];
 }
 
+- (void)userClient:(ONGUserClient *)userClient didReceiveFIDOChallenge:(ONGFIDOChallenge *)challenge
+        forRequest:(ONGMobileAuthenticationRequest *)request
+{
+    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+        initWithFidoChallenge:challenge
+                   forRequest:request
+                    forMethod:OGCDVPluginMobileAuthenticationMethodFido];
+    [operationQueue addOperation:operation];
+}
+
 - (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthenticationRequest:(ONGMobileAuthenticationRequest *)request error:(NSError *)error
 {
     [self sendErrorResultForCallbackId:[delegate completeOperationCallbackId] withError:error];
@@ -136,6 +148,9 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
             NSString *prompt = options[OGCDVPluginKeyPrompt];
             [delegate mobileAuthenticationRequestClient:self didReceiveFingerprintChallengeResponse:result
                                          withPrompt:prompt withCallbackId:command.callbackId];
+        } else if ([OGCDVPluginMobileAuthenticationMethodFido isEqualToString:method]) {
+            [delegate mobileAuthenticationRequestClient:self didReceiveFidoChallengeResponse:result
+                                         withCallbackId:command.callbackId];
         } else {
             [self sendErrorResultForCallbackId:command.callbackId
                                  withErrorCode:OGCDVPluginErrCodeInvalidMobileAuthenticationMethod

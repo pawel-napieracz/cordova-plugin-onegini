@@ -27,6 +27,7 @@ import org.json.JSONException;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationHandler;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.ConfirmationCallback;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.FidoCallback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.FingerprintCallback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.PinCallback;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
@@ -82,6 +83,9 @@ public class MobileAuthenticationRequestClient extends CordovaPlugin {
     } else if (callback instanceof FingerprintCallback) {
       final FingerprintCallback fingerprintCallback = (FingerprintCallback) callback;
       replyToFingerprintChallenge(fingerprintCallback, shouldAccept);
+    } else if (callback instanceof FidoCallback) {
+      final FidoCallback fidoCallback = (FidoCallback) callback;
+      replyToFidoChallenge(fidoCallback, shouldAccept);
     } else {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withPluginError(ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD, ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD)
@@ -131,6 +135,20 @@ public class MobileAuthenticationRequestClient extends CordovaPlugin {
           fingerprintCallback.getFingerprintCallback().acceptAuthenticationRequest();
         } else {
           fingerprintCallback.getFingerprintCallback().denyAuthenticationRequest();
+        }
+      }
+    });
+  }
+
+  private void replyToFidoChallenge(final FidoCallback fidoCallback, final boolean shouldAccept) throws JSONException {
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        if (shouldAccept) {
+          fidoCallback.getFidoCallback().acceptAuthenticationRequest();
+        }
+        else {
+          fidoCallback.getFidoCallback().denyAuthenticationRequest();
         }
       }
     });

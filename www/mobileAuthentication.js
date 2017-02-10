@@ -72,7 +72,6 @@ module.exports = (function () {
     return this;
   };
 
-
   MobileAuthenticationHandler.prototype.onFingerprintCaptured = function (cb) {
     this.callbacks.onFingerprintCaptured = cb;
     return this;
@@ -80,6 +79,11 @@ module.exports = (function () {
 
   MobileAuthenticationHandler.prototype.onFingerprintFailed = function (cb) {
     this.callbacks.onFingerprintFailed = cb;
+    return this;
+  };
+
+  MobileAuthenticationHandler.prototype.onFidoRequest = function (cb) {
+    this.callbacks.onFidoRequest = cb;
     return this;
   };
 

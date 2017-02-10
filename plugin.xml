@@ -151,7 +151,7 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
     <!-- SDK binary -->
-    <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS-5.02.00.a" framework="true"/>
+    <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS.a" framework="true"/>
 
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
@@ -294,7 +294,7 @@
                  target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AuthenticatorUtil.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/RetrofitResponseUtil.java"
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/OkHttpResponseUtil.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticationHandler.java"
@@ -336,6 +336,8 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/PinCallback.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/FingerprintCallback.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/FidoCallback.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
   </platform>
 </plugin>

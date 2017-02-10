@@ -19,7 +19,7 @@
 @interface OGCDVAuthenticatorsClientHelper : NSObject
 
 + (NSDictionary *)dictionaryFromAuthenticator:(ONGAuthenticator *)authenticator;
-+ (ONGAuthenticator *)authenticatorFromArguments:(NSSet<ONGAuthenticator *> *)registeredAuthenticators options:
++ (ONGAuthenticator *)authenticatorFromArguments:(NSSet<ONGAuthenticator *> *)authenticators options:
     (NSDictionary *)options;
 
 @end

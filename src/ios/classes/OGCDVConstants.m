@@ -42,17 +42,18 @@ NSString *const OGCDVPluginClassMobileAuthenticationRequestClient = @"OneginiMob
 
 NSString *const OGCDVPluginAuthenticatorTypePin = @"PIN";
 NSString *const OGCDVPluginAuthenticatorTypeTouchId = @"Fingerprint";
+NSString *const OGCDVPluginAuthenticatorTypeFido = @"FIDO";
 
 NSString *const OGCDVPluginEventSuccess = @"onSuccess";
 NSString *const OGCDVPluginEventConfirmationRequest = @"onConfirmationRequest";
 NSString *const OGCDVPluginEventPinRequest = @"onPinRequest";
 NSString *const OGCDVPluginEventCreatePinRequest = @"onCreatePinRequest";
 NSString *const OGCDVPluginEventFingerprintRequest = @"onFingerprintRequest";
+NSString *const OGCDVPluginEventFidoRequest = @"onFidoRequest";
 
 NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification = @"OGCDVDidReceiveRegistrationCallbackURLNotification";
 
 NSString *const OGCDVPluginErrDescriptionInternalError = @"Onegini: Internal plugin error";
-NSString *const OGCDVPluginErrDescriptionIllegalArgumentProfile = @"Onegini: Argument Provided is not a valid profile object";
 NSString *const OGCDVPluginErrDescriptionProfileNotRegistered = @"Onegini: No registered user found.";
 NSString *const OGCDVPluginErrDescriptionUserAlreadyAuthenticated = @"Onegini: User already authenticated.";
 NSString *const OGCDVPluginErrDescriptionNoUserAuthenticated = @"Onegini: No user authenticated.";
@@ -61,19 +62,13 @@ NSString *const OGCDVPluginErrDescriptionCreatePinNoRegistrationInProgress = @"O
 NSString *const OGCDVPluginErrDescriptionProvidePinNoAuthenticationInProgress = @"Onegini: providePin called, but no pin authentication in progress.";
 NSString *const OGCDVPluginErrDescriptionFingerprintNoAuthenticationInProgress = @"Onegini: received reply for fingerprint authentication, but no fingerprint authentication in progress.";
 NSString *const OGCDVPluginErrDescriptionInvalidMobileAuthenticationMethod = @"Onegini: Invalid mobile authentication method";
-NSString *const OGCDVPluginErrDescriptionIncorrectPin = @"Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
 
 int const OGCDVPluginErrCodePluginInternalError = 8000;
-int const OGCDVPluginErrCodeConfiguration = 8001;
-int const OGCDVPluginErrCodeIllegalArgument = 8002;
 
 int const OGCDVPluginErrCodeProfileNotRegistered = 8003;
-int const OGCDVPluginErrCodeUserAlreadyAuthenticated = 8004;
 int const OGCDVPluginErrCodeNoUserAuthenticated = 8005;
 int const OGCDVPluginErrCodeNoSuchAuthenticator = 8006;
 int const OGCDVPluginErrCodeCreatePinNoRegistrationInProgress = 8007;
 int const OGCDVPluginErrCodeProvidePinNoAuthenticationInProgress = 8008;
 int const OGCDVPluginErrCodeFingerprintNoAuthenticationInProgress = 8009;
 int const OGCDVPluginErrCodeInvalidMobileAuthenticationMethod = 8010;
-int const OGCDVPluginErrCodeIoException = 8011;
-int const OGCDVPluginErrCodeIncorrectPin = 8012;

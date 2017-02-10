@@ -16,7 +16,7 @@
 
 package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_ON_REGISTRATION_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_ON_REGISTRATION_REQUEST;
 
 import org.apache.cordova.CallbackContext;
 
@@ -97,7 +97,7 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
     registrationRequestCallbackContext.sendPluginResult(new PluginResultBuilder()
         .shouldKeepCallback()
         .withSuccess()
-        .withEvent(AUTH_EVENT_ON_REGISTRATION_REQUEST)
+        .withEvent(EVENT_ON_REGISTRATION_REQUEST)
         .withUri(uri)
         .build());
 

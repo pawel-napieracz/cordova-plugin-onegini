@@ -16,18 +16,18 @@
 
 package com.onegini.mobile.sdk.cordova;
 
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.TAG;
+
 import android.content.Context;
 import android.util.Log;
+import com.onegini.mobile.sdk.android.client.OneginiClient;
+import com.onegini.mobile.sdk.android.client.OneginiClientBuilder;
+import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
 import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.FingerprintAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationHandler;
 import com.onegini.mobile.sdk.cordova.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
-import com.onegini.mobile.sdk.android.client.OneginiClient;
-import com.onegini.mobile.sdk.android.client.OneginiClientBuilder;
-import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
-
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.TAG;
 
 public class OneginiSDK {
   private static OneginiSDK instance;
@@ -70,7 +70,8 @@ public class OneginiSDK {
         .setMobileAuthenticationRequestHandler(mobileAuthenticationHandler)
         .setMobileAuthenticationPinRequestHandler(mobileAuthenticationHandler)
         .setFingerprintAuthenticatioRequestHandler(fingerprintAuthenticationRequestHandler)
-        .setMobileAuthenticationFingerprintRequestHandler(mobileAuthenticationHandler);
+        .setMobileAuthenticationFingerprintRequestHandler(mobileAuthenticationHandler)
+        .setMobileAuthenticationFidoRequestHandler(mobileAuthenticationHandler);
 
     return builder.build();
   }

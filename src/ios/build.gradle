@@ -18,6 +18,7 @@ apply plugin: 'maven'
 
 def pluginSDKiOSDir = 'OneginiSDKiOS'
 def headersDir = pluginSDKiOSDir + '/Headers'
+def fidoPluginExtras = new File('../../../cordova-plugin-onegini-fido/src/ios/build.gradle')
 
 buildscript {
   repositories {
@@ -32,7 +33,7 @@ allprojects {
     mavenCentral()
 
     maven {
-      url "https://repo.onegini.com/artifactory/onegini-sdk"
+      url "https://repo.onegini.com/artifactory/public"
       credentials {
         if (project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
           username artifactory_user
@@ -47,34 +48,46 @@ allprojects {
 }
 
 configurations {
-  compile
+  sdk
+  fido
 }
 
 dependencies {
-  // The onegini sdk
-  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.02.00@a'
-  compile 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.02.00:headers@zip'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.02.00@a'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.02.00:headers@zip'
+
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:5.02.00@a'
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:5.02.00:headers@zip'
 }
 
 task prepareTargetDirectory {
-  delete fileTree(dir: pluginSDKiOSDir)
-  file(pluginSDKiOSDir).mkdirs();
-  file(headersDir).mkdirs();
+  doLast{
+    delete fileTree(dir: pluginSDKiOSDir)
+    file(pluginSDKiOSDir).mkdirs()
+    file(headersDir).mkdirs()
+  }
 }
 
 task downloadLibs(type: Copy, dependsOn: prepareTargetDirectory) {
   into(pluginSDKiOSDir)
-  from(configurations.compile)
+  if (fidoPluginExtras.exists()) {
+    from configurations.fido
+  } else {
+    from configurations.sdk
+  }
+
+  rename('libOneginiSDKiOS(.*)-(.*).a$', "libOneginiSDKiOS.a")
 }
 
 task resolveDependencies(type: Copy, dependsOn: downloadLibs) {
   def headersPackage
 
-  configurations.compile.each {
+  configurations.sdk.each {
     if (it.name.endsWith(".zip")) {
-      headersPackage = it.absoluteFile;
+      headersPackage = it.absoluteFile
     }
   }
   from zipTree(headersPackage)
   into headersDir
+  exclude '*.zip'
 }

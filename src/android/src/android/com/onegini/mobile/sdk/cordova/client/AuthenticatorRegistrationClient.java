@@ -95,7 +95,13 @@ public class AuthenticatorRegistrationClient extends CordovaPlugin {
 
     PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
     authenticatorRegistrationHandler = new AuthenticatorRegistrationHandler(callbackContext);
-    getOneginiClient().getUserClient().registerAuthenticator(authenticator, authenticatorRegistrationHandler);
+
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        getOneginiClient().getUserClient().registerAuthenticator(authenticator, authenticatorRegistrationHandler);
+      }
+    });
   }
 
   private void providePin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {

@@ -34,6 +34,7 @@ public interface OneginiCordovaPluginConstants {
   String PARAM_ACCEPT = "accept";
   String PARAM_ERROR_CODE = "code";
   String PARAM_ERROR_DESCRIPTION = "description";
+  String PARAM_ANONYMOUS = "anonymous";
 
   // Error descriptions
   String ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR = "Onegini: Internal plugin error";
@@ -78,9 +79,7 @@ public interface OneginiCordovaPluginConstants {
   String EVENT_FINGERPRINT_FAILED = "onFingerprintFailed";
   String EVENT_FINGERPRINT_CAPTURED = "onFingerprintCaptured";
   String EVENT_ON_REGISTRATION_REQUEST = "onRegistrationRequest";
-
-  // Values
-  int PIN_LENGTH = 5;
+  String EVENT_FIDO_REQUEST = "onFidoRequest";
 
   // Extras
   String EXTRA_MOBILE_AUTHENTICATION = "com.onegini.CordovaPluginMobileAuthenticationExtra";
