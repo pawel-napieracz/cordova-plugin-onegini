@@ -159,7 +159,7 @@ NSString *const keyURL = @"url";
         [registrationWebView loadRequest:urlRequest];
 
         CATransition *transition = [CATransition new];
-        transition.type = kCATransitionPush;
+        transition.type = kCATransitionMoveIn;
         transition.subtype = kCATransitionFromRight;
         [self.viewController.view addSubview:registrationWebView];
         [self.viewController.view.layer addAnimation:transition forKey:@"transition"];
@@ -189,7 +189,7 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
         [self handleRegistrationCallbackURL:navigationAction.request.URL];
 
         CATransition *transition = [CATransition new];
-        transition.type = kCATransitionPush;
+        transition.type = kCATransitionMoveIn;
         transition.subtype = kCATransitionFromLeft;
         [registrationWebView removeFromSuperview];
         [self.viewController.view.layer addAnimation:transition forKey:@"transition"];
