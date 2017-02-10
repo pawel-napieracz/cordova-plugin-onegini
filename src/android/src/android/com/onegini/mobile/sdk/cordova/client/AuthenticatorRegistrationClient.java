@@ -18,9 +18,11 @@ package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
 
 import java.util.Set;
@@ -30,13 +32,13 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
+import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
+import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.AuthenticatorDeregistrationHandler;
 import com.onegini.mobile.sdk.cordova.handler.AuthenticatorRegistrationHandler;
 import com.onegini.mobile.sdk.cordova.handler.PinAuthenticationRequestHandler;
-import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
-import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
-import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
@@ -45,6 +47,7 @@ public class AuthenticatorRegistrationClient extends CordovaPlugin {
   private static final String ACTION_START = "start";
   private static final String ACTION_PROVIDE_PIN = "providePin";
   private static final String ACTION_DEREGISTER = "deregister";
+  private static final String ACTION_CANCEL = "cancelFlow";
 
   private AuthenticatorRegistrationHandler authenticatorRegistrationHandler;
 
@@ -58,6 +61,9 @@ public class AuthenticatorRegistrationClient extends CordovaPlugin {
       return true;
     } else if (ACTION_DEREGISTER.equals(action)) {
       deregister(args, callbackContext);
+      return true;
+    } else if (ACTION_CANCEL.equals(action)) {
+      cancelFlow(callbackContext);
       return true;
     }
     return false;
@@ -140,6 +146,12 @@ public class AuthenticatorRegistrationClient extends CordovaPlugin {
 
     AuthenticatorDeregistrationHandler authenticationDeregistrationHandler = new AuthenticatorDeregistrationHandler(callbackContext);
     getOneginiClient().getUserClient().deregisterAuthenticator(authenticator, authenticationDeregistrationHandler);
+  }
+
+  private void cancelFlow(final CallbackContext callbackContext) {
+    callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withPluginError(ERROR_DESCRIPTION_OPERATION_CANCELED, ERROR_CODE_OPERATION_CANCELED)
+        .build());
   }
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {

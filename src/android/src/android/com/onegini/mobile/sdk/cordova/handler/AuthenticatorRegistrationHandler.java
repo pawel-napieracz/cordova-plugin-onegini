@@ -16,7 +16,7 @@
 
 package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_SUCCESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_SUCCESS;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -36,7 +36,7 @@ public class AuthenticatorRegistrationHandler implements OneginiAuthenticatorReg
   public void onSuccess() {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .withAuthenticationEvent(AUTH_EVENT_SUCCESS)
+        .withEvent(EVENT_SUCCESS)
         .build();
 
     sendPluginResult(pluginResult);

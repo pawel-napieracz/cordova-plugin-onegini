@@ -16,9 +16,9 @@
 
 package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_CAPTURED;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_FAILED;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_PIN_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_FINGERPRINT_CAPTURED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_FINGERPRINT_FAILED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_PIN_REQUEST;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -108,7 +108,7 @@ public class MobileAuthenticationHandler
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_PIN_REQUEST)
+        .withEvent(EVENT_PIN_REQUEST)
         .withRemainingFailureCount(authenticationAttemptCounter.getRemainingAttempts())
         .withMaxFailureCount(authenticationAttemptCounter.getMaxAttempts())
         .withOneginiMobileAuthenticationRequest(pinCallback.getMobileAuthenticationRequest())
@@ -134,7 +134,7 @@ public class MobileAuthenticationHandler
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_FAILED)
+        .withEvent(EVENT_FINGERPRINT_FAILED)
         .withOneginiMobileAuthenticationRequest(fingerprintCallback.getMobileAuthenticationRequest())
         .build());
   }
@@ -147,7 +147,7 @@ public class MobileAuthenticationHandler
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_CAPTURED)
+        .withEvent(EVENT_FINGERPRINT_CAPTURED)
         .withOneginiMobileAuthenticationRequest(fingerprintCallback.getMobileAuthenticationRequest())
         .build());
   }
@@ -198,7 +198,7 @@ public class MobileAuthenticationHandler
     pluginResultBuilder
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(callback.getAuthenticationRequestEventName())
+        .withEvent(callback.getAuthenticationRequestEventName())
         .withOneginiMobileAuthenticationRequest(mobileAuthenticationRequest);
 
     if (callback instanceof PinCallback) {

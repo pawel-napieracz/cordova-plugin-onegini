@@ -1,7 +1,7 @@
 # Generic
 .DS_Store
 .idea/
-cordova/
+/cordova/
 *.orig
 *.gradle/
 build/

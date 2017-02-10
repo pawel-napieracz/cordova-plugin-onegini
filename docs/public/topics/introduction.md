@@ -6,6 +6,7 @@ The following topic guides are available:
 
 * [Getting started](getting-started.md)
 * [Configuration](configuration.md)
+* [User registration](user-registration.md)
 * [User authentication](user-authentication.md)
 * [User authentication with fingerprint](user-authentication-with-fingerprint.md)
 * [Change PIN](change-pin.md)

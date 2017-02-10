@@ -28,21 +28,21 @@ module.exports = (function () {
           throw new TypeError('Onegini: missing "pin" argument for providePin');
         }
 
-        utils.callbackExec(client, 'providePin', options, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'providePin', options, callSuccessCallback, callErrorCallback);
       },
 
       fallbackToPin: function () {
-        utils.promiseOrCallbackExec(client, 'fallbackToPin');
+        utils.onceExec(client, 'fallbackToPin');
       },
 
       acceptFingerprint: function (options) {
         options = utils.getOptionsWithDefaults(options, {}, 'iosPrompt');
         options.accept = true;
-        utils.callbackExec(client, 'respondToFingerprintRequest', options, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'respondToFingerprintRequest', options, callSuccessCallback, callErrorCallback);
       },
 
       denyFingerprint: function () {
-        utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
+        utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, callSuccessCallback, callErrorCallback)
       },
 
       createPin: function (options) {
@@ -51,17 +51,22 @@ module.exports = (function () {
           throw new TypeError('Onegini: missing "pin" argument for createPin');
         }
 
-        utils.callbackExec(client, 'createPin', options, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'createPin', options, callSuccessCallback, callErrorCallback);
+      },
+
+      handleRegistrationUrl: function(options) {
+        options = utils.getOptionsWithDefaults(options, {}, 'url');
+        utils.callbackExec(client, 'respondToRegistrationRequest', options, callSuccessCallback, callErrorCallback);
       },
 
       cancel: function () {
-        utils.callbackExec(client, 'cancelFlow', {}, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'cancelFlow', {}, callSuccessCallback, callErrorCallback);
       }
     };
 
     function callSuccessCallback(options) {
-      var event = options.authenticationEvent;
-      delete options.authenticationEvent;
+      var event = options.pluginEvent;
+      delete options.pluginEvent;
 
       if (self.callbacks[event]) {
         self.callbacks[event](self.callbackActions, options);
@@ -69,7 +74,12 @@ module.exports = (function () {
     }
 
     function callErrorCallback(err) {
-      self.callbacks.onError(err);
+      if (self.callbacks.onError) {
+        self.callbacks.onError(err);
+      } else {
+        console.warn('Onegini: An Error occurred but no error callback was registered');
+        console.error('Onegini: ', err);
+      }
     }
 
     utils.callbackExec(client, action, options, callSuccessCallback, callErrorCallback)
@@ -97,6 +107,11 @@ module.exports = (function () {
 
   AuthenticationHandler.prototype.onFingerprintFailed = function (cb) {
     this.callbacks.onFingerprintFailed = cb;
+    return this;
+  };
+
+  AuthenticationHandler.prototype.onRegistrationRequest = function (cb) {
+    this.callbacks.onRegistrationRequest = cb;
     return this;
   };
 
