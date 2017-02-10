@@ -27,7 +27,7 @@
     self.pinChallenge = nil;
     self.fingerprintChallenge = nil;
     NSDictionary *result = @{
-        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventSuccess
+        OGCDVPluginKeyEvent: OGCDVPluginEventSuccess
     };
 
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:self.authenticationCallbackId];
@@ -44,7 +44,7 @@
 {
     self.pinChallenge = challenge;
     NSDictionary *result = @{
-        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventPinRequest,
+        OGCDVPluginKeyEvent: OGCDVPluginEventPinRequest,
         OGCDVPluginKeyMaxFailureCount: @(challenge.maxFailureCount),
         OGCDVPluginKeyRemainingFailureCount: @(challenge.remainingFailureCount)
     };
@@ -59,7 +59,7 @@
     self.fingerprintChallenge = challenge;
 
     NSDictionary *result = @{
-        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventFingerprintRequest
+        OGCDVPluginKeyEvent: OGCDVPluginEventFingerprintRequest
     };
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
     [pluginResult setKeepCallbackAsBool:YES];

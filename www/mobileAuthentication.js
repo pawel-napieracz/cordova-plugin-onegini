@@ -42,8 +42,8 @@ module.exports = (function () {
     };
 
     function callSuccessCallback(options) {
-      var event = options.authenticationEvent;
-      delete options.authenticationEvent;
+      var event = options.pluginEvent;
+      delete options.pluginEvent;
 
       if (self.callbacks[event]) {
         self.callbacks[event](self.callbackActions, options);

@@ -43,10 +43,10 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
     [operationQueue setMaxConcurrentOperationCount:1];
     challengeReceiversCallbackIds = [[NSMutableDictionary alloc] init];
     authenticationEventsForMethods = @{
-        OGCDVPluginMobileAuthenticationMethodConfirmation: OGCDVPluginAuthEventConfirmationRequest,
-        OGCDVPluginMobileAuthenticationMethodPin: OGCDVPluginAuthEventPinRequest,
-        OGCDVPluginMobileAuthenticationMethodFingerprint: OGCDVPluginAuthEventFingerprintRequest,
-        OGCDVPluginMobileAuthenticationMethodFido: OGCDVPluginAuthEventFidoRequest
+        OGCDVPluginMobileAuthenticationMethodConfirmation: OGCDVPluginEventConfirmationRequest,
+        OGCDVPluginMobileAuthenticationMethodPin: OGCDVPluginEventPinRequest,
+        OGCDVPluginMobileAuthenticationMethodFingerprint: OGCDVPluginEventFingerprintRequest,
+        OGCDVPluginMobileAuthenticationMethodFido: OGCDVPluginEventFidoRequest
     };
 
     sharedInstance = self;

@@ -73,15 +73,16 @@ public interface OneginiCordovaPluginConstants {
 
   int ERROR_CODE_OPERATION_CANCELED = 9006;
 
-  // Authentication methods
-  String AUTH_EVENT_SUCCESS = "onSuccess";
-  String AUTH_EVENT_CONFIRMATION_REQUEST = "onConfirmationRequest";
-  String AUTH_EVENT_PIN_REQUEST = "onPinRequest";
-  String AUTH_EVENT_CREATE_PIN_REQUEST = "onCreatePinRequest";
-  String AUTH_EVENT_FINGERPRINT_REQUEST = "onFingerprintRequest";
-  String AUTH_EVENT_FIDO_REQUEST = "onFidoRequest";
-  String AUTH_EVENT_FINGERPRINT_FAILED = "onFingerprintFailed";
-  String AUTH_EVENT_FINGERPRINT_CAPTURED = "onFingerprintCaptured";
+  // methods
+  String EVENT_SUCCESS = "onSuccess";
+  String EVENT_CONFIRMATION_REQUEST = "onConfirmationRequest";
+  String EVENT_PIN_REQUEST = "onPinRequest";
+  String EVENT_CREATE_PIN_REQUEST = "onCreatePinRequest";
+  String EVENT_FINGERPRINT_REQUEST = "onFingerprintRequest";
+  String EVENT_FINGERPRINT_FAILED = "onFingerprintFailed";
+  String EVENT_FINGERPRINT_CAPTURED = "onFingerprintCaptured";
+  String EVENT_ON_REGISTRATION_REQUEST = "onRegistrationRequest";
+  String EVENT_FIDO_REQUEST = "onFidoRequest";
 
   // Extras
   String EXTRA_MOBILE_AUTHENTICATION = "com.onegini.CordovaPluginMobileAuthenticationExtra";

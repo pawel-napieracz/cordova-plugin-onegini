@@ -16,8 +16,10 @@
 
 #import "CDVPlugin+OGCDV.h"
 
-@interface OGCDVUrlClient : CDVPlugin
+@interface OGCDVTestUtils : CDVPlugin<NSURLSessionDelegate, NSURLSessionTaskDelegate>
 
-- (void)setUserId:(NSString *)userId;
+- (void)setUserId:(CDVInvokedUrlCommand *)command;
+- (void)setPreference:(CDVInvokedUrlCommand *)command;
+- (void)getRedirectUrl:(CDVInvokedUrlCommand *)registrationUrl;
 
 @end

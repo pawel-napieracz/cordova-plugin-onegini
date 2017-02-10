@@ -66,7 +66,7 @@ public class UserAuthenticationClient extends CordovaPlugin {
   private static final String ACTION_RESPOND_TO_FIDO_REQUEST = "respondToFidoRequest";
   private static final String ACTION_FALLBACK_TO_PIN = "fallbackToPin";
   private static final String ACTION_REAUTHENTICATE = "reauthenticate";
-  private final static String ACTION_LOGOUT = "logout";
+  private static final String ACTION_LOGOUT = "logout";
   private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
   private static final String ACTION_CANCEL_FLOW = "cancelFlow";
   private AuthenticationHandler authenticationHandler;

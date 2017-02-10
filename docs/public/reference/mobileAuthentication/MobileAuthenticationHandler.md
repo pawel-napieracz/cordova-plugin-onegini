@@ -49,6 +49,7 @@ The following methods can be registered to handle different mobile authenticatio
 - [`onFingerprintRequest`](#onfingerprintrequest)
 - [`onFingerprintCaptured`](#onfingerprintcaptured)
 - [`onFingerprintFailed`](#onfingerprintfailed)
+- [`onFidoRequest`](#onfidorequest)
 - [`onSuccess`](#onsuccess)
 - [`onError`](#onerror)
 
@@ -105,6 +106,16 @@ This method is called when the fingerprint previously detected was not recognize
 ```js
 handler.onFingerprintFailed(() => {
   console.log("Fingerprint failed!");
+});
+```
+
+### `onFidoRequest`
+
+This method is called on a mobile authentication request with the **push with FIDO method.** The request can either be accepted using `actions.accept` or denied using `actions.deny`.
+
+```js
+handler.onFidoRequest((actions, request) => {
+  actions.accept();
 });
 ```
 
