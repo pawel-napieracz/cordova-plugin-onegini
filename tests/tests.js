@@ -69,6 +69,10 @@ exports.defineAutoTests = function () {
     cordova.exec(successCb, failureCb, "OneginiTestUtils", "setUserId", userId);
   }
 
+  function setWebViewPreference(preferenceValue) {
+    cordova.exec(null, null, 'OneginiTestUtils', 'setPreference', ['OneginiWebView', preferenceValue]);
+  }
+
   /******** onegini *********/
 
   describe('onegini', function () {
@@ -192,7 +196,7 @@ exports.defineAutoTests = function () {
       });
 
       it("should be cancellable", function (done) {
-        cordova.exec(null, null, 'OneginiTestUtils', 'setPreference', ['OneginiWebView', 'default']);
+        setWebViewPreference('default');
         onegini.user.register()
             .onCreatePinRequest(function (actions) {
               actions.cancel();
@@ -211,7 +215,7 @@ exports.defineAutoTests = function () {
       });
 
       it("should work with callback action through JS", function (done) {
-        cordova.exec(null, null, 'OneginiTestUtils', 'setPreference', ['OneginiWebView', 'disabled']);
+        setWebViewPreference('disabled');
         onegini.user.register()
             .onRegistrationRequest(function (actions, options) {
               cordova.exec(function (registrationUrl) {
@@ -239,7 +243,7 @@ exports.defineAutoTests = function () {
       });
 
       it("should work with default WebView", function (done) {
-        cordova.exec(null, null, 'OneginiTestUtils', 'setPreference', ['OneginiWebView', 'default']);
+        setWebViewPreference('default');
         onegini.user.register()
             .onCreatePinRequest(function (actions, options) {
               expect(options.profileId).toBeDefined();
@@ -258,7 +262,7 @@ exports.defineAutoTests = function () {
 
       if (cordova.platformId === "ios") {
         it("should work with SFSafariViewController", function (done) {
-          cordova.exec(null, null, 'OneginiTestUtils', 'setPreference', ['OneginiWebView', 'SFSafariViewController']);
+          setWebViewPreference('SFSafariViewController');
           onegini.user.register()
               .onCreatePinRequest(function (actions, options) {
                 expect(options.profileId).toBeDefined();
