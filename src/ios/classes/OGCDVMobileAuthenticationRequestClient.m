@@ -46,7 +46,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
         OGCDVPluginMobileAuthenticationMethodConfirmation: OGCDVPluginEventConfirmationRequest,
         OGCDVPluginMobileAuthenticationMethodPin: OGCDVPluginEventPinRequest,
         OGCDVPluginMobileAuthenticationMethodFingerprint: OGCDVPluginEventFingerprintRequest,
-        OGCDVPluginMobileAuthenticationMethodFido: OGCDVPluginAuthEventFidoRequest
+        OGCDVPluginMobileAuthenticationMethodFido: OGCDVPluginEventFidoRequest
     };
 
     sharedInstance = self;

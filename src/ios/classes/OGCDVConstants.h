@@ -47,7 +47,7 @@ extern NSString *const OGCDVPluginEventConfirmationRequest;
 extern NSString *const OGCDVPluginEventPinRequest;
 extern NSString *const OGCDVPluginEventCreatePinRequest;
 extern NSString *const OGCDVPluginEventFingerprintRequest;
-extern NSString *const OGCDVPluginAuthEventFidoRequest;
+extern NSString *const OGCDVPluginEventFidoRequest;
 
 extern NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification;
 
