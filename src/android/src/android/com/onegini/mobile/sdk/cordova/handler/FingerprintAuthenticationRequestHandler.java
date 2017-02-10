@@ -60,7 +60,7 @@ public class FingerprintAuthenticationRequestHandler implements OneginiFingerpri
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_REQUEST)
+        .withEvent(AUTH_EVENT_FINGERPRINT_REQUEST)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -71,7 +71,7 @@ public class FingerprintAuthenticationRequestHandler implements OneginiFingerpri
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_FAILED)
+        .withEvent(AUTH_EVENT_FINGERPRINT_FAILED)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -82,7 +82,7 @@ public class FingerprintAuthenticationRequestHandler implements OneginiFingerpri
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_CAPTURED)
+        .withEvent(AUTH_EVENT_FINGERPRINT_CAPTURED)
         .build();
 
     sendStartAuthenticationResult(pluginResult);

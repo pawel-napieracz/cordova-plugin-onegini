@@ -97,7 +97,7 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
     registrationRequestCallbackContext.sendPluginResult(new PluginResultBuilder()
         .shouldKeepCallback()
         .withSuccess()
-        .withAuthenticationEvent(AUTH_EVENT_ON_REGISTRATION_REQUEST)
+        .withEvent(AUTH_EVENT_ON_REGISTRATION_REQUEST)
         .withUri(uri)
         .build());
 

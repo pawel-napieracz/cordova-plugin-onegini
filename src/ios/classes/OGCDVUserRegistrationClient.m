@@ -129,7 +129,7 @@ NSString *const keyURL = @"url";
 - (void)sendRegistrationRequestEvent:(NSURL *)url
 {
     NSDictionary *message = @{
-        OGCDVPluginKeyAuthenticationEvent: eventRegistrationRequest,
+        OGCDVPluginKeyEvent: eventRegistrationRequest,
         keyURL: url.absoluteString
     };
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
@@ -203,7 +203,7 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
 {
-    [self.viewController dismissViewControllerAnimated:true completion:nil];
+    [self.viewController dismissViewControllerAnimated:YES completion:nil];
     if (self.registrationRequestChallenge) {
         [self.registrationRequestChallenge.sender cancelChallenge:self.registrationRequestChallenge];
     }
@@ -220,7 +220,7 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
     self.createPinChallenge = challenge;
 
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
-    result[OGCDVPluginKeyAuthenticationEvent] = OGCDVPluginAuthEventCreatePinRequest;
+    result[OGCDVPluginKeyEvent] = OGCDVPluginEventCreatePinRequest;
     result[OGCDVPluginKeyProfileId] = challenge.userProfile.profileId;
     result[OGCDVPluginKeyPinLength] = @(challenge.pinLength);
 
@@ -272,7 +272,7 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
     [[NSNotificationCenter defaultCenter] removeObserver:self name:OGCDVDidReceiveRegistrationCallbackURLNotification object:nil];
 
     NSDictionary *result = @{
-        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventSuccess,
+        OGCDVPluginKeyEvent: OGCDVPluginEventSuccess,
         OGCDVPluginKeyProfileId: userProfile.profileId
     };
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:self.callbackId];

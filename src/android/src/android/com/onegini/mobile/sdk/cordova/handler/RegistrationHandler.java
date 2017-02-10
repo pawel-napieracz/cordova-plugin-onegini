@@ -43,7 +43,7 @@ public class RegistrationHandler implements OneginiRegistrationHandler {
     RegistrationRequestHandler.setRegistrationRequestCallbackContext(null);
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .withAuthenticationEvent(AUTH_EVENT_SUCCESS)
+        .withEvent(AUTH_EVENT_SUCCESS)
         .withProfileId(userProfile)
         .build();
 

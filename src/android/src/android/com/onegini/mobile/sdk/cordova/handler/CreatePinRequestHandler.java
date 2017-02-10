@@ -65,7 +65,7 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
     PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_CREATE_PIN_REQUEST)
+        .withEvent(AUTH_EVENT_CREATE_PIN_REQUEST)
         .withPinLength(PIN_LENGTH)
         .withProfileId(userProfile)
         .build();
@@ -79,7 +79,7 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
         .withOneginiError(oneginiPinValidationError)
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_CREATE_PIN_REQUEST)
+        .withEvent(AUTH_EVENT_CREATE_PIN_REQUEST)
         .withPinLength(PIN_LENGTH)
         .build();
 

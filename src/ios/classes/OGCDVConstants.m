@@ -31,7 +31,7 @@ NSString *const OGCDVPluginKeyAuthenticatorName = @"name";
 NSString *const OGCDVPluginKeyMethod = @"method";
 NSString *const OGCDVPluginKeyType = @"type";
 NSString *const OGCDVPluginKeyMessage = @"message";
-NSString *const OGCDVPluginKeyAuthenticationEvent = @"authenticationEvent";
+NSString *const OGCDVPluginKeyEvent = @"pluginEvent";
 NSString *const OGCDVPluginKeyAccept = @"accept";
 NSString *const OGCDVPluginKeyPrompt = @"iosPrompt";
 NSString *const OGCDVPluginKeyErrorCode = @"code";
@@ -43,11 +43,11 @@ NSString *const OGCDVPluginClassMobileAuthenticationRequestClient = @"OneginiMob
 NSString *const OGCDVPluginAuthenticatorTypePin = @"PIN";
 NSString *const OGCDVPluginAuthenticatorTypeTouchId = @"Fingerprint";
 
-NSString *const OGCDVPluginAuthEventSuccess = @"onSuccess";
-NSString *const OGCDVPluginAuthEventConfirmationRequest = @"onConfirmationRequest";
-NSString *const OGCDVPluginAuthEventPinRequest = @"onPinRequest";
-NSString *const OGCDVPluginAuthEventCreatePinRequest = @"onCreatePinRequest";
-NSString *const OGCDVPluginAuthEventFingerprintRequest = @"onFingerprintRequest";
+NSString *const OGCDVPluginEventSuccess = @"onSuccess";
+NSString *const OGCDVPluginEventConfirmationRequest = @"onConfirmationRequest";
+NSString *const OGCDVPluginEventPinRequest = @"onPinRequest";
+NSString *const OGCDVPluginEventCreatePinRequest = @"onCreatePinRequest";
+NSString *const OGCDVPluginEventFingerprintRequest = @"onFingerprintRequest";
 
 NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification = @"OGCDVDidReceiveRegistrationCallbackURLNotification";
 

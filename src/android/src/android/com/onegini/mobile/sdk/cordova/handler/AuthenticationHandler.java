@@ -38,7 +38,7 @@ public class AuthenticationHandler implements OneginiAuthenticationHandler {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .withProfileId(userProfile)
-        .withAuthenticationEvent(AUTH_EVENT_SUCCESS)
+        .withEvent(AUTH_EVENT_SUCCESS)
         .build();
 
     sendPluginResult(pluginResult);

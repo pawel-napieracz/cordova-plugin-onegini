@@ -105,9 +105,9 @@ public class PluginResultBuilder {
     return this;
   }
 
-  public PluginResultBuilder withAuthenticationEvent(final String eventName) {
+  public PluginResultBuilder withEvent(final String eventName) {
     try {
-      payload.put("authenticationEvent", eventName);
+      payload.put("pluginEvent", eventName);
     } catch (JSONException e) {
       handleException(e);
     }

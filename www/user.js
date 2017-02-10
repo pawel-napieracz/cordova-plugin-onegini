@@ -56,7 +56,7 @@ module.exports = (function () {
 
       handleRegistrationUrl: function(options) {
         options = utils.getOptionsWithDefaults(options, {}, 'url');
-        utils.callbackExec(client, 'respondToRegistrationRequest', options, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.callbackExec(client, 'respondToRegistrationRequest', options, callSuccessCallback, callErrorCallback);
       },
 
       cancel: function () {
@@ -65,8 +65,8 @@ module.exports = (function () {
     };
 
     function callSuccessCallback(options) {
-      var event = options.authenticationEvent;
-      delete options.authenticationEvent;
+      var event = options.pluginEvent;
+      delete options.pluginEvent;
 
       if (self.callbacks[event]) {
         self.callbacks[event](self.callbackActions, options);

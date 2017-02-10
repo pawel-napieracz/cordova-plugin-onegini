@@ -36,7 +36,7 @@ public class AuthenticatorRegistrationHandler implements OneginiAuthenticatorReg
   public void onSuccess() {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
-        .withAuthenticationEvent(AUTH_EVENT_SUCCESS)
+        .withEvent(AUTH_EVENT_SUCCESS)
         .build();
 
     sendPluginResult(pluginResult);
