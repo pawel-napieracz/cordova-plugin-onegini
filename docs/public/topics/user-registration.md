@@ -2,11 +2,11 @@
 
 ## Introduction
 
-User registration is a fundamental part of Onegini. As developer you have a couple options to handle process:
+User registration is a fundamental part of the Onegini Mobile Security Platform. As developer you have a couple options to handle this process:
 
-## Using default webview.
+## Using the default WebView.
 
-To register a user with a simple webview or browser to login on your Token Server:
+Example to let the user register using a simple WebView or browser:
 ```js
 onegini.user.register()
   .onCreatePinRequest((actions, options) => {
@@ -37,10 +37,12 @@ To enable `SFSafariViewController` set the following preference in your `config.
 </platform>
 ```
 
-iOS also needs know about your redirect URL scheme. This is done through setting `CFBundleURLSchemes` in your `-Info.plist`,
-refer to [Apple's documentation](https://developer.apple.com/library/content/documentation/Carbon/Conceptual/LaunchServicesConcepts/LSCConcepts/LSCConcepts.html) for further details.
+iOS also needs to know about your redirect URL scheme. This is done through setting `CFBundleURLSchemes` in your `-Info.plist`,
+refer to [Apple's documentation](https://developer.apple.com/library/content/documentation/Carbon/Conceptual/LaunchServicesConcepts/LSCConcepts/LSCConcepts.html) 
+for further details.
 
-The plugin will now use `SFSafariViewController` to open the registration endpoint. Note that `SFSafariViewController` is available on iOS 9 and later, the plugin will fall back to WKWebView on iOS 8.
+The plugin will now use `SFSafariViewController` to open the registration endpoint. Note that the `SFSafariViewController` is only available on iOS 9 and later, 
+the plugin will fall back to WKWebView on iOS 8.
 
 ## Using a JavaScript callback
 
