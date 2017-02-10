@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.onegini.ExampleAppCordova" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget
+    xmlns="http://www.w3.org/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    id="com.onegini.ExampleAppCordova"
+    version="2.0.0">
     <name>ExampleApp</name>
     <description>
         Onegini Cordova Example app
@@ -27,6 +32,14 @@
 
         <!-- Necessary to make sure that the deep app linking works properly -->
         <preference name="AndroidLaunchMode" value="singleTask"/>
+
+        <edit-config file="AndroidManifest.xml" target="/manifest" mode="merge">
+            <manifest xmlns:tools="http://schemas.android.com/tools" />
+        </edit-config>
+        <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
+            <application android:allowBackup="false" />
+            <application tools:replace="android:allowBackup, android:label, android:icon" />
+        </edit-config>
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

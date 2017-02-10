@@ -86,6 +86,25 @@ export default {
             navigator.notification.alert('Something went wrong! ' + err.description);
             this.complete();
           });
+
+      onegini.mobileAuthentication.on('fido')
+          .onFidoRequest(function (actions, request) {
+            navigator.notification.confirm(request.message, function (buttonIndex) {
+              if (buttonIndex === 1) {
+                actions.accept();
+              }
+              else {
+                actions.deny();
+              }
+            }, 'Mobile Authentication Request', ['Accept', 'Reject']);
+          })
+          .onSuccess(function () {
+            alert('FIDO Mobile Authentication request success!');
+          })
+          .onError(function (err) {
+            alert('FIDO Mobile authentication request failed!');
+            console.error('FIDO Mobile authentication request failed: ', err);
+          });
     },
 
     accept: function() {
