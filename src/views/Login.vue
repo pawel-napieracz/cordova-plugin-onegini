@@ -87,6 +87,17 @@ export default {
         .onFingerprintFailed(() => {
           this.fingerprintStatus = 'No match!';
         })
+        .onFidoRequest((actions) => {
+          let callback = (result) => {
+            if (result == 1) {
+              actions.acceptFido();
+            } else {
+              actions.fallbackToPin();
+           }
+         }
+
+          navigator.notification.confirm('Login using FIDO?', callback, 'Authenticate', ['Continue','Use PIN']);
+        })
         .onSuccess(() => {
           this.$router.push('dashboard');
         })
