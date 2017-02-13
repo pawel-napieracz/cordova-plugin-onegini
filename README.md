@@ -17,6 +17,9 @@ Make sure you have the [SDK Configurator](https://github.com/Onegini/onegini-sdk
 (See the [getting started guide](https://docs.onegini.com/msp/latest/cordova-plugin/topics/getting-started.html#install-the-sdk-configurator) of the Onegini 
 Cordova Plugin)
 
+You need to have a valid Token Server configuration for the example app, see also the [getting started guide](https://docs.onegini.com/msp/latest/cordova-plugin/topics/getting-started.html#add-your-token-server-configuration). 
+The Config zip files can be downloaded from the [App Developer quickstart guide](https://docs.onegini.com/app-developer-quickstart.html#step5).
+
 ### Building
 Clone this repository
 ```sh
