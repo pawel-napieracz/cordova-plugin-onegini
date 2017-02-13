@@ -164,3 +164,40 @@ onegini.mobileAuthentication.on("fingerprint")
 ```
 
 The details of these handler methods are exactly the same as explained in the fingerprint authentication topic guide linked above. In particular, `onFingerprintCaptured` and `onFingerprintFailed` are only available on Android devices, due to the more restrictive nature of Touch Id for iOS. Additionally, care must be taken to implement `onPinRequest`, as the Onegini Cordova plugin will perform a fallback to pin in the case of multiple failed fingerprint requests.
+
+### Push with FIDO
+
+For devices that support it, it is also possible to allow mobile authentication requests for FIDO authenticators. Like push with PIN, this mobile authentication 
+method adds an extra layer of security, while often being more convenient for the user than PIN. The user is required to perform authentication with the 
+specified FIDO authenticator before the mobile authentication request is confirmed.
+
+The use of this mobile authentication method requires the FIDO authenticator specified in the mobile authentication request to have been registered for the user. 
+See the [User authentication with FIDO](user-authentication-with-fido.md) topic guide for more information.
+
+Handling a push with FIDO request is very similar to the other types of mobile authentication requests. 
+See [`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) for more details.
+
+**Example code to handle a push with FIDO mobile authentication requests:**
+
+```js
+onegini.mobileAuthentication.on("fido")
+    .onPinRequest((actions, request) => {
+      console.log("New mobile authentication request", request);
+
+      // We assume that on fallback, the user still accepts the request
+      // and provides a pin of "12346".
+      let pin = "12346";
+
+      actions.accept(pin);
+    })
+    .onFidoRequest((actions, request) => {
+        console.log("New mobile authentication request", request);
+    })
+    .onSuccess(() => {
+      alert("FIDO Mobile Authentication request success!");
+    })
+    .onError((err) => {
+      alert("FIDO Mobile authentication request failed!");
+      console.error("FIDO Mobile authentication request failed: ", err);
+    });
+```

@@ -42,8 +42,8 @@ module.exports = (function () {
     };
 
     function callSuccessCallback(options) {
-      var event = options.authenticationEvent;
-      delete options.authenticationEvent;
+      var event = options.pluginEvent;
+      delete options.pluginEvent;
 
       if (self.callbacks[event]) {
         self.callbacks[event](self.callbackActions, options);
@@ -72,7 +72,6 @@ module.exports = (function () {
     return this;
   };
 
-
   MobileAuthenticationHandler.prototype.onFingerprintCaptured = function (cb) {
     this.callbacks.onFingerprintCaptured = cb;
     return this;
@@ -80,6 +79,11 @@ module.exports = (function () {
 
   MobileAuthenticationHandler.prototype.onFingerprintFailed = function (cb) {
     this.callbacks.onFingerprintFailed = cb;
+    return this;
+  };
+
+  MobileAuthenticationHandler.prototype.onFidoRequest = function (cb) {
+    this.callbacks.onFidoRequest = cb;
     return this;
   };
 

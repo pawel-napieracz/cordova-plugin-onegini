@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
+#import <SafariServices/SafariServices.h>
 #import "CDVPlugin+OGCDV.h"
+#import <WebKit/WebKit.h>
 #import "OneginiSDK.h"
 
 @interface OGCDVUserRegistrationClient : CDVPlugin<ONGRegistrationDelegate>
-
-@property (nonatomic, copy) NSString *callbackId;
-@property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
-@property (nonatomic, copy) NSString *userId;
 
 + (id)sharedInstance;
 - (void)start:(CDVInvokedUrlCommand *)command;
@@ -29,5 +27,6 @@
 - (void)getUserProfiles:(CDVInvokedUrlCommand *)command;
 - (void)isUserRegistered:(CDVInvokedUrlCommand *)command;
 - (void)cancelFlow:(CDVInvokedUrlCommand *)command;
+- (void)respondToRegistrationRequest:(CDVInvokedUrlCommand *)command;
 
 @end

@@ -16,6 +16,8 @@
 
 package com.onegini.mobile.sdk.cordova.util;
 
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ANONYMOUS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_BODY;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_HEADERS;
@@ -23,10 +25,10 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PIN;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_SCOPES;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_URL;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.TAG;
 
-import java.util.ArrayList;
+import java.security.InvalidParameterException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -34,14 +36,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
-import com.squareup.okhttp.internal.http.HttpMethod;
-import retrofit.client.Header;
-import retrofit.client.Request;
-import retrofit.mime.TypedString;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.internal.http.HttpMethod;
 
 public class ActionArgumentsUtil {
+  public static final MediaType CONTENT_TYPE_PLAIN_TEXT = MediaType.parse("text/plain; charset=utf-8");
+  public static final String HEADER_KEY_CONTENT_TYPE = "Content-Type";
+
   public static String[] getScopesFromArguments(final JSONArray args) throws JSONException {
     final String[] scopesArray;
     final JSONArray scopesJSON;
@@ -69,19 +76,36 @@ public class ActionArgumentsUtil {
     return Callback.Method.valueOf(methodName.toUpperCase());
   }
 
-  public static boolean isFetchAnonymous(final JSONArray args) throws JSONException {
-    return args.getJSONObject(0).getBoolean("anonymous");
+  public static boolean isFetchAnonymous(final JSONObject options) throws JSONException {
+    return options.getBoolean(PARAM_ANONYMOUS);
   }
 
   @Nullable
   public static OneginiAuthenticator getAuthenticatorFromArguments(final JSONArray args,
                                                                    final Set<OneginiAuthenticator> availableAuthenticators) throws JSONException {
-    // TODO: Logic to search for authenticator id in the case of authenticator type = CUSTOM
-    final String authenticatorType = args.getJSONObject(0).getString(PARAM_AUTHENTICATOR_TYPE);
 
+    final JSONObject options = args.getJSONObject(0);
+    final String authenticatorType = options.getString(PARAM_AUTHENTICATOR_TYPE);
+    final boolean hasAuthenticatorId = options.has(PARAM_AUTHENTICATOR_ID);
+
+    if (hasAuthenticatorId) {
+      final String authenticatorId = options.getString(PARAM_AUTHENTICATOR_ID);
+      return getAuthenticatorByTypeAndId(availableAuthenticators, authenticatorType, authenticatorId);
+    } else {
+      return getAuthenticatorByType(availableAuthenticators, authenticatorType);
+    }
+  }
+
+  @Nullable
+  private static OneginiAuthenticator getAuthenticatorByType(final Set<OneginiAuthenticator> availableAuthenticators, final String targetType) {
     for (OneginiAuthenticator authenticator : availableAuthenticators) {
       final String type = AuthenticatorUtil.authenticatorTypeToString(authenticator.getType());
-      if (type != null && type.equals(authenticatorType)) {
+
+      if (type == null) {
+        continue;
+      }
+
+      if (type.equals(targetType)) {
         return authenticator;
       }
     }
@@ -89,55 +113,96 @@ public class ActionArgumentsUtil {
     return null;
   }
 
-  public static Request getRequestFromArguments(final JSONArray args) throws JSONException, IllegalArgumentException {
-    final String method = getMethodFromArguments(args);
-    final String url = getURLFromArguments(args);
-    final List<Header> headers = getHeadersFromArguments(args);
-    TypedString body = getBodyFromArguments(args);
+  @Nullable
+  private static OneginiAuthenticator getAuthenticatorByTypeAndId(final Set<OneginiAuthenticator> availableAuthenticators, final String targetType,
+                                                                  final String targetId) {
+    for (OneginiAuthenticator authenticator : availableAuthenticators) {
+      final String type = AuthenticatorUtil.authenticatorTypeToString(authenticator.getType());
+      final String id = authenticator.getId();
+
+      if (type == null || id == null) {
+        continue;
+      }
+
+      if (type.equals(targetType) && id.equals(targetId)) {
+        return authenticator;
+      }
+    }
+
+    return null;
+  }
+
+  public static Request getRequestFromArguments(final JSONObject options) throws JSONException, IllegalArgumentException {
+    final String method = getMethodFromOptions(options);
+    final String url = getURLFromOptions(options);
+    final Headers headers = getHeadersFromOptions(options);
+    RequestBody body = getBodyFromOptions(options, headers);
 
     if (methodDoesNotPermitRequestBody(method)) {
       body = null;
     }
 
-    return new Request(method, url, headers, body);
+    return new Request.Builder()
+        .url(url)
+        .method(method, body)
+        .headers(headers)
+        .build();
   }
 
   private static boolean methodDoesNotPermitRequestBody(final String method) {
     return !HttpMethod.permitsRequestBody(method);
   }
 
-  private static String getURLFromArguments(final JSONArray args) throws JSONException {
-    return args.getJSONObject(0).getString(PARAM_URL);
+  private static String getURLFromOptions(final JSONObject options) throws JSONException {
+    return options.getString(PARAM_URL);
   }
 
-  private static String getMethodFromArguments(final JSONArray args) throws JSONException {
-    return args.getJSONObject(0).getString(PARAM_METHOD);
+  private static String getMethodFromOptions(final JSONObject options) throws JSONException {
+    return options.getString(PARAM_METHOD);
   }
 
-  private static List<Header> getHeadersFromArguments(final JSONArray args) throws JSONException {
-    final JSONObject headersObj = args.getJSONObject(0).getJSONObject(PARAM_HEADERS);
-    final List<Header> headersList = new ArrayList<Header>();
+  private static Headers getHeadersFromOptions(final JSONObject options) throws JSONException {
+    final JSONObject headersObj = options.getJSONObject(PARAM_HEADERS);
     final Iterator<String> keys = headersObj.keys();
 
+    final Headers.Builder headersBuilder = new Headers.Builder();
     while (keys.hasNext()) {
       String name = keys.next();
       String value = headersObj.getString(name);
-      final Header header = new Header(name, value);
-      headersList.add(header);
+      headersBuilder.add(name, value);
     }
 
-    return headersList;
+    return headersBuilder.build();
   }
 
-  private static TypedString getBodyFromArguments(final JSONArray args) {
-    TypedString body;
+  private static RequestBody getBodyFromOptions(final JSONObject options, final Headers headers) {
+    RequestBody body;
+    MediaType contentType = getContentTypeForRequest(headers);
+
+    boolean isRequestWithoutBody = !options.has(PARAM_BODY);
+    if (isRequestWithoutBody) {
+      return RequestBody.create(contentType, "");
+    }
 
     try {
-      body = new TypedString(args.getJSONObject(0).getString(PARAM_BODY));
+      body = RequestBody.create(contentType, options.getString(PARAM_BODY));
     } catch (JSONException e) {
-      body = new TypedString("");
+      String message = "Error while trying to get the request body from the javascript method arguments";
+      Log.e(TAG, message, e);
+      throw new InvalidParameterException(message);
     }
 
     return body;
+  }
+
+  private static MediaType getContentTypeForRequest(final Headers headers) {
+    String contentTypeHeaderValue = headers.get(HEADER_KEY_CONTENT_TYPE);
+
+    if (contentTypeHeaderValue == null) {
+      return CONTENT_TYPE_PLAIN_TEXT;
+    }
+
+    MediaType contentType = MediaType.parse(contentTypeHeaderValue);
+    return contentType == null ? CONTENT_TYPE_PLAIN_TEXT : contentType;
   }
 }

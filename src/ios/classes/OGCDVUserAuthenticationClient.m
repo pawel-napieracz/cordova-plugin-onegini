@@ -97,17 +97,38 @@
     }];
 }
 
-- (void)fallbackToPin:(CDVInvokedUrlCommand *)command
+- (void)respondToFidoRequest:(CDVInvokedUrlCommand *)command
 {
-    if (!self.fingerprintChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeFingerprintNoAuthenticationInProgress
-                                andMessage:OGCDVPluginErrDescriptionFingerprintNoAuthenticationInProgress];
+    if (!self.fidoChallenge) {
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeFidoNoAuthenticationInProgress
+                                andMessage:OGCDVPluginErrDescriptionFidoNoAuthenticationInProgress];
         return;
     }
 
     [self.commandDelegate runInBackground:^{
-        [self.fingerprintChallenge.sender respondWithPinFallbackForChallenge:self.fingerprintChallenge];
+        NSDictionary *options = command.arguments[0];
+        BOOL shouldNotAccept = ![options[OGCDVPluginKeyAccept] boolValue];
+
+        if (shouldNotAccept) {
+            [self.fidoChallenge.sender cancelChallenge:self.fidoChallenge];
+            return;
+        }
+
+        [self.fidoChallenge.sender respondWithFIDOForChallenge:self.fidoChallenge];
     }];
+}
+
+- (void)fallbackToPin:(CDVInvokedUrlCommand *)command
+{
+    if (self.fingerprintChallenge) {
+        [self.commandDelegate runInBackground:^{
+            [self.fingerprintChallenge.sender respondWithPinFallbackForChallenge:self.fingerprintChallenge];
+        }];
+    } else if (self.fidoChallenge) {
+        [self.commandDelegate runInBackground:^{
+            [self.fidoChallenge.sender respondWithPinFallbackForChallenge:self.fidoChallenge];
+        }];
+    }
 }
 
 - (void)reauthenticate:(CDVInvokedUrlCommand *)command

@@ -23,13 +23,7 @@
 {
     NSString *type = [self typeStringFromAuthenticatorType:authenticator.type];
 
-    NSString *identifier;
-    if (authenticator.type == ONGAuthenticatorPIN || authenticator.type == ONGAuthenticatorTouchID) {
-        NSArray *identifierItems = [authenticator.identifier componentsSeparatedByString:@"."];
-        identifier = [identifierItems lastObject];
-    } else {
-        identifier = authenticator.identifier;
-    }
+    NSString *identifier = [self normalizeAuthenticatorId:authenticator];
 
     NSDictionary *dictionary = @{
         OGCDVPluginKeyAuthenticatorType: type,
@@ -41,18 +35,61 @@
     return dictionary;
 }
 
-+ (ONGAuthenticator *)authenticatorFromArguments:(NSSet<ONGAuthenticator *> *)registeredAuthenticators options:
+/*
+ * We need to normalize the authenticator ID in order to make them the equal between iOS and Android
+ */
++ (NSString *)normalizeAuthenticatorId:(ONGAuthenticator *)authenticator
+{
+    NSString *identifier;
+    if (authenticator.type == ONGAuthenticatorPIN || authenticator.type == ONGAuthenticatorTouchID) {
+        NSArray *identifierItems = [authenticator.identifier componentsSeparatedByString:@"."];
+        identifier = [identifierItems lastObject];
+    } else {
+        identifier = authenticator.identifier;
+    }
+    return identifier;
+}
+
++ (ONGAuthenticator *)authenticatorFromArguments:(NSSet<ONGAuthenticator *> *)authenticators options:
     (NSDictionary *)options
 {
     NSString *authenticatorType = options[OGCDVPluginKeyAuthenticatorType];
+    NSString *authenticatorId = options[OGCDVPluginKeyAuthenticatorId];
 
-    // TODO: Implement search on authenticatorId once custom authenticators have been implemented
+    if (authenticatorId == nil) {
+        return [self findAuthenticator:authenticators byType:authenticatorType];
+    } else {
+        return [self findAuthenticator:authenticators byType:authenticatorType andId:authenticatorId];
+    }
+}
 
-    for (ONGAuthenticator *authenticator in registeredAuthenticators) {
-        if ([[self typeStringFromAuthenticatorType:authenticator.type] isEqualToString:authenticatorType]) {
++ (ONGAuthenticator *)findAuthenticator:(NSSet<ONGAuthenticator *> *)authenticators byType:(NSString *)authenticatorType
+{
+    for (ONGAuthenticator *authenticator in authenticators) {
+        NSString *type = [self typeStringFromAuthenticatorType:authenticator.type];
+        if ([ type isEqualToString:authenticatorType]) {
             return authenticator;
         }
     }
+
+    return nil;
+}
+
++ (ONGAuthenticator *)findAuthenticator:(NSSet<ONGAuthenticator *> *)authenticators byType:(NSString *)authenticatorType andId:(NSString *)authenticatorId
+{
+    for (ONGAuthenticator *authenticator in authenticators) {
+        NSString *type = [self typeStringFromAuthenticatorType:authenticator.type];
+        NSString *id = [self normalizeAuthenticatorId:authenticator];
+
+        if (id == nil) {
+            continue;
+        }
+
+        if ([type isEqualToString:authenticatorType] && [id isEqualToString:authenticatorId]) {
+            return authenticator;
+        }
+    }
+
     return nil;
 }
 
@@ -63,6 +100,8 @@
             return OGCDVPluginAuthenticatorTypePin;
         case ONGAuthenticatorTouchID:
             return OGCDVPluginAuthenticatorTypeTouchId;
+        case ONGAuthenticatorFIDO:
+            return OGCDVPluginAuthenticatorTypeFido;
         default:
             return nil;
     }

@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-#import <UIKit/UIKit.h>
+#import "CDVPlugin+OGCDV.h"
 
-@interface OGCDVWebBrowserViewController : UIViewController
+@interface OGCDVTestUtils : CDVPlugin<NSURLSessionDelegate, NSURLSessionTaskDelegate>
 
-@property (nonatomic) NSURL *url;
-@property (nonatomic) void (^completionBlock)(NSURL *url);
+- (void)setUserId:(CDVInvokedUrlCommand *)command;
+- (void)setPreference:(CDVInvokedUrlCommand *)command;
+- (void)getRedirectUrl:(CDVInvokedUrlCommand *)registrationUrl;
 
 @end

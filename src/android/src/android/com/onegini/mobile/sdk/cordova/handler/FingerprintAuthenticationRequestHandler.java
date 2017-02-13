@@ -16,9 +16,9 @@
 
 package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_CAPTURED;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_FAILED;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FINGERPRINT_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_FINGERPRINT_CAPTURED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_FINGERPRINT_FAILED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_FINGERPRINT_REQUEST;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -60,7 +60,7 @@ public class FingerprintAuthenticationRequestHandler implements OneginiFingerpri
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_REQUEST)
+        .withEvent(EVENT_FINGERPRINT_REQUEST)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -71,7 +71,7 @@ public class FingerprintAuthenticationRequestHandler implements OneginiFingerpri
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_FAILED)
+        .withEvent(EVENT_FINGERPRINT_FAILED)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
@@ -82,7 +82,7 @@ public class FingerprintAuthenticationRequestHandler implements OneginiFingerpri
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FINGERPRINT_CAPTURED)
+        .withEvent(EVENT_FINGERPRINT_CAPTURED)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
