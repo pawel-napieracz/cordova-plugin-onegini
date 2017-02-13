@@ -2,15 +2,7 @@
   "name": "cordova-plugin-onegini",
   "version": "0.0.1",
   "dependencies": {
-    "gitbook-cli": "2.3.x",
-    "gitbook-plugin-anker-enable": "0.0.x",
-    "gitbook-plugin-disqus": "0.1.x",
-    "gitbook-plugin-expandable-chapters": "0.2.x",
-    "gitbook-plugin-onegini-styling": "git+ssh://git@gitlab.onegini.com:10022/documentation/gitbook-plugin-html-fragments.git#v1.2.1",
-    "gitbook-plugin-prism": "1.1.x",
-    "gitbook-plugin-search-pro": "1.0.x",
-    "gitbook-plugin-toc": "0.0.x",
-    "gitbook-plugin-websequencediagrams": "https://github.com/enzuguri/gitbook-plugin-websequencediagrams#494e497c9368877fe4a8755b098f2baac1c81d5d"
+    "onegini-documentation-parent": "1.x.x"
   },
   "devDependencies": {},
   "scripts": {

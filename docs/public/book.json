@@ -9,7 +9,7 @@
     "anker-enable",
     "prism",
     "-highlight",
-    "websequencediagrams",
+    "websequencediagrams-generator",
     "onegini-styling",
     "-fontsettings"
   ],
