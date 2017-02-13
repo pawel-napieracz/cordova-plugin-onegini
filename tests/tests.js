@@ -1039,6 +1039,7 @@ exports.defineAutoTests = function () {
                 }
             )
           });
+
           it("should succeed", function (done) {
             console.log("Please provide correct fingerprint");
             onegini.user.authenticators.registerNew(fidoAuthenticator)
