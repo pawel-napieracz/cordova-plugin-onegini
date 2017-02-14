@@ -71,7 +71,7 @@
     self.fidoChallenge = challenge;
 
     NSDictionary *result = @{
-        OGCDVPluginKeyAuthenticationEvent: OGCDVPluginAuthEventFidoRequest
+        OGCDVPluginKeyEvent: OGCDVPluginEventFidoRequest
     };
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
     [pluginResult setKeepCallbackAsBool:YES];
