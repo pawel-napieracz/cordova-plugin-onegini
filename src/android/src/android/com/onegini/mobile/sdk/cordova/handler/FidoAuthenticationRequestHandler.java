@@ -1,6 +1,6 @@
 package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.AUTH_EVENT_FIDO_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_FIDO_REQUEST;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -41,7 +41,7 @@ public class FidoAuthenticationRequestHandler implements OneginiFidoAuthenticati
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withAuthenticationEvent(AUTH_EVENT_FIDO_REQUEST)
+        .withEvent(EVENT_FIDO_REQUEST)
         .build();
 
     sendStartAuthenticationResult(pluginResult);
