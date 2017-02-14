@@ -1,4 +1,4 @@
-# User authentication with fingerprint
+# User authentication with FIDO
 
 <!-- toc -->
 
