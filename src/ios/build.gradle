@@ -82,11 +82,20 @@ task downloadLibs(type: Copy, dependsOn: prepareTargetDirectory) {
 task resolveDependencies(type: Copy, dependsOn: downloadLibs) {
   def headersPackage
 
-  configurations.sdk.each {
-    if (it.name.endsWith(".zip")) {
-      headersPackage = it.absoluteFile
+  if (fidoPluginExtras.exists()) {
+    configurations.fido.each {
+      if (it.name.endsWith(".zip")) {
+        headersPackage = it.absoluteFile
+      }
+    }
+  } else {
+    configurations.sdk.each {
+      if (it.name.endsWith(".zip")) {
+        headersPackage = it.absoluteFile
+      }
     }
   }
+
   from zipTree(headersPackage)
   into headersDir
   exclude '*.zip'
