@@ -76,6 +76,7 @@ task downloadLibs(type: Copy, dependsOn: prepareTargetDirectory) {
     from configurations.sdk
   }
 
+  exclude('*.zip')
   rename('libOneginiSDKiOS(.*)-(.*).a$', "libOneginiSDKiOS.a")
 }
 
