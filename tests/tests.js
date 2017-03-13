@@ -597,13 +597,12 @@ exports.defineAutoTests = function () {
               expect(actions.providePin).toBeDefined();
               expect(options).toBeDefined();
 
-              if (options.remainingFailureCount = options.maxFailureCount - 1) {
+              if (options.remainingFailureCount == options.maxFailureCount - 1) {
+                expect(options.code).toBe(8012);
+                expect(options.description).toBeDefined();
                 actions.providePin(config.pin);
               }
               else {
-                console.log("remaining failure count", options.remainingFailureCount);
-                console.log("max failure count", options.maxFailureCount);
-
                 expect(options.remainingFailureCount).toBeDefined();
                 expect(options.maxFailureCount).toBeDefined();
                 expect(options.remainingFailureCount).toBe(3);
