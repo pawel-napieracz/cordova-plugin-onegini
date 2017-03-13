@@ -1416,7 +1416,19 @@ exports.defineAutoTests = function () {
               expect(actions).toBeDefined();
               expect(actions.providePin).toBeDefined();
               expect(options).toBeDefined();
-              actions.providePin(config.pin);
+
+              if (options.remainingFailureCount == options.maxFailureCount - 1) {
+                expect(options.code).toBe(8012);
+                expect(options.description).toBeDefined();
+                actions.providePin(config.pin);
+              }
+              else {
+                expect(options.remainingFailureCount).toBeDefined();
+                expect(options.maxFailureCount).toBeDefined();
+                expect(options.remainingFailureCount).toBe(3);
+                expect(options.maxFailureCount).toBe(3);
+                actions.providePin('incorrect');
+              }
             })
             .onCreatePinRequest(function (actions, options) {
               expect(options.pinLength).toBe(5);
