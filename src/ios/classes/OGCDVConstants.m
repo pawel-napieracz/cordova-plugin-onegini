@@ -63,6 +63,7 @@ NSString *const OGCDVPluginErrDescriptionProvidePinNoAuthenticationInProgress = 
 NSString *const OGCDVPluginErrDescriptionFidoNoAuthenticationInProgress = @"Onegini: received reply for fido authentication, but no fido authentication in progress.";
 NSString *const OGCDVPluginErrDescriptionFingerprintNoAuthenticationInProgress = @"Onegini: received reply for fingerprint authentication, but no fingerprint authentication in progress.";
 NSString *const OGCDVPluginErrDescriptionInvalidMobileAuthenticationMethod = @"Onegini: Invalid mobile authentication method";
+NSString *const OGCDVPluginErrDescriptionIncorrectPin = @"Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
 
 int const OGCDVPluginErrCodePluginInternalError = 8000;
 
@@ -73,4 +74,5 @@ int const OGCDVPluginErrCodeCreatePinNoRegistrationInProgress = 8007;
 int const OGCDVPluginErrCodeProvidePinNoAuthenticationInProgress = 8008;
 int const OGCDVPluginErrCodeFingerprintNoAuthenticationInProgress = 8009;
 int const OGCDVPluginErrCodeInvalidMobileAuthenticationMethod = 8010;
+int const OGCDVPluginErrCodeIncorrectPin = 8012;
 int const OGCDVPluginErrCodeFidoNoAuthenticationInProgress = 8014;

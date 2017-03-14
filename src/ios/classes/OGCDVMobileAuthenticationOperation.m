@@ -144,6 +144,11 @@
     if (pinChallenge) {
         message[OGCDVPluginKeyMaxFailureCount] = @(pinChallenge.maxFailureCount);
         message[OGCDVPluginKeyRemainingFailureCount] = @(pinChallenge.remainingFailureCount);
+
+        if (pinChallenge.error && pinChallenge.error.code == ONGAuthenticationErrorInvalidPin) {
+            message[OGCDVPluginKeyErrorCode] = @(OGCDVPluginErrCodeIncorrectPin);
+            message[OGCDVPluginKeyErrorDescription] = OGCDVPluginErrDescriptionIncorrectPin;
+        }
     }
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];

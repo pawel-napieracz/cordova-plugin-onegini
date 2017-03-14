@@ -43,11 +43,16 @@
 - (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge
 {
     self.pinChallenge = challenge;
-    NSDictionary *result = @{
-        OGCDVPluginKeyEvent: OGCDVPluginEventPinRequest,
-        OGCDVPluginKeyMaxFailureCount: @(challenge.maxFailureCount),
-        OGCDVPluginKeyRemainingFailureCount: @(challenge.remainingFailureCount)
-    };
+
+    NSMutableDictionary *result = [[NSMutableDictionary alloc]init];
+    result[OGCDVPluginKeyEvent] = OGCDVPluginEventPinRequest;
+    result[OGCDVPluginKeyMaxFailureCount] = @(challenge.maxFailureCount);
+    result[OGCDVPluginKeyRemainingFailureCount] = @(challenge.remainingFailureCount);
+
+    if (challenge.error && challenge.error.code == ONGAuthenticationErrorInvalidPin) {
+        result[OGCDVPluginKeyErrorCode] = @(OGCDVPluginErrCodeIncorrectPin);
+        result[OGCDVPluginKeyErrorDescription] = OGCDVPluginErrDescriptionIncorrectPin;
+    }
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
     [pluginResult setKeepCallbackAsBool:YES];

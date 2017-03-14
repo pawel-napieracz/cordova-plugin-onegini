@@ -21,7 +21,7 @@
 @interface OGCDVAuthenticatorRegistrationClient ()<ONGAuthenticatorRegistrationDelegate>
 @end
 
-@implementation OGCDVAuthenticatorRegistrationClient {
+@implementation OGCDVAuthenticatorRegistrationClient : OGCDVAuthenticationDelegateHandler {
 }
 
 - (void)start:(CDVInvokedUrlCommand *)command
