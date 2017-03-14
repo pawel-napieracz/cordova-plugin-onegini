@@ -722,6 +722,8 @@ exports.defineAutoTests = function () {
                 expect(request.remainingFailureCount).toBeDefined();
 
                 if (request.remainingFailureCount === request.maxFailureCount - 1) {
+                  expect(request.code).toBe(8012);
+                  expect(request.description).toBeDefined();
                   actions.accept(config.pin);
                 }
                 else {
@@ -953,8 +955,23 @@ exports.defineAutoTests = function () {
 
           it("should succeed", function (done) {
             onegini.user.authenticators.registerNew({authenticatorType: "Fingerprint"})
-                .onPinRequest(function (actions) {
-                  actions.providePin(config.pin);
+                .onPinRequest(function (actions, options) {
+                  expect(actions).toBeDefined();
+                  expect(actions.providePin).toBeDefined();
+                  expect(options).toBeDefined();
+
+                  if (options.remainingFailureCount === options.maxFailureCount - 1) {
+                    expect(options.code).toBe(8012);
+                    expect(options.description).toBeDefined();
+                    actions.providePin(config.pin);
+                  }
+                  else {
+                    expect(options.remainingFailureCount).toBeDefined();
+                    expect(options.maxFailureCount).toBeDefined();
+                    expect(options.remainingFailureCount).toBe(3);
+                    expect(options.maxFailureCount).toBe(3);
+                    actions.providePin('incorrect');
+                  }
                 })
                 .onSuccess(function () {
                   expect(true).toBe(true);
@@ -1417,7 +1434,7 @@ exports.defineAutoTests = function () {
               expect(actions.providePin).toBeDefined();
               expect(options).toBeDefined();
 
-              if (options.remainingFailureCount == options.maxFailureCount - 1) {
+              if (options.remainingFailureCount === options.maxFailureCount - 1) {
                 expect(options.code).toBe(8012);
                 expect(options.description).toBeDefined();
                 actions.providePin(config.pin);
