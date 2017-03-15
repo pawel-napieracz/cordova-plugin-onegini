@@ -44,7 +44,7 @@
 {
     self.pinChallenge = challenge;
 
-    NSMutableDictionary *result = [[NSMutableDictionary alloc]init];
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     result[OGCDVPluginKeyEvent] = OGCDVPluginEventPinRequest;
     result[OGCDVPluginKeyMaxFailureCount] = @(challenge.maxFailureCount);
     result[OGCDVPluginKeyRemainingFailureCount] = @(challenge.remainingFailureCount);
@@ -81,6 +81,5 @@
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
     [pluginResult setKeepCallbackAsBool:YES];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
-
 }
 @end

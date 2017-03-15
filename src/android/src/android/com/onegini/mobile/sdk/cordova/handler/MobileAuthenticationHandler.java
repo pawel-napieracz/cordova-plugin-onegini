@@ -16,6 +16,8 @@
 
 package com.onegini.mobile.sdk.cordova.handler;
 
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_INCORRECT_PIN;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INCORRECT_PIN;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_FINGERPRINT_CAPTURED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_FINGERPRINT_FAILED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_PIN_REQUEST;
@@ -106,6 +108,7 @@ public class MobileAuthenticationHandler
     final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
 
     callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withPluginError(ERROR_DESCRIPTION_INCORRECT_PIN, ERROR_CODE_INCORRECT_PIN)
         .withSuccess()
         .shouldKeepCallback()
         .withEvent(EVENT_PIN_REQUEST)

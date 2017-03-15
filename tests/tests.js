@@ -597,7 +597,7 @@ exports.defineAutoTests = function () {
               expect(actions.providePin).toBeDefined();
               expect(options).toBeDefined();
 
-              if (options.remainingFailureCount == options.maxFailureCount - 1) {
+              if (options.remainingFailureCount === options.maxFailureCount - 1) {
                 expect(options.code).toBe(8012);
                 expect(options.description).toBeDefined();
                 actions.providePin(config.pin);
@@ -725,8 +725,9 @@ exports.defineAutoTests = function () {
                   expect(request.code).toBe(8012);
                   expect(request.description).toBeDefined();
                   actions.accept(config.pin);
-                }
-                else {
+                } else {
+                  expect(request.code).toBeUndefined();
+                  expect(request.description).toBeUndefined();
                   actions.accept('invalid');
                 }
               })
