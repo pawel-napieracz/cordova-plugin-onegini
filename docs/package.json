@@ -7,13 +7,14 @@
   "devDependencies": {},
   "scripts": {
     "clean": "rm -fr */_book node_modules */node_modules",
-    "internal": "node_modules/.bin/gitbook serve internal",
-    "public": "node_modules/.bin/gitbook serve public"
+    "internal": "gitbook serve internal",
+    "public": "gitbook serve public"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.onegini.com/mobile-platform/cordova-plugin"
+    "url": "https://github.com/Onegini/cordova-plugin-onegini"
   },
   "author": "Onegini B.V.",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "private": true
 }
