@@ -45,7 +45,7 @@ exports.defineAutoTests = function () {
   function sendMobileAuthenticationRequest(type) {
     var xhr = new XMLHttpRequest();
 
-    type = type || "push";
+    type = type || "push_cordova";
 
     xhr.open("POST", "https://onegini-msp-snapshot.test.onegini.io/oauth/api/v2/authenticate/user");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -738,7 +738,7 @@ exports.defineAutoTests = function () {
                 done();
               });
 
-          sendMobileAuthenticationRequest("push_with_pin");
+          sendMobileAuthenticationRequest("push_with_pin_cordova");
         }, 10000);
 
         it('should reject a mobile pin request', function (done) {
@@ -758,7 +758,7 @@ exports.defineAutoTests = function () {
                 fail('Mobile authentication request succeeded, but should have failed');
               });
 
-          sendMobileAuthenticationRequest("push_with_pin");
+          sendMobileAuthenticationRequest("push_with_pin_cordova");
         }, 10000);
       });
     });
@@ -1236,7 +1236,7 @@ exports.defineAutoTests = function () {
                   done();
                 });
 
-            sendMobileAuthenticationRequest("push_with_fingerprint");
+            sendMobileAuthenticationRequest("push_with_fingerprint_cordova");
           }, 10000);
 
           it("Should reject a mobile fingerprint request", function (done) {
@@ -1254,7 +1254,7 @@ exports.defineAutoTests = function () {
                   fail("Mobile authentication request succeeded, but should have failed");
                 });
 
-            sendMobileAuthenticationRequest("push_with_fingerprint");
+            sendMobileAuthenticationRequest("push_with_fingerprint_cordova");
           }, 10000);
 
           if (cordova.platformId === "android") {
@@ -1279,7 +1279,7 @@ exports.defineAutoTests = function () {
                     setTimeout(done, 500);
                   });
 
-              sendMobileAuthenticationRequest("push_with_fingerprint");
+              sendMobileAuthenticationRequest("push_with_fingerprint_cordova");
             }, 10000);
 
             it("Should request fingerprint authentication again on incorrect fingerprint", function (done) {
@@ -1300,7 +1300,7 @@ exports.defineAutoTests = function () {
                     fail("Mobile fingerprint authentication didn't request another attempt (or you supplied a correct fingerprint)")
                   });
 
-              sendMobileAuthenticationRequest("push_with_fingerprint");
+              sendMobileAuthenticationRequest("push_with_fingerprint_cordova");
             }, 10000);
           }
         });
