@@ -43,21 +43,27 @@ module.exports = function (context) {
   console.log('Configuring the Onegini SDK');
   console.log('===========================\n\n');
 
-  context.opts.platforms.forEach((platform) => {
-    if (arrayContains(platform, supportedPlatforms)) {
-      let platformArgs = args.slice();
+  const platforms = context.opts.platforms;
 
-      console.log(`Configuring the ${platform} platform`);
-      console.log('--------------------------' + new Array(platform.length).join('-') + '\n');
+  platforms
+      .map(platform => platform.split('@')[0])
+      .filter((platform) => {
+        if (supportedPlatforms.includes(platform)) {
+          return true;
+        }
 
-      platformArgs.unshift(platform);
-      platformArgs.push('--config', getConfigFileForPlatform(context.opts.projectRoot, platform));
+        console.log(`Skipping unsupported platform: ${platform}`)
+      })
+      .forEach((platform) => {
+        console.log(`Configuring the ${platform} platform`);
+        console.log('--------------------------' + new Array(platform.length).join('-') + '\n');
 
-      execConfigurator(platformArgs, deferral);
-    } else {
-      console.log(`Skipping unsupported platform: ${platform}`)
-    }
-  });
+        let platformArgs = args.slice();
+        platformArgs.unshift(platform);
+        platformArgs.push('--config', getConfigFileForPlatform(context.opts.projectRoot, platform));
+
+        execConfigurator(platformArgs, deferral);
+      });
 
   return deferral.promise;
 };
@@ -113,8 +119,4 @@ function getConfiguratorName() {
 
   console.log('Using SDK Configurator from $PATH');
   return defaultName;
-}
-
-function arrayContains(needle, arrhaystack) {
-  return (arrhaystack.indexOf(needle) > -1);
 }
