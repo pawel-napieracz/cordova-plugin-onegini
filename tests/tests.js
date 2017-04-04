@@ -1334,12 +1334,13 @@ exports.defineAutoTests = function () {
             },
             function (response) {
               expect(response).toBeDefined();
-              var body = response.body;
-              expect(body).toBeDefined();
-              expect(JSON.parse(body).devices).toBeDefined();
+              expect(response.body).toBeDefined();
+              expect(response.rawBody).toBeDefined();
+              expect(response.json).toBeDefined();
               expect(response.headers).toBeDefined();
               expect(response.status).toEqual(200);
               expect(response.statusText).toBeDefined();
+              expect(response.json.devices).toBeDefined();
               done();
             }, function (err) {
               expect(err).toBeUndefined();
@@ -1347,7 +1348,7 @@ exports.defineAutoTests = function () {
             });
       });
 
-      it("should require a url", function () {
+      it('should require a url', function () {
         expect(function () {
           onegini.resource.fetch();
         }).toThrow(new TypeError("Onegini: missing 'url' argument for fetch"));

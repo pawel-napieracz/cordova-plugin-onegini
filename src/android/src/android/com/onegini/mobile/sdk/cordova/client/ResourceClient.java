@@ -131,11 +131,11 @@ public class ResourceClient extends CordovaPlugin {
     httpBodyData = OkHttpResponseUtil.getBodyBytesFromResponse(response);
     httpMetaData = httpMetaJSON.toString().getBytes();
 
-    payloadBuffer = ByteBuffer.allocate(RESULT_HEADER_LENGTH + httpMetaData.length + httpBodyData.length);
-    payloadBuffer.order(LITTLE_ENDIAN);
-    payloadBuffer.putInt(httpMetaData.length);
-    payloadBuffer.put(httpMetaData);
-    payloadBuffer.put(httpBodyData);
+    payloadBuffer = ByteBuffer.allocate(RESULT_HEADER_LENGTH + httpMetaData.length + httpBodyData.length)
+        .order(LITTLE_ENDIAN)
+        .putInt(httpMetaData.length)
+        .put(httpMetaData)
+        .put(httpBodyData);
 
     return new PluginResult(resultStatus, payloadBuffer.array());
   }
