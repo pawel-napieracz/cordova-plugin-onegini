@@ -59,7 +59,9 @@ The success callback contains an object with these properties:
 | `status` | 200 | The HTTP status code of the server response
 | `statusText` | "OK"| The HTTP status text of the server response
 | `headers` | `{ Content-Type: "application/json" }` | The HTTP headers of the server response
-| `body` | - | The body of the server response
+| `body` | - | The response body encoded as a UTF-8 string
+| `rawBody` | - | An `arrayBuffer` containing the data of the response body 
+| `json` | - | The response body parsed as UTF-8 encoded JSON
 
 The error callback contains an object with the usual error code and description.
 

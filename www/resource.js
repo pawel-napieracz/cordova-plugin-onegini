@@ -15,41 +15,44 @@
  */
 
 module.exports = (function (XMLHttpRequest) {
-  var utils = require('./utils');
-  var resourceBaseUrl;
-  var nativeXhrProperties = [
-    'onabort',
-    'onerror',
-    'onload',
-    'onloadend',
-    'onloadstart',
-    'onprogress',
-    'onreadystatechange',
-    'ontimeout',
-    'readyState',
-    'response',
-    'responseText',
-    'responseType',
-    'responseURL',
-    'responseXML',
-    'status',
-    'statusText',
-    'timeout',
-    'upload',
-    'XMLHttpRequestUpload',
-    'withCredentials'
-  ];
-
-  var nativeXhrMethods = [
-    'abort',
-    'getAllResponseHeaders',
-    'getResponseHeader',
-    'overrideMimeType',
-    'send',
-    'setRequestHeader'
-  ];
+  var utils = require('./utils'),
+      HEADER_LENGTH = 4,
+      resourceBaseUrl,
+      nativeXhrProperties = [
+        'onabort',
+        'onerror',
+        'onload',
+        'onloadend',
+        'onloadstart',
+        'onprogress',
+        'onreadystatechange',
+        'ontimeout',
+        'readyState',
+        'response',
+        'responseText',
+        'responseType',
+        'responseURL',
+        'responseXML',
+        'status',
+        'statusText',
+        'timeout',
+        'upload',
+        'XMLHttpRequestUpload',
+        'withCredentials'
+      ],
+      nativeXhrMethods = [
+        'abort',
+        'getAllResponseHeaders',
+        'getResponseHeader',
+        'overrideMimeType',
+        'send',
+        'setRequestHeader'
+      ];
 
   function fetch(options, successCb, failureCb) {
+    var _successCb = successCb,
+        _failureCb = failureCb;
+
     options = utils.getOptionsWithDefaults(options, {
       method: 'GET',
       headers: {},
@@ -60,7 +63,54 @@ module.exports = (function (XMLHttpRequest) {
       throw new TypeError("Onegini: missing 'url' argument for fetch");
     }
 
-    return utils.promiseOrCallbackExec('OneginiResourceClient', 'fetch', options, successCb, failureCb);
+    function httpResponseFromArrayBuffer(buffer) {
+      var metaLength = new Int32Array(buffer.slice(0, HEADER_LENGTH))[0],
+          metadataBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength),
+          metadata = new Uint8Array(metadataBuffer),
+          result = JSON.parse(String.fromCharCode.apply(null, metadata));
+
+      Object.defineProperties(result, {
+        'rawBody': {
+          value: buffer.slice(HEADER_LENGTH + metaLength, buffer.byteLength)
+        },
+        'body': {
+          get: function() {
+            var bodyData = new Uint8Array(this.rawBody);
+            return String.fromCharCode.apply(null, bodyData);
+          }
+        },
+        'json': {
+          get: function() {
+            return JSON.parse(this.body);
+          }
+        }
+      });
+
+      return result;
+    }
+
+    function success(buffer) {
+      _successCb(httpResponseFromArrayBuffer(buffer))
+    }
+
+    function failure(buffer) {
+      _failureCb({
+        code: 8013,
+        description: 'Onegini: HTTP Request failed. Check httpResponse for more info.',
+        httpResponse: httpResponseFromArrayBuffer(buffer)
+      });
+    }
+
+    utils.callbackExec('OneginiResourceClient', 'fetch', options, success, failure);
+
+    if (successCb) {
+      return
+    }
+
+    return new Promise(function (resolve, reject) {
+      _successCb = resolve;
+      _failureCb = reject;
+    });
   }
 
   function init(url) {

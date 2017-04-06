@@ -23,10 +23,7 @@ NSString *const OGCDVPluginKeyUrl = @"url";
 NSString *const OGCDVPluginKeyStatus = @"status";
 NSString *const OGCDVPluginKeyStatusText = @"statusText";
 NSString *const OGCDVPluginKeyHeaders = @"headers";
-NSString *const OGCDVPluginKeyHttpResponse = @"httpResponse";
-
-int const OGCDVPluginErrCodeHttpError = 8013;
-NSString *const OGCDVPluginErrDescriptionHttpError = @"Onegini: HTTP Request failed. Check httpResponse for more info.";
+int const OGCDVFetchResultHeaderLength = 4;
 
 @implementation OGCDVResourceClient {
 }
@@ -75,41 +72,41 @@ NSString *const OGCDVPluginErrDescriptionHttpError = @"Onegini: HTTP Request fai
 
 - (CDVPluginResult *)getPluginResultFromResourceResponse:(ONGResourceResponse *)response withError:(NSError *)error
 {
-    BOOL didReceiveHttpReply = response.statusCode != nil;
     BOOL didReceiveHttpReplySuccess = response.statusCode >= 200 && response.statusCode <= 299;
-    NSDictionary *httpResponse = @{
-        OGCDVPluginKeyBody: [self getBodyFromResponse:response],
+    CDVCommandStatus status;
+    if (didReceiveHttpReplySuccess) {
+        status = CDVCommandStatus_OK;
+    } else {
+        status = CDVCommandStatus_ERROR;
+    }
+
+    NSDictionary *httpMetadataJSON = @{
         OGCDVPluginKeyStatus: @(response.statusCode),
         OGCDVPluginKeyStatusText: [self getStatusText:response.statusCode],
         OGCDVPluginKeyHeaders: response.allHeaderFields == nil ? @{} : response.allHeaderFields
     };
 
-    if (didReceiveHttpReplySuccess) {
-        return [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:httpResponse];
+    NSError *jsonError;
+    NSData *httpMetadata = [NSJSONSerialization dataWithJSONObject:httpMetadataJSON options:NSJSONWritingPrettyPrinted error:&jsonError];
+    if (jsonError) {
+        return [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{
+            OGCDVPluginKeyErrorCode: @(OGCDVPluginErrCodeIoException),
+            OGCDVPluginKeyErrorDescription: @"Could not parse HTTP response to JSON"
+        }];
     }
 
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
-    result[OGCDVPluginKeyHttpResponse] = httpResponse;
+    int32_t metadataLength = (int32_t)httpMetadata.length;
+    NSMutableData *payloadData = [NSMutableData data];
+    [payloadData appendBytes:&metadataLength length:OGCDVFetchResultHeaderLength];
+    [payloadData appendData:httpMetadata];
+    [payloadData appendData:response.data];
 
-    if (didReceiveHttpReply) {
-        result[OGCDVPluginKeyErrorCode] = @(OGCDVPluginErrCodeHttpError);
-        result[OGCDVPluginKeyErrorDescription] = OGCDVPluginErrDescriptionHttpError;
-    } else {
-        result[OGCDVPluginKeyErrorCode] = @(error.code);
-        result[OGCDVPluginKeyErrorDescription] = error.description;
-    }
-
-    return [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result];
+    return [CDVPluginResult resultWithStatus:status messageAsArrayBuffer:payloadData];
 }
 
 - (NSString *)getStatusText:(NSInteger)code
 {
     return [NSHTTPURLResponse localizedStringForStatusCode:code];
-}
-
-- (NSString *)getBodyFromResponse:(ONGResourceResponse *)response
-{
-    return [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
 }
 
 - (NSDictionary *)convertNumbersToStringsInDictionary:(NSDictionary *)dictionary

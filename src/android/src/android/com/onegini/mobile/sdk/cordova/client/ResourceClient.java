@@ -16,18 +16,16 @@
 
 package com.onegini.mobile.sdk.cordova.client;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_HTTP_ERROR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_IO_EXCEPTION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_HTTP_ERROR;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ERROR_CODE;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ERROR_DESCRIPTION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.TAG;
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.security.InvalidParameterException;
 
 import org.apache.cordova.CallbackContext;
@@ -51,11 +49,10 @@ public class ResourceClient extends CordovaPlugin {
 
   private static final String ACTION_FETCH = "fetch";
 
+  private static final int RESULT_HEADER_LENGTH = 4;
   private static final String PARAM_STATUS = "status";
   private static final String PARAM_STATUS_TEXT = "statusText";
-  private static final String PARAM_BODY = "body";
   private static final String PARAM_HEADERS = "headers";
-  private static final String PARAM_HTTP_RESPONSE = "httpResponse";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -115,49 +112,44 @@ public class ResourceClient extends CordovaPlugin {
   }
 
   private PluginResult pluginResultFromOkHttpResponse(final Response response) {
+    final ByteBuffer payloadBuffer;
     final PluginResult.Status resultStatus;
-    final JSONObject responseJSON;
+    final JSONObject httpMetadataJSON;
+    final byte[] httpMetaData;
+    final byte[] httpBodyData;
+
+    resultStatus = response.isSuccessful() ? OK : ERROR;
+
     try {
-      responseJSON = okHttpResponseToJsonObject(response);
+      httpMetadataJSON = okHttpResponseMetadataAsJSON(response);
     } catch (Exception e) {
       return new PluginResultBuilder()
           .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
           .build();
     }
 
-    final JSONObject resultPayload;
+    httpBodyData = OkHttpResponseUtil.getBodyBytesFromResponse(response);
+    httpMetaData = httpMetadataJSON.toString().getBytes();
 
-    if (response.isSuccessful()) {
-      resultStatus = OK;
-      resultPayload = responseJSON;
-    } else {
-      resultStatus = ERROR;
-      resultPayload = new JSONObject();
+    payloadBuffer = ByteBuffer.allocate(RESULT_HEADER_LENGTH + httpMetaData.length + httpBodyData.length)
+        .order(LITTLE_ENDIAN)
+        .putInt(httpMetaData.length)
+        .put(httpMetaData)
+        .put(httpBodyData);
 
-      try {
-        resultPayload.put(PARAM_ERROR_CODE, ERROR_CODE_HTTP_ERROR);
-        resultPayload.put(PARAM_ERROR_DESCRIPTION, ERROR_DESCRIPTION_HTTP_ERROR);
-        resultPayload.put(PARAM_HTTP_RESPONSE, responseJSON);
-      } catch (JSONException e) {
-        Log.d(TAG, "Could not parse http response to JSON object");
-      }
-    }
-
-    return new PluginResult(resultStatus, resultPayload);
+    return new PluginResult(resultStatus, payloadBuffer.array());
   }
 
-  private JSONObject okHttpResponseToJsonObject(final Response response) {
+  private JSONObject okHttpResponseMetadataAsJSON(final Response response) {
     final JSONObject responseJSON = new JSONObject();
     final int statusCode = response.code();
     final String statusText = response.message();
     final JSONObject headers = OkHttpResponseUtil.getJsonHeadersFromResponse(response);
-    final String body = OkHttpResponseUtil.getBodyStringFromResponse(response);
 
     try {
       responseJSON.put(PARAM_STATUS, statusCode);
       responseJSON.put(PARAM_STATUS_TEXT, statusText);
       responseJSON.put(PARAM_HEADERS, headers);
-      responseJSON.put(PARAM_BODY, body);
     } catch (JSONException e) {
       Log.e(TAG, "Could not parse http response to JSON object");
     }

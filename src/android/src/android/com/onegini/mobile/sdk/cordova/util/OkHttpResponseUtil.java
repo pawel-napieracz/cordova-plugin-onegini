@@ -46,13 +46,13 @@ public class OkHttpResponseUtil {
   }
 
   @NonNull
-  public static String getBodyStringFromResponse(Response response) {
+  public static byte[] getBodyBytesFromResponse(Response response) {
     if (response.body() == null) {
-      return "";
+      return new byte[0];
     }
 
     try {
-      return response.body().string();
+      return response.body().bytes();
     } catch (IOException e) {
       String message = "Could not read response body from HTTP response";
       Log.e(TAG, message, e);
