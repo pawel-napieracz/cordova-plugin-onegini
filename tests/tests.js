@@ -1348,6 +1348,38 @@ exports.defineAutoTests = function () {
             });
       });
 
+      it('should fetch a non JSON resource', function (done) {
+        onegini.resource.fetch(
+            {
+              url: 'https://onegini-msp-snapshot.test.onegini.io/admin/static/img/onegini-logo-dark.svg',
+              headers: {
+                'X-Test-String': 'foobar',
+                'X-Test-Int': 1337
+              }
+            },
+            function (response) {
+              expect(response).toBeDefined();
+              expect(response.body).toBeDefined();
+              expect(response.rawBody).toBeDefined();
+              try {
+                response.json;
+                fail("An error is expected here");
+              }
+              catch (error) {
+                if (!error instanceof TypeError) {
+                  fail("Expected a TypeError because an image is not a valid JSON response")
+                }
+              }
+              expect(response.headers).toBeDefined();
+              expect(response.status).toEqual(200);
+              expect(response.statusText).toBeDefined();
+              done();
+            }, function (err) {
+              expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
+            });
+      });
+
       it('should require a url', function () {
         expect(function () {
           onegini.resource.fetch();
@@ -1381,37 +1413,6 @@ exports.defineAutoTests = function () {
         };
         xhr.send();
       });
-
-      it('should fetch a non JSON resource', function (done) {
-        onegini.resource.fetch(
-            {
-              url: 'https://onegini-msp-snapshot.test.onegini.io/admin/static/img/onegini-logo-dark.svg',
-              headers: {
-                'X-Test-String': 'foobar',
-                'X-Test-Int': 1337
-              }
-            },
-            function (response) {
-              expect(response).toBeDefined();
-              expect(response.body).toBeDefined();
-              expect(response.rawBody).toBeDefined();
-              try {
-                response.json;
-                fail("An error is expected here");
-              } catch(error) {
-                if (!error instanceof TypeError) {
-                  fail("Expected a TypeError because an image is not a valid JSON response")
-                }
-              }
-              expect(response.headers).toBeDefined();
-              expect(response.status).toEqual(200);
-              expect(response.statusText).toBeDefined();
-              done();
-            }, function (err) {
-              expect(err).toBeUndefined();
-              fail('Error callback called, but method should have succeeded');
-            });
-      })
     });
   });
 
