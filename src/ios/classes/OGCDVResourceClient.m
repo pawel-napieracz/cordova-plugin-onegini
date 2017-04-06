@@ -23,11 +23,7 @@ NSString *const OGCDVPluginKeyUrl = @"url";
 NSString *const OGCDVPluginKeyStatus = @"status";
 NSString *const OGCDVPluginKeyStatusText = @"statusText";
 NSString *const OGCDVPluginKeyHeaders = @"headers";
-NSString *const OGCDVPluginKeyHttpResponse = @"httpResponse";
 int const OGCDVFetchResultHeaderLength = 4;
-
-int const OGCDVPluginErrCodeHttpError = 8013;
-NSString *const OGCDVPluginErrDescriptionHttpError = @"Onegini: HTTP Request failed. Check httpResponse for more info.";
 
 @implementation OGCDVResourceClient {
 }
@@ -79,19 +75,19 @@ NSString *const OGCDVPluginErrDescriptionHttpError = @"Onegini: HTTP Request fai
     BOOL didReceiveHttpReplySuccess = response.statusCode >= 200 && response.statusCode <= 299;
     CDVCommandStatus status;
     if (didReceiveHttpReplySuccess) {
-        CDVCommandStatus_OK;
+        status = CDVCommandStatus_OK;
     } else {
-        CDVCommandStatus_ERROR;
+        status = CDVCommandStatus_ERROR;
     }
 
-    NSDictionary *httpMetaJSON = @{
+    NSDictionary *httpMetadataJSON = @{
         OGCDVPluginKeyStatus: @(response.statusCode),
         OGCDVPluginKeyStatusText: [self getStatusText:response.statusCode],
         OGCDVPluginKeyHeaders: response.allHeaderFields == nil ? @{} : response.allHeaderFields
     };
 
     NSError *jsonError;
-    NSData *httpMetaData = [NSJSONSerialization dataWithJSONObject:httpMetaJSON options:NSJSONWritingPrettyPrinted error:&jsonError];
+    NSData *httpMetadata = [NSJSONSerialization dataWithJSONObject:httpMetadataJSON options:NSJSONWritingPrettyPrinted error:&jsonError];
     if (jsonError) {
         return [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:@{
             OGCDVPluginKeyErrorCode: @(OGCDVPluginErrCodeIoException),
@@ -99,17 +95,11 @@ NSString *const OGCDVPluginErrDescriptionHttpError = @"Onegini: HTTP Request fai
         }];
     }
 
-    int32_t metaLength = (int32_t)httpMetaData.length;
+    int32_t metadataLength = (int32_t)httpMetadata.length;
     NSMutableData *payloadData = [NSMutableData data];
-    [payloadData appendBytes:&metaLength length:OGCDVFetchResultHeaderLength];
-    [payloadData appendData:httpMetaData];
+    [payloadData appendBytes:&metadataLength length:OGCDVFetchResultHeaderLength];
+    [payloadData appendData:httpMetadata];
     [payloadData appendData:response.data];
-
-    if (didReceiveHttpReplySuccess) {
-        status = CDVCommandStatus_OK;
-    } else {
-        status = CDVCommandStatus_ERROR;
-    }
 
     return [CDVPluginResult resultWithStatus:status messageAsArrayBuffer:payloadData];
 }

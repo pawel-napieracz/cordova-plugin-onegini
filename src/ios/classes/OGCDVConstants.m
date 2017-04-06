@@ -74,6 +74,6 @@ int const OGCDVPluginErrCodeCreatePinNoRegistrationInProgress = 8007;
 int const OGCDVPluginErrCodeProvidePinNoAuthenticationInProgress = 8008;
 int const OGCDVPluginErrCodeFingerprintNoAuthenticationInProgress = 8009;
 int const OGCDVPluginErrCodeInvalidMobileAuthenticationMethod = 8010;
-int const OGCDVPluginErrCodeIncorrectPin = 8012;
 int const OGCDVPluginErrCodeIoException = 8011;
+int const OGCDVPluginErrCodeIncorrectPin = 8012;
 int const OGCDVPluginErrCodeFidoNoAuthenticationInProgress = 8014;
