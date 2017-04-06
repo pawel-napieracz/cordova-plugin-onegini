@@ -114,14 +114,14 @@ public class ResourceClient extends CordovaPlugin {
   private PluginResult pluginResultFromOkHttpResponse(final Response response) {
     final ByteBuffer payloadBuffer;
     final PluginResult.Status resultStatus;
-    final JSONObject httpMetaJSON;
+    final JSONObject httpMetadataJSON;
     final byte[] httpMetaData;
     final byte[] httpBodyData;
 
     resultStatus = response.isSuccessful() ? OK : ERROR;
 
     try {
-      httpMetaJSON = okHttpResponseMetaAsJSON(response);
+      httpMetadataJSON = okHttpResponseMetadataAsJSON(response);
     } catch (Exception e) {
       return new PluginResultBuilder()
           .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
@@ -129,7 +129,7 @@ public class ResourceClient extends CordovaPlugin {
     }
 
     httpBodyData = OkHttpResponseUtil.getBodyBytesFromResponse(response);
-    httpMetaData = httpMetaJSON.toString().getBytes();
+    httpMetaData = httpMetadataJSON.toString().getBytes();
 
     payloadBuffer = ByteBuffer.allocate(RESULT_HEADER_LENGTH + httpMetaData.length + httpBodyData.length)
         .order(LITTLE_ENDIAN)
@@ -140,7 +140,7 @@ public class ResourceClient extends CordovaPlugin {
     return new PluginResult(resultStatus, payloadBuffer.array());
   }
 
-  private JSONObject okHttpResponseMetaAsJSON(final Response response) {
+  private JSONObject okHttpResponseMetadataAsJSON(final Response response) {
     final JSONObject responseJSON = new JSONObject();
     final int statusCode = response.code();
     final String statusText = response.message();

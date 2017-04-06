@@ -65,9 +65,9 @@ module.exports = (function (XMLHttpRequest) {
 
     function httpResponseFromArrayBuffer(buffer) {
       var metaLength = new Int32Array(buffer.slice(0, HEADER_LENGTH))[0],
-          metaBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength),
-          metaData = new Uint8Array(metaBuffer),
-          result = JSON.parse(String.fromCharCode.apply(null, metaData));
+          metadataBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength),
+          metadata = new Uint8Array(metadataBuffer),
+          result = JSON.parse(String.fromCharCode.apply(null, metadata));
 
       Object.defineProperties(result, {
         'rawBody': {
