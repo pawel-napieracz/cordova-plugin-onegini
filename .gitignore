@@ -1,14 +1,27 @@
 # Generic
-.DS_Store
-.idea/
-/cordova
-*.orig
-*.gradle/
-build/
-**/*.iml
-local.properties
-npm-debug.log*
 **/*--
+
+# Gradle files
+.gradle/
+build/
+
+# Intellij project files
+**/*.iml
+*.ipr
+*.iws
+.idea/
+
+# MAC_OSX
+*.DS_Store
+
+# Gitbook stuff
+_book/
+docs/site/
+docs/node_modules/
+docs/*/node_modules/
+docs/public/javadocs
+book.pdf
+npm-debug.log
 
 # iOS specific
 *.pbxuser
@@ -25,5 +38,4 @@ DerivedData
 src/ios/OneginiSDKiOS
 
 # Android specific
-src/android/CordovaLib/build
-src/android/build
+local.properties
