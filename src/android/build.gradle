@@ -59,8 +59,7 @@ android {
 
   sourceSets {
     main {
-      java.srcDirs = [applicationSrcDir, 'CordovaLib/src']
-      java.exclude { 'CordovaLib/src/com' }
+      java.srcDirs = [applicationSrcDir]
       manifest.srcFile 'AndroidManifest.xml'
       res.srcDirs = [applicationResDir]
     }
@@ -68,6 +67,8 @@ android {
 }
 
 dependencies {
+  compile 'org.apache.cordova:framework:6.2.1:release@aar'
+
   // Dependency injection
   compile 'com.google.dagger:dagger:2.0.2'
 }
