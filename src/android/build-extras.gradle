@@ -50,7 +50,7 @@ allprojects {
 
 dependencies {
   // Onegini SDK
-  compile('com.onegini.mobile.sdk.android:onegini-sdk:6.04.02@aar') {
+  compile('com.onegini.mobile.sdk.android:onegini-sdk:7.0.0-SNAPSHOT@aar') {
     transitive = true
   }
 
