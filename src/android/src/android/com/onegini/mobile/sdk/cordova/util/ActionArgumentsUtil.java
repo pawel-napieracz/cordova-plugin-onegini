@@ -29,6 +29,7 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.TAG;
 
 import java.security.InvalidParameterException;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -73,7 +74,7 @@ public class ActionArgumentsUtil {
 
   public static Callback.Method getCallbackMethodFromArguments(final JSONArray args) throws JSONException {
     final String methodName = args.getJSONObject(0).getString(PARAM_METHOD);
-    return Callback.Method.valueOf(methodName.toUpperCase());
+    return Callback.Method.valueOf(methodName.toUpperCase(Locale.ENGLISH));
   }
 
   public static boolean isFetchAnonymous(final JSONObject options) throws JSONException {
