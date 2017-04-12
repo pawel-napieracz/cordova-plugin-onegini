@@ -44,18 +44,13 @@ NSString *const OGCDVPluginKeyMarkedAsEnrolled = @"EnrolledForMobileAuthenticati
         }
 
         self.enrollCallbackId = command.callbackId;
-
-        if (![self isRegisteredForRemoteNotifications]) {
-            [self registerForRemoteNotifications];
-        } else {
-            [self doEnroll];
-        }
+        [self doEnroll];
     }];
 }
 
 - (void)doEnroll
 {
-    [[ONGUserClient sharedInstance] enrollForMobileAuthentication:^(BOOL enrolled, NSError *_Nullable error) {
+    [[ONGUserClient sharedInstance] enrollForMobileAuth:^(BOOL enrolled, NSError *_Nullable error) {
         if (error != nil || !enrolled) {
             [self sendErrorResultForCallbackId:self.enrollCallbackId withError:error];
         } else {
