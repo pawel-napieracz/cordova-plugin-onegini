@@ -208,7 +208,7 @@ public class MobileAuthenticationHandler
       final PinCallback pinCallback = (PinCallback) callback;
       pluginResultBuilder
           .withRemainingFailureCount(pinCallback.getAuthenticationAttemptCounter().getRemainingAttempts())
-          .withMaxFailureCount(pinCallback.getAuthenticationAttemptCounter().getRemainingAttempts());
+          .withMaxFailureCount(pinCallback.getAuthenticationAttemptCounter().getMaxAttempts());
     }
 
     callbackContext.sendPluginResult(pluginResultBuilder.build());
