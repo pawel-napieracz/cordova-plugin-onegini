@@ -4,12 +4,35 @@
 
 ## Introduction
 
-The **Onegini Mobile Security Platform** offers a mobile authentication mechanism in a user friendly and secure way. You can take advantage of mobile authentication to add second factor authentication to your product, that can be used to improve the security of selected actions like logging into your website or accepting a transaction payment.
+The **Onegini Mobile Security Platform** offers a mobile authentication mechanism in a user friendly and secure way. You can for instance take advantage of 
+mobile authentication to add second factor authentication to your product, that can be used to improve the security of selected actions like logging into your 
+website or accepting a transaction payment.
+
+The mobile authentication feature is an extensive feature that has a number of different possibilities. E.g. there are different ways that mobile authentication
+is triggered / received on a mobile device:
+- With push notifications; The user gets a push notification on his phone to alert him that a mobile authentication transaction is pending.
+- With an One-Time-Password (OTP); The user provides an OTP in order to confirm a mobile authentication transaction. Since the OTP is long it is likely that 
+the OTP is transformed into a QR code and the user scans this code with his mobile device.
+
+The mobile authentication with Push mechanism offers different ways of user authentication so you can ask your users for additional verification when accepting
+ a mobile authentication request.
 
 ## Setup and requirements
 
-The setup and requirements to enable mobile authentication differ per platform. For Android devices, the medium used to send push messages is **Google Cloud Messaging (GCM)**. For iOS devices, the **Apple Push Notification Service (APNS)** is used.
-You will need a valid GCM Sender ID and/or APNS setup to receive push notifications in the Onegini Cordova Plugin.
+The mobile authentication enrollment process is separated into two different steps:
+- enroll: Performs the basic enrollment
+- enroll with push: Exchanges push tokens with the Token Server so it can send push notifications to a mobile device.
+
+If you don't want to use mobile authentication **with push** you don't need to 
+perform the `enrollWithPush` step. The `enroll` method enables the basic mobile authentication feature. Mobile authentication with OTP is possible after you
+enrolled the user (using the `enroll` method).
+
+>**Note:** It is advised to perform the `enroll` step as soon as possible in your application as it is quite resource intensive becuause it generates a private 
+key and certificate.  
+
+The setup and requirements to enable mobile authentication with push differ per platform. For Android devices, the medium used to send push messages is 
+**Google Cloud Messaging (GCM)**. For iOS devices, the **Apple Push Notification Service (APNS)** is used. You will need a valid GCM Sender ID and/or APNS 
+setup to receive push notifications in the Onegini Cordova Plugin.
 
 ## Push Configuration
 
@@ -23,10 +46,8 @@ For iOS to receive push notifications. You will need to open `platforms/ios/MyAp
 Make sure to enable `Push Notifications` under your App's Capabilities.
 
 ## Enrollment
-
-Once push notifications have been set up, the Onegini Cordova plugin requires an authenticated or logged in user to enroll for mobile authentication. The user can be enrolled on only one application instance at a time. If the user has multiple mobile devices on which the application is installed, the user can only enroll for mobile authentication on one of these devices.
-
-**Example code to enroll an authenticated user for mobile authentication:**
+The Onegini Cordova plugin requires an authenticated or logged in user to enroll for mobile authentication. The user can enroll for mobile authentication on 
+every device that he/she installed your application on.
 
 ```js
 onegini.mobileAuthentication.enroll()
@@ -38,17 +59,32 @@ onegini.mobileAuthentication.enroll()
     });
 ```
 
-If you want to use mobile fingerprint authentication, you will need to register the fingerprint authenticator for the relevant user (see [User authentication with fingerprint](user-authentication-with-fingerprint.md)).
+
+## Enrollment with Push
+Once push notifications have been set up, the Onegini Cordova plugin requires an authenticated or logged in user to enroll for mobile authentication with push. 
+The user can be enrolled on only one application instance at a time. If the user has multiple mobile devices on which the application is installed, the user 
+can only enroll for mobile authentication with push on one of these devices.
+
+**Example code to enroll an authenticated user for mobile authentication with push:**
+
+//TODO
+
+If you want to use mobile fingerprint authentication, you will need to register the fingerprint authenticator for the relevant user (see 
+[User authentication with fingerprint](user-authentication-with-fingerprint.md)).
 
 ## Handling mobile authentication requests
 
-You can configure different mobile authentication types in the Token Server [mobile authentication configuration](https://docs.onegini.com/token-server/topics/mobile-apps/mobile-authentication/mobile-authentication.html#configure-authentication-properties) panel. There are currently three different methods of authentication. These are **push**, **push with PIN**, and **push with fingerprint**. Only once the authentication type has been configured on the Token Server can it be used.
+You can configure different mobile authentication types in the Token Server [mobile authentication configuration](https://docs.onegini.com/token-server/topics/mobile-apps/mobile-authentication/mobile-authentication.html#configure-authentication-properties) 
+panel. There are currently three different methods of authentication. These are **push**, **push with PIN**, **push with fingerprint**, and **push with FIDO**. 
+Only once the authentication type has been configured on the Token Server can it be used.
 
 ### Push
 
-The first type of mobile authentication request is the most simple one, push (also referred to as "confirmation"). The user has the option to simply accept or deny a request. Typically, this is done by displaying two buttons to the user, although the choice of UI is free and left entirely to the app developer.
+The first type of mobile authentication request is the most simple one, push (also referred to as "confirmation"). The user has the option to simply accept or 
+deny a request. Typically, this is done by displaying two buttons to the user, although the choice of UI is free and left entirely to the app developer.
 
-To handle a push mobile authentication request, the handler returned by [`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) must be implemented for the parameter `"confirmation"`.
+To handle a push mobile authentication request, the handler returned by [`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) must be 
+implemented for the parameter `"confirmation"`.
 
 **Example code to handle push mobile authentication requests:**
 
@@ -75,13 +111,17 @@ onegini.mobileAuthentication.on("confirmation")
     });
 ```
 
-The method `onConfirmationRequest` will be called when the Onegini Cordova plugin receives a mobile authentication request via push. The `actions.accept` and `actions.deny` methods allow the user to choose whether to accept or deny the mobile authentication request.
+The method `onConfirmationRequest` will be called when the Onegini Cordova plugin receives a mobile authentication request via push. The `actions.accept` and 
+`actions.deny` methods allow the user to choose whether to accept or deny the mobile authentication request.
 
 ### Push with PIN
 
-It is also possible to require the user to enter their PIN in order to confirm their identity before accepting a mobile authentication request. The push with PIN type of mobile authentication request adds another layer of security to the two factor authentication in your product.
+It is also possible to require the user to enter their PIN in order to confirm their identity before accepting a mobile authentication request. The push with 
+PIN type of mobile authentication request adds another layer of security to the two factor authentication in your product.
 
-Handling a push with PIN is similar to the simpler push, except the parameter given to [`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) is `"pin"`. It also requires the implementation of a different, but familiar handler method.
+Handling a push with PIN is similar to the simpler push, except the parameter given to 
+[`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) is `"pin"`. It also requires the implementation of a different, but familiar 
+handler method.
 
 **Example code to handle push with PIN mobile authentication requests:**
 
@@ -110,15 +150,20 @@ onegini.mobileAuthentication.on("pin")
     });
 ```
 
-The `request` argument contains some helpful properties such as the number of failed and remaining PIN attempts. See [`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) for more details.
+The `request` argument contains some helpful properties such as the number of failed and remaining PIN attempts. See 
+[`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) for more details.
 
 ### Push with fingerprint
 
-For devices that support it, it is also possible to allow mobile authentication requests for fingerprint. Like push with PIN, this mobile authentication method adds an extra layer of security, while often being more convenient for the user than PIN. The user is required to scan their fingerprint before the mobile authentication request is confirmed.
+For devices that support it, it is also possible to allow mobile authentication requests for fingerprint. Like push with PIN, this mobile authentication method 
+adds an extra layer of security, while often being more convenient for the user than PIN. The user is required to scan their fingerprint before the mobile
+authentication request is confirmed.
 
-The use of this mobile authentication method requires the fingerprint authenticator to have been registered for the user. See [User authentication with fingerprint](user-authentication-with-fingerprint.md) topic guide for more information.
+The use of this mobile authentication method requires the fingerprint authenticator to have been registered for the user. See 
+[User authentication with fingerprint](user-authentication-with-fingerprint.md) topic guide for more information.
 
-Handling a push with fingerprint is very similar to the other types of mobile authentication requests. See [`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) for more details.
+Handling a push with fingerprint is very similar to the other types of mobile authentication requests. See 
+[`onegini.mobileAuthentication.on`](../reference/mobileAuthentication/on.md) for more details.
 
 **Example code to handle push with fingerprint mobile authentication requests:**
 
@@ -163,7 +208,10 @@ onegini.mobileAuthentication.on("fingerprint")
     })
 ```
 
-The details of these handler methods are exactly the same as explained in the fingerprint authentication topic guide linked above. In particular, `onFingerprintCaptured` and `onFingerprintFailed` are only available on Android devices, due to the more restrictive nature of Touch Id for iOS. Additionally, care must be taken to implement `onPinRequest`, as the Onegini Cordova plugin will perform a fallback to pin in the case of multiple failed fingerprint requests.
+The details of these handler methods are exactly the same as explained in the fingerprint authentication topic guide linked above. In particular, 
+`onFingerprintCaptured` and `onFingerprintFailed` are only available on Android devices, due to the more restrictive nature of Touch Id for iOS. 
+Additionally, care must be taken to implement `onPinRequest`, as the Onegini Cordova plugin will perform a fallback to pin in the case of multiple failed 
+fingerprint requests.
 
 ### Push with FIDO
 

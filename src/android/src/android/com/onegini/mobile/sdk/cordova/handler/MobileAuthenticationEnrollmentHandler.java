@@ -18,11 +18,11 @@ package com.onegini.mobile.sdk.cordova.handler;
 
 import org.apache.cordova.CallbackContext;
 
-import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthenticationEnrollmentHandler;
-import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthenticationEnrollmentError;
+import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthEnrollmentHandler;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthEnrollmentError;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
-public class MobileAuthenticationEnrollmentHandler implements OneginiMobileAuthenticationEnrollmentHandler {
+public class MobileAuthenticationEnrollmentHandler implements OneginiMobileAuthEnrollmentHandler {
 
   private CallbackContext callbackContext;
 
@@ -38,9 +38,9 @@ public class MobileAuthenticationEnrollmentHandler implements OneginiMobileAuthe
   }
 
   @Override
-  public void onError(final OneginiMobileAuthenticationEnrollmentError oneginiMobileAuthenticationEnrollmentError) {
+  public void onError(final OneginiMobileAuthEnrollmentError mobileAuthEnrollmentError) {
     callbackContext.sendPluginResult(new PluginResultBuilder()
-        .withOneginiError(oneginiMobileAuthenticationEnrollmentError)
+        .withOneginiError(mobileAuthEnrollmentError)
         .build());
   }
 }
