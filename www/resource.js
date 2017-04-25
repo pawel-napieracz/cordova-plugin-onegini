@@ -63,8 +63,16 @@ module.exports = (function (XMLHttpRequest) {
       throw new TypeError("Onegini: missing 'url' argument for fetch");
     }
 
+    function getMetaLength(buffer) {
+      var array = new Uint8Array(buffer, 0, HEADER_LENGTH);
+      return ((array[array.length - 4]) |
+      (array[array.length - 3] << 8) |
+      (array[array.length - 2] << 8) |
+      (array[array.length - 1] << 8));
+    }
+
     function httpResponseFromArrayBuffer(buffer) {
-      var metaLength = new Uint32Array(buffer, 0, HEADER_LENGTH)[0],
+      var metaLength = getMetaLength(buffer),
           metadata = new Uint8Array(buffer, HEADER_LENGTH, metaLength),
           result = JSON.parse(String.fromCharCode.apply(null, metadata));
 
@@ -127,7 +135,7 @@ module.exports = (function (XMLHttpRequest) {
   }
 
   OneginiXMLHttpRequest.prototype.open = function (method, url) {
-    if (url.startsWith(resourceBaseUrl)) {
+    if (url.substr(0, resourceBaseUrl.length) === resourceBaseUrl) {
       setupXhrProxy(this, method, url);
     }
 
