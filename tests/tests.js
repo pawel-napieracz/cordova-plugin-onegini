@@ -634,8 +634,20 @@ exports.defineAutoTests = function () {
 
     describe("mobileAuthentication (2/3)", function () {
       describe("enroll", function () {
-        it("Should succeed in enrolling an authenticated user", function (done) {
+        it("Should succeed in enrolling an authenticated user for mobile auth", function (done) {
           onegini.mobileAuthentication.enroll(
+              function () {
+                expect(true).toBe(true);
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+                fail("Error callback was called, but method should have succeeded");
+              });
+        }, 20000);
+
+        it("Should succeed in enrolling an authenticated user for mobile auth with push", function (done) {
+          onegini.mobileAuthentication.enrollForPush(
               function () {
                 expect(true).toBe(true);
                 done();

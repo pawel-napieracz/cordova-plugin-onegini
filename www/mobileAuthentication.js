@@ -21,6 +21,10 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
   }
 
+  function enrollForPush(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enrollForPush', [], successCb, failureCb);
+  }
+
   function MobileAuthenticationHandler(method) {
     var self = this;
     this.callbacks = {};
@@ -103,6 +107,7 @@ module.exports = (function () {
 
   return {
     enroll: enroll,
+    enrollForPush: enrollForPush,
     on: on
   }
 })();
