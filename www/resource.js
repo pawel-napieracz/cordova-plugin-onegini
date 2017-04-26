@@ -67,27 +67,40 @@ module.exports = (function (XMLHttpRequest) {
       var array = new Uint8Array(buffer, 0, HEADER_LENGTH);
       return ((array[array.length - 4]) |
       (array[array.length - 3] << 8) |
-      (array[array.length - 2] << 8) |
-      (array[array.length - 1] << 8));
+      (array[array.length - 2] << 16) |
+      (array[array.length - 1] << 24));
     }
 
     function httpResponseFromArrayBuffer(buffer) {
       var metaLength = getMetaLength(buffer),
           metadata = new Uint8Array(buffer, HEADER_LENGTH, metaLength),
-          result = JSON.parse(String.fromCharCode.apply(null, metadata));
+          result = JSON.parse(String.fromCharCode.apply(null, metadata)),
+          rawBody;
+
+      if (ArrayBuffer.prototype.slice) {
+        rawBody = buffer.slice(HEADER_LENGTH + metaLength, buffer.byteLength)
+      } else {
+        rawBody = new ArrayBuffer(buffer.byteLength - metaLength - HEADER_LENGTH);
+        var bodyArray = new Uint8Array(rawBody);
+        var bufferArray = new Uint8Array(buffer);
+
+        for (var i = 0; i < bodyArray.length; i++) {
+          bodyArray[i] = bufferArray[i + HEADER_LENGTH + metaLength];
+        }
+      }
 
       Object.defineProperties(result, {
         'rawBody': {
-          value: new Uint8Array(buffer, HEADER_LENGTH + metaLength)
+          value: rawBody
         },
         'body': {
-          get: function() {
+          get: function () {
             var bodyData = new Uint8Array(this.rawBody);
             return String.fromCharCode.apply(null, bodyData);
           }
         },
         'json': {
-          get: function() {
+          get: function () {
             return JSON.parse(this.body);
           }
         }
