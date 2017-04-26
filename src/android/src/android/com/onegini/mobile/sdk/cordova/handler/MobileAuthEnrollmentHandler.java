@@ -22,11 +22,11 @@ import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthEnrollmentHandle
 import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthEnrollmentError;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
-public class MobileAuthenticationEnrollmentHandler implements OneginiMobileAuthEnrollmentHandler {
+public class MobileAuthEnrollmentHandler implements OneginiMobileAuthEnrollmentHandler {
 
   private CallbackContext callbackContext;
 
-  public MobileAuthenticationEnrollmentHandler(final CallbackContext callbackContext) {
+  public MobileAuthEnrollmentHandler(final CallbackContext callbackContext) {
     this.callbackContext = callbackContext;
   }
 
