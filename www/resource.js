@@ -242,9 +242,13 @@ module.exports = (function (XMLHttpRequest) {
   }
 
   function populateXhrWithFetchResponse(xhr, result) {
+    if (xhr.responseType === 'arrayBuffer') {
+      defineProperty(xhr, 'response', result.rawBody);
+    } else {
+      defineProperty(xhr, 'response', result.body);
+    }
     defineProperty(xhr, 'readyState', 4);
     defineProperty(xhr, 'responseText', result.body);
-    defineProperty(xhr, 'response', result.body);
     defineProperty(xhr, 'status', result.status);
     defineProperty(xhr, 'statusText', result.statusText);
     xhr._responseHeaders = result.headers;
