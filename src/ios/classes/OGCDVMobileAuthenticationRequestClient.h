@@ -17,7 +17,7 @@
 #import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
-@interface OGCDVMobileAuthenticationRequestClient : CDVPlugin<ONGMobileAuthenticationRequestDelegate> {
+@interface OGCDVMobileAuthenticationRequestClient : CDVPlugin<ONGMobileAuthRequestDelegate> {
     NSOperationQueue *operationQueue;
     NSMutableDictionary *challengeReceiversCallbackIds;
     NSDictionary *authenticationEventsForMethods;

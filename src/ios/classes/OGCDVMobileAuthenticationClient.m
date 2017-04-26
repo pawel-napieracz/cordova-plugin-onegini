@@ -44,21 +44,27 @@ NSString *const OGCDVPluginKeyMarkedAsEnrolled = @"EnrolledForMobileAuthenticati
         }
 
         self.enrollCallbackId = command.callbackId;
-        [self doEnroll];
+
+        [[ONGUserClient sharedInstance] enrollForMobileAuth:^(BOOL enrolled, NSError *_Nullable error) {
+            if (error != nil || !enrolled) {
+                [self sendErrorResultForCallbackId:self.enrollCallbackId withError:error];
+            } else {
+                [self markAsEnrolled];
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.enrollCallbackId];
+            }
+            self.enrollCallbackId = nil;
+        }];
     }];
 }
 
-- (void)doEnroll
+- (void)enrollForPush:(CDVInvokedUrlCommand *)command
 {
-    [[ONGUserClient sharedInstance] enrollForMobileAuth:^(BOOL enrolled, NSError *_Nullable error) {
-        if (error != nil || !enrolled) {
-            [self sendErrorResultForCallbackId:self.enrollCallbackId withError:error];
-        } else {
-            [self markAsEnrolled];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.enrollCallbackId];
-        }
-        self.enrollCallbackId = nil;
-    }];
+
+}
+
+- (void)doEnrollForPush
+{
+
 }
 
 - (void)registerForRemoteNotifications
@@ -89,17 +95,14 @@ NSString *const OGCDVPluginKeyMarkedAsEnrolled = @"EnrolledForMobileAuthenticati
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     if (self.enrollCallbackId == nil) {
-        // remember until 'OGCDVClient start' completes
-        self.pendingDeviceToken = deviceToken;
+        self.deviceToken = deviceToken;
     } else {
-        [[ONGUserClient sharedInstance] storeDevicePushTokenInSession:deviceToken];
-        [self doEnroll];
+        [self doEnrollForPush];
     }
 }
 
 - (void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    [[ONGUserClient sharedInstance] storeDevicePushTokenInSession:nil];
     [self sendErrorResultForCallbackId:self.enrollCallbackId withError:error];
 }
 

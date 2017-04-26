@@ -20,9 +20,10 @@
 @interface OGCDVMobileAuthenticationClient : CDVPlugin
 
 @property (nonatomic, copy) NSString *enrollCallbackId;
-@property (nonatomic, copy) NSData *pendingDeviceToken;
+@property (nonatomic, copy) NSData *deviceToken;
 
 - (void)enroll:(CDVInvokedUrlCommand *)command;
+- (void)enrollForPush:(CDVInvokedUrlCommand *)command;
 
 - (BOOL)isEnrolled;
 

@@ -22,7 +22,7 @@
 
 @property (nonatomic, copy) void (^confirmationChallengeConfirmationBlock)(BOOL confirmRequest);
 @property (atomic, retain) NSString *completeOperationCallbackId;
-@property (atomic, retain) ONGMobileAuthenticationRequest *mobileAuthenticationRequest;
+@property (atomic, retain) ONGMobileAuthRequest *mobileAuthenticationRequest;
 @property (atomic, retain) NSString *mobileAuthenticationMethod;
 @property (atomic, retain) ONGPinChallenge *pinChallenge;
 @property (atomic, retain) ONGFingerprintChallenge *fingerprintChallenge;
@@ -31,16 +31,16 @@
 @property (nonatomic, assign) BOOL _finished;
 
 - (id)initWithConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation
-                         forRequest:(ONGMobileAuthenticationRequest *)request
+                         forRequest:(ONGMobileAuthRequest *)request
                           forMethod:(NSString *)method;
 - (id)initWithPinChallenge:(ONGPinChallenge *)challenge
-                forRequest:(ONGMobileAuthenticationRequest *)request
+                forRequest:(ONGMobileAuthRequest *)request
                  forMethod:(NSString *)method;
 - (id)initWithFingerprintChallenge:(ONGFingerprintChallenge *)challenge
-                        forRequest:(ONGMobileAuthenticationRequest *)request
+                        forRequest:(ONGMobileAuthRequest *)request
                          forMethod:(NSString *)method;
 - (id)initWithFidoChallenge:(ONGFIDOChallenge *)challenge
-                 forRequest:(ONGMobileAuthenticationRequest *)request
+                 forRequest:(ONGMobileAuthRequest *)request
                   forMethod:(NSString *)method;
 - (void)sendChallenge:(NSString *)callbackId;
 

@@ -18,7 +18,6 @@
 #import "OGCDVClient.h"
 #import "OGCDVConstants.h"
 #import "OneginiConfigModel.h"
-#import "OGCDVMobileAuthenticationClient.h"
 #import "OGCDVMobileAuthenticationRequestClient.h"
 
 @implementation OGCDVClient {
@@ -44,11 +43,6 @@
                 return;
             }
 
-            OGCDVMobileAuthenticationClient *mobileAuthClient = [(CDVViewController *)self.viewController getCommandInstance:OGCDVPluginClassMobileAuthenticationClient];
-            if (mobileAuthClient.pendingDeviceToken != nil) {
-                [[ONGUserClient sharedInstance] storeDevicePushTokenInSession:mobileAuthClient.pendingDeviceToken];
-                mobileAuthClient.pendingDeviceToken = nil;
-            }
             NSDictionary *config = @{OGCDVPluginKeyResourceBaseURL: OneginiConfigModel.configuration[ONGResourceBaseURL]};
             [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:config] callbackId:command.callbackId];
             [self handleLaunchNotification];
@@ -62,7 +56,7 @@
 
     if (userInfo != nil) {
         OGCDVMobileAuthenticationRequestClient *mobileAuthenticationRequestClient = [(CDVViewController *)self.viewController getCommandInstance:OGCDVPluginClassMobileAuthenticationRequestClient];
-        [[ONGUserClient sharedInstance] handleMobileAuthenticationRequest:userInfo delegate:mobileAuthenticationRequestClient];
+        [[ONGUserClient sharedInstance] handleMobileAuthRequest:userInfo delegate:mobileAuthenticationRequestClient];
     }
 }
 

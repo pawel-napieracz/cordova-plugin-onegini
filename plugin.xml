@@ -135,8 +135,8 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGErrors.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGFIDOChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGFingerprintChallenge.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthenticationRequest.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthenticationRequestDelegate.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthRequest.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthRequestDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGNetworkTask.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPinChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPublicCommons.h"/>
