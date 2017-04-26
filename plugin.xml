@@ -323,9 +323,9 @@
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PinValidationHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthenticationEnrollmentHandler.java"
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthEnrollmentHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthenticationHandler.java"
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/RegistrationRequestHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
