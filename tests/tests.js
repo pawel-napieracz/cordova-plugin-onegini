@@ -1425,6 +1425,20 @@ exports.defineAutoTests = function () {
         };
         xhr.send();
       });
+
+      it('should intercept an XMLHttpRequest for binary data', function (done) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://onegini-msp-snapshot.test.onegini.io/resources/devices');
+        xhr.responseType = 'arrayBuffer';
+        xhr.onload = function () {
+          expect(this.readyState).toEqual(4);
+          expect(this.status).toBe(200);
+          expect(this.response).toBeDefined();
+          expect(this.response instanceof String).toBe(false);
+          done();
+        };
+        xhr.send();
+      });
     });
   });
 
