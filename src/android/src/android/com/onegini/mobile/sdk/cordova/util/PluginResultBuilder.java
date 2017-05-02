@@ -85,7 +85,7 @@ public class PluginResultBuilder {
 
     try {
       payload.put(PARAM_ERROR_CODE, oneginiError.getErrorType());
-      payload.put(PARAM_ERROR_DESCRIPTION, oneginiError.getErrorDescription());
+      payload.put(PARAM_ERROR_DESCRIPTION, oneginiError.getMessage());
     } catch (JSONException e) {
       handleException(e);
     }
