@@ -59,12 +59,35 @@ NSString *const OGCDVPluginKeyMarkedAsEnrolled = @"EnrolledForMobileAuthenticati
 
 - (void)enrollForPush:(CDVInvokedUrlCommand *)command
 {
+    [self.commandDelegate runInBackground:^{
+        ONGUserProfile *user = [[ONGUserClient sharedInstance] authenticatedUserProfile];
+        if (user == nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
+            return;
+        }
 
+        self.enrollCallbackId = command.callbackId;
+
+        if (![self isRegisteredForRemoteNotifications]) {
+            [self registerForRemoteNotifications];
+        } else {
+            [self doEnrollForPush];
+        }
+    }];
 }
 
 - (void)doEnrollForPush
 {
-
+    [[ONGUserClient sharedInstance] enrollForPushMobileAuthWithDeviceToken:self.deviceToken
+                                                                completion:^(BOOL enrolled, NSError *_Nullable error) {
+                                                                    if (error != nil || !enrolled) {
+                                                                        [self sendErrorResultForCallbackId:self.enrollCallbackId withError:error];
+                                                                    } else {
+                                                                        [self markAsEnrolled];
+                                                                        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.enrollCallbackId];
+                                                                    }
+                                                                    self.enrollCallbackId = nil;
+                                                                }];
 }
 
 - (void)registerForRemoteNotifications
