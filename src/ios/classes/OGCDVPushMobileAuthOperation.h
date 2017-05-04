@@ -17,7 +17,7 @@
 #import "OneginiSDK.h"
 #import "OGCDVPushMobileAuthRequestClient.h"
 
-@interface OGCDVMobileAuthenticationOperation : NSOperation<OGCDVPluginMobileAuthenticationRequestDelegate> {
+@interface OGCDVPushMobileAuthOperation : NSOperation<OGCDVPluginMobileAuthenticationRequestDelegate> {
 }
 
 @property (nonatomic, copy) void (^confirmationChallengeConfirmationBlock)(BOOL confirmRequest);

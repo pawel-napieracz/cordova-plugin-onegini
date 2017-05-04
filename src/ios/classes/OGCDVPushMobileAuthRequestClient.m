@@ -15,7 +15,7 @@
  */
 
 #import "OGCDVPushMobileAuthRequestClient.h"
-#import "OGCDVMobileAuthenticationOperation.h"
+#import "OGCDVPushMobileAuthOperation.h"
 #import "OGCDVConstants.h"
 #import "OGCDVAuthenticationDelegateHandler.h"
 
@@ -64,7 +64,7 @@ static OGCDVPushMobileAuthRequestClient *sharedInstance;
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation forRequest:(ONGMobileAuthRequest *)request
 {
-    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+    OGCDVPushMobileAuthOperation *operation = [[OGCDVPushMobileAuthOperation alloc]
         initWithConfirmationChallenge:confirmation
                            forRequest:request
                             forMethod:OGCDVPluginMobileAuthenticationMethodConfirmation];
@@ -79,7 +79,7 @@ static OGCDVPushMobileAuthRequestClient *sharedInstance;
         return;
     }
 
-    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+    OGCDVPushMobileAuthOperation *operation = [[OGCDVPushMobileAuthOperation alloc]
         initWithPinChallenge:challenge
                   forRequest:request
                    forMethod:OGCDVPluginMobileAuthenticationMethodPin];
@@ -89,7 +89,7 @@ static OGCDVPushMobileAuthRequestClient *sharedInstance;
 - (void)userClient:(ONGUserClient *)userClient didReceiveFingerprintChallenge:(ONGFingerprintChallenge *)challenge
         forRequest:(ONGMobileAuthRequest *)request
 {
-    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+    OGCDVPushMobileAuthOperation *operation = [[OGCDVPushMobileAuthOperation alloc]
         initWithFingerprintChallenge:challenge
                           forRequest:request
                            forMethod:OGCDVPluginMobileAuthenticationMethodFingerprint];
@@ -99,7 +99,7 @@ static OGCDVPushMobileAuthRequestClient *sharedInstance;
 - (void)userClient:(ONGUserClient *)userClient didReceiveFIDOChallenge:(ONGFIDOChallenge *)challenge
         forRequest:(ONGMobileAuthRequest *)request
 {
-    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+    OGCDVPushMobileAuthOperation *operation = [[OGCDVPushMobileAuthOperation alloc]
         initWithFidoChallenge:challenge
                    forRequest:request
                     forMethod:OGCDVPluginMobileAuthenticationMethodFido];

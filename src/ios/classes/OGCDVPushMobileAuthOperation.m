@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#import "OGCDVMobileAuthenticationOperation.h"
+#import "OGCDVPushMobileAuthOperation.h"
 #import "OGCDVConstants.h"
 
-@implementation OGCDVMobileAuthenticationOperation {
+@implementation OGCDVPushMobileAuthOperation {
 }
 
 @synthesize mobileAuthenticationRequest;
@@ -105,8 +105,8 @@
     [self didChangeValueForKey:@"isExecuting"];
 
     [[OGCDVPushMobileAuthRequestClient sharedInstance] performSelectorOnMainThread:@selector(setDelegate:)
-                                                                              withObject:self
-                                                                           waitUntilDone:YES];
+                                                                        withObject:self
+                                                                     waitUntilDone:YES];
 
     NSDictionary *challengeReceiversCallbackIds = [[OGCDVPushMobileAuthRequestClient sharedInstance] challengeReceiversCallbackIds];
     NSString *challengeReceiverCallbackId = challengeReceiversCallbackIds[mobileAuthenticationMethod];
@@ -115,9 +115,9 @@
         [self sendChallenge:challengeReceiverCallbackId];
     } else {
         [[[OGCDVPushMobileAuthRequestClient sharedInstance] challengeReceiversCallbackIds] addObserver:self
-                                                                                                  forKeyPath:mobileAuthenticationMethod
-                                                                                                     options:NSKeyValueObservingOptionNew
-                                                                                                     context:NULL];
+                                                                                            forKeyPath:mobileAuthenticationMethod
+                                                                                               options:NSKeyValueObservingOptionNew
+                                                                                               context:NULL];
     }
 }
 

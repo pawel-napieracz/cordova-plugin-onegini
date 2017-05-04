@@ -114,8 +114,8 @@
     <source-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.m"/>
     <header-file src="src/ios/classes/OGCDVPushMobileAuthRequestClient.h"/>
     <source-file src="src/ios/classes/OGCDVPushMobileAuthRequestClient.m"/>
-    <header-file src="src/ios/classes/OGCDVMobileAuthenticationOperation.h"/>
-    <source-file src="src/ios/classes/OGCDVMobileAuthenticationOperation.m"/>
+    <header-file src="src/ios/classes/OGCDVPushMobileAuthOperation.h"/>
+    <source-file src="src/ios/classes/OGCDVPushMobileAuthOperation.m"/>
 
     <!-- Safari Services for SFSafariViewController -->
     <framework src="SafariServices.framework" weak="true" />
