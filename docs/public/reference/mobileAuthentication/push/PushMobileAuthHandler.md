@@ -4,7 +4,7 @@
 
 ## Introduction
 
-When a user is enrolled for push mobile authentication, they are able to receive and respond to mobile authentication requests. After receiving a push notification containing such a request, the Onegini Cordova Plugin needs to know how to handle it. This is done via a `MobileAuthenticationHandler` object, which can be used to register callbacks which will be called when certain mobile authentication steps are required.
+When a user is enrolled for push mobile authentication, they are able to receive and respond to mobile authentication requests. After receiving a push notification containing such a request, the Onegini Cordova Plugin needs to know how to handle it. This is done via a `PushMobileAuthHandler` object, which can be used to register callbacks which will be called when certain mobile authentication steps are required.
 
 **Example:** When a mobile authentication request of type **push** is received, the `onConfirmationRequest` callback will be called.
 

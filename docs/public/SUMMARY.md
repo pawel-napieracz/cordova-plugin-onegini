@@ -12,6 +12,7 @@
     * [Deregister user](topics/deregister-user.md)
     * [Mobile authentication](topics/mobile-authentication.md)
       * [Push Mobile authentication](topics/mobile-authentication-push.md)
+      * [OTP Mobile authentication](topics/mobile-authentication-otp.md)
     * [Secure resource access](topics/secure-resource-access.md)
     * [Error handling](topics/error-handling.md)
 * [Reference guides](reference/introduction.md)
@@ -39,6 +40,9 @@
             * [enroll](reference/mobileAuthentication/push/enroll.md)
             * [on](reference/mobileAuthentication/push/on.md)
             * [PushMobileAuthHandler](reference/mobileAuthentication/push/PushMobileAuthHandler.md)
+        * OTP
+            * [handleRequest](reference/mobileAuthentication/otp/handleRequest.md)
+            * [OtpMobileAuthHandler](reference/mobileAuthentication/otp/OtpMobileAuthHandler.md)
 * [Release notes](release-notes/introduction.md)
     * [1.x](release-notes/1.x.md)
     * [2.x](release-notes/2.x.md)
