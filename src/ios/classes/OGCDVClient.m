@@ -18,7 +18,7 @@
 #import "OGCDVClient.h"
 #import "OGCDVConstants.h"
 #import "OneginiConfigModel.h"
-#import "OGCDVMobileAuthenticationRequestClient.h"
+#import "OGCDVPushMobileAuthRequestClient.h"
 
 @implementation OGCDVClient {
 }
@@ -55,8 +55,9 @@
     NSDictionary *userInfo = self.launchNotificationUserInfo;
 
     if (userInfo != nil) {
-        OGCDVMobileAuthenticationRequestClient *mobileAuthenticationRequestClient = [(CDVViewController *)self.viewController getCommandInstance:OGCDVPluginClassMobileAuthenticationRequestClient];
-        [[ONGUserClient sharedInstance] handleMobileAuthRequest:userInfo delegate:mobileAuthenticationRequestClient];
+        OGCDVPushMobileAuthRequestClient *mobileAuthenticationRequestClient = [(CDVViewController *)self.viewController
+            getCommandInstance:OGCDVPluginClassMobileAuthenticationRequestClient];
+        [[ONGUserClient sharedInstance] handlePushMobileAuthRequest:userInfo delegate:mobileAuthenticationRequestClient];
     }
 }
 

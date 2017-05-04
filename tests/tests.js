@@ -546,11 +546,11 @@ exports.defineAutoTests = function () {
     describe("mobileAuthentication (1/3)", function () {
       describe('enroll', function () {
         it("should exist", function () {
-          expect(onegini.mobileAuthentication.enroll).toBeDefined();
+          expect(onegini.mobileAuth.enroll).toBeDefined();
         });
 
         it("should return an error when not logged in", function (done) {
-          onegini.mobileAuthentication.enroll(
+          onegini.mobileAuth.enroll(
               function (result) {
                 expect(result).toBeUndefined();
               },
@@ -635,7 +635,7 @@ exports.defineAutoTests = function () {
     describe("mobileAuthentication (2/3)", function () {
       describe("enroll", function () {
         it("Should succeed in enrolling an authenticated user for mobile auth", function (done) {
-          onegini.mobileAuthentication.enroll(
+          onegini.mobileAuth.enroll(
               function () {
                 expect(true).toBe(true);
                 done();
@@ -647,7 +647,7 @@ exports.defineAutoTests = function () {
         }, 20000);
 
         it("Should succeed in enrolling an authenticated user for mobile auth with push", function (done) {
-          onegini.mobileAuthentication.enrollForPush(
+          onegini.mobileAuth.push.enroll(
               function () {
                 expect(true).toBe(true);
                 done();
@@ -661,11 +661,11 @@ exports.defineAutoTests = function () {
 
       describe("on", function () {
         it('should exist', function () {
-          expect(onegini.mobileAuthentication.on).toBeDefined();
+          expect(onegini.mobileAuth.push.on).toBeDefined();
         });
 
         it('should accept a mobile confirmation request', function (done) {
-          onegini.mobileAuthentication.on("confirmation")
+          onegini.mobileAuth.push.on("confirmation")
               .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
@@ -683,7 +683,7 @@ exports.defineAutoTests = function () {
         }, 10000);
 
         it('should reject a mobile confirmation request', function (done) {
-          onegini.mobileAuthentication.on("confirmation")
+          onegini.mobileAuth.push.on("confirmation")
               .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
@@ -703,7 +703,7 @@ exports.defineAutoTests = function () {
         it('should be able to handle multiple requests', function (done) {
           var counter = 0;
 
-          onegini.mobileAuthentication.on("confirmation")
+          onegini.mobileAuth.push.on("confirmation")
               .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
@@ -725,7 +725,7 @@ exports.defineAutoTests = function () {
         }, 10000);
 
         it('should accept a mobile pin request', function (done) {
-          onegini.mobileAuthentication.on("pin")
+          onegini.mobileAuth.push.on("pin")
               .onPinRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
@@ -754,7 +754,7 @@ exports.defineAutoTests = function () {
         }, 10000);
 
         it('should reject a mobile pin request', function (done) {
-          onegini.mobileAuthentication.on("pin")
+          onegini.mobileAuth.push.on("pin")
               .onPinRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
                 expect(request.message).toBeDefined();
@@ -1165,7 +1165,7 @@ exports.defineAutoTests = function () {
       describe("mobileAuthentication FIDO (3/4)", function () {
         describe("on request", function () {
           it("Should accept", function (done) {
-            onegini.mobileAuthentication.on("fido")
+            onegini.mobileAuth.push.on("fido")
                 .onFidoRequest(function (actions, request) {
                   console.log("Please provide correct fingerprint");
                   expect(request.type).toBeDefined();
@@ -1233,7 +1233,7 @@ exports.defineAutoTests = function () {
         });
         describe("on", function () {
           it("Should accept a mobile fingerprint request", function (done) {
-            onegini.mobileAuthentication.on("fingerprint")
+            onegini.mobileAuth.push.on("fingerprint")
                 .onFingerprintRequest(function (actions, request) {
                   console.log("Please provide correct fingerprint");
                   expect(request.type).toBeDefined();
@@ -1252,7 +1252,7 @@ exports.defineAutoTests = function () {
           }, 10000);
 
           it("Should reject a mobile fingerprint request", function (done) {
-            onegini.mobileAuthentication.on("fingerprint")
+            onegini.mobileAuth.push.on("fingerprint")
                 .onFingerprintRequest(function (actions, request) {
                   expect(request.type).toBeDefined();
                   expect(request.message).toBeDefined();
@@ -1272,7 +1272,7 @@ exports.defineAutoTests = function () {
           if (cordova.platformId === "android") {
             it("Should be notified on fingerprint captured", function (done) {
               var didCallCaptured = false;
-              onegini.mobileAuthentication.on("fingerprint")
+              onegini.mobileAuth.push.on("fingerprint")
                   .onFingerprintRequest(function (actions, request) {
                     console.log("Please provide any fingerprint");
                     expect(request).toBeDefined();
@@ -1295,7 +1295,7 @@ exports.defineAutoTests = function () {
             }, 10000);
 
             it("Should request fingerprint authentication again on incorrect fingerprint", function (done) {
-              onegini.mobileAuthentication.on("fingerprint")
+              onegini.mobileAuth.push.on("fingerprint")
                   .onFingerprintRequest(function (actions, request) {
                     console.log("Please provide incorrect fingerprint");
                     expect(request).toBeDefined();

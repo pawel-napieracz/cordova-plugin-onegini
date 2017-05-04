@@ -15,7 +15,7 @@
  */
 
 #import "OneginiSDK.h"
-#import "OGCDVMobileAuthenticationRequestClient.h"
+#import "OGCDVPushMobileAuthRequestClient.h"
 
 @interface OGCDVMobileAuthenticationOperation : NSOperation<OGCDVPluginMobileAuthenticationRequestDelegate> {
 }

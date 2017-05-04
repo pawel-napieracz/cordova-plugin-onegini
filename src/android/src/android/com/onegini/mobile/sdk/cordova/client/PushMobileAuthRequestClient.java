@@ -34,7 +34,7 @@ import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 @SuppressWarnings("unused")
-public class MobileAuthenticationRequestClient extends CordovaPlugin {
+public class PushMobileAuthRequestClient extends CordovaPlugin {
 
   private static final String ACTION_REGISTER_CHALLENGE_RECEIVER = "registerChallengeReceiver";
   private static final String ACTION_REPLY_TO_CHALLENGE = "replyToChallenge";

@@ -104,17 +104,17 @@
     self._executing = YES;
     [self didChangeValueForKey:@"isExecuting"];
 
-    [[OGCDVMobileAuthenticationRequestClient sharedInstance] performSelectorOnMainThread:@selector(setDelegate:)
+    [[OGCDVPushMobileAuthRequestClient sharedInstance] performSelectorOnMainThread:@selector(setDelegate:)
                                                                               withObject:self
                                                                            waitUntilDone:YES];
 
-    NSDictionary *challengeReceiversCallbackIds = [[OGCDVMobileAuthenticationRequestClient sharedInstance] challengeReceiversCallbackIds];
+    NSDictionary *challengeReceiversCallbackIds = [[OGCDVPushMobileAuthRequestClient sharedInstance] challengeReceiversCallbackIds];
     NSString *challengeReceiverCallbackId = challengeReceiversCallbackIds[mobileAuthenticationMethod];
 
     if (challengeReceiverCallbackId) {
         [self sendChallenge:challengeReceiverCallbackId];
     } else {
-        [[[OGCDVMobileAuthenticationRequestClient sharedInstance] challengeReceiversCallbackIds] addObserver:self
+        [[[OGCDVPushMobileAuthRequestClient sharedInstance] challengeReceiversCallbackIds] addObserver:self
                                                                                                   forKeyPath:mobileAuthenticationMethod
                                                                                                      options:NSKeyValueObservingOptionNew
                                                                                                      context:NULL];
@@ -127,7 +127,7 @@
                        context:(void *)context
 {
     if ([keyPath isEqualToString:mobileAuthenticationMethod]) {
-        [[[OGCDVMobileAuthenticationRequestClient sharedInstance] challengeReceiversCallbackIds] removeObserver:self forKeyPath:mobileAuthenticationMethod];
+        [[[OGCDVPushMobileAuthRequestClient sharedInstance] challengeReceiversCallbackIds] removeObserver:self forKeyPath:mobileAuthenticationMethod];
         NSString *challengeReceiverCallbackId = change[NSKeyValueChangeNewKey];
         [self sendChallenge:challengeReceiverCallbackId];
     }
@@ -139,7 +139,7 @@
     message[OGCDVPluginKeyType] = mobileAuthenticationRequest.type;
     message[OGCDVPluginKeyMessage] = mobileAuthenticationRequest.message;
     message[OGCDVPluginKeyProfileId] = mobileAuthenticationRequest.userProfile.profileId;
-    message[OGCDVPluginKeyEvent] = [[OGCDVMobileAuthenticationRequestClient sharedInstance] authenticationEventsForMethods][mobileAuthenticationMethod];
+    message[OGCDVPluginKeyEvent] = [[OGCDVPushMobileAuthRequestClient sharedInstance] authenticationEventsForMethods][mobileAuthenticationMethod];
 
     if (pinChallenge) {
         message[OGCDVPluginKeyMaxFailureCount] = @(pinChallenge.maxFailureCount);
@@ -154,17 +154,17 @@
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
     [pluginResult setKeepCallbackAsBool:YES];
 
-    [[[OGCDVMobileAuthenticationRequestClient sharedInstance] commandDelegate] sendPluginResult:pluginResult callbackId:callbackId];
+    [[[OGCDVPushMobileAuthRequestClient sharedInstance] commandDelegate] sendPluginResult:pluginResult callbackId:callbackId];
 }
 
-- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
+- (void)mobileAuthenticationRequestClient:(OGCDVPushMobileAuthRequestClient *)mobileAuthenticationRequestClient
   didReceiveConfirmationChallengeResponse:(BOOL)accept withCallbackId:(NSString *)callbackId
 {
     [self setCompleteOperationCallbackId:callbackId];
     [self confirmationChallengeConfirmationBlock](accept);
 }
 
-- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
+- (void)mobileAuthenticationRequestClient:(OGCDVPushMobileAuthRequestClient *)mobileAuthenticationRequestClient
            didReceivePinChallengeResponse:(BOOL)accept withPin:(NSString *)pin withCallbackId:(NSString *)callbackId
 {
     [self setCompleteOperationCallbackId:callbackId];
@@ -176,7 +176,7 @@
     }
 }
 
-- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
+- (void)mobileAuthenticationRequestClient:(OGCDVPushMobileAuthRequestClient *)mobileAuthenticationRequestClient
    didReceiveFingerprintChallengeResponse:(BOOL)accept withPrompt:(NSString *)prompt withCallbackId:(NSString *)callbackId
 {
     [self setCompleteOperationCallbackId:callbackId];
@@ -193,7 +193,7 @@
     }
 }
 
-- (void)mobileAuthenticationRequestClient:(OGCDVMobileAuthenticationRequestClient *)mobileAuthenticationRequestClient
+- (void)mobileAuthenticationRequestClient:(OGCDVPushMobileAuthRequestClient *)mobileAuthenticationRequestClient
           didReceiveFidoChallengeResponse:(BOOL)accept withCallbackId:(NSString *)callbackId
 {
     [self setCompleteOperationCallbackId:callbackId];

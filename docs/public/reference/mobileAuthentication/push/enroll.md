@@ -1,18 +1,19 @@
-# Enroll for mobile authentication
+# Enroll for mobile authentication with push
 
 <!-- toc -->
 
-Authenticated users can enroll for mobile authentication, allowing them to execute mobile authentication with OTP. See the [mobile authentication topic guide](../../topics/mobile-authentication.md) 
-for more information on mobile authentication in general.
+Authenticated users can enroll for mobile authentication with push, allowing them to receive and respond to push notifications.
 
-## `onegini.mobileAuth.enroll`
+A prerequisite for this method is that the user is already enrolled for [regular mobile authentication (without push)](../enroll.md).
+
+## `onegini.mobileAuth.push.enroll`
 
 This function enrolls the currently logged in user for mobile authentication.
 
 **Example enrollment for a logged in user:**
 
 ```js
-onegini.mobileAuth.enroll()
+onegini.mobileAuth.push.enroll()
     .then(() => {
       alert("Enrollment success!");
     })

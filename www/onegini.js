@@ -19,7 +19,7 @@ module.exports = (function () {
   var device = require('./device');
   var utils = require('./utils');
   var resource = require('./resource');
-  var mobileAuthentication = require('./mobileAuthentication');
+  var mobileAuth = require('./mobileAuth');
 
   function start(options, successCb, failureCb) {
     var promise, callbackResult;
@@ -52,6 +52,7 @@ module.exports = (function () {
     user: user,
     device: device,
     resource: resource,
-    mobileAuthentication: mobileAuthentication
+    mobileAuthentication: mobileAuth,
+    mobileAuth: mobileAuth
   };
 })();

@@ -58,7 +58,7 @@ public class MobileAuthWithPushHandler
   private final Queue<Callback> callbackQueue = new LinkedList<Callback>();
   private boolean isRunning = false;
 
-  protected MobileAuthWithPushHandler() {
+  private MobileAuthWithPushHandler() {
   }
 
   public static MobileAuthWithPushHandler getInstance() {

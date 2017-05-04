@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "OGCDVMobileAuthenticationRequestClient.h"
+#import "OGCDVPushMobileAuthRequestClient.h"
 #import "OGCDVMobileAuthenticationOperation.h"
 #import "OGCDVConstants.h"
 #import "OGCDVAuthenticationDelegateHandler.h"
@@ -23,9 +23,9 @@ NSString *const OGCDVPluginMobileAuthenticationMethodConfirmation = @"confirmati
 NSString *const OGCDVPluginMobileAuthenticationMethodPin = @"pin";
 NSString *const OGCDVPluginMobileAuthenticationMethodFingerprint = @"fingerprint";
 NSString *const OGCDVPluginMobileAuthenticationMethodFido = @"fido";
-static OGCDVMobileAuthenticationRequestClient *sharedInstance;
+static OGCDVPushMobileAuthRequestClient *sharedInstance;
 
-@implementation OGCDVMobileAuthenticationRequestClient {
+@implementation OGCDVPushMobileAuthRequestClient {
 }
 
 @synthesize operationQueue;
@@ -59,7 +59,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [[ONGUserClient sharedInstance] handleMobileAuthRequest:userInfo delegate:self];
+    [[ONGUserClient sharedInstance] handlePushMobileAuthRequest:userInfo delegate:self];
 }
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation forRequest:(ONGMobileAuthRequest *)request
@@ -106,13 +106,13 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
     [operationQueue addOperation:operation];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthenticationRequest:(ONGMobileAuthRequest *)request error:(NSError *)error
+- (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthRequest:(ONGMobileAuthRequest *)request error:(NSError *)error
 {
     [self sendErrorResultForCallbackId:[delegate completeOperationCallbackId] withError:error];
     [delegate completeOperation];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthenticationRequest:(ONGMobileAuthRequest *)request
+- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthRequest:(ONGMobileAuthRequest *)request
 {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[delegate completeOperationCallbackId]];

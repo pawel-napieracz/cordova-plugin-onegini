@@ -14,5 +14,5 @@ This method is used to register handlers for different mobile authentication met
 
 Currently, the available method strings are `"confirmation"` (push), `"pin"` (push with PIN), and `"fingerprint"` (push with fingerprint).
 
-The `on` method returns a [`MobileAuthenticationHandler`](MobileAuthenticationHandler.md) object, which can be used to implement the various handler methods.
-Examples for implementing Mobile Authentication request can be found in the Mobile Authentication [topic guide](../../topics/mobile-authentication.md).
+The `on` method returns a [`PushMobileAuthHandler`](PushMobileAuthHandler.md) object, which can be used to implement the various handler methods.
+Examples for implementing Push Mobile Authentication request can be found in the Mobile Authentication with Push [topic guide](../../../topics/mobile-authentication.md).

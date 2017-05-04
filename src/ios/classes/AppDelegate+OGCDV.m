@@ -17,7 +17,7 @@
 #import "AppDelegate+OGCDV.h"
 #import "OGCDVConstants.h"
 #import "OGCDVMobileAuthenticationClient.h"
-#import "OGCDVMobileAuthenticationRequestClient.h"
+#import "OGCDVPushMobileAuthRequestClient.h"
 
 @implementation AppDelegate (OGCDV)
 

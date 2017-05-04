@@ -1,7 +1,13 @@
 # Mobile authentication API reference
 
-This section describes the APIs that are available on the global `onegini.mobileAuthentication` object.
+This section describes the APIs that are available on the global `onegini.mobileAuth` object.
 
-* [`onegini.mobileAuthentication.MobileAuthenticationHandler`](MobileAuthenticationHandler.md)
+## Mobile authentication
+
 * [`onegini.mobileAuthentication.enroll`](enroll.md)
-* [`onegini.mobileAuthentication.on`](on.md)
+
+## Push Mobile authentication
+
+* [`onegini.mobileAuthentication.MobileAuthenticationHandler`](push/PushMobileAuthHandler.md)
+* [`onegini.mobileAuthentication.push.enroll`](enroll.md)
+* [`onegini.mobileAuthentication.push.on`](push/on.md)
