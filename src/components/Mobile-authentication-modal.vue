@@ -38,7 +38,7 @@ export default {
 
   methods: {
     listenForEvents: function() {
-      onegini.mobileAuthentication.on('confirmation')
+      onegini.mobileAuth.push.on('confirmation')
           .onConfirmationRequest((actions, request) => {
             this.request = request;
             this.actions = actions;
@@ -52,7 +52,7 @@ export default {
             this.complete();
           });
 
-      onegini.mobileAuthentication.on('pin')
+      onegini.mobileAuth.push.on('pin')
           .onPinRequest((actions, request) => {
             this.pin = null;
             this.actions = actions;
@@ -67,7 +67,7 @@ export default {
             this.complete();
           });
 
-      onegini.mobileAuthentication.on('fingerprint')
+      onegini.mobileAuth.push.on('fingerprint')
           .onFingerprintRequest((actions, request) => {
             this.actions = actions;
             this.request = request;
@@ -87,7 +87,7 @@ export default {
             this.complete();
           });
 
-      onegini.mobileAuthentication.on('fido')
+      onegini.mobileAuth.push.on('fido')
           .onFidoRequest(function (actions, request) {
             navigator.notification.confirm(request.message, function (buttonIndex) {
               if (buttonIndex === 1) {
