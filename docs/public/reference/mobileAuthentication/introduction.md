@@ -4,10 +4,10 @@ This section describes the APIs that are available on the global `onegini.mobile
 
 ## Mobile authentication
 
-* [`onegini.mobileAuthentication.enroll`](enroll.md)
+* [`onegini.mobileAuth.enroll`](enroll.md)
 
 ## Push Mobile authentication
 
-* [`onegini.mobileAuthentication.MobileAuthenticationHandler`](push/PushMobileAuthHandler.md)
-* [`onegini.mobileAuthentication.push.enroll`](enroll.md)
-* [`onegini.mobileAuthentication.push.on`](push/on.md)
+* [`onegini.mobileAuth.push.PushMobileAuthHandler`](push/PushMobileAuthHandler.md)
+* [`onegini.mobileAuth.push.enroll`](enroll.md)
+* [`onegini.mobileAuth.push.on`](push/on.md)

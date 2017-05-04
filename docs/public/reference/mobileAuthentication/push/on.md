@@ -4,7 +4,7 @@
 
 When a user is enrolled for mobile authentication, they are able to receive and respond to mobile authentication requests. The Onegini Cordova Plugin facilitates this by allowing you to register handler methods that implement the UI.
 
-## `onegini.mobileAuthentication.on`
+## `onegini.mobileAuth.push.on`
 
 This method is used to register handlers for different mobile authentication methods. The various methods (**push**, **push with PIN**, etc.) can be [configured](https://docs.onegini.com/token-server/topics/mobile-apps/mobile-authentication/mobile-authentication.html#configure-authentication-properties) in the Token Server. Once configured, the handlers for these various methods need to be registered using `on`, which takes the method string as parameter.
 
