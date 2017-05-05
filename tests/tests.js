@@ -42,27 +42,15 @@ exports.defineAutoTests = function () {
     console.warn("Testing for FIDO authentication disabled (requires interaction)");
   }
 
-  function sendMobileAuthenticationRequest(type) {
-    var xhr = new XMLHttpRequest();
-
-    type = type || "push_cordova";
-
-    xhr.open("POST", "https://onegini-msp-snapshot.test.onegini.io/oauth/api/v2/authenticate/user");
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.setRequestHeader("Authorization", "Basic MjNBMDIxQTgyNzFGNDdEODUwRTM2Qjc2NDgwMEQ0NjQ0MDM4RUZDODAzMTFGN0U1QjNDMTE4QTgzNTgwOUMwQTpGMkM4MzYwMDJBODVCNEQxMkU5MzRDREFCNEZFRUMwQzk4QkExRjNEMzM2NzM2RkJCNTMxNzE3MzVGMzZCM0Mx");
-
-    xhr.onreadystatechange = function () {
-      if (this.readyState === 4) {
-        if (this.status !== 200) {
-          console.error("Failed to send mobile authentication request!", JSON.parse(this.responseText));
-        }
-      }
-    };
-
-    xhr.send("callback_uri=https://www.onegini.com&message=Test&type=" + type + "&user_id=" + config.userId);
+  function sendPushMobileAuthRequest(type) {
+    sendMobileAuthRequest(type, config.userId)
   }
 
-  function sendMobileAuthenticationRequestForFido() {
+  function sendOtpMobileAuthRequest(callback) {
+    sendMobileAuthRequest('otp', null, callback);
+  }
+
+  function sendPushMobileAuthRequestForFido() {
     var xhr = new XMLHttpRequest();
 
     xhr.open("GET", "https://onegini-msp-snapshot.test.onegini.io/oauth/api/v2/authenticate/user/" + config.userId + "/enabled");
@@ -78,7 +66,7 @@ exports.defineAutoTests = function () {
           for (var i = 0; i < enabledTypes.length; i++) {
             var type = enabledTypes[i];
             if (type.toLowerCase().includes('fido')) {
-              sendMobileAuthenticationRequest(type);
+              sendPushMobileAuthRequest(type);
               return;
             }
           }
@@ -88,6 +76,35 @@ exports.defineAutoTests = function () {
     };
 
     xhr.send();
+  }
+
+function sendMobileAuthRequest(type, user, callback) {
+    var xhr = new XMLHttpRequest();
+
+    type = type || "push_cordova";
+
+    xhr.open("POST", "https://onegini-msp-snapshot.test.onegini.io/oauth/api/v2/authenticate/user");
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Authorization", "Basic MjNBMDIxQTgyNzFGNDdEODUwRTM2Qjc2NDgwMEQ0NjQ0MDM4RUZDODAzMTFGN0U1QjNDMTE4QTgzNTgwOUMwQTpGMkM4MzYwMDJBODVCNEQxMkU5MzRDREFCNEZFRUMwQzk4QkExRjNEMzM2NzM2RkJCNTMxNzE3MzVGMzZCM0Mx");
+
+    xhr.onreadystatechange = function () {
+      if (this.readyState === 4) {
+        if (this.status !== 200) {
+          console.error("Failed to send mobile authentication request!", JSON.parse(this.responseText));
+        }
+        else {
+          if (callback) {
+            callback(JSON.parse(this.responseText));
+          }
+        }
+      }
+    };
+
+    var data = "callback_uri=https://www.onegini.com&message=Test&type=" + type;
+    if (user) {
+      data += "&user_id=" + user;
+    }
+    xhr.send(data);
   }
 
   function setUrlHandlerUserId(userId, successCb, failureCb) {
@@ -543,8 +560,8 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe("mobileAuthentication (1/3)", function () {
-      describe('enroll', function () {
+    describe("mobileAuth (1/3)", function () {
+      describe("enroll", function () {
         it("should exist", function () {
           expect(onegini.mobileAuth.enroll).toBeDefined();
         });
@@ -560,6 +577,29 @@ exports.defineAutoTests = function () {
                 done();
               });
         });
+      });
+      describe("push", function () {
+        it("should exist", function () {
+          expect(onegini.mobileAuth.push).toBeDefined();
+        });
+
+        describe("enroll", function () {
+          it("should exist", function () {
+            expect(onegini.mobileAuth.push.enroll).toBeDefined();
+          });
+
+          it("should return an error when not logged in", function (done) {
+            onegini.mobileAuth.push.enroll(
+                function (result) {
+                  expect(result).toBeUndefined();
+                },
+                function (err) {
+                  expect(err).toBeDefined();
+                  expect(err.description).toBe("Onegini: No user authenticated.");
+                  done();
+                });
+          });
+        })
       });
     });
 
@@ -632,22 +672,10 @@ exports.defineAutoTests = function () {
       });
     });
 
-    describe("mobileAuthentication (2/3)", function () {
+    describe("mobileAuth (2/3)", function () {
       describe("enroll", function () {
-        it("Should succeed in enrolling an authenticated user for mobile auth", function (done) {
+        it("Should succeed", function (done) {
           onegini.mobileAuth.enroll(
-              function () {
-                expect(true).toBe(true);
-                done();
-              },
-              function (err) {
-                expect(err).toBeUndefined();
-                fail("Error callback was called, but method should have succeeded");
-              });
-        }, 20000);
-
-        it("Should succeed in enrolling an authenticated user for mobile auth with push", function (done) {
-          onegini.mobileAuth.push.enroll(
               function () {
                 expect(true).toBe(true);
                 done();
@@ -659,12 +687,86 @@ exports.defineAutoTests = function () {
         }, 20000);
       });
 
+      describe("mobileAuth.otp", function () {
+        it("should exist", function () {
+          expect(onegini.mobileAuth.otp).toBeDefined();
+        });
+
+        describe("handleRequest", function () {
+          it("should exist", function () {
+            expect(onegini.mobileAuth.otp.handleRequest).toBeDefined();
+          });
+
+          it("should accept an OTP confirmation request", function (done) {
+            sendOtpMobileAuthRequest(function (data) {
+              var otp = data.otp;
+              console.log("OTP: " + otp);
+
+              onegini.mobileAuth.otp.handleRequest({
+                otp: otp
+              })
+                  .onConfirmationRequest(function (actions, request) {
+                    expect(request.type).toBeDefined();
+                    expect(request.message).toBeDefined();
+                    expect(request.profileId).toBeDefined();
+                    actions.accept();
+                  })
+                  .onError(function () {
+                    fail("OTP mobile authentication request failed, but should have succeeded");
+                  })
+                  .onSuccess(function () {
+                    done();
+                  });
+            });
+          });
+
+          it("should reject an OTP confirmation request", function (done) {
+            sendOtpMobileAuthRequest(function (data) {
+              var otp = data.otp;
+              console.log("OTP: " + otp);
+
+              onegini.mobileAuth.otp.handleRequest({
+                otp: otp
+              })
+                  .onConfirmationRequest(function (actions, request) {
+                    expect(request.type).toBeDefined();
+                    expect(request.message).toBeDefined();
+                    expect(request.profileId).toBeDefined();
+                    actions.deny();
+                  })
+                  .onError(function () {
+                    done();
+                  })
+                  .onSuccess(function () {
+                    fail("OTP mobile authentication request succeeded, but should have failed");
+                  });
+            });
+          });
+        });
+      });
+
+      describe("mobileAuth.push (2/3)", function () {
+        describe("enroll", function () {
+          it("Should succeed", function (done) {
+            onegini.mobileAuth.push.enroll(
+                function () {
+                  expect(true).toBe(true);
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                  fail("Error callback was called, but method should have succeeded");
+                });
+          });
+        });
+      });
+
       describe("on", function () {
         it('should exist', function () {
           expect(onegini.mobileAuth.push.on).toBeDefined();
         });
 
-        it('should accept a mobile confirmation request', function (done) {
+        it('should accept a push confirmation request', function (done) {
           onegini.mobileAuth.push.on("confirmation")
               .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
@@ -679,10 +781,10 @@ exports.defineAutoTests = function () {
                 done();
               });
 
-          sendMobileAuthenticationRequest();
+          sendPushMobileAuthRequest();
         }, 10000);
 
-        it('should reject a mobile confirmation request', function (done) {
+        it('should reject a push confirmation request', function (done) {
           onegini.mobileAuth.push.on("confirmation")
               .onConfirmationRequest(function (actions, request) {
                 expect(request.type).toBeDefined();
@@ -697,7 +799,7 @@ exports.defineAutoTests = function () {
                 done();
               });
 
-          sendMobileAuthenticationRequest();
+          sendPushMobileAuthRequest();
         }, 10000);
 
         it('should be able to handle multiple requests', function (done) {
@@ -720,8 +822,8 @@ exports.defineAutoTests = function () {
                 }
               });
 
-          sendMobileAuthenticationRequest();
-          sendMobileAuthenticationRequest();
+          sendPushMobileAuthRequest();
+          sendPushMobileAuthRequest();
         }, 10000);
 
         it('should accept a mobile pin request', function (done) {
@@ -750,7 +852,7 @@ exports.defineAutoTests = function () {
                 done();
               });
 
-          sendMobileAuthenticationRequest("push_with_pin_cordova");
+          sendPushMobileAuthRequest("push_with_pin_cordova");
         }, 10000);
 
         it('should reject a mobile pin request', function (done) {
@@ -770,7 +872,7 @@ exports.defineAutoTests = function () {
                 fail('Mobile authentication request succeeded, but should have failed');
               });
 
-          sendMobileAuthenticationRequest("push_with_pin_cordova");
+          sendPushMobileAuthRequest("push_with_pin_cordova");
         }, 10000);
       });
     });
@@ -1162,7 +1264,7 @@ exports.defineAutoTests = function () {
     });
 
     if (config.testForFidoAuthentication) {
-      describe("mobileAuthentication FIDO (3/4)", function () {
+      describe("mobileAuth.push FIDO (3/4)", function () {
         describe("on request", function () {
           it("Should accept", function (done) {
             onegini.mobileAuth.push.on("fido")
@@ -1180,7 +1282,7 @@ exports.defineAutoTests = function () {
                   done();
                 });
 
-            sendMobileAuthenticationRequestForFido();
+            sendPushMobileAuthRequestForFido();
           }, 10000)
         })
       });
@@ -1210,11 +1312,11 @@ exports.defineAutoTests = function () {
         });
       });
     } else {
-      console.warn("Skipping mobileAuthentication (3/4). Mobile authentication FIDO tests disabled");
+      console.warn("Skipping mobileAuth.push (3/4). Mobile authentication FIDO tests disabled");
     }
 
     if (config.testForMobileFingerprintAuthentication) {
-      describe("mobileAuthentication (4/4)", function () {
+      describe("mobileAuth.push (4/4)", function () {
         describe("register Fingerprint authenticator", function () {
           it("should succeed", function (done) {
             onegini.user.authenticators.registerNew({authenticatorType: "Fingerprint"})
@@ -1248,7 +1350,7 @@ exports.defineAutoTests = function () {
                   done();
                 });
 
-            sendMobileAuthenticationRequest("push_with_fingerprint_cordova");
+            sendPushMobileAuthRequest("push_with_fingerprint_cordova");
           }, 10000);
 
           it("Should reject a mobile fingerprint request", function (done) {
@@ -1266,7 +1368,7 @@ exports.defineAutoTests = function () {
                   fail("Mobile authentication request succeeded, but should have failed");
                 });
 
-            sendMobileAuthenticationRequest("push_with_fingerprint_cordova");
+            sendPushMobileAuthRequest("push_with_fingerprint_cordova");
           }, 10000);
 
           if (cordova.platformId === "android") {
@@ -1291,7 +1393,7 @@ exports.defineAutoTests = function () {
                     setTimeout(done, 500);
                   });
 
-              sendMobileAuthenticationRequest("push_with_fingerprint_cordova");
+              sendPushMobileAuthRequest("push_with_fingerprint_cordova");
             }, 10000);
 
             it("Should request fingerprint authentication again on incorrect fingerprint", function (done) {
@@ -1312,14 +1414,14 @@ exports.defineAutoTests = function () {
                     fail("Mobile fingerprint authentication didn't request another attempt (or you supplied a correct fingerprint)")
                   });
 
-              sendMobileAuthenticationRequest("push_with_fingerprint_cordova");
+              sendPushMobileAuthRequest("push_with_fingerprint_cordova");
             }, 10000);
           }
         });
       });
     }
     else {
-      console.warn("Skipping mobileAuthentication (4/4). Mobile fingerprint authentication tests disabled");
+      console.warn("Skipping mobileAuth.push (4/4). Mobile fingerprint authentication tests disabled");
     }
   });
 
