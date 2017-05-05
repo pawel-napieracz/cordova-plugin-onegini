@@ -140,7 +140,6 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthRequestDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGNetworkTask.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPinChallenge.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPublicCommons.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPublicDefines.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRegistrationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRegistrationRequestChallenge.h"/>
