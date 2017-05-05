@@ -700,7 +700,6 @@ function sendMobileAuthRequest(type, user, callback) {
           it("should accept an OTP confirmation request", function (done) {
             sendOtpMobileAuthRequest(function (data) {
               var otp = data.otp;
-              console.log("OTP: " + otp);
 
               onegini.mobileAuth.otp.handleRequest({
                 otp: otp
@@ -723,7 +722,6 @@ function sendMobileAuthRequest(type, user, callback) {
           it("should reject an OTP confirmation request", function (done) {
             sendOtpMobileAuthRequest(function (data) {
               var otp = data.otp;
-              console.log("OTP: " + otp);
 
               onegini.mobileAuth.otp.handleRequest({
                 otp: otp
