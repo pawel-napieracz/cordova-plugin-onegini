@@ -35,6 +35,7 @@ public interface OneginiCordovaPluginConstants {
   String PARAM_ERROR_CODE = "code";
   String PARAM_ERROR_DESCRIPTION = "description";
   String PARAM_ANONYMOUS = "anonymous";
+  String PARAM_OTP = "otp";
 
   // Error descriptions
   String ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR = "Onegini: Internal plugin error";

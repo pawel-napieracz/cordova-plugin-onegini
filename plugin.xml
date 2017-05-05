@@ -213,6 +213,10 @@
         <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.PushMobileAuthRequestClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiOtpMobileAuthRequestClient">
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.OtpMobileAuthRequestClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -286,6 +290,8 @@
                  target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/PushMobileAuthRequestClient.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/OtpMobileAuthRequestClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
 
     <!-- gcm -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/gcm/OneginiGcmListenerService.java"
@@ -334,6 +340,8 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthWithPushEnrollmentHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthWithPushHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthWithOtpHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/RegistrationRequestHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>

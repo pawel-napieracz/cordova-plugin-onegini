@@ -32,8 +32,8 @@ import com.google.android.gms.iid.InstanceID;
 import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthEnrollmentHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 @SuppressWarnings("unused")

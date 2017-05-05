@@ -1,6 +1,6 @@
 package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_OTP_CONFIRMATION_REQUEST;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_CONFIRMATION_REQUEST;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_SUCCESS;
 
 import org.apache.cordova.CallbackContext;
@@ -11,12 +11,14 @@ import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthWithOtpErr
 import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthWithOtpRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiAcceptDenyCallback;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
+import com.onegini.mobile.sdk.cordova.mobileAuthentication.ConfirmationCallback;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class MobileAuthWithOtpHandler implements OneginiMobileAuthWithOtpHandler, OneginiMobileAuthWithOtpRequestHandler {
 
   private static MobileAuthWithOtpHandler instance = null;
-  private OneginiAcceptDenyCallback acceptDenyCallback;
+  private Callback callback;
   private CallbackContext callbackContext;
 
   private MobileAuthWithOtpHandler() {
@@ -30,18 +32,26 @@ public class MobileAuthWithOtpHandler implements OneginiMobileAuthWithOtpHandler
     return instance;
   }
 
+  public void setCallbackContext(final CallbackContext callbackContext) {
+    this.callbackContext = callbackContext;
+  }
+
+  public Callback getCallback() {
+    return callback;
+  }
+
   // *START* Mobile auth with OTP Request Handler methods
 
   @Override
-  public void startAuthentication(final OneginiMobileAuthenticationRequest oneginiMobileAuthenticationRequest,
-                                  final OneginiAcceptDenyCallback oneginiAcceptDenyCallback) {
-    this.acceptDenyCallback = oneginiAcceptDenyCallback;
+  public void startAuthentication(final OneginiMobileAuthenticationRequest request,
+                                  final OneginiAcceptDenyCallback acceptDenyCallback) {
+    this.callback = new ConfirmationCallback(request, acceptDenyCallback);
 
     PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .shouldKeepCallback()
-        .withEvent(EVENT_OTP_CONFIRMATION_REQUEST)
-        .withOneginiMobileAuthenticationRequest(oneginiMobileAuthenticationRequest)
+        .withEvent(EVENT_CONFIRMATION_REQUEST)
+        .withOneginiMobileAuthenticationRequest(request)
         .build();
 
     sendPluginResult(pluginResult);
@@ -55,7 +65,7 @@ public class MobileAuthWithOtpHandler implements OneginiMobileAuthWithOtpHandler
 
   @Override
   public void finishAuthentication() {
-    acceptDenyCallback = null;
+    callback = null;
   }
 
   // *END* Mobile auth with OTP Request Handler methods
@@ -74,10 +84,10 @@ public class MobileAuthWithOtpHandler implements OneginiMobileAuthWithOtpHandler
   }
 
   @Override
-  public void onError(final OneginiMobileAuthWithOtpError oneginiMobileAuthWithOtpError) {
+  public void onError(final OneginiMobileAuthWithOtpError error) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withError()
-        .withOneginiError(oneginiMobileAuthWithOtpError).build();
+        .withOneginiError(error).build();
 
     sendPluginResult(pluginResult);
     this.callbackContext = null;

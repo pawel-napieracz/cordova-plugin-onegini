@@ -18,6 +18,7 @@ package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ACCEPT;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -38,7 +39,6 @@ public class PushMobileAuthRequestClient extends CordovaPlugin {
 
   private static final String ACTION_REGISTER_CHALLENGE_RECEIVER = "registerChallengeReceiver";
   private static final String ACTION_REPLY_TO_CHALLENGE = "replyToChallenge";
-  private static final String PARAM_ACCEPT = "accept";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
