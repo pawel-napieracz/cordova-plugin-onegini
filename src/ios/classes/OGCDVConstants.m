@@ -34,6 +34,7 @@ NSString *const OGCDVPluginKeyMessage = @"message";
 NSString *const OGCDVPluginKeyEvent = @"pluginEvent";
 NSString *const OGCDVPluginKeyAccept = @"accept";
 NSString *const OGCDVPluginKeyPrompt = @"iosPrompt";
+NSString *const OGCDVPluginKeyOtp = @"otp";
 NSString *const OGCDVPluginKeyErrorCode = @"code";
 NSString *const OGCDVPluginKeyErrorDescription = @"description";
 
