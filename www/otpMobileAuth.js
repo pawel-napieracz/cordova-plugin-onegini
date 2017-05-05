@@ -73,7 +73,7 @@ module.exports = (function () {
     return this;
   };
 
-  function handleRequest() {
+  function handleRequest(options) {
     options = utils.getOptionsWithDefaults(options, {}, 'otp');
     if (!options || !options.otp) {
       throw new TypeError("Onegini: missing 'otp' argument for otp.handleRequest");

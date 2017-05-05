@@ -32,6 +32,7 @@
   <js-module src="www/resource.js" name="resource" />
   <js-module src="www/mobileAuth.js" name="mobileAuth" />
   <js-module src="www/pushMobileAuth.js" name="pushMobileAuth" />
+  <js-module src="www/otpMobileAuth.js" name="otpMobileAuth" />
 
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
@@ -74,6 +75,9 @@
       <feature name="OneginiPushMobileAuthRequestClient">
         <param name="ios-package" value="OGCDVPushMobileAuthRequestClient" />
       </feature>
+      <feature name="OneginiOtpMobileAuthRequestClient">
+        <param name="ios-package" value="OGCDVOtpMobileAuthRequestClient" />
+      </feature>
     </config-file>
 
     <header-file src="src/ios/classes/Reachability.h"/>
@@ -114,6 +118,8 @@
     <source-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.m"/>
     <header-file src="src/ios/classes/OGCDVPushMobileAuthRequestClient.h"/>
     <source-file src="src/ios/classes/OGCDVPushMobileAuthRequestClient.m"/>
+    <header-file src="src/ios/classes/OGCDVOtpMobileAuthRequestClient.h"/>
+    <source-file src="src/ios/classes/OGCDVOtpMobileAuthRequestClient.m"/>
     <header-file src="src/ios/classes/OGCDVPushMobileAuthOperation.h"/>
     <source-file src="src/ios/classes/OGCDVPushMobileAuthOperation.m"/>
 
