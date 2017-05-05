@@ -17,14 +17,14 @@
 module.exports = (function () {
   var utils = require('./utils');
 
-  function OtpAuthenticationHandler(options, client, action) {
+  function OtpMobileAuthHandler(options, client, action) {
     var self = this;
     this.callbacks = {};
 
     this.callbackActions = {
       accept: function () {
         var options = {
-          accept: false
+          accept: true
         };
         utils.promiseOrCallbackExec(client, 'replyToChallenge', options, self.callbacks.onSuccess, self.callbacks.onError);
       },
@@ -58,17 +58,17 @@ module.exports = (function () {
     utils.callbackExec(client, action, options, callSuccessCallback, callErrorCallback)
   }
 
-  PushMobileAuthHandler.prototype.onConfirmationRequest = function (cb) {
+  OtpMobileAuthHandler.prototype.onConfirmationRequest = function (cb) {
     this.callbacks.onConfirmationRequest = cb;
     return this;
   };
 
-  AuthenticationHandler.prototype.onError = function (cb) {
+  OtpMobileAuthHandler.prototype.onError = function (cb) {
     this.callbacks.onError = cb;
     return this;
   };
 
-  AuthenticationHandler.prototype.onSuccess = function (cb) {
+  OtpMobileAuthHandler.prototype.onSuccess = function (cb) {
     this.callbacks.onSuccess = cb;
     return this;
   };
@@ -79,7 +79,7 @@ module.exports = (function () {
       throw new TypeError("Onegini: missing 'otp' argument for otp.handleRequest");
     }
 
-    return new OtpAuthenticationHandler(options, 'OneginiOtpMobileAuthRequestClient', 'start')
+    return new OtpMobileAuthHandler(options, 'OneginiOtpMobileAuthRequestClient', 'start')
   }
 
   return {
