@@ -4,12 +4,12 @@
 
 ## Introduction
 
-When a user is enrolled for OTP mobile authentication, they are able to receive and respond to mobile authentication requests. After initiating an OTP request, the Onegini Cordova plugin returns a `MobileAuthenticationHandler` object, which can be used to register callbacks which will be called when certain OTP mobile authentication steps are required.
+When a user is enrolled for mobile authentication, they are able to receive and respond to mobile authentication requests. After initiating an OTP request, the Onegini Cordova plugin returns a `MobileAuthenticationHandler` object, which can be used to register callbacks which will be called when certain OTP mobile authentication steps are required.
 
-**Example:** When an OTP mobile authentication request is initiated which does not require additional verification (such as PIN or Fingerprint authentication), the `onConfirmationRequest` callback will be called.
+**Example:** When an OTP mobile authentication request is initiated the `onConfirmationRequest` callback will be called.
 
 ```js
-let handler = onegini.mobileAuth.otp.handleRequest({ 
+let handler = onegini.mobileAuth.otp.handleRequest({
   otp: "base64 encoded OTP"
 });
 
