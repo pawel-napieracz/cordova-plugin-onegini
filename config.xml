@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     id="com.onegini.ExampleAppCordova"
-    version="2.0.2-SNAPSHOT">
+    version="3.0.0-BETA">
     <name>ExampleApp</name>
     <description>
         Onegini Cordova Example app
