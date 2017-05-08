@@ -39,3 +39,8 @@ src/ios/OneginiSDKiOS
 
 # Android specific
 local.properties
+
+# Python specific
+docs/.python-version
+tasks.pyc
+__pycache__
