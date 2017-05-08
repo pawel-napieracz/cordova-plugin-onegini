@@ -49,7 +49,7 @@ The following methods can be registered to handle different mobile authenticatio
 - [`onSuccess`](#onsuccess)
 - [`onError`](#onerror)
 
-### `onmConfirmationRequest`
+### `onConfirmationRequest`
 
 This method is called on a mobile authentication request with the **push** method. The request can either be accepted using `actions.accept` or denied using `actions.deny`.
 
