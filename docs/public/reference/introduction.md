@@ -8,7 +8,7 @@ This section describes the APIs that are exposed by the Onegini Cordova Plugin.
   * [`onegini.user.*`](user/introduction.md)
   * [`onegini.device.*`](device/introduction.md)
   * [`onegini.resource.*`](resource/introduction.md)
-  * [`onegini.mobileAuthentication.*`](mobileAuthentication/introduction.md)
+  * [`onegini.mobileAuth.*`](mobileAuthentication/introduction.md)
 
 ## Using promises instead of callbacks
 

@@ -26,7 +26,8 @@ import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
 import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.FidoAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.FingerprintAuthenticationRequestHandler;
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithOtpHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 
@@ -66,15 +67,16 @@ public class OneginiSDK {
     final PinAuthenticationRequestHandler pinAuthenticationRequestHandler = PinAuthenticationRequestHandler.getInstance();
     final FingerprintAuthenticationRequestHandler fingerprintAuthenticationRequestHandler = FingerprintAuthenticationRequestHandler.getInstance();
     final FidoAuthenticationRequestHandler fidoAuthenticationRequestHandler = FidoAuthenticationRequestHandler.getInstance();
-    final MobileAuthHandler mobileAuthHandler = MobileAuthHandler.getInstance();
-
+    final MobileAuthWithPushHandler mobileAuthWithPushHandler = MobileAuthWithPushHandler.getInstance();
+    final MobileAuthWithOtpHandler mobileAuthWithOtpHandler = MobileAuthWithOtpHandler.getInstance();
     final OneginiClientBuilder builder = new OneginiClientBuilder(applicationContext, registrationRequestHandler, createPinRequestHandler, pinAuthenticationRequestHandler)
-        .setMobileAuthenticationRequestHandler(mobileAuthHandler)
-        .setMobileAuthenticationPinRequestHandler(mobileAuthHandler)
+        .setMobileAuthWithPushRequestHandler(mobileAuthWithPushHandler)
+        .setMobileAuthWithPushPinRequestHandler(mobileAuthWithPushHandler)
+        .setMobileAuthWithPushFingerprintRequestHandler(mobileAuthWithPushHandler)
+        .setMobileAuthWithPushFidoRequestHandler(mobileAuthWithPushHandler)
         .setFingerprintAuthenticatioRequestHandler(fingerprintAuthenticationRequestHandler)
         .setFidoAuthenticationRequestHandler(fidoAuthenticationRequestHandler)
-        .setMobileAuthenticationFingerprintRequestHandler(mobileAuthHandler)
-        .setMobileAuthenticationFidoRequestHandler(mobileAuthHandler);
+        .setMobileAuthWithOtpRequestHandler(mobileAuthWithOtpHandler);
 
     return builder.build();
   }

@@ -18,14 +18,10 @@ module.exports = (function () {
   var utils = require('./utils');
 
   function enroll(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
-  }
-
-  function enrollForPush(successCb, failureCb) {
     return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enrollForPush', [], successCb, failureCb);
   }
 
-  function MobileAuthenticationHandler(method) {
+  function PushMobileAuthHandler(method) {
     var self = this;
     this.callbacks = {};
 
@@ -33,7 +29,7 @@ module.exports = (function () {
       accept: function (options) {
         options = utils.getOptionsWithDefaults(options, {}, 'pin');
         options.accept = true;
-        utils.promiseOrCallbackExec('OneginiMobileAuthenticationRequestClient', 'replyToChallenge', options, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.promiseOrCallbackExec('OneginiPushMobileAuthRequestClient', 'replyToChallenge', options, self.callbacks.onSuccess, self.callbacks.onError);
       },
 
       deny: function () {
@@ -41,7 +37,7 @@ module.exports = (function () {
           accept: false
         };
 
-        utils.promiseOrCallbackExec('OneginiMobileAuthenticationRequestClient', 'replyToChallenge', options, self.callbacks.onSuccess, self.callbacks.onError);
+        utils.promiseOrCallbackExec('OneginiPushMobileAuthRequestClient', 'replyToChallenge', options, self.callbacks.onSuccess, self.callbacks.onError);
       }
     };
 
@@ -58,56 +54,55 @@ module.exports = (function () {
       self.callbacks.onError(err);
     }
 
-    utils.callbackExec('OneginiMobileAuthenticationRequestClient', 'registerChallengeReceiver', {method: method}, callSuccessCallback, callErrorCallback);
+    utils.callbackExec('OneginiPushMobileAuthRequestClient', 'registerChallengeReceiver', {method: method}, callSuccessCallback, callErrorCallback);
   }
 
-  MobileAuthenticationHandler.prototype.onConfirmationRequest = function (cb) {
+  PushMobileAuthHandler.prototype.onConfirmationRequest = function (cb) {
     this.callbacks.onConfirmationRequest = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.onPinRequest = function (cb) {
+  PushMobileAuthHandler.prototype.onPinRequest = function (cb) {
     this.callbacks.onPinRequest = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.onFingerprintRequest = function (cb) {
+  PushMobileAuthHandler.prototype.onFingerprintRequest = function (cb) {
     this.callbacks.onFingerprintRequest = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.onFingerprintCaptured = function (cb) {
+  PushMobileAuthHandler.prototype.onFingerprintCaptured = function (cb) {
     this.callbacks.onFingerprintCaptured = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.onFingerprintFailed = function (cb) {
+  PushMobileAuthHandler.prototype.onFingerprintFailed = function (cb) {
     this.callbacks.onFingerprintFailed = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.onFidoRequest = function (cb) {
+  PushMobileAuthHandler.prototype.onFidoRequest = function (cb) {
     this.callbacks.onFidoRequest = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.onError = function (cb) {
+  PushMobileAuthHandler.prototype.onError = function (cb) {
     this.callbacks.onError = cb;
     return this;
   };
 
-  MobileAuthenticationHandler.prototype.onSuccess = function (cb) {
+  PushMobileAuthHandler.prototype.onSuccess = function (cb) {
     this.callbacks.onSuccess = cb;
     return this;
   };
 
   function on(method) {
-    return new MobileAuthenticationHandler(method);
+    return new PushMobileAuthHandler(method);
   }
 
   return {
     enroll: enroll,
-    enrollForPush: enrollForPush,
     on: on
   }
 })();

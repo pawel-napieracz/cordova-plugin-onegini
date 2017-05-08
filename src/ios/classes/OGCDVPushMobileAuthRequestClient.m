@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#import "OGCDVMobileAuthenticationRequestClient.h"
-#import "OGCDVMobileAuthenticationOperation.h"
+#import "OGCDVPushMobileAuthRequestClient.h"
+#import "OGCDVPushMobileAuthOperation.h"
 #import "OGCDVConstants.h"
 #import "OGCDVAuthenticationDelegateHandler.h"
 
@@ -23,9 +23,9 @@ NSString *const OGCDVPluginMobileAuthenticationMethodConfirmation = @"confirmati
 NSString *const OGCDVPluginMobileAuthenticationMethodPin = @"pin";
 NSString *const OGCDVPluginMobileAuthenticationMethodFingerprint = @"fingerprint";
 NSString *const OGCDVPluginMobileAuthenticationMethodFido = @"fido";
-static OGCDVMobileAuthenticationRequestClient *sharedInstance;
+static OGCDVPushMobileAuthRequestClient *sharedInstance;
 
-@implementation OGCDVMobileAuthenticationRequestClient {
+@implementation OGCDVPushMobileAuthRequestClient {
 }
 
 @synthesize operationQueue;
@@ -59,12 +59,12 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [[ONGUserClient sharedInstance] handleMobileAuthRequest:userInfo delegate:self];
+    [[ONGUserClient sharedInstance] handlePushMobileAuthRequest:userInfo delegate:self];
 }
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation forRequest:(ONGMobileAuthRequest *)request
 {
-    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+    OGCDVPushMobileAuthOperation *operation = [[OGCDVPushMobileAuthOperation alloc]
         initWithConfirmationChallenge:confirmation
                            forRequest:request
                             forMethod:OGCDVPluginMobileAuthenticationMethodConfirmation];
@@ -79,7 +79,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
         return;
     }
 
-    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+    OGCDVPushMobileAuthOperation *operation = [[OGCDVPushMobileAuthOperation alloc]
         initWithPinChallenge:challenge
                   forRequest:request
                    forMethod:OGCDVPluginMobileAuthenticationMethodPin];
@@ -89,7 +89,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 - (void)userClient:(ONGUserClient *)userClient didReceiveFingerprintChallenge:(ONGFingerprintChallenge *)challenge
         forRequest:(ONGMobileAuthRequest *)request
 {
-    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+    OGCDVPushMobileAuthOperation *operation = [[OGCDVPushMobileAuthOperation alloc]
         initWithFingerprintChallenge:challenge
                           forRequest:request
                            forMethod:OGCDVPluginMobileAuthenticationMethodFingerprint];
@@ -99,20 +99,20 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 - (void)userClient:(ONGUserClient *)userClient didReceiveFIDOChallenge:(ONGFIDOChallenge *)challenge
         forRequest:(ONGMobileAuthRequest *)request
 {
-    OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
+    OGCDVPushMobileAuthOperation *operation = [[OGCDVPushMobileAuthOperation alloc]
         initWithFidoChallenge:challenge
                    forRequest:request
                     forMethod:OGCDVPluginMobileAuthenticationMethodFido];
     [operationQueue addOperation:operation];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthenticationRequest:(ONGMobileAuthRequest *)request error:(NSError *)error
+- (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthRequest:(ONGMobileAuthRequest *)request error:(NSError *)error
 {
     [self sendErrorResultForCallbackId:[delegate completeOperationCallbackId] withError:error];
     [delegate completeOperation];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthenticationRequest:(ONGMobileAuthRequest *)request
+- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthRequest:(ONGMobileAuthRequest *)request
 {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[delegate completeOperationCallbackId]];

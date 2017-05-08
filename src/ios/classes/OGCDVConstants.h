@@ -18,6 +18,7 @@ extern NSString *const OGCDVPluginKeyMaxFailureCount;
 extern NSString *const OGCDVPluginKeyPin;
 extern NSString *const OGCDVPluginKeyPinLength;
 extern NSString *const OGCDVPluginKeyProfileId;
+extern NSString *const OGCDVPluginKeyTransactionId;
 extern NSString *const OGCDVPluginKeyRemainingFailureCount;
 extern NSString *const OGCDVPluginKeyScopes;
 extern NSString *const OGCDVPluginKeyResourceBaseURL;
@@ -32,6 +33,7 @@ extern NSString *const OGCDVPluginKeyMessage;
 extern NSString *const OGCDVPluginKeyEvent;
 extern NSString *const OGCDVPluginKeyAccept;
 extern NSString *const OGCDVPluginKeyPrompt;
+extern NSString *const OGCDVPluginKeyOtp;
 extern NSString *const OGCDVPluginKeyErrorCode;
 extern NSString *const OGCDVPluginKeyErrorDescription;
 

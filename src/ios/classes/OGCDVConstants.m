@@ -20,6 +20,7 @@ NSString *const OGCDVPluginKeyMaxFailureCount = @"maxFailureCount";
 NSString *const OGCDVPluginKeyPin = @"pin";
 NSString *const OGCDVPluginKeyPinLength = @"pinLength";
 NSString *const OGCDVPluginKeyProfileId = @"profileId";
+NSString *const OGCDVPluginKeyTransactionId = @"transactionId";
 NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureCount";
 NSString *const OGCDVPluginKeyScopes = @"scopes";
 NSString *const OGCDVPluginKeyResourceBaseURL = @"resourceBaseURL";
@@ -34,11 +35,12 @@ NSString *const OGCDVPluginKeyMessage = @"message";
 NSString *const OGCDVPluginKeyEvent = @"pluginEvent";
 NSString *const OGCDVPluginKeyAccept = @"accept";
 NSString *const OGCDVPluginKeyPrompt = @"iosPrompt";
+NSString *const OGCDVPluginKeyOtp = @"otp";
 NSString *const OGCDVPluginKeyErrorCode = @"code";
 NSString *const OGCDVPluginKeyErrorDescription = @"description";
 
 NSString *const OGCDVPluginClassMobileAuthenticationClient = @"OneginiMobileAuthenticationClient";
-NSString *const OGCDVPluginClassMobileAuthenticationRequestClient = @"OneginiMobileAuthenticationRequestClient";
+NSString *const OGCDVPluginClassMobileAuthenticationRequestClient = @"OneginiPushMobileAuthRequestClient";
 
 NSString *const OGCDVPluginAuthenticatorTypePin = @"PIN";
 NSString *const OGCDVPluginAuthenticatorTypeTouchId = @"Fingerprint";

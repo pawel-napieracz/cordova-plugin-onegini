@@ -40,7 +40,7 @@ import com.onegini.mobile.sdk.android.handlers.error.OneginiInitializationError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
@@ -62,7 +62,7 @@ public class OneginiClient extends CordovaPlugin {
      */
     getOneginiClient();
 
-    handleMobileAuthenticationRequest(mobileAuthenticationBundle);
+    handlePushMobileAuthenticationRequest(mobileAuthenticationBundle);
   }
 
   @Override
@@ -80,27 +80,27 @@ public class OneginiClient extends CordovaPlugin {
     super.onNewIntent(intent);
     final Bundle mobileAuthenticationPushMessage = intent.getBundleExtra(EXTRA_MOBILE_AUTHENTICATION);
 
-    handleMobileAuthenticationRequest(mobileAuthenticationPushMessage);
+    handlePushMobileAuthenticationRequest(mobileAuthenticationPushMessage);
     handleRedirection(intent.getData());
   }
 
-  private void handleMobileAuthenticationRequest(final Bundle pushMessage) {
+  private void handlePushMobileAuthenticationRequest(final Bundle pushMessage) {
     if (pushMessage == null) {
       return;
     }
 
     if (OneginiSDK.getInstance().isStarted()) {
       getOneginiClient().getUserClient()
-          .handleMobileAuthenticationRequest(pushMessage, MobileAuthHandler.getInstance());
+          .handleMobileAuthWithPushRequest(pushMessage, MobileAuthWithPushHandler.getInstance());
     } else {
       delayedMobileAuthenticationRequests.add(pushMessage);
     }
   }
 
-  private void handleDelayedMobileAuthenticationRequests() {
+  private void handleDelayedPushMobileAuthenticationRequests() {
     for (Iterator<Bundle> iterator = delayedMobileAuthenticationRequests.iterator(); iterator.hasNext(); ) {
       Bundle request = iterator.next();
-      getOneginiClient().getUserClient().handleMobileAuthenticationRequest(request, MobileAuthHandler.getInstance());
+      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(request, MobileAuthWithPushHandler.getInstance());
       iterator.remove();
     }
   }
@@ -119,7 +119,7 @@ public class OneginiClient extends CordovaPlugin {
           @Override
           public void onSuccess(final Set<UserProfile> set) {
             sendOneginiClientStartSuccessResult(callbackContext);
-            handleDelayedMobileAuthenticationRequests();
+            handleDelayedPushMobileAuthenticationRequests();
           }
 
           @Override

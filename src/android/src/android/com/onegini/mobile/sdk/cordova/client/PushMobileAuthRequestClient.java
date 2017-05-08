@@ -18,13 +18,14 @@ package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ACCEPT;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.ConfirmationCallback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.FidoCallback;
@@ -34,11 +35,10 @@ import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 @SuppressWarnings("unused")
-public class MobileAuthenticationRequestClient extends CordovaPlugin {
+public class PushMobileAuthRequestClient extends CordovaPlugin {
 
   private static final String ACTION_REGISTER_CHALLENGE_RECEIVER = "registerChallengeReceiver";
   private static final String ACTION_REPLY_TO_CHALLENGE = "replyToChallenge";
-  private static final String PARAM_ACCEPT = "accept";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -59,13 +59,13 @@ public class MobileAuthenticationRequestClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        MobileAuthHandler.getInstance().registerAuthenticationChallengeReceiver(method, callbackContext);
+        MobileAuthWithPushHandler.getInstance().registerAuthenticationChallengeReceiver(method, callbackContext);
       }
     });
   }
 
   private void replyToChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final Callback callback = MobileAuthHandler.getInstance().getCurrentCallback();
+    final Callback callback = MobileAuthWithPushHandler.getInstance().getCurrentCallback();
     final boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
 
     if (callback == null) {
