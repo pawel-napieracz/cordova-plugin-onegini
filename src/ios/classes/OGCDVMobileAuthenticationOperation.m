@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Onegini B.V.
+ * Copyright (c) 2017 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@
 @synthesize fidoChallenge;
 
 - (id)initWithConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation
-                         forRequest:(ONGMobileAuthenticationRequest *)request
+                         forRequest:(ONGMobileAuthRequest *)request
                           forMethod:(NSString *)method
 {
     if (![super init]) {
@@ -42,7 +42,7 @@
 }
 
 - (id)initWithPinChallenge:(ONGPinChallenge *)challenge
-                forRequest:(ONGMobileAuthenticationRequest *)request
+                forRequest:(ONGMobileAuthRequest *)request
                  forMethod:(NSString *)method;
 {
     if (![super init]) {
@@ -56,7 +56,7 @@
 }
 
 - (id)initWithFingerprintChallenge:(ONGFingerprintChallenge *)challenge
-                        forRequest:(ONGMobileAuthenticationRequest *)request
+                        forRequest:(ONGMobileAuthRequest *)request
                          forMethod:(NSString *)method;
 {
     if (![super init]) {
@@ -70,7 +70,7 @@
 }
 
 - (id)initWithFidoChallenge:(ONGFIDOChallenge *)challenge
-                 forRequest:(ONGMobileAuthenticationRequest *)request
+                 forRequest:(ONGMobileAuthRequest *)request
                   forMethod:(NSString *)method;
 {
     if (![super init]) {
@@ -83,7 +83,7 @@
     return self;
 }
 
-- (void)initOperationWithRequest:(ONGMobileAuthenticationRequest *)request forMethod:(NSString *)method
+- (void)initOperationWithRequest:(ONGMobileAuthRequest *)request forMethod:(NSString *)method
 {
     self.qualityOfService = NSOperationQualityOfServiceBackground;
 

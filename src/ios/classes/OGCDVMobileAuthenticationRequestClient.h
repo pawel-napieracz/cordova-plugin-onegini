@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Onegini B.V.
+ * Copyright (c) 2017 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
-@interface OGCDVMobileAuthenticationRequestClient : CDVPlugin<ONGMobileAuthenticationRequestDelegate> {
+@interface OGCDVMobileAuthenticationRequestClient : CDVPlugin<ONGMobileAuthRequestDelegate> {
     NSOperationQueue *operationQueue;
     NSMutableDictionary *challengeReceiversCallbackIds;
     NSDictionary *authenticationEventsForMethods;

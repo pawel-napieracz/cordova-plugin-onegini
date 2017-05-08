@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Onegini B.V.
+ * Copyright (c) 2017 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,10 @@ module.exports = (function () {
 
   function enroll(successCb, failureCb) {
     return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
+  }
+
+  function enrollForPush(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enrollForPush', [], successCb, failureCb);
   }
 
   function MobileAuthenticationHandler(method) {
@@ -103,6 +107,7 @@ module.exports = (function () {
 
   return {
     enroll: enroll,
+    enrollForPush: enrollForPush,
     on: on
   }
 })();

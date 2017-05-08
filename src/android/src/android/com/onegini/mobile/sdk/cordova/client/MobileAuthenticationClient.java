@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Onegini B.V.
+ * Copyright (c) 2017 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package com.onegini.mobile.sdk.cordova.client;
 
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_CONFIGURATION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
 
 import org.apache.cordova.CallbackContext;
@@ -25,21 +27,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
+import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationEnrollmentHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushEnrollmentHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthEnrollmentHandler;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 @SuppressWarnings("unused")
 public class MobileAuthenticationClient extends CordovaPlugin {
 
   private static final String ACTION_ENROLL = "enroll";
+  private static final String ACTION_ENROLL_FOR_PUSH = "enrollForPush";
   private static final String PREF_GCM_SENDER_ID = "OneginiGcmSenderId";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if (ACTION_ENROLL.equals(action)) {
       enroll(args, callbackContext);
+      return true;
+    } else if (ACTION_ENROLL_FOR_PUSH.equals(action)) {
+      enrollForPush(args, callbackContext);
       return true;
     }
 
@@ -60,9 +70,50 @@ public class MobileAuthenticationClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        final MobileAuthenticationEnrollmentHandler mobileAuthenticationEnrollmentHandler = new MobileAuthenticationEnrollmentHandler(callbackContext);
+        final MobileAuthEnrollmentHandler handler = new MobileAuthEnrollmentHandler(callbackContext);
+        getOneginiClient().getUserClient().enrollUserForMobileAuth(handler);
+      }
+    });
+  }
 
-        getOneginiClient().getUserClient().enrollUserForMobileAuth(mobileAuthenticationEnrollmentHandler);
+  private void enrollForPush(final JSONArray args, final CallbackContext callbackContext) {
+    final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
+
+    if (userProfile == null) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
+          .build());
+
+      return;
+    }
+
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        final String registrationId;
+        final String senderId = preferences.getString(PREF_GCM_SENDER_ID, null);
+
+        if (senderId == null) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withPluginError("Cannot enroll for mobile authentication: 'OneginiGcmSenderId' preference not found in config.xml", ERROR_CODE_CONFIGURATION)
+              .build());
+
+          return;
+        }
+
+        try {
+          InstanceID instanceID = InstanceID.getInstance(getApplicationContext());
+          registrationId = instanceID.getToken(senderId, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+        } catch (Exception e) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
+              .build());
+
+          return;
+        }
+
+        final OneginiMobileAuthWithPushEnrollmentHandler handler = new MobileAuthWithPushEnrollmentHandler(callbackContext);
+        getOneginiClient().getUserClient().enrollUserForMobileAuthWithPush(registrationId, handler);
       }
     });
   }

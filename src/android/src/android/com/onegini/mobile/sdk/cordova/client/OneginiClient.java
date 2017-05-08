@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Onegini B.V.
+ * Copyright (c) 2017 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ import com.onegini.mobile.sdk.android.handlers.error.OneginiInitializationError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
@@ -91,7 +91,7 @@ public class OneginiClient extends CordovaPlugin {
 
     if (OneginiSDK.getInstance().isStarted()) {
       getOneginiClient().getUserClient()
-          .handleMobileAuthenticationRequest(pushMessage, MobileAuthenticationHandler.getInstance());
+          .handleMobileAuthenticationRequest(pushMessage, MobileAuthHandler.getInstance());
     } else {
       delayedMobileAuthenticationRequests.add(pushMessage);
     }
@@ -100,7 +100,7 @@ public class OneginiClient extends CordovaPlugin {
   private void handleDelayedMobileAuthenticationRequests() {
     for (Iterator<Bundle> iterator = delayedMobileAuthenticationRequests.iterator(); iterator.hasNext(); ) {
       Bundle request = iterator.next();
-      getOneginiClient().getUserClient().handleMobileAuthenticationRequest(request, MobileAuthenticationHandler.getInstance());
+      getOneginiClient().getUserClient().handleMobileAuthenticationRequest(request, MobileAuthHandler.getInstance());
       iterator.remove();
     }
   }

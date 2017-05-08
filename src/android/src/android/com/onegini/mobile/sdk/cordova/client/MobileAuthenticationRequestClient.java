@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Onegini B.V.
+ * Copyright (c) 2017 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthenticationHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthHandler;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.ConfirmationCallback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.FidoCallback;
@@ -59,13 +59,13 @@ public class MobileAuthenticationRequestClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        MobileAuthenticationHandler.getInstance().registerAuthenticationChallengeReceiver(method, callbackContext);
+        MobileAuthHandler.getInstance().registerAuthenticationChallengeReceiver(method, callbackContext);
       }
     });
   }
 
   private void replyToChallenge(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final Callback callback = MobileAuthenticationHandler.getInstance().getCurrentCallback();
+    final Callback callback = MobileAuthHandler.getInstance().getCurrentCallback();
     final boolean shouldAccept = args.getJSONObject(0).getBoolean(PARAM_ACCEPT);
 
     if (callback == null) {

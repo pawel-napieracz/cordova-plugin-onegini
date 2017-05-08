@@ -17,41 +17,30 @@
 package com.onegini.mobile.sdk.cordova.handler;
 
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.PluginResult;
 
-import com.onegini.mobile.sdk.android.handlers.OneginiDeregisterUserProfileHandler;
-import com.onegini.mobile.sdk.android.handlers.error.OneginiDeregistrationError;
+import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthWithPushEnrollmentHandler;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthWithPushEnrollmentError;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
-public class DeregistrationHandler implements OneginiDeregisterUserProfileHandler {
+public class MobileAuthWithPushEnrollmentHandler implements OneginiMobileAuthWithPushEnrollmentHandler {
+
   private CallbackContext callbackContext;
 
-  public DeregistrationHandler(final CallbackContext callbackContext) {
+  public MobileAuthWithPushEnrollmentHandler(final CallbackContext callbackContext) {
     this.callbackContext = callbackContext;
   }
 
   @Override
   public void onSuccess() {
-    final PluginResult pluginResult = new PluginResultBuilder()
+    callbackContext.sendPluginResult(new PluginResultBuilder()
         .withSuccess()
-        .build();
-
-    sendPluginResult(pluginResult);
+        .build());
   }
 
   @Override
-  public void onError(final OneginiDeregistrationError oneginiDeregistrationError) {
-    PluginResult pluginResult = new PluginResultBuilder()
-        .withError()
-        .withOneginiError(oneginiDeregistrationError)
-        .build();
-
-    sendPluginResult(pluginResult);
-  }
-
-  private void sendPluginResult(final PluginResult pluginResult) {
-    if (!callbackContext.isFinished()) {
-      callbackContext.sendPluginResult(pluginResult);
-    }
+  public void onError(final OneginiMobileAuthWithPushEnrollmentError error) {
+    callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withOneginiError(error)
+        .build());
   }
 }

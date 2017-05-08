@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Onegini B.V.
+ * Copyright (c) 2017 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,21 +49,21 @@ import com.onegini.mobile.sdk.cordova.mobileAuthentication.FingerprintCallback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.PinCallback;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
-public class MobileAuthenticationHandler
+public class MobileAuthHandler
     implements OneginiMobileAuthenticationHandler, OneginiMobileAuthenticationRequestHandler,
     OneginiMobileAuthenticationPinRequestHandler, OneginiMobileAuthenticationFingerprintRequestHandler, OneginiMobileAuthenticationFidoRequestHandler {
 
-  private static MobileAuthenticationHandler instance = null;
+  private static MobileAuthHandler instance = null;
   private final HashMap<Callback.Method, CallbackContext> challengeReceivers = new HashMap<Callback.Method, CallbackContext>();
   private final Queue<Callback> callbackQueue = new LinkedList<Callback>();
   private boolean isRunning = false;
 
-  protected MobileAuthenticationHandler() {
+  protected MobileAuthHandler() {
   }
 
-  public static MobileAuthenticationHandler getInstance() {
+  public static MobileAuthHandler getInstance() {
     if (instance == null) {
-      instance = new MobileAuthenticationHandler();
+      instance = new MobileAuthHandler();
     }
 
     return instance;

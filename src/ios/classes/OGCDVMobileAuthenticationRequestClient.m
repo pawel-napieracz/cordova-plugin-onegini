@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Onegini B.V.
+ * Copyright (c) 2017 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,10 +59,10 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [[ONGUserClient sharedInstance] handleMobileAuthenticationRequest:userInfo delegate:self];
+    [[ONGUserClient sharedInstance] handleMobileAuthRequest:userInfo delegate:self];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didReceiveConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation forRequest:(ONGMobileAuthenticationRequest *)request
+- (void)userClient:(ONGUserClient *)userClient didReceiveConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation forRequest:(ONGMobileAuthRequest *)request
 {
     OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
         initWithConfirmationChallenge:confirmation
@@ -71,7 +71,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
     [operationQueue addOperation:operation];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge forRequest:(ONGMobileAuthenticationRequest *)request
+- (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge forRequest:(ONGMobileAuthRequest *)request
 {
     if (challenge.error.code == ONGAuthenticationErrorInvalidPin) {
         [delegate setPinChallenge:challenge];
@@ -87,7 +87,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 }
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveFingerprintChallenge:(ONGFingerprintChallenge *)challenge
-        forRequest:(ONGMobileAuthenticationRequest *)request
+        forRequest:(ONGMobileAuthRequest *)request
 {
     OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
         initWithFingerprintChallenge:challenge
@@ -97,7 +97,7 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
 }
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveFIDOChallenge:(ONGFIDOChallenge *)challenge
-        forRequest:(ONGMobileAuthenticationRequest *)request
+        forRequest:(ONGMobileAuthRequest *)request
 {
     OGCDVMobileAuthenticationOperation *operation = [[OGCDVMobileAuthenticationOperation alloc]
         initWithFidoChallenge:challenge
@@ -106,13 +106,13 @@ static OGCDVMobileAuthenticationRequestClient *sharedInstance;
     [operationQueue addOperation:operation];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthenticationRequest:(ONGMobileAuthenticationRequest *)request error:(NSError *)error
+- (void)userClient:(ONGUserClient *)userClient didFailToHandleMobileAuthenticationRequest:(ONGMobileAuthRequest *)request error:(NSError *)error
 {
     [self sendErrorResultForCallbackId:[delegate completeOperationCallbackId] withError:error];
     [delegate completeOperation];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthenticationRequest:(ONGMobileAuthenticationRequest *)request
+- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthenticationRequest:(ONGMobileAuthRequest *)request
 {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[delegate completeOperationCallbackId]];

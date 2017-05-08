@@ -1,7 +1,7 @@
 /* jshint jasmine: true */
 
 /*
- * Copyright (c) 2016 Onegini B.V.
+ * Copyright (c) 2017 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -634,8 +634,20 @@ exports.defineAutoTests = function () {
 
     describe("mobileAuthentication (2/3)", function () {
       describe("enroll", function () {
-        it("Should succeed in enrolling an authenticated user", function (done) {
+        it("Should succeed in enrolling an authenticated user for mobile auth", function (done) {
           onegini.mobileAuthentication.enroll(
+              function () {
+                expect(true).toBe(true);
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+                fail("Error callback was called, but method should have succeeded");
+              });
+        }, 20000);
+
+        it("Should succeed in enrolling an authenticated user for mobile auth with push", function (done) {
+          onegini.mobileAuthentication.enrollForPush(
               function () {
                 expect(true).toBe(true);
                 done();
