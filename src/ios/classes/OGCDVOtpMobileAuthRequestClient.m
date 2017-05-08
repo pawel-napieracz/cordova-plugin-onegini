@@ -69,6 +69,7 @@
     message[OGCDVPluginKeyType] = request.type;
     message[OGCDVPluginKeyMessage] = request.message;
     message[OGCDVPluginKeyProfileId] = request.userProfile.profileId;
+    message[OGCDVPluginKeyTransactionId] = request.transactionId;
     message[OGCDVPluginKeyEvent] = OGCDVPluginEventConfirmationRequest;
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];

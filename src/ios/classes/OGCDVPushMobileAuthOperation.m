@@ -139,6 +139,7 @@
     message[OGCDVPluginKeyType] = mobileAuthenticationRequest.type;
     message[OGCDVPluginKeyMessage] = mobileAuthenticationRequest.message;
     message[OGCDVPluginKeyProfileId] = mobileAuthenticationRequest.userProfile.profileId;
+    message[OGCDVPluginKeyTransactionId] = mobileAuthenticationRequest.transactionId;
     message[OGCDVPluginKeyEvent] = [[OGCDVPushMobileAuthRequestClient sharedInstance] authenticationEventsForMethods][mobileAuthenticationMethod];
 
     if (pinChallenge) {

@@ -20,6 +20,7 @@ NSString *const OGCDVPluginKeyMaxFailureCount = @"maxFailureCount";
 NSString *const OGCDVPluginKeyPin = @"pin";
 NSString *const OGCDVPluginKeyPinLength = @"pinLength";
 NSString *const OGCDVPluginKeyProfileId = @"profileId";
+NSString *const OGCDVPluginKeyTransactionId = @"transactionId";
 NSString *const OGCDVPluginKeyRemainingFailureCount = @"remainingFailureCount";
 NSString *const OGCDVPluginKeyScopes = @"scopes";
 NSString *const OGCDVPluginKeyResourceBaseURL = @"resourceBaseURL";
