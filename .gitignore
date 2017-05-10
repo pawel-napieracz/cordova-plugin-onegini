@@ -41,6 +41,6 @@ src/ios/OneginiSDKiOS
 local.properties
 
 # Python specific
-docs/.python-version
+.python-version
 tasks.pyc
 __pycache__
