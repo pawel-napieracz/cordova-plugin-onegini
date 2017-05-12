@@ -18,11 +18,11 @@ module.exports = (function () {
   var utils = require('./utils');
 
   function isUserEnrolled(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'isEnrolledForPush', [], successCb, failureCb);
+    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'isEnrolledForPush', [], successCb, failureCb);
   }
 
   function enroll(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enrollForPush', [], successCb, failureCb);
+    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'enrollForPush', [], successCb, failureCb);
   }
 
   function PushMobileAuthHandler(method) {
