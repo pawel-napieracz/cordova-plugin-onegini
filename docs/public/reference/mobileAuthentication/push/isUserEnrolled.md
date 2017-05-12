@@ -2,17 +2,25 @@
 
 <!-- toc -->
 
-In order to perform mobile authentication with push a user must be enrolled. This convenience method checks whether the currently authenticated user is enrolled 
-for mobile auth with push. Therefore you don't have to keep track of this on your own.
+In order to perform mobile authentication with push a user must be enrolled. This convenience method checks whether a user is enrolled for mobile authentication
+with push. Therefore, you don't have to keep track of this on your own.
 
 ## `onegini.mobileAuth.push.isEnrolled`
 
-This function checks whether the currently authenticated user is enrolled for mobile auth. 
+This function checks whether the given user is enrolled for mobile authentication with push.
 
-**Example enrollment check for a logged in user:**
+- Requires an object with a `profileId`:
+
+| Property | Default | Description |
+| --- | --- | --- |
+| `profileId` | - | A profile ID you want to check
+
+**Example enrollment check:**
 
 ```js
-onegini.mobileAuth.push.isEnrolled()
+onegini.mobileAuth.push.isUserEnrolled({
+      profileId: "W8DUJ2"
+    })
     .then((isEnrolled) => {
       if (isEnrolled) {
         alert("The user is enrolled.");

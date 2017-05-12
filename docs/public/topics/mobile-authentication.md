@@ -56,12 +56,13 @@ authentication override is enabled in The Token Server configuration. See the [T
 configuration]({{book.app_config_mobile_authentication}}) for more information on the server side configuration of
 mobile authentication.
 
-The plugin also provides a convenience method to check whether the currently authenticated user is enrolled for mobile authentication. The 
-`onegini.mobileAuth.isEnrolled` method provides you with the information whether the user is already enrolled for mobile authentication. Below follows an 
-example implementation.
+The plugin also provides a convenience method to check whether a user is enrolled for mobile authentication. The `onegini.mobileAuth.isUserEnrolled` method 
+provides you with the information whether the user is already enrolled for mobile authentication. Below follows an example implementation.
 
 ```js
-onegini.mobileAuth.isEnrolled()
+onegini.mobileAuth.isUserEnrolled({
+      profileId: "W8DUJ2"
+    })
     .then((isEnrolled) => {
       if (isEnrolled) {
         alert("The user is enrolled.");

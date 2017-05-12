@@ -19,7 +19,7 @@ module.exports = (function () {
   var push = require('./pushMobileAuth');
   var otp = require('./otpMobileAuth');
 
-  function isEnrolled(successCb, failureCb) {
+  function isUserEnrolled(successCb, failureCb) {
     return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'isEnrolled', [], successCb, failureCb);
   }
 
@@ -28,7 +28,7 @@ module.exports = (function () {
   }
 
   return {
-    isEnrolled: isEnrolled,
+    isUserEnrolled: isUserEnrolled,
     enroll: enroll,
     push : push,
     otp: otp
