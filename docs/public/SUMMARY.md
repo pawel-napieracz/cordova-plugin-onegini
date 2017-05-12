@@ -35,8 +35,10 @@
     * [resource](reference/resource/introduction.md)
         * [fetch](reference/resource/fetch.md)
     * [mobileAuthentication](reference/mobileAuthentication/introduction.md)
+        * [isEnrolled](reference/mobileAuthentication/isEnrolled.md)
         * [enroll](reference/mobileAuthentication/enroll.md)
         * push
+            * [isEnrolled](reference/mobileAuthentication/push/isEnrolled.md)
             * [enroll](reference/mobileAuthentication/push/enroll.md)
             * [on](reference/mobileAuthentication/push/on.md)
             * [PushMobileAuthHandler](reference/mobileAuthentication/push/PushMobileAuthHandler.md)
