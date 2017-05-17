@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
+
 #import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
-@interface OGCDVMobileAuthenticationClient : CDVPlugin
+@interface OGCDVPushMobileAuthClient : CDVPlugin
 
 @property (nonatomic, copy) NSString *enrollCallbackId;
 @property (nonatomic, copy) NSData *deviceToken;
 
+- (void)isEnrolled:(CDVInvokedUrlCommand *)command;
 - (void)enroll:(CDVInvokedUrlCommand *)command;
-- (void)enrollForPush:(CDVInvokedUrlCommand *)command;
-
-- (BOOL)isEnrolled;
 
 - (void)registerForRemoteNotifications;
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;

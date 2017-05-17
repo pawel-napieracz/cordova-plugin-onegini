@@ -37,8 +37,8 @@ extern NSString *const OGCDVPluginKeyOtp;
 extern NSString *const OGCDVPluginKeyErrorCode;
 extern NSString *const OGCDVPluginKeyErrorDescription;
 
-extern NSString *const OGCDVPluginClassMobileAuthenticationClient;
-extern NSString *const OGCDVPluginClassMobileAuthenticationRequestClient;
+extern NSString *const OGCDVPluginClassPushMobileAuthenticationClient;
+extern NSString *const OGCDVPluginClassPushMobileAuthRequestClient;
 
 extern NSString *const OGCDVPluginAuthenticatorTypePin;
 extern NSString *const OGCDVPluginAuthenticatorTypeTouchId;

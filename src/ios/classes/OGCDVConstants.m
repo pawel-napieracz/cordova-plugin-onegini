@@ -39,8 +39,8 @@ NSString *const OGCDVPluginKeyOtp = @"otp";
 NSString *const OGCDVPluginKeyErrorCode = @"code";
 NSString *const OGCDVPluginKeyErrorDescription = @"description";
 
-NSString *const OGCDVPluginClassMobileAuthenticationClient = @"OneginiMobileAuthClient";
-NSString *const OGCDVPluginClassMobileAuthenticationRequestClient = @"OneginiPushMobileAuthRequestClient";
+NSString *const OGCDVPluginClassPushMobileAuthenticationClient = @"OneginiPushMobileAuthClient";
+NSString *const OGCDVPluginClassPushMobileAuthRequestClient = @"OneginiPushMobileAuthRequestClient";
 
 NSString *const OGCDVPluginAuthenticatorTypePin = @"PIN";
 NSString *const OGCDVPluginAuthenticatorTypeTouchId = @"Fingerprint";
