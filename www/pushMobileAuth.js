@@ -17,12 +17,17 @@
 module.exports = (function () {
   var utils = require('./utils');
 
-  function isUserEnrolled(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'isEnrolledForPush', [], successCb, failureCb);
+  function isUserEnrolled(options, successCb, failureCb) {
+    options = utils.getOptionsWithDefaults(options, {}, 'profileId');
+    if (!options || !options.profileId) {
+      throw new TypeError("Onegini: missing 'profileId' argument for user.mobileAuth.push.isUserEnrolled");
+    }
+
+    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'isEnrolled', options, successCb, failureCb);
   }
 
   function enroll(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'enrollForPush', [], successCb, failureCb);
+    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'enroll', [], successCb, failureCb);
   }
 
   function PushMobileAuthHandler(method) {

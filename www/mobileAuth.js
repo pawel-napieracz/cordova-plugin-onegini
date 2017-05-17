@@ -19,8 +19,13 @@ module.exports = (function () {
   var push = require('./pushMobileAuth');
   var otp = require('./otpMobileAuth');
 
-  function isUserEnrolled(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiMobileAuthClient', 'isEnrolled', [], successCb, failureCb);
+  function isUserEnrolled(options, successCb, failureCb) {
+    options = utils.getOptionsWithDefaults(options, {}, 'profileId');
+    if (!options || !options.profileId) {
+      throw new TypeError("Onegini: missing 'profileId' argument for user.mobileAuth.isUserEnrolled");
+    }
+
+    return utils.promiseOrCallbackExec('OneginiMobileAuthClient', 'isEnrolled', options, successCb, failureCb);
   }
 
   function enroll(successCb, failureCb) {
