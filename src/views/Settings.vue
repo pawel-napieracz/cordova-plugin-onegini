@@ -1,7 +1,8 @@
 <template>
   <div class="view">
     <h1>Settings</h1>
-    <button-lg text="Enable Mobile Authentication" @click="enrollForMobileAuthentication" />
+    <button-lg text="Enable Mobile Authentication" @click="enrollForMobileAuth "/>
+    <button-lg text="Enable Push Mobile Authentication" @click="enrollForPushMobileAuth" />
     <button-lg text="Change PIN" @click="changePin" />
     <h3>Authenticators</h3>
     <authenticator-list />
@@ -20,14 +21,23 @@ export default {
   },
 
   methods: {
-    enrollForMobileAuthentication: function() {
+    enrollForMobileAuth: function() {
       onegini.mobileAuth.enroll()
-          .then(onegini.mobileAuth.push.enroll)
           .then(() => {
-            navigator.notification.alert('You are now ready to receive Mobile Authentication requests!');
+            navigator.notification.alert('You are now ready to perform mobile authentication!');
           })
           .catch((err) => {
-            navigator.notification.alert('Could not enroll for Mobile Authentication ' + err.description);
+            navigator.notification.alert('Could not enroll for Mobile Authentication: ' + err.description);
+          });
+    },
+
+    enrollForPushMobileAuth: function() {
+      onegini.mobileAuth.push.enroll()
+          .then(() => {
+            navigator.notification.alert('You are now ready to receive push mobile authentication requests!');
+          })
+          .catch((err) => {
+            navigator.notification.alert('Could not enroll for Mobile Authentication with push: ' + err.description);
           });
     },
 
