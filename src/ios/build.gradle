@@ -33,7 +33,8 @@ allprojects {
     mavenCentral()
 
     maven {
-      url "https://repo.onegini.com/artifactory/onegini-sdk"
+      // TODO revert back to "https://repo.onegini.com/artifactory/onegini-sdk" when using a released version of the iOS SDK
+      url "https://repo.onegini.com/artifactory/public"
       credentials {
         if (project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
           username artifactory_user
@@ -53,11 +54,11 @@ configurations {
 }
 
 dependencies {
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.0.0-BETA@a'
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.0.0-BETA:headers@zip'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.0.0-SNAPSHOT@a'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.0.0-SNAPSHOT:headers@zip'
 
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.0.0-BETA@a'
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.0.0-BETA:headers@zip'
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.0.0-SNAPSHOT@a'
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.0.0-SNAPSHOT:headers@zip'
 }
 
 task prepareTargetDirectory {
