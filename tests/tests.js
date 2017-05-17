@@ -561,6 +561,9 @@ function sendMobileAuthRequest(type, user, callback) {
     });
 
     describe("mobileAuth (1/3)", function () {
+      it("mobileAuth should equal mobileAuthentication", function () {
+        expect(onegini.mobileAuth === onegini.mobileAuthentication).toBe(true);
+      });
       describe("isUserEnrolled", function() {
         it("should exist", function() {
           expect(onegini.mobileAuth.isUserEnrolled).toBeDefined();
