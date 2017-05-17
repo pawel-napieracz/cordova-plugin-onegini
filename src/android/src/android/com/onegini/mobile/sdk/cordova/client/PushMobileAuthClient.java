@@ -44,16 +44,16 @@ import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
 public class PushMobileAuthClient extends CordovaPlugin {
 
-  private static final String ACTION_IS_ENROLLED_FOR_PUSH = "isEnrolledForPush";
-  private static final String ACTION_ENROLL_FOR_PUSH = "enrollForPush";
+  private static final String ACTION_IS_ENROLLED = "isEnrolled";
+  private static final String ACTION_ENROLL = "enroll";
   private static final String PREF_GCM_SENDER_ID = "OneginiGcmSenderId";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    if (ACTION_IS_ENROLLED_FOR_PUSH.equals(action)) {
+    if (ACTION_IS_ENROLLED.equals(action)) {
       isEnrolled(args, callbackContext);
       return true;
-    } else if (ACTION_ENROLL_FOR_PUSH.equals(action)) {
+    } else if (ACTION_ENROLL.equals(action)) {
       enrollForPush(args, callbackContext);
       return true;
     }
