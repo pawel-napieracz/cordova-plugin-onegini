@@ -19,8 +19,6 @@
 
 @interface OGCDVMobileAuthClient : CDVPlugin
 
-@property (nonatomic, copy) NSString *enrollCallbackId;
-
 - (void)isEnrolled:(CDVInvokedUrlCommand *)command;
 - (void)enroll:(CDVInvokedUrlCommand *)command;
 

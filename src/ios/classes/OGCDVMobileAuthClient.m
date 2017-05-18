@@ -45,16 +45,13 @@
             [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
-
-        self.enrollCallbackId = command.callbackId;
-
+        
         [[ONGUserClient sharedInstance] enrollForMobileAuth:^(BOOL enrolled, NSError *_Nullable error) {
             if (error != nil || !enrolled) {
-                [self sendErrorResultForCallbackId:self.enrollCallbackId withError:error];
+                [self sendErrorResultForCallbackId:command.callbackId withError:error];
             } else {
-                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.enrollCallbackId];
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
             }
-            self.enrollCallbackId = nil;
         }];
     }];
 }
