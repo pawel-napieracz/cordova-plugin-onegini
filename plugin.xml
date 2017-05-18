@@ -68,8 +68,11 @@
       <feature name="OneginiResourceClient">
         <param name="ios-package" value="OGCDVResourceClient" />
       </feature>
-      <feature name="OneginiMobileAuthenticationClient">
-        <param name="ios-package" value="OGCDVMobileAuthenticationClient" />
+      <feature name="OneginiMobileAuthClient">
+        <param name="ios-package" value="OGCDVMobileAuthClient" />
+      </feature>
+      <feature name="OneginiPushMobileAuthClient">
+        <param name="ios-package" value="OGCDVPushMobileAuthClient" />
         <param name="onload" value="true" />
       </feature>
       <feature name="OneginiPushMobileAuthRequestClient">
@@ -112,8 +115,10 @@
     <source-file src="src/ios/classes/OGCDVDeviceAuthenticationClient.m"/>
     <header-file src="src/ios/classes/OGCDVResourceClient.h"/>
     <source-file src="src/ios/classes/OGCDVResourceClient.m"/>
-    <header-file src="src/ios/classes/OGCDVMobileAuthenticationClient.h"/>
-    <source-file src="src/ios/classes/OGCDVMobileAuthenticationClient.m"/>
+    <header-file src="src/ios/classes/OGCDVMobileAuthClient.h"/>
+    <source-file src="src/ios/classes/OGCDVMobileAuthClient.m"/>
+    <header-file src="src/ios/classes/OGCDVPushMobileAuthClient.h"/>
+    <source-file src="src/ios/classes/OGCDVPushMobileAuthClient.m"/>
     <header-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.h"/>
     <source-file src="src/ios/classes/OGCDVAuthenticationDelegateHandler.m"/>
     <header-file src="src/ios/classes/OGCDVPushMobileAuthRequestClient.h"/>
@@ -205,8 +210,12 @@
         <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.AuthenticatorRegistrationClient"/>
         <param name="onload" value="false"/>
       </feature>
-      <feature name="OneginiMobileAuthenticationClient">
-        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.MobileAuthenticationClient"/>
+      <feature name="OneginiMobileAuthClient">
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.MobileAuthClient"/>
+        <param name="onload" value="false"/>
+      </feature>
+      <feature name="OneginiPushMobileAuthClient">
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.PushMobileAuthClient"/>
         <param name="onload" value="false"/>
       </feature>
       <feature name="OneginiPushMobileAuthRequestClient">
@@ -286,7 +295,9 @@
                  target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/AuthenticatorRegistrationClient.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/MobileAuthenticationClient.java"
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/MobileAuthClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/PushMobileAuthClient.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/PushMobileAuthRequestClient.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/client"/>

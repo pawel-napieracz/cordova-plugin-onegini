@@ -17,18 +17,9 @@
 #import "CDVPlugin+OGCDV.h"
 #import "OneginiSDK.h"
 
-@interface OGCDVMobileAuthenticationClient : CDVPlugin
+@interface OGCDVMobileAuthClient : CDVPlugin
 
-@property (nonatomic, copy) NSString *enrollCallbackId;
-@property (nonatomic, copy) NSData *deviceToken;
-
+- (void)isEnrolled:(CDVInvokedUrlCommand *)command;
 - (void)enroll:(CDVInvokedUrlCommand *)command;
-- (void)enrollForPush:(CDVInvokedUrlCommand *)command;
-
-- (BOOL)isEnrolled;
-
-- (void)registerForRemoteNotifications;
-- (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
-- (void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error;
 
 @end
