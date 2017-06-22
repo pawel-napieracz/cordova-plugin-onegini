@@ -9,6 +9,9 @@
       "android"
     ]
   },
+  "engines": {
+    "cordova" : ">=6.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Onegini/cordova-plugin-onegini.git"
@@ -25,7 +28,7 @@
   "author": "Onegini B.V.",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/Onegini/cordova-plugin-onegini/issues"
+    "email" : "support@onegini.com"
   },
   "homepage": "https://github.com/Onegini/cordova-plugin-onegini#readme"
 }
