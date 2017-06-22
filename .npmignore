@@ -1,1 +1,8 @@
+.idea/
 www/
+docs/
+tests/
+webpack.config.js
+RELEASE-STEPS.md
+tasks.py
+.babelrc
