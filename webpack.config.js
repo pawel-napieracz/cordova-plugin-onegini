@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    onegini: './www/onegini.js'
+    onegini: './src/js/onegini.js'
   },
 
   output: {
