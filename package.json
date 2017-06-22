@@ -1,0 +1,34 @@
+{
+  "name": "cordova-plugin-onegini",
+  "version": "3.0.0-SNAPSHOT",
+  "description": "Onegini Cordova Plugin",
+  "cordova": {
+    "id": "cordova-plugin-onegini",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "engines": {
+    "cordova" : ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Onegini/cordova-plugin-onegini.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android",
+    "onegini",
+    "msp",
+    "mobile-security-platform",
+    "security"
+  ],
+  "author": "Onegini B.V.",
+  "license": "Apache-2.0",
+  "bugs": {
+    "email" : "support@onegini.com"
+  },
+  "homepage": "https://github.com/Onegini/cordova-plugin-onegini#readme"
+}
