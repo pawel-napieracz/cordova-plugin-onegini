@@ -30,5 +30,16 @@
   "bugs": {
     "email" : "support@onegini.com"
   },
-  "homepage": "https://github.com/Onegini/cordova-plugin-onegini#readme"
+  "homepage": "https://github.com/Onegini/cordova-plugin-onegini#readme",
+  "scripts": {
+    "build": "NODE_ENV=development webpack",
+    "build:prod": "NODE_ENV=production webpack",
+    "prepublish": "npm run build:prod"
+  },
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.0",
+    "babel-preset-env": "^1.5.2",
+    "webpack": "^3.0.0"
+  }
 }

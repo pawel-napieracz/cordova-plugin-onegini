@@ -15,7 +15,7 @@
  */
 
 module.exports = (function () {
-  var exec = require('cordova/exec');
+  var exec = cordova.require('cordova/exec');
 
   function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';

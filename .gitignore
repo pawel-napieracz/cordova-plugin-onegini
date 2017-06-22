@@ -1,7 +1,6 @@
 # Generic
 .DS_Store
 .idea/
-/cordova
 *.orig
 *.gradle/
 build/
@@ -9,6 +8,7 @@ build/
 local.properties
 npm-debug.log*
 **/*--
+node_modules/
 
 # iOS specific
 *.pbxuser
@@ -27,3 +27,11 @@ src/ios/OneginiSDKiOS
 # Android specific
 src/android/CordovaLib/build
 src/android/build
+
+# Python specific
+.python-version
+tasks.pyc
+__pycache__
+
+# Webpack
+dist/
