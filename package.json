@@ -34,7 +34,7 @@
   "scripts": {
     "build": "NODE_ENV=development webpack",
     "build:prod": "NODE_ENV=production webpack",
-    "prepublish": "npm run build:prod"
+    "prepublishOnly": "npm run build:prod"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
