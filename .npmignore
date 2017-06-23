@@ -1,13 +1,13 @@
 .idea/
 .npmignore
+.babelrc
 docs/
 tests/
-webpack.config.js
 RELEASE-STEPS.md
+requirements.txt
 tasks.py
-.babelrc
+webpack.config.js
 src/android/.gradle
-src/android/.idea
 src/android/AndroidManifest.xml
 src/android/build
 src/android/build.gradle
