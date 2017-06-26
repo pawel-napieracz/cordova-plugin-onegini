@@ -77,4 +77,7 @@ onegini.start({
     });
 ```
 
-Currently, only non-anonymous requests are supported using XHR intercepts.
+### Caveats
+
+* Currently, only non-anonymous requests are supported using XHR intercepts.
+* `xhr.responseType = 'arrayBuffer'` is only supported on Android 4.4 and up. The underlying `XMLHttpRequest` implementation on older Android devices does not support this method.
