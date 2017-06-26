@@ -63,35 +63,15 @@ module.exports = (function (XMLHttpRequest) {
       throw new TypeError("Onegini: missing 'url' argument for fetch");
     }
 
-    function getMetaLength(buffer) {
-      var array = new Uint8Array(buffer, 0, HEADER_LENGTH);
-      return ((array[array.length - 4]) |
-      (array[array.length - 3] << 8) |
-      (array[array.length - 2] << 16) |
-      (array[array.length - 1] << 24));
-    }
-
     function httpResponseFromArrayBuffer(buffer) {
-      var metaLength = getMetaLength(buffer),
-          metadata = new Uint8Array(buffer, HEADER_LENGTH, metaLength),
-          result = JSON.parse(String.fromCharCode.apply(null, metadata)),
-          rawBody;
-
-      if (ArrayBuffer.prototype.slice) {
-        rawBody = buffer.slice(HEADER_LENGTH + metaLength, buffer.byteLength)
-      } else {
-        rawBody = new ArrayBuffer(buffer.byteLength - metaLength - HEADER_LENGTH);
-        var bodyArray = new Uint8Array(rawBody);
-        var bufferArray = new Uint8Array(buffer);
-
-        for (var i = 0; i < bodyArray.length; i++) {
-          bodyArray[i] = bufferArray[i + HEADER_LENGTH + metaLength];
-        }
-      }
+      var metaLength = new Int32Array(buffer.slice(0, HEADER_LENGTH))[0],
+          metadataBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength),
+          metadata = new Uint8Array(metadataBuffer),
+          result = JSON.parse(String.fromCharCode.apply(null, metadata));
 
       Object.defineProperties(result, {
         'rawBody': {
-          value: rawBody
+          value: buffer.slice(HEADER_LENGTH + metaLength, buffer.byteLength)
         },
         'body': {
           get: function () {
@@ -264,7 +244,8 @@ module.exports = (function (XMLHttpRequest) {
   function populateXhrWithFetchResponse(xhr, result) {
     if (xhr.responseType === 'arrayBuffer') {
       defineProperty(xhr, 'response', result.rawBody);
-    } else {
+    }
+    else {
       defineProperty(xhr, 'response', result.body);
     }
     defineProperty(xhr, 'readyState', 4);
