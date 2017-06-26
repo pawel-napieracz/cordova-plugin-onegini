@@ -15,6 +15,7 @@
  */
 
 require('babel-polyfill');
+require('custom-event-polyfill');
 
 module.exports = (function () {
   var user = require('./user');

@@ -215,10 +215,10 @@ module.exports = (function (XMLHttpRequest) {
         body: body
       }, function (successResponse) {
         populateXhrWithFetchResponse(xhr, successResponse);
-        xhr.dispatchEvent(new Event('load'));
+        xhr.dispatchEvent(new CustomEvent('load'));
       }, function (err) {
         populateXhrWithFetchResponse(xhr, err.httpResponse);
-        xhr.dispatchEvent(new Event('error'));
+        xhr.dispatchEvent(new CustomEvent('error'));
       });
     });
 
