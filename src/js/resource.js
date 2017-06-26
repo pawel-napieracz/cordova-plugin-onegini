@@ -16,6 +16,7 @@
 
 module.exports = (function (XMLHttpRequest) {
   var utils = require('./utils'),
+      textEncoding = require('text-encoding'),
       HEADER_LENGTH = 4,
       resourceBaseUrl,
       nativeXhrProperties = [
@@ -75,8 +76,7 @@ module.exports = (function (XMLHttpRequest) {
         },
         'body': {
           get: function () {
-            var bodyData = new Uint8Array(this.rawBody);
-            return String.fromCharCode.apply(null, bodyData);
+            return new textEncoding.TextDecoder('utf-8').decode(this.rawBody);
           }
         },
         'json': {
