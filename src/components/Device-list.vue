@@ -8,7 +8,7 @@
           <li>Application: {{ device.application }}</li>
           <li>Platform: {{ device.platform }}</li>
           <li>Mobile authentication: {{ device.mobile_authentication_enabled ? "YES" : "NO" }}</li>
-        </ul
+        </ul>
       </li>
     </ul>
   </div>
