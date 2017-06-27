@@ -10,7 +10,7 @@
     ]
   },
   "engines": {
-    "cordova" : ">=6.0.0"
+    "cordova": ">=6.0.0"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,21 @@
   "author": "Onegini B.V.",
   "license": "Apache-2.0",
   "bugs": {
-    "email" : "support@onegini.com"
+    "email": "support@onegini.com"
   },
-  "homepage": "https://github.com/Onegini/cordova-plugin-onegini#readme"
+  "homepage": "https://github.com/Onegini/cordova-plugin-onegini#readme",
+  "scripts": {
+    "clean": "rm -rf dist node_modules",
+    "build": "NODE_ENV=development webpack",
+    "build:prod": "NODE_ENV=production webpack",
+    "prepublishOnly": "npm run build:prod",
+    "version": "pip install -r requirements.txt && invoke documentation"
+  },
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.0",
+    "babel-preset-env": "^1.5.2",
+    "np": "^2.16.0",
+    "webpack": "^3.0.0"
+  }
 }

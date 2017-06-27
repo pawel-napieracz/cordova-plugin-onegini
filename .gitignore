@@ -21,7 +21,6 @@ docs/node_modules/
 docs/*/node_modules/
 docs/public/javadocs
 book.pdf
-npm-debug.log
 
 # iOS specific
 *.pbxuser
@@ -34,7 +33,6 @@ project.xcworkspace/
 xcuserdata/
 Breakpoints_v2.xcbkptlist
 DerivedData
-
 src/ios/OneginiSDKiOS
 
 # Android specific
@@ -44,3 +42,8 @@ local.properties
 .python-version
 tasks.pyc
 __pycache__
+
+# Node / Webpack specific
+node_modules/
+npm-debug.log*
+dist/

@@ -15,14 +15,14 @@ third-party software.
 In order to enable FIDO authentication for your application you must add an additional Cordova plugin to your application project.
 
 ```bash
-cordova plugin add https://github.com/Onegini/cordova-plugin-onegini-fido
+cordova plugin add git+https://git@github.com:Onegini/cordova-plugin-onegini-fido.git
 ```
 
 > *INFO*: It is required that you add the FIDO plugin before you add the normal Onegini Cordova plugin (cordova-plugin-onegini).
 > Due to the way dependencies are resolved, FIDO authentication will not work if the fido plugin is added _after_ cordova-plugin-onegini.
 > An example:
 >```bash
->cordova plugin add https://github.com/Onegini/cordova-plugin-onegini-fido https://github.com/Onegini/cordova-plugin-onegini
+>cordova plugin add git+https://git@github.com:Onegini/cordova-plugin-onegini-fido.git cordova-plugin-onegini
 >```
 
 ### Setting up iOS
