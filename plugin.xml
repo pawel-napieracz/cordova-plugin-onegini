@@ -23,14 +23,9 @@
   <hook type="after_platform_add" src="hooks/configure_sdk.js" />
   <hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />
 
-  <js-module src="www/onegini.js" name="onegini">
+  <js-module src="dist/onegini.js" name="onegini">
     <clobbers target="onegini"/>
   </js-module>
-  <js-module src="www/device.js" name="device" />
-  <js-module src="www/user.js" name="user" />
-  <js-module src="www/utils.js" name="utils" />
-  <js-module src="www/resource.js" name="resource" />
-  <js-module src="www/mobileAuthentication.js" name="mobileAuthentication" />
 
   <platform name="ios">
     <config-file target="config.xml" parent="/*">

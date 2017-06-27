@@ -33,7 +33,7 @@ artifactory_password=<password>
 ## Add the plugin to your project
 
 ```bash
-cordova plugin add https://github.com/Onegini/cordova-plugin-onegini
+cordova plugin add cordova-plugin-onegini
 ```
 
 ## Configure your project
