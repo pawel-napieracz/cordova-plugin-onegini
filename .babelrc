@@ -6,7 +6,11 @@
         "debug": false,
         "modules": false,
         "targets": {
-          "browsers": ["last 2 versions", "safari >= 7"]
+          "browsers": [
+            "android >= 4.0",
+            "chromeandroid >= 6",
+            "ios >= 8"
+          ]
         }
       }
     ]

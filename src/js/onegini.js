@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+require('babel-polyfill');
+
 module.exports = (function () {
   var user = require('./user');
   var device = require('./device');
