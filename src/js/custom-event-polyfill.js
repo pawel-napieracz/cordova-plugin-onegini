@@ -39,9 +39,9 @@ module.exports = (function () {
       catch (e) {
         this.defaultPrevented = true;
       }
-
-      return customEvent;
     };
+
+    return customEvent;
   }
 
   CustomEvent.prototype = window.Event.prototype;
