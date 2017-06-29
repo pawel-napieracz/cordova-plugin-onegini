@@ -4,7 +4,7 @@
       "env",
       {
         "debug": false,
-        "modules": false,
+        "modules": "commonjs",
         "targets": {
           "browsers": [
             "android >= 4.0",
@@ -12,6 +12,16 @@
             "ios >= 8"
           ]
         }
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "helpers": true,
+        "polyfill": true,
+        "regenerator": false
       }
     ]
   ]
