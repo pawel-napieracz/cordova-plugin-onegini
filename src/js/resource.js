@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-module.exports = (function (XMLHttpRequest) {
+module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
   var utils = require('./utils'),
-      textEncoding = require('text-encoding'),
       HEADER_LENGTH = 4,
       resourceBaseUrl,
       nativeXhrProperties = [
@@ -50,6 +49,20 @@ module.exports = (function (XMLHttpRequest) {
         'setRequestHeader'
       ];
 
+  if (!TextDecoder) {
+    TextDecoder = require('text-encoding').TextDecoder;
+  }
+
+  try {
+    var customEvent = new CustomEvent('test');
+    customEvent.preventDefault();
+    if (customEvent.defaultPrevented !== true) {
+      throw new Error('Could not prevent default')
+    }
+  } catch(e) {
+    CustomEvent = require('./custom-event-polyfill');
+  }
+
   function fetch(options, successCb, failureCb) {
     var _successCb = successCb,
         _failureCb = failureCb;
@@ -76,7 +89,7 @@ module.exports = (function (XMLHttpRequest) {
         },
         'body': {
           get: function () {
-            return new textEncoding.TextDecoder('utf-8').decode(this.rawBody);
+            return new TextDecoder('utf-8').decode(this.rawBody);
           }
         },
         'json': {
@@ -268,4 +281,4 @@ module.exports = (function (XMLHttpRequest) {
     disable: disable
   };
 
-})(XMLHttpRequest);
+})(window.XMLHttpRequest, window.TextDecoder, window.CustomEvent);
