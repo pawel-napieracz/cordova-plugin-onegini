@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-module.exports = (function (XMLHttpRequest) {
+module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
   var utils = require('./utils'),
-      textEncoding = require('text-encoding'),
       HEADER_LENGTH = 4,
       resourceBaseUrl,
       nativeXhrProperties = [
@@ -50,6 +49,20 @@ module.exports = (function (XMLHttpRequest) {
         'setRequestHeader'
       ];
 
+  if (!TextDecoder) {
+    TextDecoder = require('text-encoding').TextDecoder;
+  }
+
+  try {
+    var customEvent = new CustomEvent('test');
+    customEvent.preventDefault();
+    if (customEvent.defaultPrevented !== true) {
+      throw new Error('Could not prevent default')
+    }
+  } catch(e) {
+    CustomEvent = require('./custom-event-polyfill');
+  }
+
   function fetch(options, successCb, failureCb) {
     var _successCb = successCb,
         _failureCb = failureCb;
@@ -64,7 +77,13 @@ module.exports = (function (XMLHttpRequest) {
       throw new TypeError("Onegini: missing 'url' argument for fetch");
     }
 
+    function sliceBuffer(buffer) {
+      var ArrrayBuffer = require('core-js/fn/typed/array-buffer');
+      buffer = ArrayBuffer.prototype.slice.call(buffer, [0, buffer.length]);
+    }
+
     function httpResponseFromArrayBuffer(buffer) {
+      sliceBuffer(buffer);
       var metaLength = new Int32Array(buffer.slice(0, HEADER_LENGTH))[0],
           metadataBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength),
           metadata = new Uint8Array(metadataBuffer),
@@ -76,7 +95,7 @@ module.exports = (function (XMLHttpRequest) {
         },
         'body': {
           get: function () {
-            return new textEncoding.TextDecoder('utf-8').decode(this.rawBody);
+            return new TextDecoder('utf-8').decode(this.rawBody);
           }
         },
         'json': {
@@ -215,10 +234,10 @@ module.exports = (function (XMLHttpRequest) {
         body: body
       }, function (successResponse) {
         populateXhrWithFetchResponse(xhr, successResponse);
-        xhr.dispatchEvent(new Event('load'));
+        xhr.dispatchEvent(new CustomEvent('load'));
       }, function (err) {
         populateXhrWithFetchResponse(xhr, err.httpResponse);
-        xhr.dispatchEvent(new Event('error'));
+        xhr.dispatchEvent(new CustomEvent('error'));
       });
     });
 
@@ -268,4 +287,4 @@ module.exports = (function (XMLHttpRequest) {
     disable: disable
   };
 
-})(XMLHttpRequest);
+})(window.XMLHttpRequest, window.TextDecoder, window.CustomEvent);
