@@ -77,7 +77,13 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
       throw new TypeError("Onegini: missing 'url' argument for fetch");
     }
 
+    function sliceBuffer(buffer) {
+      var ArrrayBuffer = require('core-js/fn/typed/array-buffer');
+      buffer = ArrayBuffer.prototype.slice.call(buffer, [0, buffer.length]);
+    }
+
     function httpResponseFromArrayBuffer(buffer) {
+      sliceBuffer(buffer);
       var metaLength = new Int32Array(buffer.slice(0, HEADER_LENGTH))[0],
           metadataBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength),
           metadata = new Uint8Array(metadataBuffer),
