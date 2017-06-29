@@ -36,7 +36,6 @@
     "build": "NODE_ENV=development webpack",
     "build:prod": "NODE_ENV=production webpack",
     "prepublishOnly": "npm run build:prod",
-    "version": "export PYENV_VERSION=2.7.13 && pip install -r requirements.txt && invoke documentation"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
