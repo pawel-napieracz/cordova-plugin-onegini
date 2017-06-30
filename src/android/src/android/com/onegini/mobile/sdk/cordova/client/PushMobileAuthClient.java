@@ -17,12 +17,18 @@
 package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_CONFIGURATION;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
+
+import java.util.Set;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -32,23 +38,22 @@ import com.google.android.gms.iid.InstanceID;
 import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthEnrollmentHandler;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
+import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
-@SuppressWarnings("unused")
-public class MobileAuthenticationClient extends CordovaPlugin {
+public class PushMobileAuthClient extends CordovaPlugin {
 
+  private static final String ACTION_IS_ENROLLED = "isEnrolled";
   private static final String ACTION_ENROLL = "enroll";
-  private static final String ACTION_ENROLL_FOR_PUSH = "enrollForPush";
   private static final String PREF_GCM_SENDER_ID = "OneginiGcmSenderId";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    if (ACTION_ENROLL.equals(action)) {
-      enroll(args, callbackContext);
+    if (ACTION_IS_ENROLLED.equals(action)) {
+      isEnrolled(args, callbackContext);
       return true;
-    } else if (ACTION_ENROLL_FOR_PUSH.equals(action)) {
+    } else if (ACTION_ENROLL.equals(action)) {
       enrollForPush(args, callbackContext);
       return true;
     }
@@ -56,12 +61,15 @@ public class MobileAuthenticationClient extends CordovaPlugin {
     return false;
   }
 
-  private void enroll(final JSONArray args, final CallbackContext callbackContext) {
-    final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
+  private void isEnrolled(final JSONArray args, final CallbackContext callbackContext) {
+    final String userProfileId;
 
-    if (userProfile == null) {
+    try {
+      userProfileId = args.getJSONObject(0).getString(PARAM_PROFILE_ID);
+    } catch (JSONException e) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
+          .withError()
+          .withPluginError(ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE, ERROR_CODE_ILLEGAL_ARGUMENT)
           .build());
 
       return;
@@ -70,8 +78,21 @@ public class MobileAuthenticationClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        final MobileAuthEnrollmentHandler handler = new MobileAuthEnrollmentHandler(callbackContext);
-        getOneginiClient().getUserClient().enrollUserForMobileAuth(handler);
+        final Set<UserProfile> userProfiles = getOneginiClient().getUserClient().getUserProfiles();
+        final UserProfile userProfile = UserProfileUtil.findUserProfileById(userProfileId, userProfiles);
+
+        if (userProfile == null) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withError()
+              .withPluginError(ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE, ERROR_CODE_ILLEGAL_ARGUMENT)
+              .build());
+
+          return;
+        }
+
+        final boolean isEnrolled = getOneginiClient().getUserClient().isUserEnrolledForMobileAuthWithPush(userProfile);
+        final PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, isEnrolled);
+        callbackContext.sendPluginResult(pluginResult);
       }
     });
   }

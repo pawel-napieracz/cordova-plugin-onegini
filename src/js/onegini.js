@@ -52,7 +52,10 @@ module.exports = (function () {
     user: user,
     device: device,
     resource: resource,
-    mobileAuthentication: mobileAuth,
-    mobileAuth: mobileAuth
+    mobileAuth: mobileAuth,
+    get mobileAuthentication() {
+      console.log('Warning: onegini.mobileAuthentication is renamed to onegini.mobileAuth since version 3. The onegini.mobileAuthentication endpoint might be removed in the future.');
+      return mobileAuth;
+    }
   };
 })();

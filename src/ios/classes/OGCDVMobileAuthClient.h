@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-module.exports = (function () {
-  var utils = require('./utils');
-  var push = require('./pushMobileAuth');
-  var otp = require('./otpMobileAuth');
+#import "CDVPlugin+OGCDV.h"
+#import "OneginiSDK.h"
 
-  function enroll(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiMobileAuthenticationClient', 'enroll', [], successCb, failureCb);
-  }
+@interface OGCDVMobileAuthClient : CDVPlugin
 
-  return {
-    enroll: enroll,
-    push : push,
-    otp: otp
-  }
-})();
+- (void)isEnrolled:(CDVInvokedUrlCommand *)command;
+- (void)enroll:(CDVInvokedUrlCommand *)command;
+
+@end

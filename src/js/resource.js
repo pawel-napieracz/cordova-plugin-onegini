@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-module.exports = (function (XMLHttpRequest) {
+module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
   var utils = require('./utils'),
       HEADER_LENGTH = 4,
       resourceBaseUrl,
@@ -49,6 +49,20 @@ module.exports = (function (XMLHttpRequest) {
         'setRequestHeader'
       ];
 
+  if (!TextDecoder) {
+    TextDecoder = require('text-encoding').TextDecoder;
+  }
+
+  try {
+    var customEvent = new CustomEvent('test');
+    customEvent.preventDefault();
+    if (customEvent.defaultPrevented !== true) {
+      throw new Error('Could not prevent default')
+    }
+  } catch(e) {
+    CustomEvent = require('./custom-event-polyfill');
+  }
+
   function fetch(options, successCb, failureCb) {
     var _successCb = successCb,
         _failureCb = failureCb;
@@ -63,40 +77,25 @@ module.exports = (function (XMLHttpRequest) {
       throw new TypeError("Onegini: missing 'url' argument for fetch");
     }
 
-    function getMetaLength(buffer) {
-      var array = new Uint8Array(buffer, 0, HEADER_LENGTH);
-      return ((array[array.length - 4]) |
-      (array[array.length - 3] << 8) |
-      (array[array.length - 2] << 16) |
-      (array[array.length - 1] << 24));
+    function sliceBuffer(buffer) {
+      var ArrrayBuffer = require('core-js/fn/typed/array-buffer');
+      buffer = ArrayBuffer.prototype.slice.call(buffer, [0, buffer.length]);
     }
 
     function httpResponseFromArrayBuffer(buffer) {
-      var metaLength = getMetaLength(buffer),
-          metadata = new Uint8Array(buffer, HEADER_LENGTH, metaLength),
-          result = JSON.parse(String.fromCharCode.apply(null, metadata)),
-          rawBody;
-
-      if (ArrayBuffer.prototype.slice) {
-        rawBody = buffer.slice(HEADER_LENGTH + metaLength, buffer.byteLength)
-      } else {
-        rawBody = new ArrayBuffer(buffer.byteLength - metaLength - HEADER_LENGTH);
-        var bodyArray = new Uint8Array(rawBody);
-        var bufferArray = new Uint8Array(buffer);
-
-        for (var i = 0; i < bodyArray.length; i++) {
-          bodyArray[i] = bufferArray[i + HEADER_LENGTH + metaLength];
-        }
-      }
+      sliceBuffer(buffer);
+      var metaLength = new Int32Array(buffer.slice(0, HEADER_LENGTH))[0],
+          metadataBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength),
+          metadata = new Uint8Array(metadataBuffer),
+          result = JSON.parse(String.fromCharCode.apply(null, metadata));
 
       Object.defineProperties(result, {
         'rawBody': {
-          value: rawBody
+          value: buffer.slice(HEADER_LENGTH + metaLength, buffer.byteLength)
         },
         'body': {
           get: function () {
-            var bodyData = new Uint8Array(this.rawBody);
-            return String.fromCharCode.apply(null, bodyData);
+            return new TextDecoder('utf-8').decode(this.rawBody);
           }
         },
         'json': {
@@ -235,10 +234,10 @@ module.exports = (function (XMLHttpRequest) {
         body: body
       }, function (successResponse) {
         populateXhrWithFetchResponse(xhr, successResponse);
-        xhr.dispatchEvent(new Event('load'));
+        xhr.dispatchEvent(new CustomEvent('load'));
       }, function (err) {
         populateXhrWithFetchResponse(xhr, err.httpResponse);
-        xhr.dispatchEvent(new Event('error'));
+        xhr.dispatchEvent(new CustomEvent('error'));
       });
     });
 
@@ -264,7 +263,8 @@ module.exports = (function (XMLHttpRequest) {
   function populateXhrWithFetchResponse(xhr, result) {
     if (xhr.responseType === 'arrayBuffer') {
       defineProperty(xhr, 'response', result.rawBody);
-    } else {
+    }
+    else {
       defineProperty(xhr, 'response', result.body);
     }
     defineProperty(xhr, 'readyState', 4);
@@ -287,4 +287,4 @@ module.exports = (function (XMLHttpRequest) {
     disable: disable
   };
 
-})(XMLHttpRequest);
+})(window.XMLHttpRequest, window.TextDecoder, window.CustomEvent);

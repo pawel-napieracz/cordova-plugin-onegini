@@ -51,17 +51,12 @@ allprojects {
 
 dependencies {
   // Onegini SDK
-  compile('com.onegini.mobile.sdk.android:onegini-sdk:7.0.0-BETA@aar') {
+  compile('com.onegini.mobile.sdk.android:onegini-sdk:7.0.1@aar') {
     transitive = true
   }
 
   // Google cloud messaging (GCM)
   compile "com.google.android.gms:play-services-gcm:9.6.1"
-
-  // Required FIDO libraries
-  compile 'com.samsung.sds.fido.uaf.sdk:fido-client:1.5.0@aar'
-  compile 'org.fidoalliance.uaf.client.common:samsungsds-ccom:1.5.0@aar'
-  compile 'com.samsung.sds.fido.uaf.message:samsungsds-um:1.5.0'
 }
 
 afterEvaluate {

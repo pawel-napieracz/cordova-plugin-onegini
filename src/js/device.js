@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-#import "CDVPlugin+OGCDV.h"
-#import "OneginiSDK.h"
+module.exports = (function () {
+  var utils = require('./utils');
 
-@interface OGCDVMobileAuthenticationClient : CDVPlugin
+  function authenticate(options, successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiDeviceAuthenticationClient', 'authenticate', options, successCb, failureCb);
+  }
 
-@property (nonatomic, copy) NSString *enrollCallbackId;
-@property (nonatomic, copy) NSData *deviceToken;
-
-- (void)enroll:(CDVInvokedUrlCommand *)command;
-- (void)enrollForPush:(CDVInvokedUrlCommand *)command;
-
-- (BOOL)isEnrolled;
-
-- (void)registerForRemoteNotifications;
-- (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
-- (void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error;
-
-@end
+  return {
+    authenticate: authenticate
+  };
+})();

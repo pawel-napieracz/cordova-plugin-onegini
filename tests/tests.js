@@ -561,6 +561,36 @@ function sendMobileAuthRequest(type, user, callback) {
     });
 
     describe("mobileAuth (1/3)", function () {
+      it("mobileAuth should equal mobileAuthentication", function () {
+        expect(onegini.mobileAuth === onegini.mobileAuthentication).toBe(true);
+      });
+      describe("isUserEnrolled", function() {
+        it("should exist", function() {
+          expect(onegini.mobileAuth.isUserEnrolled).toBeDefined();
+        });
+
+        it("'profileId' argument mandatory", function () {
+          expect(function () {
+            onegini.mobileAuth.isUserEnrolled({},
+                function () {}, function () {});
+          }).toThrow(new TypeError("Onegini: missing 'profileId' argument for user.mobileAuth.isUserEnrolled"));
+        });
+
+        it("should return not enrolled", function (done) {
+          onegini.mobileAuth.isUserEnrolled({
+            profileId : registeredProfileId
+          },
+          function (result) {
+            expect(result).toBe(false);
+            done();
+          },
+          function (err) {
+            expect(err).toBeUndefined();
+            fail('Error callback called, but method should have succeeded');
+          });
+        });
+      });
+
       describe("enroll", function () {
         it("should exist", function () {
           expect(onegini.mobileAuth.enroll).toBeDefined();
@@ -578,9 +608,38 @@ function sendMobileAuthRequest(type, user, callback) {
               });
         });
       });
+
       describe("push", function () {
         it("should exist", function () {
           expect(onegini.mobileAuth.push).toBeDefined();
+        });
+
+        describe("isUserEnrolled", function () {
+          it("should exist", function () {
+            expect(onegini.mobileAuth.push.isUserEnrolled).toBeDefined();
+          });
+
+          it("'profileId' argument mandatory", function () {
+            expect(function () {
+              onegini.mobileAuth.push.isUserEnrolled({}, function () {
+              }, function () {
+              });
+            }).toThrow(new TypeError("Onegini: missing 'profileId' argument for user.mobileAuth.push.isUserEnrolled"));
+          });
+
+          it("should return not enrolled", function (done) {
+            onegini.mobileAuth.push.isUserEnrolled({
+                  profileId : registeredProfileId
+                },
+                function (result) {
+                  expect(result).toBe(false);
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                  fail('Error callback called, but method should have succeeded');
+                });
+          });
         });
 
         describe("enroll", function () {
@@ -687,6 +746,22 @@ function sendMobileAuthRequest(type, user, callback) {
         }, 20000);
       });
 
+      describe("isUserEnrolled", function () {
+        it("should return enrolled", function (done) {
+          onegini.mobileAuth.isUserEnrolled({
+                profileId : registeredProfileId
+              },
+              function (result) {
+                expect(result).toBe(true);
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+                fail('Error callback called, but method should have succeeded');
+              });
+        });
+      });
+
       describe("mobileAuth.otp", function () {
         it("should exist", function () {
           expect(onegini.mobileAuth.otp).toBeDefined();
@@ -754,6 +829,22 @@ function sendMobileAuthRequest(type, user, callback) {
                 function (err) {
                   expect(err).toBeUndefined();
                   fail("Error callback was called, but method should have succeeded");
+                });
+          });
+        });
+
+        describe("isUserEnrolled", function () {
+          it("should return enrolled", function (done) {
+            onegini.mobileAuth.push.isUserEnrolled({
+                  profileId: registeredProfileId
+                },
+                function (result) {
+                  expect(result).toBe(true);
+                  done();
+                },
+                function (err) {
+                  expect(err).toBeUndefined();
+                  fail('Error callback called, but method should have succeeded');
                 });
           });
         });

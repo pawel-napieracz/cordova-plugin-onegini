@@ -16,26 +16,26 @@
 
 #import "AppDelegate+OGCDV.h"
 #import "OGCDVConstants.h"
-#import "OGCDVMobileAuthenticationClient.h"
+#import "OGCDVPushMobileAuthClient.h"
 #import "OGCDVPushMobileAuthRequestClient.h"
 
 @implementation AppDelegate (OGCDV)
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    [[self.viewController getCommandInstance:OGCDVPluginClassMobileAuthenticationClient]
+    [[self.viewController getCommandInstance:OGCDVPluginClassPushMobileAuthenticationClient]
         didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    [[self.viewController getCommandInstance:OGCDVPluginClassMobileAuthenticationClient]
+    [[self.viewController getCommandInstance:OGCDVPluginClassPushMobileAuthenticationClient]
         didFailToRegisterForRemoteNotificationsWithError:error];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [[self.viewController getCommandInstance:OGCDVPluginClassMobileAuthenticationRequestClient]
+    [[self.viewController getCommandInstance:OGCDVPluginClassPushMobileAuthRequestClient]
         didReceiveRemoteNotification:userInfo];
 }
 
