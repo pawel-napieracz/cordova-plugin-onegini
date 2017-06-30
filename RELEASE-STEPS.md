@@ -1,7 +1,7 @@
 The following steps must be executed to create a release:
 
 1. Update the release notes
-2. Update the version number in the `plugin.xml`
+2. Update the version number in the `plugin.xml` and `package.json`
 3. Commit & push the version update to GitHub
 4. Mare sure you have your AWS access key in your env to allow uploading the documentation.
 5. Merge the development branch to master.
