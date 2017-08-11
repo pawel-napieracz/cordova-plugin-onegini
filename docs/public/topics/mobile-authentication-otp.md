@@ -7,7 +7,7 @@
 The Onegini Mobile Security Platform offers an ability of mobile authentication with a One Time Password (OTP). Mobile authentication with OTP
 provides users an easy and secure way for two factor authentication or single factor authentication where no passwords are required. A good use case is for
 example letting a user login to your web application using his/her mobile device by scanning a QR code displayed within a browser. This essentially allows the
-user to authenticate using his/her mobile device. It is also not relying on third party services like APNs or GCM. All of the communication stays between App,
+user to authenticate using his/her mobile device. It is also not relying on third party services like APNs or FCM. All of the communication stays between App,
 web application and Mobile Security Platform.
 
 An Example implementation could work like this: A web application fetches the OTP from the Token Server and displays it on the login page in the form

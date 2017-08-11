@@ -4,21 +4,18 @@
 
 ## Introduction
 
-Two factor authentication can be implemented using APNs & GCM push notifications. It's a very secure and user friendly way of authentication. You can use this
+Two factor authentication can be implemented using APNs & FCM push notifications. It's a very secure and user friendly way of authentication. You can use this
 feature to allow users to confirm their transactions. Confirmation can be done using simple Accept button, PIN, Fingerprint or a FIDO authenticator. All
-transaction information is encrypted and no sensitive information is sent through either APNs or GCM.
+transaction information is encrypted and no sensitive information is sent through either APNs or FCM.
 
 ## Setup and requirements
 
 The setup and requirements to enable mobile authentication with push differ per platform. For Android devices, the medium used to send push messages is
-**Google Cloud Messaging (GCM)**. For iOS devices, the **Apple Push Notification service (APNs)** is used. You will need a valid GCM Sender ID and/or APNs
+**Firebase Cloud Messaging (FCM)**. For iOS devices, the **Apple Push Notification service (APNs)** is used. You will need a valid google-services.json and/or APNs
 setup to receive push notifications in the Onegini Cordova Plugin.
 
-To tell the Onegini Cordova Plugin about your GCM Sender ID, add the Sender ID to your `config.xml` as a preference.
-
-```xml
-<preference name="OneginiGcmSenderId" value="123456789012"/>
-```
+To tell the Onegini Cordova Plugin about your `google-services.json`, add your `google-services.json` file to the root of your project. The Cordova plugin 
+contains a hook that is triggered `after_prepare` which will copy your `google-services.json` to the correct location in the generated Android project.
 
 For iOS to receive push notifications. You will need to open `platforms/ios/MyApp.xcodeproj` in Xcode and configure APNS.
 Make sure to enable `Push Notifications` under your App's Capabilities.
