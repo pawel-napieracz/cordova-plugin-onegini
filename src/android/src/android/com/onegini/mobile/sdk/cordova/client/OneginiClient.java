@@ -34,7 +34,7 @@ import org.json.JSONException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
+import com.google.firebase.messaging.RemoteMessage;
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiInitializationError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
@@ -48,12 +48,12 @@ import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 public class OneginiClient extends CordovaPlugin {
 
   private static final String ACTION_START = "start";
-  private final List<Bundle> delayedMobileAuthenticationRequests = new LinkedList<Bundle>();
+  private final List<RemoteMessage> delayedMobileAuthenticationRequests = new LinkedList<RemoteMessage>();
 
   @Override
   public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
     super.initialize(cordova, webView);
-    final Bundle mobileAuthenticationBundle = cordova.getActivity().getIntent().getBundleExtra(EXTRA_MOBILE_AUTHENTICATION);
+    final RemoteMessage remoteMessage = cordova.getActivity().getIntent().getParcelableExtra(EXTRA_MOBILE_AUTHENTICATION);
 
     /*
       Prepare an instance of the SDK.
@@ -62,7 +62,7 @@ public class OneginiClient extends CordovaPlugin {
      */
     getOneginiClient();
 
-    handlePushMobileAuthenticationRequest(mobileAuthenticationBundle);
+    handlePushMobileAuthenticationRequest(remoteMessage);
   }
 
   @Override
@@ -78,29 +78,28 @@ public class OneginiClient extends CordovaPlugin {
   @Override
   public void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
-    final Bundle mobileAuthenticationPushMessage = intent.getBundleExtra(EXTRA_MOBILE_AUTHENTICATION);
+    final RemoteMessage message = intent.getParcelableExtra(EXTRA_MOBILE_AUTHENTICATION);
 
-    handlePushMobileAuthenticationRequest(mobileAuthenticationPushMessage);
+    handlePushMobileAuthenticationRequest(message);
     handleRedirection(intent.getData());
   }
 
-  private void handlePushMobileAuthenticationRequest(final Bundle pushMessage) {
-    if (pushMessage == null) {
+  private void handlePushMobileAuthenticationRequest(final RemoteMessage remoteMessage) {
+    if (remoteMessage == null) {
       return;
     }
 
     if (OneginiSDK.getInstance().isStarted()) {
-      getOneginiClient().getUserClient()
-          .handleMobileAuthWithPushRequest(pushMessage, MobileAuthWithPushHandler.getInstance());
+      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(remoteMessage, MobileAuthWithPushHandler.getInstance());
     } else {
-      delayedMobileAuthenticationRequests.add(pushMessage);
+      delayedMobileAuthenticationRequests.add(remoteMessage);
     }
   }
 
   private void handleDelayedPushMobileAuthenticationRequests() {
-    for (Iterator<Bundle> iterator = delayedMobileAuthenticationRequests.iterator(); iterator.hasNext(); ) {
-      Bundle request = iterator.next();
-      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(request, MobileAuthWithPushHandler.getInstance());
+    for (Iterator<RemoteMessage> iterator = delayedMobileAuthenticationRequests.iterator(); iterator.hasNext(); ) {
+      RemoteMessage remoteMessage = iterator.next();
+      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(remoteMessage, MobileAuthWithPushHandler.getInstance());
       iterator.remove();
     }
   }

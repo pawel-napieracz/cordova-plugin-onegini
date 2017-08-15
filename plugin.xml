@@ -224,7 +224,6 @@
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-      <uses-permission android:name="android.permission.WAKE_LOCK" />
     </config-file>
     <config-file target="AndroidManifest.xml" parent="application/activity">
       <intent-filter>
@@ -235,23 +234,12 @@
       </intent-filter>
     </config-file>
 
-    <!-- GCM Config -->
+    <!-- FCM Config -->
     <config-file target="AndroidManifest.xml" parent="application">
-      <receiver
-          android:name="com.google.android.gms.gcm.GcmReceiver"
-          android:exported="true"
-          android:permission="com.google.android.c2dm.permission.SEND" >
-        <intent-filter>
-          <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-          <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-          <category android:name="com.onegini.cordovaExampleApp" />
-        </intent-filter>
-      </receiver>
       <service
-          android:name="com.onegini.mobile.sdk.cordova.gcm.OneginiGcmListenerService"
-          android:exported="false" >
+          android:name="com.onegini.mobile.sdk.cordova.fcm.FcmListenerService">
         <intent-filter>
-          <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+          <action android:name="com.google.firebase.MESSAGING_EVENT"/>
         </intent-filter>
       </service>
     </config-file>
@@ -302,9 +290,13 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/OtpMobileAuthRequestClient.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
 
-    <!-- gcm -->
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/gcm/OneginiGcmListenerService.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/gcm"/>
+    <!-- fcm -->
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmListenerService.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmRegistrationService.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmStorage.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PluginResultBuilder.java"
