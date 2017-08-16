@@ -22,7 +22,6 @@
 
   <hook type="after_platform_add" src="hooks/configure_sdk.js" />
   <hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />
-  <hook type="after_prepare" src="hooks/copy_google_services.js" />
 
   <js-module src="dist/onegini.js" name="onegini">
     <clobbers target="onegini"/>
@@ -249,10 +248,6 @@
 
     <!-- Build gradle -->
     <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
-
-    <!-- Dummy Google services json -->
-    <source-file src="src/android/google-services.json"
-                 target-dir="."/>
 
     <!-- Onegini Plugin -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/OneginiSDK.java"

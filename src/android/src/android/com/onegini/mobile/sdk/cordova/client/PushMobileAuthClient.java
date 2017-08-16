@@ -115,7 +115,7 @@ public class PushMobileAuthClient extends CordovaPlugin {
 
           if (token == null || "".equals(token)) {
             callbackContext.sendPluginResult(new PluginResultBuilder()
-                .withPluginError("Cannot enroll for mobile authentication: FCM Token is null", ERROR_CODE_CONFIGURATION)
+                .withPluginError("Cannot enroll for push mobile auth: FCM Token is null. Please check your 'google-services.json'.", ERROR_CODE_CONFIGURATION)
                 .build());
 
             return;
@@ -123,12 +123,14 @@ public class PushMobileAuthClient extends CordovaPlugin {
 
           final OneginiMobileAuthWithPushEnrollmentHandler handler = new MobileAuthWithPushEnrollmentHandler(callbackContext);
           getOneginiClient().getUserClient().enrollUserForMobileAuthWithPush(token, handler);
+        } catch (IllegalStateException e) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withPluginError("Cannot enroll for push mobile auth: Could not initialize FCM. Please check if you installed the 'cordova-plugin-onegini-fcm' plugin.", ERROR_CODE_CONFIGURATION)
+              .build());
         } catch (Exception e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
               .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
               .build());
-
-          return;
         }
       }
     });
