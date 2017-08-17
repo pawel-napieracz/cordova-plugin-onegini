@@ -228,6 +228,12 @@ public class MobileAuthWithPushHandler
     }
 
     final CallbackContext callbackContext = callback.getChallengeResponseCallbackContext();
+    if (callbackContext == null) {
+      // We don't have a challenge / response callback so we cannot perform any callback. We'll just continue to process the next authentication request
+      startProcessingNextAuthenticationRequest();
+      return;
+    }
+
     final PluginResult pluginResult;
 
     if (oneginiError == null) {
