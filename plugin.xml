@@ -241,6 +241,12 @@
           <action android:name="com.google.firebase.MESSAGING_EVENT"/>
         </intent-filter>
       </service>
+      <service
+          android:name="com.onegini.mobile.sdk.cordova.fcm.FcmInstanceIdService">
+        <intent-filter>
+          <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+        </intent-filter>
+      </service>
     </config-file>
 
     <!-- Multidex -->
@@ -289,6 +295,8 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmListenerService.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmRegistrationService.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmInstanceIdService.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmStorage.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
