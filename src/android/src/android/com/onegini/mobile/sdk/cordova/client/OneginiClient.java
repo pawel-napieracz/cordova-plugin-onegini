@@ -17,7 +17,6 @@
 package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EXTRA_MOBILE_AUTHENTICATION;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EXTRA_SDK_STARTED;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -121,9 +120,9 @@ public class OneginiClient extends CordovaPlugin {
           public void onSuccess(final Set<UserProfile> set) {
             sendOneginiClientStartSuccessResult(callbackContext);
 
-            final Intent sdkStartedIntent = new Intent(getApplicationContext(), FcmTokenUpdateService.class);
-            sdkStartedIntent.putExtra(EXTRA_SDK_STARTED, true);
-            getApplicationContext().startService(sdkStartedIntent);
+            // We must trigger the update FCM service in case onTokenRefresh was called when the SDK wasn't started yet.
+            final Intent fcmTokenUpdateIntent = new Intent(getApplicationContext(), FcmTokenUpdateService.class);
+            getApplicationContext().startService(fcmTokenUpdateIntent);
 
             handleDelayedPushMobileAuthenticationRequests();
           }

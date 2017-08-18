@@ -16,8 +16,6 @@
 
 package com.onegini.mobile.sdk.cordova.fcm;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EXTRA_FCM_TOKEN_REFRESHED;
-
 import android.content.Intent;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -30,7 +28,6 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
   @Override
   public void onTokenRefresh() {
     final Intent intent = new Intent(getApplicationContext(), FcmTokenUpdateService.class);
-    intent.putExtra(EXTRA_FCM_TOKEN_REFRESHED, true);
     getApplicationContext().startService(intent);
   }
 }
