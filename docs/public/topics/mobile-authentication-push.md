@@ -4,24 +4,45 @@
 
 ## Introduction
 
-Two factor authentication can be implemented using APNs & GCM push notifications. It's a very secure and user friendly way of authentication. You can use this
+Two factor authentication can be implemented using APNs & FCM push notifications. It's a very secure and user friendly way of authentication. You can use this
 feature to allow users to confirm their transactions. Confirmation can be done using simple Accept button, PIN, Fingerprint or a FIDO authenticator. All
-transaction information is encrypted and no sensitive information is sent through either APNs or GCM.
+transaction information is encrypted and no sensitive information is sent through either APNs or FCM.
 
 ## Setup and requirements
 
 The setup and requirements to enable mobile authentication with push differ per platform. For Android devices, the medium used to send push messages is
-**Google Cloud Messaging (GCM)**. For iOS devices, the **Apple Push Notification service (APNs)** is used. You will need a valid GCM Sender ID and/or APNs
-setup to receive push notifications in the Onegini Cordova Plugin.
+**Firebase Cloud Messaging (FCM)**. For iOS devices, the **Apple Push Notification service (APNs)** is used. You will need a valid `google-services.json` and/or 
+APNs setup to receive push notifications in the Onegini Cordova Plugin.
 
-To tell the Onegini Cordova Plugin about your GCM Sender ID, add the Sender ID to your `config.xml` as a preference.
+### Android 
 
-```xml
-<preference name="OneginiGcmSenderId" value="123456789012"/>
+Since FCM requires a valid `google-services.json` and not everyone might want to use the push mobile authentication feature this functionality is placed 
+in it's own Cordova plugin, the [Onegini FCM plugin](https://github.com/Onegini/cordova-plugin-onegini-fcm). To enable push mobile authentication you must add 
+the `cordova-plugin-onegini-fcm` plugin to your project:
+
+```bash
+cordova plugin add cordova-plugin-onegini-fcm
 ```
 
-For iOS to receive push notifications. You will need to open `platforms/ios/MyApp.xcodeproj` in Xcode and configure APNS.
-Make sure to enable `Push Notifications` under your App's Capabilities.
+This plugin will enable your application for FCM and trigger the `GoogleServices` Gradle plugin during the project build phase.
+
+To add your `google-services.json` to the application project, add your `google-services.json` file to the root of your Cordova project. This file can be 
+obtained from the [Firebase console](https://console.firebase.google.com) The FCM plugin contains a hook that is triggered on `after_prepare` which will copy 
+your `google-services.json` to the correct location in the generated Android project.
+
+### iOS
+
+For iOS to receive push notifications. You will need to open `platforms/ios/MyApp.xcodeproj` in Xcode and configure APNs. Make sure to enable 
+`Push Notifications` under your App's Capabilities.
+
+### Onegini FCM plugin version compatibility
+
+To check which Onegini FCM plugin and Onegini plugin are compatible with each other check the table below.
+
+| Onegini plugin Version (cordova-plugin-onegini) | Onegini FCM plugin version (cordova-plugin-onegini-fcm)| Remark
+|-------------------------------------------------|--------------------------------------------------------| -------------------
+| < 4.0.0                                         | n.a.                                                   | Onegini Cordova plugin versions before 4.0.0 still depend on GCM.
+| 4.x.x                                           | 1.x.x                                                  | n.a.
 
 ## Enrollment
 

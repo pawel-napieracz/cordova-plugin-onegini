@@ -1,5 +1,6 @@
 .idea/
 .npmignore
+.editorconfig
 .babelrc
 docs/
 tests/

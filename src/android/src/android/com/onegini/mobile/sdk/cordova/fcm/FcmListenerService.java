@@ -14,47 +14,60 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova.gcm;
+package com.onegini.mobile.sdk.cordova.fcm;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EXTRA_MOBILE_AUTHENTICATION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_CONTENT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_TRANSACTION_ID;
+import static java.util.Collections.emptyMap;
+
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
 @SuppressLint("Registered")
-public class OneginiGcmListenerService extends GcmListenerService {
+public class FcmListenerService extends FirebaseMessagingService {
 
   @Override
-  public void onMessageReceived(final String s, final Bundle pushMessage) {
-    if (pushMessage.isEmpty()) {
+  public void onMessageReceived(final RemoteMessage message) {
+    if (message == null) {
       return;
     }
 
-    if (isMobileAuthenticationRequest(pushMessage)) {
-      startMainActivityWithIntentExtra(pushMessage);
+    if (isMobileAuthenticationRequest(message)) {
+      startMainActivityWithIntentExtra(message);
     }
   }
 
-  private void startMainActivityWithIntentExtra(final Bundle extra) {
+  private void startMainActivityWithIntentExtra(final RemoteMessage message) {
     final String packageName = this.getPackageName();
     final Intent launchIntent = this.getPackageManager().getLaunchIntentForPackage(packageName);
-    launchIntent.putExtra(EXTRA_MOBILE_AUTHENTICATION, extra);
+    launchIntent.putExtra(EXTRA_MOBILE_AUTHENTICATION, message);
     startActivity(launchIntent);
   }
 
-  private boolean isMobileAuthenticationRequest(final Bundle pushMessage) {
+  private boolean isMobileAuthenticationRequest(final RemoteMessage message) {
     try {
-      final JSONObject messageContent = new JSONObject(pushMessage.getString(PUSH_MSG_CONTENT));
+      Map<String, String> data = getRemoteMessageData(message);
+      final JSONObject messageContent = new JSONObject(data.get(PUSH_MSG_CONTENT));
       return messageContent.has(PUSH_MSG_TRANSACTION_ID);
     } catch (JSONException e) {
       return false;
     }
+  }
+
+  private Map<String, String> getRemoteMessageData(RemoteMessage message) {
+    Map<String, String> data = message.getData();
+    if (data == null) {
+      return emptyMap();
+    }
+
+    return data;
   }
 }

@@ -33,11 +33,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
 import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.fcm.FcmRegistrationService;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
@@ -46,7 +45,6 @@ public class PushMobileAuthClient extends CordovaPlugin {
 
   private static final String ACTION_IS_ENROLLED = "isEnrolled";
   private static final String ACTION_ENROLL = "enroll";
-  private static final String PREF_GCM_SENDER_ID = "OneginiGcmSenderId";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -111,30 +109,29 @@ public class PushMobileAuthClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        final String registrationId;
-        final String senderId = preferences.getString(PREF_GCM_SENDER_ID, null);
-
-        if (senderId == null) {
-          callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withPluginError("Cannot enroll for mobile authentication: 'OneginiGcmSenderId' preference not found in config.xml", ERROR_CODE_CONFIGURATION)
-              .build());
-
-          return;
-        }
-
         try {
-          InstanceID instanceID = InstanceID.getInstance(getApplicationContext());
-          registrationId = instanceID.getToken(senderId, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+          final FcmRegistrationService fcmRegistrationService = new FcmRegistrationService(getApplicationContext());
+          final String token = fcmRegistrationService.getRegistrationToken();
+
+          if (token == null || "".equals(token)) {
+            callbackContext.sendPluginResult(new PluginResultBuilder()
+                .withPluginError("Cannot enroll for push mobile auth: FCM Token is null. Please check your 'google-services.json'.", ERROR_CODE_CONFIGURATION)
+                .build());
+
+            return;
+          }
+
+          final OneginiMobileAuthWithPushEnrollmentHandler handler = new MobileAuthWithPushEnrollmentHandler(callbackContext);
+          getOneginiClient().getUserClient().enrollUserForMobileAuthWithPush(token, handler);
+        } catch (IllegalStateException e) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withPluginError("Cannot enroll for push mobile auth: Could not initialize FCM. Please check if you installed the 'cordova-plugin-onegini-fcm' plugin.", ERROR_CODE_CONFIGURATION)
+              .build());
         } catch (Exception e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
               .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
               .build());
-
-          return;
         }
-
-        final OneginiMobileAuthWithPushEnrollmentHandler handler = new MobileAuthWithPushEnrollmentHandler(callbackContext);
-        getOneginiClient().getUserClient().enrollUserForMobileAuthWithPush(registrationId, handler);
       }
     });
   }
