@@ -85,6 +85,8 @@ public interface OneginiCordovaPluginConstants {
 
   // Extras
   String EXTRA_MOBILE_AUTHENTICATION = "com.onegini.CordovaPluginMobileAuthenticationExtra";
+  String EXTRA_SDK_STARTED = "com.onegini.CordovaPluginSdkStarted";
+  String EXTRA_FCM_TOKEN_REFRESHED = "com.onegini.CordovaPluginFcmTokenRefresheded";
 
   String TAG = "oneginiCordovaPlugin";
 

@@ -1,16 +1,27 @@
+/*
+ * Copyright (c) 2017 Onegini B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.onegini.mobile.sdk.cordova.fcm;
 
-import android.util.Log;
-import com.google.firebase.iid.FirebaseInstanceId;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EXTRA_FCM_TOKEN_REFRESHED;
+
+import android.content.Intent;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.onegini.mobile.sdk.android.client.OneginiClient;
-import com.onegini.mobile.sdk.android.handlers.OneginiRefreshMobileAuthPushTokenHandler;
-import com.onegini.mobile.sdk.android.handlers.error.OneginiRefreshMobileAuthPushTokenError;
-import com.onegini.mobile.sdk.cordova.OneginiSDK;
 
 public class FcmInstanceIdService extends FirebaseInstanceIdService {
-
-  private static final String TAG = FcmInstanceIdService.class.getSimpleName();
 
   /**
    * Called if InstanceID token is created or updated. This may occur if the security of the previous token had been compromised.
@@ -18,38 +29,8 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
    */
   @Override
   public void onTokenRefresh() {
-    final String token = FirebaseInstanceId.getInstance().getToken();
-    final FcmRegistrationService fcmRegistrationService = new FcmRegistrationService(this);
-    if (fcmRegistrationService.shouldUpdateToken(token)) {
-      // the token was updated, notify the SDK
-      sendUpdatedTokenToServer(token);
-    } else {
-      // the token is created for the first time
-      fcmRegistrationService.storeToken(token);
-    }
-  }
-
-  private void sendUpdatedTokenToServer(final String token) {
-    getOneginiClient().getDeviceClient().refreshMobileAuthPushToken(token, new TokenUpdateHandler());
-  }
-
-  private class TokenUpdateHandler implements OneginiRefreshMobileAuthPushTokenHandler {
-
-    public TokenUpdateHandler() {
-    }
-
-    @Override
-    public void onSuccess() {
-      Log.d(TAG, "The FCM push token has been updated.");
-    }
-
-    @Override
-    public void onError(final OneginiRefreshMobileAuthPushTokenError error) {
-      Log.e(TAG, "The FCM push token update has failed: " + error.getMessage());
-    }
-  }
-
-  private OneginiClient getOneginiClient() {
-    return OneginiSDK.getInstance().getOneginiClient(getApplicationContext());
+    final Intent intent = new Intent(getApplicationContext(), FcmTokenUpdateService.class);
+    intent.putExtra(EXTRA_FCM_TOKEN_REFRESHED, true);
+    getApplicationContext().startService(intent);
   }
 }
