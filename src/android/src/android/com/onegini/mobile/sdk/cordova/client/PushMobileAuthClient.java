@@ -36,7 +36,7 @@ import android.content.Context;
 import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
-import com.onegini.mobile.sdk.cordova.fcm.FcmRegistrationService;
+import com.onegini.mobile.sdk.cordova.fcm.FcmTokenService;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
@@ -110,8 +110,8 @@ public class PushMobileAuthClient extends CordovaPlugin {
       @Override
       public void run() {
         try {
-          final FcmRegistrationService fcmRegistrationService = new FcmRegistrationService(getApplicationContext());
-          final String token = fcmRegistrationService.getRegistrationToken();
+          final FcmTokenService fcmTokenService = new FcmTokenService(getApplicationContext());
+          final String token = fcmTokenService.getRegistrationToken();
 
           if (token == null || "".equals(token)) {
             callbackContext.sendPluginResult(new PluginResultBuilder()

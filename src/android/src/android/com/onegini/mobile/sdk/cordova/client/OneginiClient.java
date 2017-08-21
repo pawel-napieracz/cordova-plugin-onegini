@@ -40,6 +40,7 @@ import com.onegini.mobile.sdk.android.handlers.error.OneginiInitializationError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.fcm.FcmTokenUpdateService;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
@@ -118,6 +119,11 @@ public class OneginiClient extends CordovaPlugin {
           @Override
           public void onSuccess(final Set<UserProfile> set) {
             sendOneginiClientStartSuccessResult(callbackContext);
+
+            // We must trigger the update FCM service in case onTokenRefresh was called when the SDK wasn't started yet.
+            final Intent fcmTokenUpdateIntent = new Intent(getApplicationContext(), FcmTokenUpdateService.class);
+            getApplicationContext().startService(fcmTokenUpdateIntent);
+
             handleDelayedPushMobileAuthenticationRequests();
           }
 
