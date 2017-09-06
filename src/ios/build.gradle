@@ -53,11 +53,13 @@ configurations {
 }
 
 dependencies {
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.0.0@a'
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.0.0:headers@zip'
+  // TODO SDK v7.0.0 is required for implicit auth. Update when released.
 
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.0.0@a'
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.0.0:headers@zip'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.1.0@a'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.1.0:headers@zip'
+
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.1.0@a'
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.1.0:headers@zip'
 }
 
 task prepareTargetDirectory {
