@@ -147,15 +147,6 @@ module.exports = (function () {
     return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'start');
   };
 
-  var reauthenticate = function (options) {
-    options = utils.getOptionsWithDefaults(options, {}, 'profileId');
-    if (!options || !options.profileId) {
-      throw new TypeError("Onegini: missing 'profileId' argument for reauthenticate");
-    }
-
-    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'reauthenticate');
-  };
-
   var register = function (options) {
     options = utils.getOptionsWithDefaults(options, {}, 'scopes');
     return new AuthenticationHandler(options, 'OneginiUserRegistrationClient', 'start');
@@ -251,7 +242,6 @@ module.exports = (function () {
 
   return {
     authenticate: authenticate,
-    reauthenticate: reauthenticate,
     register: register,
     changePin: changePin,
     authenticators: authenticators,

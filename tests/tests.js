@@ -966,33 +966,6 @@ function sendMobileAuthRequest(type, user, callback) {
       });
     });
 
-    describe('reauthenticate', function () {
-      it('should exist', function () {
-        expect(onegini.user.reauthenticate).toBeDefined();
-      });
-
-      it("should require a profileId", function () {
-        expect(function () {
-          onegini.user.reauthenticate()
-        }).toThrow(new TypeError("Onegini: missing 'profileId' argument for reauthenticate"));
-      });
-
-      it("should succeed", function (done) {
-        onegini.user.reauthenticate({profileId: registeredProfileId})
-            .onPinRequest(function (actions) {
-              expect(actions).toBeDefined();
-              actions.providePin(config.pin);
-            })
-            .onError(function (err) {
-              expect(err).toBeDefined();
-              fail('Error callback called, but method should have succeeded');
-            })
-            .onSuccess(function () {
-              done();
-            });
-      });
-    });
-
     describe("authenticators (2/3)", function () {
       describe("setPreferred", function () {
         it("Should fail with a non-existing authenticator", function (done) {
@@ -1204,26 +1177,6 @@ function sendMobileAuthRequest(type, user, callback) {
           });
         });
 
-        describe("user.reauthenticate", function () {
-          it("should allow fallback from fingerprint to pin", function (done) {
-            onegini.user.reauthenticate(registeredProfileId)
-                .onFingerprintRequest(function (actions) {
-                  actions.fallbackToPin();
-                })
-                .onPinRequest(function (actions) {
-                  actions.providePin(config.pin);
-                })
-                .onSuccess(function () {
-                  expect(true).toBe(true);
-                  done();
-                })
-                .onError(function (err) {
-                  expect(err).toBeUndefined();
-                  fail("Fingerprint authentication should have succeeded");
-                })
-          });
-        });
-
         describe("deregister", function () {
           it("Should succeed with existing fingerprint authenticator", function (done) {
             onegini.user.authenticators.deregister(
@@ -1289,26 +1242,6 @@ function sendMobileAuthRequest(type, user, callback) {
                   expect(err).toBeUndefined();
                   fail("Error callback called, but method should have failed.");
                 });
-          });
-        });
-
-        describe("user.reauthenticate", function () {
-          it("should allow fallback from FIDO to pin", function (done) {
-            onegini.user.reauthenticate(registeredProfileId)
-                .onFidoRequest(function (actions) {
-                  actions.fallbackToPin();
-                })
-                .onPinRequest(function (actions) {
-                  actions.providePin(config.pin);
-                })
-                .onSuccess(function () {
-                  expect(true).toBe(true);
-                  done();
-                })
-                .onError(function (err) {
-                  expect(err).toBeUndefined();
-                  fail("FIDO authentication should have succeeded");
-                })
           });
         });
 

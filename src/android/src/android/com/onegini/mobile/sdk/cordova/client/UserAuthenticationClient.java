@@ -65,7 +65,6 @@ public class UserAuthenticationClient extends CordovaPlugin {
   private static final String ACTION_RESPOND_TO_FINGERPRINT_REQUEST = "respondToFingerprintRequest";
   private static final String ACTION_RESPOND_TO_FIDO_REQUEST = "respondToFidoRequest";
   private static final String ACTION_FALLBACK_TO_PIN = "fallbackToPin";
-  private static final String ACTION_REAUTHENTICATE = "reauthenticate";
   private static final String ACTION_LOGOUT = "logout";
   private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
   private static final String ACTION_CANCEL_FLOW = "cancelFlow";
@@ -81,9 +80,6 @@ public class UserAuthenticationClient extends CordovaPlugin {
       return true;
     } else if (ACTION_GET_AUTHENTICATED_USER_PROFILE.equals(action)) {
       getAuthenticatedUserProfile(callbackContext);
-      return true;
-    } else if (ACTION_REAUTHENTICATE.equals(action)) {
-      reauthenticate(args, callbackContext);
       return true;
     } else if (ACTION_LOGOUT.equals(action)) {
       logout(callbackContext);
@@ -144,41 +140,6 @@ public class UserAuthenticationClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
         getOneginiClient().getUserClient().authenticateUser(userProfile, authenticationHandler);
-      }
-    });
-  }
-
-  private void reauthenticate(final JSONArray args, final CallbackContext callbackContext) {
-    final UserProfile userProfile;
-
-    try {
-      userProfile = getUserProfileForAuthentication(args);
-    } catch (IllegalArgumentException e) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withError()
-          .withPluginError(e.getMessage(), ERROR_CODE_ILLEGAL_ARGUMENT)
-          .build());
-
-      return;
-    } catch (Exception e) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withError()
-          .withPluginError(e.getMessage(), ERROR_CODE_PROFILE_NOT_REGISTERED)
-          .build());
-
-      return;
-    }
-
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
-    FingerprintAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
-    FidoAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
-    authenticationHandler = new AuthenticationHandler(callbackContext);
-
-    cordova.getThreadPool().execute(new Runnable() {
-      @Override
-      public void run() {
-        getOneginiClient().getUserClient()
-            .reauthenticateUser(userProfile, authenticationHandler);
       }
     });
   }
