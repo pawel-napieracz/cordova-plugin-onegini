@@ -1,3 +1,4 @@
+package com.onegini.mobile.sdk.cordova.handler;
 /*
  * Copyright (c) 2017 Onegini B.V.
  *
@@ -14,38 +15,35 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova.handler;
-
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
-import com.onegini.mobile.sdk.android.handlers.OneginiLogoutHandler;
-import com.onegini.mobile.sdk.android.handlers.error.OneginiLogoutError;
+import com.onegini.mobile.sdk.android.handlers.OneginiImplicitAuthenticationHandler;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiImplicitTokenRequestError;
+import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
-public class LogoutHandler implements OneginiLogoutHandler{
+public class ImplicitAuthenticationHandler implements OneginiImplicitAuthenticationHandler {
 
   private final CallbackContext callbackContext;
 
-  public LogoutHandler(final CallbackContext callbackContext) {
+  public ImplicitAuthenticationHandler(final CallbackContext callbackContext) {
     this.callbackContext = callbackContext;
   }
 
   @Override
-  public void onSuccess() {
+  public void onSuccess(final UserProfile userProfile) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .build();
 
     callbackContext.sendPluginResult(pluginResult);
-
   }
 
   @Override
-  public void onError(final OneginiLogoutError logoutError) {
+  public void onError(final OneginiImplicitTokenRequestError implicitTokenRequestError) {
     final PluginResult pluginResult = new PluginResultBuilder()
-        .withError()
-        .withOneginiError(logoutError)
+        .withOneginiError(implicitTokenRequestError)
         .build();
 
     callbackContext.sendPluginResult(pluginResult);

@@ -51,6 +51,7 @@ import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.AuthenticationHandler;
 import com.onegini.mobile.sdk.cordova.handler.FidoAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.FingerprintAuthenticationRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.ImplicitAuthenticationHandler;
 import com.onegini.mobile.sdk.cordova.handler.LogoutHandler;
 import com.onegini.mobile.sdk.cordova.handler.PinAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
@@ -67,7 +68,9 @@ public class UserAuthenticationClient extends CordovaPlugin {
   private static final String ACTION_FALLBACK_TO_PIN = "fallbackToPin";
   private static final String ACTION_LOGOUT = "logout";
   private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
+  private static final String ACTION_AUTHENTICATE_IMPLICITLY = "authenticateImplicitly";
   private static final String ACTION_CANCEL_FLOW = "cancelFlow";
+
   private AuthenticationHandler authenticationHandler;
 
   @Override
@@ -92,6 +95,9 @@ public class UserAuthenticationClient extends CordovaPlugin {
       return true;
     } else if (ACTION_FALLBACK_TO_PIN.equals(action)) {
       fallbackToPin(callbackContext);
+      return true;
+    } else if (ACTION_AUTHENTICATE_IMPLICITLY.equals(action)) {
+      authenticateImplicitly(callbackContext, args);
       return true;
     } else if (ACTION_CANCEL_FLOW.equals(action)) {
       cancelFlow(callbackContext);
@@ -148,8 +154,7 @@ public class UserAuthenticationClient extends CordovaPlugin {
     final UserProfile userProfile;
 
     try {
-      userProfile = getUserProfile(args);
-
+      userProfile = getUserProfileFromPluginArgs(args);
     } catch (JSONException e) {
       throw new IllegalArgumentException(ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE);
     }
@@ -161,9 +166,9 @@ public class UserAuthenticationClient extends CordovaPlugin {
     return userProfile;
   }
 
-  private UserProfile getUserProfile(final JSONArray args) throws JSONException {
-    String profileId = args.getJSONObject(0).getString(PARAM_PROFILE_ID);
-    Set<UserProfile> registeredUserProfiles = getOneginiClient().getUserClient().getUserProfiles();
+  private UserProfile getUserProfileFromPluginArgs(final JSONArray args) throws JSONException {
+    final String profileId = args.getJSONObject(0).getString(PARAM_PROFILE_ID);
+    final Set<UserProfile> registeredUserProfiles = getOneginiClient().getUserClient().getUserProfiles();
 
     return UserProfileUtil.findUserProfileById(profileId, registeredUserProfiles);
   }
@@ -297,6 +302,28 @@ public class UserAuthenticationClient extends CordovaPlugin {
         }
 
         callbackContext.sendPluginResult(pluginResultBuilder.build());
+      }
+    });
+  }
+
+  private void authenticateImplicitly(final CallbackContext callbackContext, final JSONArray args) throws JSONException {
+    final UserProfile userProfile = getUserProfileFromPluginArgs(args);
+    final String[] scopes = ActionArgumentsUtil.getScopesFromArguments(args);
+
+    if (userProfile == null) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withPluginError(ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED, ERROR_CODE_ILLEGAL_ARGUMENT)
+          .build());
+
+      return;
+    }
+
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        final ImplicitAuthenticationHandler implicitAuthenticationHandler = new ImplicitAuthenticationHandler(callbackContext);
+
+        getOneginiClient().getUserClient().authenticateUserImplicitly(userProfile, scopes, implicitAuthenticationHandler);
       }
     });
   }

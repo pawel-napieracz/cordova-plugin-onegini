@@ -138,23 +138,35 @@ module.exports = (function () {
     return this;
   };
 
-  var authenticate = function (options) {
+  function authenticate (options) {
     options = utils.getOptionsWithDefaults(options, {}, 'profileId');
     if (!options || !options.profileId) {
       throw new TypeError("Onegini: missing 'profileId' argument for user.authenticate");
     }
 
     return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'start');
-  };
+  }
 
-  var register = function (options) {
+  function authenticateImplicitly (options, successCb, failureCb) {
+    options = utils.getOptionsWithDefaults(options, {
+      scopes: []
+    }, 'profileId');
+
+    if (!options || !options.profileId) {
+      throw new TypeError("Onegini: missing 'profileId' argument for user.authenticateImplicitly");
+    }
+
+    return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'authenticateImplicitly', options, successCb, failureCb);
+  }
+
+  function register (options) {
     options = utils.getOptionsWithDefaults(options, {}, 'scopes');
     return new AuthenticationHandler(options, 'OneginiUserRegistrationClient', 'start');
-  };
+  }
 
-  var changePin = function () {
+  function changePin () {
     return new AuthenticationHandler(null, 'OneginiChangePinClient', 'start');
-  };
+  }
 
   var authenticators = {
     getAll: function (options, successCb, failureCb) {
@@ -242,6 +254,7 @@ module.exports = (function () {
 
   return {
     authenticate: authenticate,
+    authenticateImplicitly: authenticateImplicitly,
     register: register,
     changePin: changePin,
     authenticators: authenticators,
