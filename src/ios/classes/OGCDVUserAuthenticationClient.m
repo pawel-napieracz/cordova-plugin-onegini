@@ -37,6 +37,7 @@
     [self.commandDelegate runInBackground:^{
         NSDictionary *options = command.arguments[0];
         NSString *profileId = options[OGCDVPluginKeyProfileId];
+        NSArray *scopes = options[OGCDVPluginKeyScopes];
 
         ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
         if (user == nil) {
@@ -45,7 +46,13 @@
             return;
         }
 
-        // TODO Implicit auth
+        [[ONGUserClient sharedInstance] implicitlyAuthenticateUser:user scopes:scopes completion:^(BOOL success, NSError * _Nonnull error){
+            if (error != nil || !success) {
+                [self sendErrorResultForCallbackId:command.callbackId withError:error];
+            } else {
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            }
+        }];
     }];
 }
 
