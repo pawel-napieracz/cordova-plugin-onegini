@@ -27,7 +27,6 @@
         * [getUserProfiles](reference/user/getUserProfiles.md)
         * [isUserRegistered](reference/user/isUserRegistered.md)
         * [logout](reference/user/logout.md)
-        * [reauthenticate](reference/user/reauthenticate.md)
         * [register](reference/user/register.md)
         * [validatePinWithPolicy](reference/user/validatePinWithPolicy.md)
     * [device](reference/device/introduction.md)
