@@ -125,7 +125,9 @@ NSString *const keyURL = @"url";
         return;
     }
 
-    [self handleRegistrationCallbackURL:url];
+    [self.commandDelegate runInBackground:^{
+        [self handleRegistrationCallbackURL:url];
+    }];
 }
 
 - (void)sendRegistrationRequestEvent:(NSURL *)url
