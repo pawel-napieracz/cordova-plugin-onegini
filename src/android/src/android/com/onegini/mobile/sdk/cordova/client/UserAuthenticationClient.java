@@ -69,6 +69,7 @@ public class UserAuthenticationClient extends CordovaPlugin {
   private static final String ACTION_LOGOUT = "logout";
   private static final String ACTION_GET_AUTHENTICATED_USER_PROFILE = "getAuthenticatedUserProfile";
   private static final String ACTION_AUTHENTICATE_IMPLICITLY = "authenticateImplicitly";
+  private static final String ACTION_GET_IMPLICITLY_AUTHENTICATED_USER_PROFILE = "getImplicitlyAuthenticatedUserProfile";
   private static final String ACTION_CANCEL_FLOW = "cancelFlow";
 
   private AuthenticationHandler authenticationHandler;
@@ -99,6 +100,9 @@ public class UserAuthenticationClient extends CordovaPlugin {
     } else if (ACTION_AUTHENTICATE_IMPLICITLY.equals(action)) {
       authenticateImplicitly(callbackContext, args);
       return true;
+    } else if (ACTION_GET_IMPLICITLY_AUTHENTICATED_USER_PROFILE.equals(action)) {
+      getImplicitlyAuthenticatedUserProfile(callbackContext);
+     return true;
     } else if (ACTION_CANCEL_FLOW.equals(action)) {
       cancelFlow(callbackContext);
       return true;
@@ -289,11 +293,10 @@ public class UserAuthenticationClient extends CordovaPlugin {
       @Override
       public void run() {
         final UserProfile authenticatedUserProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
+        final PluginResultBuilder pluginResultBuilder = new PluginResultBuilder();
 
-        PluginResultBuilder pluginResultBuilder = new PluginResultBuilder();
         if (authenticatedUserProfile == null) {
           pluginResultBuilder
-              .withError()
               .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED);
         } else {
           pluginResultBuilder
@@ -324,6 +327,26 @@ public class UserAuthenticationClient extends CordovaPlugin {
         final ImplicitAuthenticationHandler implicitAuthenticationHandler = new ImplicitAuthenticationHandler(callbackContext);
 
         getOneginiClient().getUserClient().authenticateUserImplicitly(userProfile, scopes, implicitAuthenticationHandler);
+      }
+    });
+  }
+
+  private void getImplicitlyAuthenticatedUserProfile(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        final UserProfile implicitlyAuthenticatedUserProfile = getOneginiClient().getUserClient().getImplicitlyAuthenticatedUserProfile();
+        final PluginResultBuilder pluginResultBuilder = new PluginResultBuilder();
+
+        if (implicitlyAuthenticatedUserProfile == null) {
+          pluginResultBuilder.withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED);
+        } else {
+          pluginResultBuilder
+              .withSuccess()
+              .withProfileId(implicitlyAuthenticatedUserProfile);
+        }
+
+        callbackContext.sendPluginResult(pluginResultBuilder.build());
       }
     });
   }
