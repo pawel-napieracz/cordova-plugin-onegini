@@ -310,6 +310,8 @@
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticatorDeregistrationHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/ImplicitAuthenticationHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/LogoutHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/RegistrationHandler.java"
