@@ -4,39 +4,41 @@
       <div class="container">
         <div class="header">
           <h4>Login with your fingerprint</h4>
-        <div>
-        <div class="body">
-          <p>{{status}}</p>
+          <div>
+            <div class="body">
+              <p>{{status}}</p>
+            </div>
+            <div class="footer">
+              <button-lg text="Use PIN instead" @click="fallbackToPin" />
+            </div>
+          </div>
         </div>
-        <div class="footer">
-          <button-lg text="Use PIN instead" @click="fallbackToPin"/>
-        </div>    
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ButtonLarge from '../components/Button-large.vue';
+  import ButtonLarge from '../components/Button-large.vue';
 
-export default {
-  props: [
-    'status',
-    'actions'
-  ],
+  export default {
+    props: [
+      'status',
+      'actions'
+    ],
 
-  methods: {
-    fallbackToPin: function() {
-      if(this.actions) {
-        this.actions.fallbackToPin();
+    methods: {
+      fallbackToPin: function () {
+        if (this.actions) {
+          this.actions.fallbackToPin();
+        }
       }
-    }
-  },
+    },
 
-  components: {
-    'button-lg': ButtonLarge
+    components: {
+      'button-lg': ButtonLarge
+    }
   }
-}
 </script>
 
 <style scoped>
@@ -50,7 +52,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    
+
     background-color: rgba(0, 0, 0, .1);
   }
 
