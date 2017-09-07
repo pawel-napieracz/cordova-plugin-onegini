@@ -241,6 +241,10 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'getAuthenticatedUserProfile', [], successCb, failureCb);
   }
 
+  function getImplicitlyAuthenticatedUserProfile(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'getImplicitlyAuthenticatedUserProfile', [], successCb, failureCb);
+  }
+
   function logout(successCb, failureCb) {
     return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'logout', [], successCb, failureCb);
   }
@@ -262,6 +266,7 @@ module.exports = (function () {
     isUserRegistered: isUserRegistered,
     getUserProfiles: getUserProfiles,
     getAuthenticatedUserProfile: getAuthenticatedUserProfile,
+    getImplicitlyAuthenticatedUserProfile: getImplicitlyAuthenticatedUserProfile,
     logout: logout,
     validatePinWithPolicy: validatePinWithPolicy
   };

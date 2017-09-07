@@ -32,6 +32,18 @@
     }
 }
 
+- (void)getImplicitlyAuthenticatedUserProfile:(CDVInvokedUrlCommand *)command
+{
+    ONGUserProfile *implicitlyAuthenticatedUserProfile = [[ONGUserClient sharedInstance] implicitlyAuthenticatedUserProfile];
+    if (implicitlyAuthenticatedUserProfile == nil) {
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
+    } else {
+        NSDictionary *result = @{OGCDVPluginKeyProfileId: implicitlyAuthenticatedUserProfile.profileId};
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:command.callbackId];
+    }
+}
+
+
 - (void)authenticateImplicitly:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{

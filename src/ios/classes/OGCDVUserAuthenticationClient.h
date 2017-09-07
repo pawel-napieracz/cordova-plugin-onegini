@@ -19,6 +19,7 @@
 @interface OGCDVUserAuthenticationClient : OGCDVAuthenticationDelegateHandler
 
 - (void)getAuthenticatedUserProfile:(CDVInvokedUrlCommand *)command;
+- (void)getImplicitlyAuthenticatedUserProfile:(CDVInvokedUrlCommand *)command;
 - (void)authenticateImplicitly:(CDVInvokedUrlCommand *)command;
 - (void)start:(CDVInvokedUrlCommand *)command;
 - (void)providePin:(CDVInvokedUrlCommand *)command;
