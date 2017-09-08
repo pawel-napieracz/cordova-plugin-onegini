@@ -19,6 +19,7 @@ package com.onegini.mobile.sdk.cordova.client;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_IO_EXCEPTION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INVALID_FETCH_METHOD;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.TAG;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static org.apache.cordova.PluginResult.Status.ERROR;
@@ -35,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.TextUtils;
 import android.util.Log;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
@@ -53,6 +55,34 @@ public class ResourceClient extends CordovaPlugin {
   private static final String PARAM_STATUS = "status";
   private static final String PARAM_STATUS_TEXT = "statusText";
   private static final String PARAM_HEADERS = "headers";
+  private static final String PARAM_AUTH = "auth";
+
+  private enum AuthMethod {
+    USER("Symbol(user)"),
+    ANONYMOUS("Symbol(anonymous)"),
+    IMPLICIT("Symbol(implicit)");
+
+    private final String method;
+
+    AuthMethod(final String method) {
+      this.method = method;
+    }
+
+    @Override
+    public String toString() {
+      return method;
+    }
+
+    public static AuthMethod fromString(final String method) {
+      for (AuthMethod m : values()) {
+        if (TextUtils.equals(method, m.toString())) {
+          return m;
+        }
+      }
+
+      return null;
+    }
+  }
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -67,7 +97,15 @@ public class ResourceClient extends CordovaPlugin {
   private void fetch(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final Request request;
     final JSONObject options = args.getJSONObject(0);
-    final boolean isAnonymous = ActionArgumentsUtil.isFetchAnonymous(options);
+    final AuthMethod authMethod = AuthMethod.fromString(options.getString(PARAM_AUTH));
+
+    if (authMethod == null) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withPluginError(ERROR_DESCRIPTION_INVALID_FETCH_METHOD, ERROR_CODE_ILLEGAL_ARGUMENT)
+          .build());
+
+      return;
+    }
 
     try {
       request = ActionArgumentsUtil.getRequestFromArguments(options);
@@ -91,10 +129,17 @@ public class ResourceClient extends CordovaPlugin {
         final OkHttpClient okClient;
         final Response response;
 
-        if (isAnonymous) {
-          okClient = getOneginiClient().getDeviceClient().getAnonymousResourceOkHttpClient();
-        } else {
-          okClient = getOneginiClient().getUserClient().getResourceOkHttpClient();
+        switch (authMethod) {
+          case ANONYMOUS:
+            okClient = getOneginiClient().getDeviceClient().getAnonymousResourceOkHttpClient();
+            break;
+          case IMPLICIT:
+            okClient = getOneginiClient().getUserClient().getImplicitResourceOkHttpClient();
+            break;
+          case USER:
+          default:
+            okClient = getOneginiClient().getUserClient().getResourceOkHttpClient();
+            break;
         }
 
         try {

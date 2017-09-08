@@ -1888,4 +1888,25 @@ exports.defineAutoTests = function () {
           })
       })
   });
+
+  describe('onegini.resource (implicit)', function () {
+    beforeAll(function (done) {
+      onegini.user.authenticateImplicitly(registeredProfileId, function () {
+        done();
+      });
+    });
+
+    it('should fetch an implicit resource', function (done) {
+      onegini.resource.fetch({
+        url: 'https://onegini-msp-snapshot.test.onegini.io/resources/user-id-decorated',
+        auth: onegini.resource.auth.IMPLICIT
+      }, function (response) {
+        expect(response.json.decorated_user_id).toEqual('✨ ' + config.userId + ' ✨');
+        done();
+      }, function (err) {
+        console.error(err);
+        fail('Method failed, but should have succeeded');
+      });
+    });
+  });
 };
