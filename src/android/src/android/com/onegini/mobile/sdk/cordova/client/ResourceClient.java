@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import android.text.TextUtils;
 import android.util.Log;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.model.AuthMethod;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.OkHttpResponseUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
@@ -56,33 +57,6 @@ public class ResourceClient extends CordovaPlugin {
   private static final String PARAM_STATUS_TEXT = "statusText";
   private static final String PARAM_HEADERS = "headers";
   private static final String PARAM_AUTH = "auth";
-
-  private enum AuthMethod {
-    USER("Symbol(user)"),
-    ANONYMOUS("Symbol(anonymous)"),
-    IMPLICIT("Symbol(implicit)");
-
-    private final String method;
-
-    AuthMethod(final String method) {
-      this.method = method;
-    }
-
-    @Override
-    public String toString() {
-      return method;
-    }
-
-    public static AuthMethod fromString(final String method) {
-      for (AuthMethod m : values()) {
-        if (TextUtils.equals(method, m.toString())) {
-          return m;
-        }
-      }
-
-      return null;
-    }
-  }
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
