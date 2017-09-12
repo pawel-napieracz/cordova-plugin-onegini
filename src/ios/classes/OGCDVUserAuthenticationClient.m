@@ -68,7 +68,7 @@
     }];
 }
 
-- (void)start:(CDVInvokedUrlCommand *)command
+- (void)authenticate:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
         NSDictionary *options = command.arguments[0];

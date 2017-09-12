@@ -33,7 +33,8 @@ allprojects {
     mavenCentral()
 
     maven {
-      url "https://repo.onegini.com/artifactory/onegini-sdk"
+      // TODO Move to onegini-sdk repo before plugin release
+      url "https://repo.onegini.com/artifactory/libs-snapshot-local"
       credentials {
         if (project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
           username artifactory_user
@@ -52,14 +53,13 @@ configurations {
   fido
 }
 
+// TODO Move to release version before plugin release
 dependencies {
-  // TODO SDK v7.0.0 is required for implicit auth. Update when released.
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.0.0-SNAPSHOT@a'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.0.0-SNAPSHOT:headers@zip'
 
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.1.0@a'
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.1.0:headers@zip'
-
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.1.0@a'
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.1.0:headers@zip'
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:7.0.0-SNAPSHOT@a'
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:7.0.0-SNAPSHOT:headers@zip'
 }
 
 task prepareTargetDirectory {

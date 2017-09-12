@@ -2,7 +2,8 @@
 
 <!-- toc -->
 
-Your users can authenticate themselves using any [authenticator](authenticators.md) registered to them. Authentication is done via an [AuthenticationHandler](AuthenticationHandler.md). If a user is already authenticated, the `onSuccess` handler will be called immediately.
+Your users can authenticate themselves using any [authenticator](authenticators.md) registered to them. Authentication is done via an
+[AuthenticationHandler](AuthenticationHandler.md). If a user is already authenticated, the `onSuccess` handler will be called immediately.
 
 ## `onegini.user.authenticate`
 

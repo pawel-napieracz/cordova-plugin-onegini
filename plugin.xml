@@ -142,12 +142,9 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGFingerprintChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthRequest.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthRequestDelegate.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthenticationRequest.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthenticationRequestDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMultipartData.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGNetworkTask.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPinChallenge.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPublicCommons.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPublicDefines.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRegistrationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRegistrationRequestChallenge.h"/>
@@ -158,13 +155,12 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserProfile.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
-
     <!-- SDK binary -->
     <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS.a" framework="true"/>
 
+    <!-- Frameworks -->
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
-
   </platform>
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
