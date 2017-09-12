@@ -68,7 +68,7 @@ It is also possible to check if a specific profile ID is registered. See [`onegi
 ## Authenticating a registered user
 
 Once a user has been registered, they can be logged in using the [`onegini.user.authenticate`](../reference/user/authenticate.md), or the
-[`onegini.user.authenticateImplicitly`](../reference/user/authenticateImplicitly.md) function. These functions takes the `profileId` of the user wishing to log
+[`onegini.user.authenticateImplicitly`](../reference/user/authenticateImplicitly.md) function. These functions take the `profileId` of the user wishing to log
 in as argument.
 
 **Example code to log in a user:**
