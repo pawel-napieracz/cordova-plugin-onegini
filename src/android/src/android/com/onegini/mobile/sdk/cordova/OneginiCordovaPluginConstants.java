@@ -52,7 +52,7 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD = "Onegini: Invalid mobile authentication method";
   String ERROR_DESCRIPTION_INCORRECT_PIN = "Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
   String ERROR_DESCRIPTION_OPERATION_CANCELED = "Onegini: the operation was canceled.";
-  String ERROR_DESCRIPTION_INVALID_FETCH_METHOD = "Onegini: invalid authentication method for resource.fetch";
+  String ERROR_DESCRIPTION_INVALID_FETCH_AUTH_METHOD = "Onegini: invalid authentication method for resource.fetch";
 
   // Error codes
   int ERROR_CODE_PLUGIN_INTERNAL_ERROR = 8000;

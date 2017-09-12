@@ -19,7 +19,7 @@ package com.onegini.mobile.sdk.cordova.client;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_IO_EXCEPTION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INVALID_FETCH_METHOD;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INVALID_FETCH_AUTH_METHOD;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.TAG;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static org.apache.cordova.PluginResult.Status.ERROR;
@@ -36,7 +36,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.text.TextUtils;
 import android.util.Log;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.model.AuthMethod;
@@ -56,7 +55,7 @@ public class ResourceClient extends CordovaPlugin {
   private static final String PARAM_STATUS = "status";
   private static final String PARAM_STATUS_TEXT = "statusText";
   private static final String PARAM_HEADERS = "headers";
-  private static final String PARAM_AUTH = "auth";
+  private static final String PARAM_AUTH_METHOD = "auth";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -71,11 +70,11 @@ public class ResourceClient extends CordovaPlugin {
   private void fetch(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final Request request;
     final JSONObject options = args.getJSONObject(0);
-    final AuthMethod authMethod = AuthMethod.fromString(options.getString(PARAM_AUTH));
+    final AuthMethod authMethod = AuthMethod.fromString(options.getString(PARAM_AUTH_METHOD));
 
     if (authMethod == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_DESCRIPTION_INVALID_FETCH_METHOD, ERROR_CODE_ILLEGAL_ARGUMENT)
+          .withPluginError(ERROR_DESCRIPTION_INVALID_FETCH_AUTH_METHOD, ERROR_CODE_ILLEGAL_ARGUMENT)
           .build());
 
       return;
