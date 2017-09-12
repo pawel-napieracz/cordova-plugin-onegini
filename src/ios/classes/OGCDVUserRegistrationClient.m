@@ -79,14 +79,16 @@ NSString *const keyURL = @"url";
 
 - (void)getUserProfiles:(CDVInvokedUrlCommand *)command
 {
-    NSArray<ONGUserProfile *> *profiles = [[ONGUserClient sharedInstance] userProfiles].allObjects;
+    [self.commandDelegate runInBackground:^{
+        NSArray<ONGUserProfile *> *profiles = [[ONGUserClient sharedInstance] userProfiles].allObjects;
 
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:profiles.count];
-    for (ONGUserProfile *profile in profiles) {
-        [result addObject:@{OGCDVPluginKeyProfileId: profile.profileId}];
-    }
+        NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:profiles.count];
+        for (ONGUserProfile *profile in profiles) {
+            [result addObject:@{OGCDVPluginKeyProfileId: profile.profileId}];
+        }
 
-    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
+    }];
 }
 
 - (void)isUserRegistered:(CDVInvokedUrlCommand *)command
@@ -123,7 +125,9 @@ NSString *const keyURL = @"url";
         return;
     }
 
-    [self handleRegistrationCallbackURL:url];
+    [self.commandDelegate runInBackground:^{
+        [self handleRegistrationCallbackURL:url];
+    }];
 }
 
 - (void)sendRegistrationRequestEvent:(NSURL *)url

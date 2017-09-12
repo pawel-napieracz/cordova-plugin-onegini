@@ -6,6 +6,7 @@ This section describes the APIs that are available on the global `onegini.user` 
 
 * [`onegini.user.AuthenticationHandler`](AuthenticationHandler.md)
 * [`onegini.user.authenticate`](authenticate.md)
+* [`onegini.user.authenticateImplicitly`](authenticateImplicitly.md)
 * [`onegini.user.authenticators.*`](authenticators.md)
 * [`onegini.user.changePin`](changePin.md)
 * [`onegini.user.deregister`](deregister.md)
@@ -13,6 +14,5 @@ This section describes the APIs that are available on the global `onegini.user` 
 * [`onegini.user.getUserProfiles`](getUserProfiles.md)
 * [`onegini.user.isUserRegistered`](isUserRegistered.md)
 * [`onegini.user.logout`](logout.md)
-* [`onegini.user.reauthenticate`](reauthenticate.md)
 * [`onegini.user.register`](register.md)
 * [`onegini.user.validatePinWithPolicy`](validatePinWithPolicy.md)

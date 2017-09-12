@@ -20,8 +20,8 @@
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
-  <hook type="after_platform_add" src="hooks/configure_sdk.js" />
-  <hook type="before_plugin_install" src="hooks/resolve_dependencies.js" />
+  <hook type="after_platform_add" src="hooks/configure_sdk.js"/>
+  <hook type="before_plugin_install" src="hooks/resolve_dependencies.js"/>
 
   <js-module src="dist/onegini.js" name="onegini">
     <clobbers target="onegini"/>
@@ -30,49 +30,49 @@
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
       <feature name="OneginiClient">
-        <param name="ios-package" value="OGCDVClient" />
-        <param name="onload" value="true" />
+        <param name="ios-package" value="OGCDVClient"/>
+        <param name="onload" value="true"/>
       </feature>
       <feature name="OneginiUserClient">
-        <param name="ios-package" value="OGCDVUserClient" />
+        <param name="ios-package" value="OGCDVUserClient"/>
       </feature>
       <feature name="OneginiUserRegistrationClient">
-        <param name="ios-package" value="OGCDVUserRegistrationClient" />
-        <param name="onload" value="true" />
+        <param name="ios-package" value="OGCDVUserRegistrationClient"/>
+        <param name="onload" value="true"/>
       </feature>
       <feature name="OneginiUserDeregistrationClient">
-        <param name="ios-package" value="OGCDVUserDeregistrationClient" />
+        <param name="ios-package" value="OGCDVUserDeregistrationClient"/>
       </feature>
       <feature name="OneginiUserAuthenticationClient">
-        <param name="ios-package" value="OGCDVUserAuthenticationClient" />
+        <param name="ios-package" value="OGCDVUserAuthenticationClient"/>
       </feature>
       <feature name="OneginiChangePinClient">
-        <param name="ios-package" value="OGCDVChangePinClient" />
+        <param name="ios-package" value="OGCDVChangePinClient"/>
       </feature>
       <feature name="OneginiAuthenticatorsClient">
-        <param name="ios-package" value="OGCDVAuthenticatorsClient" />
+        <param name="ios-package" value="OGCDVAuthenticatorsClient"/>
       </feature>
       <feature name="OneginiAuthenticatorRegistrationClient">
-        <param name="ios-package" value="OGCDVAuthenticatorRegistrationClient" />
+        <param name="ios-package" value="OGCDVAuthenticatorRegistrationClient"/>
       </feature>
       <feature name="OneginiDeviceAuthenticationClient">
-        <param name="ios-package" value="OGCDVDeviceAuthenticationClient" />
+        <param name="ios-package" value="OGCDVDeviceAuthenticationClient"/>
       </feature>
       <feature name="OneginiResourceClient">
-        <param name="ios-package" value="OGCDVResourceClient" />
+        <param name="ios-package" value="OGCDVResourceClient"/>
       </feature>
       <feature name="OneginiMobileAuthClient">
-        <param name="ios-package" value="OGCDVMobileAuthClient" />
+        <param name="ios-package" value="OGCDVMobileAuthClient"/>
       </feature>
       <feature name="OneginiPushMobileAuthClient">
-        <param name="ios-package" value="OGCDVPushMobileAuthClient" />
-        <param name="onload" value="true" />
+        <param name="ios-package" value="OGCDVPushMobileAuthClient"/>
+        <param name="onload" value="true"/>
       </feature>
       <feature name="OneginiPushMobileAuthRequestClient">
-        <param name="ios-package" value="OGCDVPushMobileAuthRequestClient" />
+        <param name="ios-package" value="OGCDVPushMobileAuthRequestClient"/>
       </feature>
       <feature name="OneginiOtpMobileAuthRequestClient">
-        <param name="ios-package" value="OGCDVOtpMobileAuthRequestClient" />
+        <param name="ios-package" value="OGCDVOtpMobileAuthRequestClient"/>
       </feature>
     </config-file>
 
@@ -122,10 +122,10 @@
     <source-file src="src/ios/classes/OGCDVPushMobileAuthOperation.m"/>
 
     <!-- Safari Services for SFSafariViewController -->
-    <framework src="SafariServices.framework" weak="true" />
+    <framework src="SafariServices.framework" weak="true"/>
 
-    <!-- WebKit for WKWebView (used if SFSafariViewController is not available -->
-    <framework src="WebKit.framework" weak="true" />
+    <!-- WebKit for WKWebView (used if SFSafariViewController is not available) -->
+    <framework src="WebKit.framework" weak="true"/>
 
     <!-- SDK Headers -->
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticationDelegate.h"/>
@@ -142,6 +142,7 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGFingerprintChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthRequest.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthRequestDelegate.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMultipartData.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGNetworkTask.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPinChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPublicDefines.h"/>
@@ -157,9 +158,9 @@
     <!-- SDK binary -->
     <source-file src="src/ios/OneginiSDKiOS/libOneginiSDKiOS.a" framework="true"/>
 
+    <!-- Frameworks -->
     <framework src="libiconv.dylib"/>
     <framework src="libc++.dylib"/>
-
   </platform>
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
@@ -233,28 +234,11 @@
       </intent-filter>
     </config-file>
 
-    <!-- FCM Config -->
-    <config-file target="AndroidManifest.xml" parent="application">
-      <service
-          android:name="com.onegini.mobile.sdk.cordova.fcm.FcmListenerService">
-        <intent-filter>
-          <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-        </intent-filter>
-      </service>
-      <service
-          android:name="com.onegini.mobile.sdk.cordova.fcm.FcmInstanceIdService">
-        <intent-filter>
-          <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-        </intent-filter>
-      </service>
-      <service android:name="com.onegini.mobile.sdk.cordova.fcm.FcmTokenUpdateService" />
-    </config-file>
-
     <!-- Multidex -->
-    <framework src="com.android.support:multidex:1.0.0" />
+    <framework src="com.android.support:multidex:1.0.0"/>
 
     <!-- Build gradle -->
-    <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
+    <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference"/>
 
     <!-- Onegini Plugin -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/OneginiSDK.java"
@@ -321,6 +305,8 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticatorRegistrationHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticatorDeregistrationHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/ImplicitAuthenticationHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/LogoutHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>

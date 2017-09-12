@@ -45,7 +45,7 @@ module.exports = function (context) {
   });
 
   gradle.stderr.on('data', (data) => {
-    process.stdout.write(data);
+    process.stderr.write(data);
   });
 
   gradle.on('close', (code) => {

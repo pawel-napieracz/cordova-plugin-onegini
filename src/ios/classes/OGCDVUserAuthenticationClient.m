@@ -32,7 +32,43 @@
     }
 }
 
-- (void)start:(CDVInvokedUrlCommand *)command
+- (void)getImplicitlyAuthenticatedUserProfile:(CDVInvokedUrlCommand *)command
+{
+    ONGUserProfile *implicitlyAuthenticatedUserProfile = [[ONGUserClient sharedInstance] implicitlyAuthenticatedUserProfile];
+    if (implicitlyAuthenticatedUserProfile == nil) {
+        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
+    } else {
+        NSDictionary *result = @{OGCDVPluginKeyProfileId: implicitlyAuthenticatedUserProfile.profileId};
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result] callbackId:command.callbackId];
+    }
+}
+
+
+- (void)authenticateImplicitly:(CDVInvokedUrlCommand *)command
+{
+    [self.commandDelegate runInBackground:^{
+        NSDictionary *options = command.arguments[0];
+        NSString *profileId = options[OGCDVPluginKeyProfileId];
+        NSArray *scopes = options[OGCDVPluginKeyScopes];
+
+        ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
+        if (user == nil) {
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered
+                                    andMessage:OGCDVPluginErrDescriptionProfileNotRegistered];
+            return;
+        }
+
+        [[ONGUserClient sharedInstance] implicitlyAuthenticateUser:user scopes:scopes completion:^(BOOL success, NSError * _Nonnull error){
+            if (error != nil || !success) {
+                [self sendErrorResultForCallbackId:command.callbackId withError:error];
+            } else {
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            }
+        }];
+    }];
+}
+
+- (void)authenticate:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
         NSDictionary *options = command.arguments[0];
@@ -129,23 +165,6 @@
             [self.fidoChallenge.sender respondWithPinFallbackForChallenge:self.fidoChallenge];
         }];
     }
-}
-
-- (void)reauthenticate:(CDVInvokedUrlCommand *)command
-{
-    [self.commandDelegate runInBackground:^{
-        NSDictionary *options = command.arguments[0];
-        NSString *profileId = options[OGCDVPluginKeyProfileId];
-
-        self.authenticationCallbackId = command.callbackId;
-
-        ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];
-        if (user == nil) {
-            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered andMessage:OGCDVPluginErrDescriptionProfileNotRegistered];
-        } else {
-            [[ONGUserClient sharedInstance] reauthenticateUser:user delegate:self];
-        }
-    }];
 }
 
 - (void)logout:(CDVInvokedUrlCommand *)command
