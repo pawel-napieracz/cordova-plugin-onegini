@@ -12,10 +12,13 @@ no user interaction like asking for their PIN or Fingerprint.
 - Returns a promise or calls either success or error callback.
 - Takes the following arguments:
 
-| Property    | Default              | Description                                              |
-| ----------- | -------------------- | -------------------------------------------------------- |
-| `profileId` | -                    | A profile ID created when the user profile is registered |
-| `scopes`    | server configuration | An array of scopes the user will register for (optional) |
+| Property    | Default              | Description                                                   |
+| ----------- | -------------------- | ------------------------------------------------------------- |
+| `profileId` | -                    | A profile ID created when the user profile is registered      |
+| `scopes`    | registration scopes  | An array of scopes the user will authenticate with (optional) |
+
+The `scopes` array may only contain scopes that were obtained during registration. If no scopes are provided, the plugin will authenticate the user for
+_all_ scopes granted during registration.
 
 ** Example: **
 ```js

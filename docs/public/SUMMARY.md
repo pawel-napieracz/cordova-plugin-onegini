@@ -20,6 +20,7 @@
     * [user](reference/user/introduction.md)
         * [AuthenticationHandler](reference/user/AuthenticationHandler.md)
         * [authenticate](reference/user/authenticate.md)
+        * [authenticateImplicitly](reference/user/authenticateImplicitly.md)
         * [authenticators](reference/user/authenticators.md)
         * [changePin](reference/user/changePin.md)
         * [deregister](reference/user/deregister.md)
