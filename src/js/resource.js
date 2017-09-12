@@ -78,63 +78,6 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
 
     options = parseOptions(options);
 
-    function sliceBuffer(buffer) {
-      const ArrrayBuffer = require('core-js/fn/typed/array-buffer');
-      buffer = ArrayBuffer.prototype.slice.call(buffer, [0, buffer.length]);
-    }
-
-    function httpResponseFromArrayBuffer(buffer) {
-      sliceBuffer(buffer);
-      const metaLength = new Int32Array(buffer.slice(0, HEADER_LENGTH))[0];
-      const metadataBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength);
-      const metadata = new Uint8Array(metadataBuffer);
-      const result = JSON.parse(String.fromCharCode.apply(null, metadata));
-
-      Object.defineProperties(result, {
-        'rawBody': {
-          value: buffer.slice(HEADER_LENGTH + metaLength, buffer.byteLength)
-        },
-        'body': {
-          get: function () {
-            return new TextDecoder('utf-8').decode(this.rawBody);
-          }
-        },
-        'json': {
-          get: function () {
-            return JSON.parse(this.body);
-          }
-        }
-      });
-
-      return result;
-    }
-
-    function parseOptions(options) {
-      if (options && options.anonymous) {
-        console.warn("Warning: resource.fetch option 'anonymous' has been deprecated.\nInstead, set the 'auth' option to one of resource.fetch.auth.USER, ANONYMOUS or IMPLICIT");
-        options.auth = options.anonymous ? auth.ANONYMOUS : auth.USER;
-      }
-
-      options = utils.getOptionsWithDefaults(options, {
-        method: 'GET',
-        headers: {},
-        auth: auth.USER,
-        anonymous: null,
-      }, 'url');
-
-      if (!options || !options.url) {
-        throw new TypeError("Onegini: missing 'url' argument for fetch");
-      }
-
-      if (!Object.values(auth).includes(options.auth)) {
-        throw new TypeError('Onegini: resource.fetch: options.auth should be of one of resource.fetch.auth.USER, ANONYMOUS or IMPLICIT');
-      }
-
-      options.auth = options.auth.toString();
-
-      return options;
-    }
-
     function success(buffer) {
       _successCb(httpResponseFromArrayBuffer(buffer))
     }
@@ -157,6 +100,63 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
       _successCb = resolve;
       _failureCb = reject;
     });
+  }
+
+  function parseOptions(options) {
+    if (options && options.anonymous) {
+      console.warn("Warning: resource.fetch option 'anonymous' has been deprecated.\nInstead, set the 'auth' option to one of resource.fetch.auth.USER, ANONYMOUS or IMPLICIT");
+      options.auth = options.anonymous ? auth.ANONYMOUS : auth.USER;
+    }
+
+    options = utils.getOptionsWithDefaults(options, {
+      method: 'GET',
+      headers: {},
+      auth: auth.USER,
+      anonymous: null,
+    }, 'url');
+
+    if (!options || !options.url) {
+      throw new TypeError("Onegini: missing 'url' argument for fetch");
+    }
+
+    if (!Object.values(auth).includes(options.auth)) {
+      throw new TypeError('Onegini: resource.fetch: options.auth should be of one of resource.fetch.auth.USER, ANONYMOUS or IMPLICIT');
+    }
+
+    options.auth = options.auth.toString();
+
+    return options;
+  }
+
+  function sliceBuffer(buffer) {
+    const ArrrayBuffer = require('core-js/fn/typed/array-buffer');
+    buffer = ArrayBuffer.prototype.slice.call(buffer, [0, buffer.length]);
+  }
+
+  function httpResponseFromArrayBuffer(buffer) {
+    sliceBuffer(buffer);
+    const metaLength = new Int32Array(buffer.slice(0, HEADER_LENGTH))[0];
+    const metadataBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength);
+    const metadata = new Uint8Array(metadataBuffer);
+    const result = JSON.parse(String.fromCharCode.apply(null, metadata));
+
+    Object.defineProperties(result, {
+      'rawBody': {
+        value: buffer.slice(HEADER_LENGTH + metaLength, buffer.byteLength)
+      },
+      'body': {
+        get: function () {
+          return new TextDecoder('utf-8').decode(this.rawBody);
+        }
+      },
+      'json': {
+        get: function () {
+          return JSON.parse(this.body);
+        }
+      }
+    });
+
+    return result;
   }
 
   function init(url) {
