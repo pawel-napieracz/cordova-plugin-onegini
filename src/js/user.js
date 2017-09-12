@@ -144,7 +144,7 @@ module.exports = (function () {
       throw new TypeError("Onegini: missing 'profileId' argument for user.authenticate");
     }
 
-    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'start');
+    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'authenticate');
   }
 
   function authenticateImplicitly (options, successCb, failureCb) {

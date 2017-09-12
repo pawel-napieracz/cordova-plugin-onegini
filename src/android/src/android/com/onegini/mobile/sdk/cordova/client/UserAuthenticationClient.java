@@ -61,7 +61,7 @@ import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 @SuppressWarnings("unused")
 public class UserAuthenticationClient extends CordovaPlugin {
 
-  private static final String ACTION_START = "start";
+  private static final String ACTION_AUTHENTICATE = "authenticate";
   private static final String ACTION_PROVIDE_PIN = "providePin";
   private static final String ACTION_RESPOND_TO_FINGERPRINT_REQUEST = "respondToFingerprintRequest";
   private static final String ACTION_RESPOND_TO_FIDO_REQUEST = "respondToFidoRequest";
@@ -76,8 +76,8 @@ public class UserAuthenticationClient extends CordovaPlugin {
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    if (ACTION_START.equals(action)) {
-      startAuthentication(args, callbackContext);
+    if (ACTION_AUTHENTICATE.equals(action)) {
+      authenticate(args, callbackContext);
       return true;
     } else if (ACTION_PROVIDE_PIN.equals(action)) {
       providePin(args, callbackContext);
@@ -111,7 +111,7 @@ public class UserAuthenticationClient extends CordovaPlugin {
     return false;
   }
 
-  private void startAuthentication(final JSONArray args, final CallbackContext callbackContext) {
+  private void authenticate(final JSONArray args, final CallbackContext callbackContext) {
     final UserProfile userProfile;
 
     try {

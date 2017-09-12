@@ -21,7 +21,7 @@
 - (void)getAuthenticatedUserProfile:(CDVInvokedUrlCommand *)command;
 - (void)getImplicitlyAuthenticatedUserProfile:(CDVInvokedUrlCommand *)command;
 - (void)authenticateImplicitly:(CDVInvokedUrlCommand *)command;
-- (void)start:(CDVInvokedUrlCommand *)command;
+- (void)authenticate:(CDVInvokedUrlCommand *)command;
 - (void)providePin:(CDVInvokedUrlCommand *)command;
 - (void)respondToFingerprintRequest:(CDVInvokedUrlCommand *)command;
 - (void)fallbackToPin:(CDVInvokedUrlCommand *)command;
