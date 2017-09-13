@@ -1891,9 +1891,7 @@ exports.defineAutoTests = function () {
 
   describe('onegini.resource (implicit)', function () {
     beforeAll(function (done) {
-      onegini.user.authenticateImplicitly(registeredProfileId, function () {
-        done();
-      });
+      onegini.user.authenticateImplicitly(registeredProfileId, done);
     });
 
     it('should fetch an implicit resource', function (done) {
