@@ -32,7 +32,6 @@
   },
   "homepage": "https://github.com/Onegini/cordova-plugin-onegini#readme",
   "scripts": {
-    "clean": "rm -rf dist node_modules",
     "build": "NODE_ENV=development webpack",
     "build:prod": "NODE_ENV=production webpack",
     "prepublishOnly": "npm run build:prod"
@@ -46,5 +45,8 @@
     "np": "^2.16.0",
     "text-encoding": "^0.6.4",
     "webpack": "^3.0.0"
+  },
+  "dependencies": {
+    "clean-webpack-plugin": "^0.1.16"
   }
 }

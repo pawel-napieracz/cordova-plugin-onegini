@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -30,7 +31,11 @@ module.exports = {
         loader: 'babel-loader'
       }
     ]
-  }
+  },
+
+  plugins: [
+    new CleanWebpackPlugin(['dist'])
+  ]
 };
 
 if (process.env.NODE_ENV === 'production') {
@@ -49,5 +54,5 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
-  ])
+  ]);
 }
