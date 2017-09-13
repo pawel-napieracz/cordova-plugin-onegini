@@ -16,6 +16,7 @@
 
 package com.onegini.mobile.sdk.cordova.client;
 
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
@@ -70,35 +71,31 @@ public class AuthenticatorRegistrationClient extends CordovaPlugin {
   }
 
   private void startRegistration(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
-    final Set<OneginiAuthenticator> authenticatorSet;
-    final OneginiAuthenticator authenticator;
-
-    if (userProfile == null) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
-          .build());
-
-      return;
-    }
-
-    authenticatorSet = getOneginiClient().getUserClient().getNotRegisteredAuthenticators(userProfile);
-    authenticator = ActionArgumentsUtil.getAuthenticatorFromArguments(args, authenticatorSet);
-
-    if (authenticator == null) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR, ERROR_CODE_NO_SUCH_AUTHENTICATOR)
-          .build());
-
-      return;
-    }
-
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
-    authenticatorRegistrationHandler = new AuthenticatorRegistrationHandler(callbackContext);
-
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
+        final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
+        final Set<OneginiAuthenticator> authenticatorSet;
+        final OneginiAuthenticator authenticator;
+
+        if (userProfile == null) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
+              .build());
+
+          return;
+        }
+
+        authenticatorSet = getOneginiClient().getUserClient().getNotRegisteredAuthenticators(userProfile);
+        authenticator = findAuthenticatorOrSendError(args, authenticatorSet, callbackContext);
+
+        if (authenticator == null) {
+          return;
+        }
+
+        PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
+        authenticatorRegistrationHandler = new AuthenticatorRegistrationHandler(callbackContext);
+
         getOneginiClient().getUserClient().registerAuthenticator(authenticator, authenticatorRegistrationHandler);
       }
     });
@@ -121,31 +118,55 @@ public class AuthenticatorRegistrationClient extends CordovaPlugin {
   }
 
   private void deregister(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
-    final Set<OneginiAuthenticator> authenticatorSet;
-    final OneginiAuthenticator authenticator;
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
 
-    if (userProfile == null) {
+        final UserProfile userProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
+        final Set<OneginiAuthenticator> authenticatorSet;
+        final OneginiAuthenticator authenticator;
+
+        if (userProfile == null) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
+              .build());
+
+          return;
+        }
+
+        authenticatorSet = getOneginiClient().getUserClient().getRegisteredAuthenticators(userProfile);
+        authenticator = findAuthenticatorOrSendError(args, authenticatorSet, callbackContext);
+
+        if (authenticator == null) {
+          return;
+        }
+
+
+        AuthenticatorDeregistrationHandler authenticationDeregistrationHandler = new AuthenticatorDeregistrationHandler(callbackContext);
+        getOneginiClient().getUserClient().deregisterAuthenticator(authenticator, authenticationDeregistrationHandler);
+      }
+    });
+  }
+
+  private OneginiAuthenticator findAuthenticatorOrSendError(final JSONArray args, final Set<OneginiAuthenticator> authenticatorSet,
+                                                            final CallbackContext callbackContext) {
+    OneginiAuthenticator authenticator = null;
+
+    try {
+      authenticator = ActionArgumentsUtil.getAuthenticatorFromArguments(args, authenticatorSet);
+    } catch (JSONException e) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_DESCRIPTION_NO_USER_AUTHENTICATED, ERROR_CODE_NO_USER_AUTHENTICATED)
+          .withPluginError(e.getMessage(), ERROR_CODE_ILLEGAL_ARGUMENT)
           .build());
-
-      return;
     }
-
-    authenticatorSet = getOneginiClient().getUserClient().getRegisteredAuthenticators(userProfile);
-    authenticator = ActionArgumentsUtil.getAuthenticatorFromArguments(args, authenticatorSet);
 
     if (authenticator == null) {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withPluginError(ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR, ERROR_CODE_NO_SUCH_AUTHENTICATOR)
           .build());
-
-      return;
     }
 
-    AuthenticatorDeregistrationHandler authenticationDeregistrationHandler = new AuthenticatorDeregistrationHandler(callbackContext);
-    getOneginiClient().getUserClient().deregisterAuthenticator(authenticator, authenticationDeregistrationHandler);
+    return authenticator;
   }
 
   private void cancelFlow(final CallbackContext callbackContext) {

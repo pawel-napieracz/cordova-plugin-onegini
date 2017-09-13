@@ -65,29 +65,35 @@ public class ResourceClient extends CordovaPlugin {
   }
 
   private void fetch(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-    final Request request;
     final JSONObject options = args.getJSONObject(0);
     final boolean isAnonymous = ActionArgumentsUtil.isFetchAnonymous(options);
-
-    try {
-      request = ActionArgumentsUtil.getRequestFromArguments(options);
-    } catch (InvalidParameterException e) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
-          .build());
-
-      return;
-    } catch (IllegalArgumentException e) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(e.getMessage(), ERROR_CODE_ILLEGAL_ARGUMENT)
-          .build());
-
-      return;
-    }
 
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
+        final Request request;
+
+        try {
+          request = ActionArgumentsUtil.getRequestFromArguments(options);
+        } catch (InvalidParameterException e) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
+              .build());
+
+          return;
+        } catch (IllegalArgumentException e) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withPluginError(e.getMessage(), ERROR_CODE_ILLEGAL_ARGUMENT)
+              .build());
+
+          return;
+        } catch (JSONException e) {
+          callbackContext.sendPluginResult(new PluginResultBuilder()
+              .withPluginError(e.getMessage(), ERROR_CODE_ILLEGAL_ARGUMENT)
+              .build());
+          return;
+        }
+
         final OkHttpClient okClient;
         final Response response;
 
