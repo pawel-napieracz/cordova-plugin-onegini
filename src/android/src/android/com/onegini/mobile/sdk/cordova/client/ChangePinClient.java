@@ -29,12 +29,12 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.onegini.mobile.sdk.android.client.OneginiClient;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.ChangePinHandler;
 import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.PinAuthenticationRequestHandler;
-import com.onegini.mobile.sdk.android.client.OneginiClient;
-import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
@@ -66,12 +66,12 @@ public class ChangePinClient extends CordovaPlugin {
   }
 
   private void startChangePin(final CallbackContext callbackContext) throws JSONException {
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
-    CreatePinRequestHandler.getInstance().setOnStartPinCreationCallback(callbackContext);
-
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
+        PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
+        CreatePinRequestHandler.getInstance().setOnStartPinCreationCallback(callbackContext);
+
         final ChangePinHandler changePinHandler = new ChangePinHandler(callbackContext);
         getOneginiClient().getUserClient().changePin(changePinHandler);
       }
