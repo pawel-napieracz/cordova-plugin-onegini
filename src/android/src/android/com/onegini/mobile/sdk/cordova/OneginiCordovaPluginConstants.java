@@ -42,7 +42,6 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE = "Onegini: Argument provided is not a valid profile object";
 
   String ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED = "Onegini: No registered user found.";
-  String ERROR_DESCRIPTION_USER_ALREADY_AUTHENTICATED = "Onegini: User already authenticated.";
   String ERROR_DESCRIPTION_NO_USER_AUTHENTICATED = "Onegini: No user authenticated.";
   String ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR = "Onegini: No such authenticator found";
   String ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = "Onegini: createPin called, but no registration in progress.";
@@ -59,7 +58,6 @@ public interface OneginiCordovaPluginConstants {
   int ERROR_CODE_ILLEGAL_ARGUMENT = 8002;
 
   int ERROR_CODE_PROFILE_NOT_REGISTERED = 8003;
-  int ERROR_CODE_USER_ALREADY_AUTHENTICATED = 8004;
   int ERROR_CODE_NO_USER_AUTHENTICATED = 8005;
   int ERROR_CODE_NO_SUCH_AUTHENTICATOR = 8006;
   int ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = 8007;

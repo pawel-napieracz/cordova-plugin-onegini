@@ -761,18 +761,6 @@ exports.defineAutoTests = function () {
               fail("User authentication failed, but should have succeeded");
             });
         });
-
-        it('should fail when user is already authenticated', function (done) {
-          onegini.user.authenticate(registeredProfileId)
-            .onSuccess(function () {
-              fail("User authentication succeeded, but should have failed");
-            })
-            .onError(function (err) {
-              expect(err).toBeDefined();
-              expect(err.description).toBe("Onegini: User already authenticated.");
-              done();
-            });
-        });
       });
 
       describe("mobileAuth (2/3)", function () {
