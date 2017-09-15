@@ -138,10 +138,20 @@ module.exports = (function () {
     return this;
   };
 
-  function authenticate (options) {
-    options = utils.getOptionsWithDefaults(options, {}, 'profileId');
-    if (!options || !options.profileId) {
+  function authenticate (profileOptions, authenticatorOptions) {
+    profileOptions = utils.getOptionsWithDefaults(profileOptions, {}, 'profileId');
+    if (!profileOptions.profileId) {
       throw new TypeError("Onegini: missing 'profileId' argument for user.authenticate");
+    }
+
+    const options = [profileOptions];
+
+    if (authenticatorOptions) {
+      authenticatorOptions = utils.getOptionsWithDefaults(authenticatorOptions, {}, 'authenticatorType');
+      if (!authenticatorOptions.authenticatorType) {
+        throw new TypeError("Onegini: missing 'authenticatorType' argument for user.authenticate");
+      }
+      options.push(authenticatorOptions);
     }
 
     return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'authenticate');
