@@ -52,7 +52,7 @@ NSString *const keyURL = @"url";
 {
     [self.commandDelegate runInBackground:^{
         self.callbackId = command.callbackId;
-        NSArray *optionalScopes = nil;
+        NSArray *optionalScopes;
         if (command.arguments.count > 0) {
             NSDictionary *options = command.arguments[0];
             optionalScopes = options[OGCDVPluginKeyScopes];
@@ -120,7 +120,7 @@ NSString *const keyURL = @"url";
 
     if (!self.registrationRequestChallenge) {
 #ifdef DEBUG
-        NSLog(@"OneginiPlugin: Warning: tried to reply to registration challenge, but no registration challenge is active");
+        NSLog(@"OneginiPlugin - WARNING: tried to reply to registration challenge, but no registration challenge is active");
 #endif
         return;
     }
