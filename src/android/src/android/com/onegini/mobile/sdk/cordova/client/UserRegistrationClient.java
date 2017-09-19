@@ -173,7 +173,12 @@ public class UserRegistrationClient extends CordovaPlugin {
       return;
     }
 
-    RegistrationRequestHandler.handleRegistrationCallback(uri);
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        RegistrationRequestHandler.handleRegistrationCallback(uri);
+      }
+    });
   }
 
   private boolean shouldOpenBrowserForRegistration() {

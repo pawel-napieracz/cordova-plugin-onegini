@@ -56,7 +56,6 @@ extern NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification;
 extern NSString *const OGCDVPluginErrDescriptionInternalError;
 extern NSString *const OGCDVPluginErrDescriptionIllegalArgumentProfile;
 extern NSString *const OGCDVPluginErrDescriptionProfileNotRegistered;
-extern NSString *const OGCDVPluginErrDescriptionUserAlreadyAuthenticated;
 extern NSString *const OGCDVPluginErrDescriptionNoUserAuthenticated;
 extern NSString *const OGCDVPluginErrDescriptionNoSuchAuthenticator;
 extern NSString *const OGCDVPluginErrDescriptionCreatePinNoRegistrationInProgress;
@@ -72,7 +71,6 @@ extern int const OGCDVPluginErrCodeConfiguration;
 extern int const OGCDVPluginErrCodeIllegalArgument;
 
 extern int const OGCDVPluginErrCodeProfileNotRegistered;
-extern int const OGCDVPluginErrCodeUserAlreadyAuthenticated;
 extern int const OGCDVPluginErrCodeNoUserAuthenticated;
 extern int const OGCDVPluginErrCodeNoSuchAuthenticator;
 extern int const OGCDVPluginErrCodeCreatePinNoRegistrationInProgress;

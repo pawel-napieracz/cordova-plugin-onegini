@@ -57,7 +57,6 @@ NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification = @"OGCDVDidR
 
 NSString *const OGCDVPluginErrDescriptionInternalError = @"Onegini: Internal plugin error";
 NSString *const OGCDVPluginErrDescriptionProfileNotRegistered = @"Onegini: No registered user found.";
-NSString *const OGCDVPluginErrDescriptionUserAlreadyAuthenticated = @"Onegini: User already authenticated.";
 NSString *const OGCDVPluginErrDescriptionNoUserAuthenticated = @"Onegini: No user authenticated.";
 NSString *const OGCDVPluginErrDescriptionNoSuchAuthenticator = @"Onegini: No such authenticator found";
 NSString *const OGCDVPluginErrDescriptionCreatePinNoRegistrationInProgress = @"Onegini: createPin called, but no registration in progress.";

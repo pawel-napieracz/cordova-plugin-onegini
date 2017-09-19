@@ -74,13 +74,6 @@
         NSDictionary *options = command.arguments[0];
         NSString *profileId = options[OGCDVPluginKeyProfileId];
 
-        ONGUserProfile *authenticatedUserProfile = [[ONGUserClient sharedInstance] authenticatedUserProfile];
-        if (authenticatedUserProfile && [authenticatedUserProfile.profileId isEqualToString:profileId]) {
-            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator
-                                    andMessage:OGCDVPluginErrDescriptionUserAlreadyAuthenticated];
-            return;
-        }
-
         self.authenticationCallbackId = command.callbackId;
 
         ONGUserProfile *user = [OGCDVUserClientHelper getRegisteredUserProfile:profileId];

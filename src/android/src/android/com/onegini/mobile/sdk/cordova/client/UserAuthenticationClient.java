@@ -23,7 +23,6 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PROFILE_NOT_REGISTERED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_USER_ALREADY_AUTHENTICATED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_FIDO_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
@@ -31,7 +30,6 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_USER_ALREADY_AUTHENTICATED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ACCEPT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
 
@@ -127,16 +125,6 @@ public class UserAuthenticationClient extends CordovaPlugin {
       callbackContext.sendPluginResult(new PluginResultBuilder()
           .withError()
           .withPluginError(e.getMessage(), ERROR_CODE_PROFILE_NOT_REGISTERED)
-          .build());
-
-      return;
-    }
-
-    final UserProfile authenticatedUserProfile = getOneginiClient().getUserClient().getAuthenticatedUserProfile();
-    if (userProfile.equals(authenticatedUserProfile)) {
-      callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withError()
-          .withPluginError(ERROR_DESCRIPTION_USER_ALREADY_AUTHENTICATED, ERROR_CODE_USER_ALREADY_AUTHENTICATED)
           .build());
 
       return;
