@@ -748,40 +748,30 @@ exports.defineAutoTests = function () {
             expect(actions.providePin).toBeDefined();
             expect(options).toBeDefined();
 
-            if (options.remainingFailureCount === options.maxFailureCount - 1) {
-              expect(options.code).toBe(8012);
-              expect(options.description).toBeDefined();
-              actions.providePin(config.pin);
-            }
-            else {
-              expect(options.remainingFailureCount).toBeDefined();
-              expect(options.maxFailureCount).toBeDefined();
-              expect(options.remainingFailureCount).toBe(3);
-              expect(options.maxFailureCount).toBe(3);
-              actions.providePin('incorrect');
-            }
-          })
-          .onSuccess(function () {
-            done();
-          })
-          .onError(function (err) {
-            expect(err).toBeUndefined();
-            fail("User authentication failed, but should have succeeded");
-          });
-      });
+              if (options.remainingFailureCount === options.maxFailureCount - 1) {
+                expect(options.code).toBe(8012);
+                expect(options.description).toBeDefined();
+                actions.providePin(config.pin);
+              }
+              else {
+                expect(options.remainingFailureCount).toBeDefined();
+                expect(options.maxFailureCount).toBeDefined();
+                expect(options.remainingFailureCount).toBe(3);
+                expect(options.maxFailureCount).toBe(3);
+                actions.providePin('incorrect');
+              }
+            })
+            .onSuccess(function () {
+              done();
+            })
+            .onError(function (err) {
+              expect(err).toBeUndefined();
+              fail("User authentication failed, but should have succeeded");
+            });
+        });
 
-      it('should fail when user is already authenticated', function (done) {
-        onegini.user.authenticate(registeredProfileId)
-          .onSuccess(function () {
-            fail("User authentication succeeded, but should have failed");
-          })
-          .onError(function (err) {
-            expect(err).toBeDefined();
-            expect(err.description).toBe("Onegini: User already authenticated.");
-            done();
-          });
+
       });
-    });
 
     describe("mobileAuth (2/3)", function () {
       describe("enroll", function () {
