@@ -1,8 +1,8 @@
 # Secure resource access
 
-
-There are three authentication methods your app can use to securely access resources like account information, transactions, etc. from a back-end or resource
-server. Different resources might require using different methods for authentication. The tree authentication methods are as follows:
+There are three types of authentication credentials your app can use to securely access resources like account information, transactions, etc. from a back-end
+or resource server. A user or device needs to be authenticated before a resource can be fetched with the corresponding authentication credentials.
+Different resources might require using different methods for authentication. The following authentication credential types can be used:
 - **User authentication (default)**: Requires the user to be [fully authenticated](../reference/user/authenticate.md), meaning to be authenticated with an
 authenticator (PIN or Fingerprint for example).
 - **Implicit authentication**: Requires the user to be [implicitly authenticated](../reference/user/authenticateImplicitly.md), meaning the user has registered with
@@ -36,13 +36,14 @@ onegini.resource.fetch({
     });
 ```
 
-The `auth` option specifies the authentication method. This property defaults to `onegini.resource.auth.USER`, but is explicitly set here for the sake of completion.   
+The `auth` option specifies which authentication token should be send to the Token Server.This property defaults to `onegini.resource.auth.USER`, but is
+explicitly set here for the sake of completion.   
 
 ## Using fetch with implicit authentication
 
 Before fetching an implicit resource, the user must be [authenticated implicitly](../reference/user/authenticateImplicitly.md).
 
-To specify that we will be using implicit authentication, the `auth` property must be set to `onegini.resource.auth.IMPLICIT`.
+To specify that we will use the implicit authentication credentials, the `auth` property must be set to `onegini.resource.auth.IMPLICIT`.
 
 ** Example code to fetch a resource with implicit authentication: **
 
@@ -62,7 +63,7 @@ onegini.resource.fetch({
 A device can use its OAuth credentials to authenticate itself with the Token Server, and obtain an access token. An anonymous resource call can be used in cases
 where a user does not need to be logged in or even registered in order to use certain functionality, or access some resource.
 
-To specify that we will be using anonymous authentication the `auth` property must be set to `onegini.resource.auth.ANONYMOUS`.
+To specify that we will be using the anonymous authentication credentials, the `auth` property must be set to `onegini.resource.auth.ANONYMOUS`.
 
 **Example code to fetch an anonymous resource:**
 
@@ -86,7 +87,9 @@ For details of the response and error objects, see the documention for [fetch](.
 
 ## Intercepting XHR requests
 
-While it is best to use `onegini.resource.fetch` to access secured resources, it is also possible to initiate `XMLHTTPRequest` calls yourself, and allow the Onegini Cordova plugin to intercept the outgoing requests. The requests will be authenticated and encrypted as necessary. Similarly, responses will be decrypted if necessary, allowing you to use the response as normal.
+While it is best to use `onegini.resource.fetch` to access secured resources, it is also possible to initiate `XMLHTTPRequest` calls yourself, and allow the
+Onegini Cordova plugin to intercept the outgoing requests. The requests will be authenticated and encrypted as necessary. Similarly, responses will be decrypted
+if necessary, allowing you to use the response as normal.
 
 This option must be set upon initialization of the Onegini Cordova plugin. It is implemented as an argument to [`onegini.start`](../reference/start.md).
 
@@ -106,5 +109,5 @@ onegini.start({
 
 ### Caveats
 
-* Currently, only non-anonymous requests are supported using XHR intercepts.
+* Currently, only user authenticated requests (`onegini.resource.auth.USER`) requests are supported using XHR intercepts.
 * `xhr.responseType = 'arrayBuffer'` is only supported on Android 4.4 and up. The underlying `XMLHttpRequest` implementation on older Android devices does not support this method.
