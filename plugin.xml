@@ -350,5 +350,9 @@
                  target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/FidoCallback.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
+
+    <!-- model -->
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/model/AuthMethod.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/model/"/>
   </platform>
 </plugin>

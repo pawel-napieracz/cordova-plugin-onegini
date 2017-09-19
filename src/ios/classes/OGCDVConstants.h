@@ -65,6 +65,7 @@ extern NSString *const OGCDVPluginErrDescriptionFidoNoAuthenticationInProgress;
 extern NSString *const OGCDVPluginErrDescriptionFingerprintNoAuthenticationInProgress;
 extern NSString *const OGCDVPluginErrDescriptionInvalidMobileAuthenticationMethod;
 extern NSString *const OGCDVPluginErrDescriptionIncorrectPin;
+extern NSString *const OGCDVPluginErrDescriptionInvalidFetchAuthMethod;
 
 extern int const OGCDVPluginErrCodePluginInternalError;
 extern int const OGCDVPluginErrCodeConfiguration;

@@ -17,12 +17,15 @@
 #import "OGCDVResourceClient.h"
 #import "OGCDVConstants.h"
 
-NSString *const OGCDVPluginKeyAnonymous = @"anonymous";
 NSString *const OGCDVPluginKeyBody = @"body";
 NSString *const OGCDVPluginKeyUrl = @"url";
 NSString *const OGCDVPluginKeyStatus = @"status";
 NSString *const OGCDVPluginKeyStatusText = @"statusText";
 NSString *const OGCDVPluginKeyHeaders = @"headers";
+NSString *const OGCDVPluginKeyAuthMethod = @"auth";
+NSString *const OGCDVPluginAuthMethodUser = @"Symbol(user)";
+NSString *const OGCDVPluginAuthMethodAnonymous = @"Symbol(anonymous)";
+NSString *const OGCDVPluginAuthMethodImplicit = @"Symbol(implicit)";
 int const OGCDVFetchResultHeaderLength = 4;
 
 @implementation OGCDVResourceClient {
@@ -38,7 +41,7 @@ int const OGCDVFetchResultHeaderLength = 4;
         NSDictionary *params = options[OGCDVPluginKeyBody];
         NSMutableDictionary *headers = options[OGCDVPluginKeyHeaders];
         NSDictionary *convertedHeaders = [self convertNumbersToStringsInDictionary:headers];
-        BOOL anonymous = [options[OGCDVPluginKeyAnonymous] boolValue];
+        NSString *authMethod = options[OGCDVPluginKeyAuthMethod];
 
         ONGRequestBuilder *requestBuilder = [ONGRequestBuilder builder];
         [requestBuilder setHeaders:convertedHeaders];
@@ -52,22 +55,26 @@ int const OGCDVFetchResultHeaderLength = 4;
 
         ONGResourceRequest *request = [requestBuilder build];
 
-        if (anonymous) {
-            [[ONGDeviceClient sharedInstance] fetchResource:request completion:^(ONGResourceResponse *response, NSError *error) {
-                [self handleResponse:response withError:error forCallbackId:command.callbackId];
-            }];
-        } else {
-            [[ONGUserClient sharedInstance] fetchResource:request completion:^(ONGResourceResponse *response, NSError *error) {
-                [self handleResponse:response withError:error forCallbackId:command.callbackId];
-            }];
+        if (!authMethod) {
+            [self sendErrorResultForCallbackId:command.callbackId
+                                 withErrorCode:OGCDVPluginErrCodeIllegalArgument
+                                    andMessage:OGCDVPluginErrDescriptionInvalidFetchAuthMethod];
+            return;
+        }
+
+        void (^fetchCompletion)(ONGResourceResponse*, NSError*) = ^(ONGResourceResponse *response, NSError *error) {
+            CDVPluginResult *pluginResult = [self getPluginResultFromResourceResponse:response withError:error];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        };
+
+        if ([authMethod isEqualToString:OGCDVPluginAuthMethodUser]) {
+            [[ONGUserClient sharedInstance] fetchResource:request completion:fetchCompletion];
+        } else if ([authMethod isEqualToString:OGCDVPluginAuthMethodAnonymous]) {
+            [[ONGDeviceClient sharedInstance] fetchResource:request completion:fetchCompletion];
+        } else if ([authMethod isEqualToString:OGCDVPluginAuthMethodImplicit]) {
+            [[ONGUserClient sharedInstance] fetchImplicitResource:request completion:fetchCompletion];
         }
     }];
-}
-
-- (void)handleResponse:(ONGResourceResponse *)response withError:(NSError *)error forCallbackId:(NSString *)callbackId
-{
-    CDVPluginResult *pluginResult = [self getPluginResultFromResourceResponse:response withError:error];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 - (CDVPluginResult *)getPluginResultFromResourceResponse:(ONGResourceResponse *)response withError:(NSError *)error
