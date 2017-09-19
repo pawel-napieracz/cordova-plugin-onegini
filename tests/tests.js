@@ -748,30 +748,30 @@ exports.defineAutoTests = function () {
             expect(actions.providePin).toBeDefined();
             expect(options).toBeDefined();
 
-              if (options.remainingFailureCount === options.maxFailureCount - 1) {
-                expect(options.code).toBe(8012);
-                expect(options.description).toBeDefined();
-                actions.providePin(config.pin);
-              }
-              else {
-                expect(options.remainingFailureCount).toBeDefined();
-                expect(options.maxFailureCount).toBeDefined();
-                expect(options.remainingFailureCount).toBe(3);
-                expect(options.maxFailureCount).toBe(3);
-                actions.providePin('incorrect');
-              }
-            })
-            .onSuccess(function () {
-              done();
-            })
-            .onError(function (err) {
-              expect(err).toBeUndefined();
-              fail("User authentication failed, but should have succeeded");
-            });
-        });
-
-
+            if (options.remainingFailureCount === options.maxFailureCount - 1) {
+              expect(options.code).toBe(8012);
+              expect(options.description).toBeDefined();
+              actions.providePin(config.pin);
+            }
+            else {
+              expect(options.remainingFailureCount).toBeDefined();
+              expect(options.maxFailureCount).toBeDefined();
+              expect(options.remainingFailureCount).toBe(3);
+              expect(options.maxFailureCount).toBe(3);
+              actions.providePin('incorrect');
+            }
+          })
+          .onSuccess(function () {
+            done();
+          })
+          .onError(function (err) {
+            expect(err).toBeUndefined();
+            fail("User authentication failed, but should have succeeded");
+          });
       });
+
+
+    });
 
     describe("mobileAuth (2/3)", function () {
       describe("enroll", function () {
@@ -1204,6 +1204,14 @@ exports.defineAutoTests = function () {
         });
 
         describe("user.authenticate with fingerprint", function () {
+          afterAll(function (done) {
+            onegini.user.authenticate(registeredProfileId, 'PIN')
+              .onPinRequest(function (actions) {
+                actions.providePin(config.pin);
+              })
+              .onSuccess(done);
+          });
+
           it("should respect the authenticator argument", function (done) {
             onegini.user.authenticate({ profileId: registeredProfileId }, { authenticatorType: 'Fingerprint' })
               .onPinRequest(function () {
