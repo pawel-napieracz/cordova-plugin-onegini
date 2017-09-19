@@ -18,7 +18,7 @@
 
 exports.defineAutoTests = function () {
   var config = {
-    testForMultipleAuthenticators: false,
+    testForMultipleAuthenticators: true,
     testForMobileFingerprintAuthentication: false,
     testForFidoAuthentication: false,
     userId: "devnull-cordovatest-" + Math.random().toString().substr(2, 5),
