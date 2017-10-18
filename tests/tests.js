@@ -1578,6 +1578,36 @@ exports.defineAutoTests = function () {
             });
         });
 
+        it('should fetch a resource with a JSON body without content-type', function (done) {
+          var body = {
+            "foo": "oof",
+            "bar": "baz"
+          };
+          onegini.resource.fetch(
+            {
+              url: 'https://onegini-msp-snapshot.test.onegini.io/resources/mirror-request',
+              method: 'POST',
+              body: body,
+              headers: {
+                'X-Test-String': 'foobar',
+                'X-Test-Int': 1337
+              }
+            },
+            function (response) {
+              expect(response).toBeDefined();
+              expect(response.body).toEqual(JSON.stringify(body));
+              expect(response.rawBody).toBeDefined();
+              expect(response.headers).toBeDefined();
+              expect(response.headers['Content-Type']).toEqual('application/json');
+              expect(response.status).toEqual(200);
+              expect(response.statusText).toBeDefined();
+              done();
+            }, function (err) {
+              expect(err).toBeUndefined();
+              fail('Error callback called, but method should have succeeded');
+            });
+        });
+
         it('should require a url', function () {
           expect(function () {
             onegini.resource.fetch();
