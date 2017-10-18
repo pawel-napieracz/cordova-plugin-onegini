@@ -35,20 +35,23 @@ int const OGCDVFetchResultHeaderLength = 4;
 
         NSString *url = options[OGCDVPluginKeyUrl];
         NSString *method = options[OGCDVPluginKeyMethod];
-        NSDictionary *params = options[OGCDVPluginKeyBody];
+        NSString *body = options[OGCDVPluginKeyBody];
         NSMutableDictionary *headers = options[OGCDVPluginKeyHeaders];
-        NSDictionary *convertedHeaders = [self convertNumbersToStringsInDictionary:headers];
         BOOL anonymous = [options[OGCDVPluginKeyAnonymous] boolValue];
 
         ONGRequestBuilder *requestBuilder = [ONGRequestBuilder builder];
+
+        if (body) {
+            [requestBuilder setBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+            BOOL contentTypeNotSet = !(headers[@"Content-Type"] || headers[@"content-type"]);
+            if (contentTypeNotSet) {
+                [headers setObject:@"application/json" forKey:@"Content-Type"];
+            }
+        }
+        NSDictionary *convertedHeaders = [self convertNumbersToStringsInDictionary:headers];
         [requestBuilder setHeaders:convertedHeaders];
         [requestBuilder setMethod:method];
         [requestBuilder setPath:url];
-
-        if (params != nil) {
-            [requestBuilder setParametersEncoding:ONGParametersEncodingJSON];
-            [requestBuilder setParameters:params];
-        }
 
         ONGResourceRequest *request = [requestBuilder build];
 
