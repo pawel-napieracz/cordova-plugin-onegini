@@ -43,8 +43,7 @@ int const OGCDVFetchResultHeaderLength = 4;
 
         if (body) {
             [requestBuilder setBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-            BOOL contentTypeNotSet = !(headers[@"Content-Type"] || headers[@"content-type"]);
-            if (contentTypeNotSet) {
+            if ([self isContentTypeNotSet:headers]) {
                 [headers setObject:@"application/json" forKey:@"Content-Type"];
             }
         }
@@ -65,6 +64,16 @@ int const OGCDVFetchResultHeaderLength = 4;
             }];
         }
     }];
+}
+
+- (BOOL)isContentTypeNotSet:(NSMutableDictionary *)headers {
+    NSArray *keys = [headers allKeys];
+    for (NSString *key in keys) {
+        if ([@"content-type" compare:key options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 - (void)handleResponse:(ONGResourceResponse *)response withError:(NSError *)error forCallbackId:(NSString *)callbackId
