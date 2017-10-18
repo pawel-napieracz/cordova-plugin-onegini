@@ -1411,26 +1411,25 @@ exports.defineAutoTests = function () {
       });
 
       it('should fetch a resource with a specific body', function (done) {
-        var body = {
-          "foo": "oof",
-          "bar": "baz"
-        };
+        var body = "foobar";
+
         onegini.resource.fetch(
           {
             url: 'https://onegini-msp-snapshot.test.onegini.io/resources/mirror-request',
             method: 'POST',
             body: body,
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'text/plain',
               'X-Test-String': 'foobar',
               'X-Test-Int': 1337
             }
           },
           function (response) {
             expect(response).toBeDefined();
-            expect(response.body).toEqual(JSON.stringify(body));
+            expect(response.body).toEqual(body);
             expect(response.rawBody).toBeDefined();
             expect(response.headers).toBeDefined();
+            expect(response.headers['Content-Type']).toEqual('text/plain');
             expect(response.status).toEqual(200);
             expect(response.statusText).toBeDefined();
             done();
