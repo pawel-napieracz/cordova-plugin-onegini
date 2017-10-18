@@ -38,7 +38,7 @@ int const OGCDVFetchResultHeaderLength = 4;
 
         NSString *url = options[OGCDVPluginKeyUrl];
         NSString *method = options[OGCDVPluginKeyMethod];
-        NSDictionary *params = options[OGCDVPluginKeyBody];
+        NSString *body = options[OGCDVPluginKeyBody];
         NSMutableDictionary *headers = options[OGCDVPluginKeyHeaders];
         NSDictionary *convertedHeaders = [self convertNumbersToStringsInDictionary:headers];
         NSString *authMethod = options[OGCDVPluginKeyAuthMethod];
@@ -48,9 +48,8 @@ int const OGCDVFetchResultHeaderLength = 4;
         [requestBuilder setMethod:method];
         [requestBuilder setPath:url];
 
-        if (params != nil) {
-            [requestBuilder setParametersEncoding:ONGParametersEncodingJSON];
-            [requestBuilder setParameters:params];
+        if (body) {
+            [requestBuilder setBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
         }
 
         ONGResourceRequest *request = [requestBuilder build];

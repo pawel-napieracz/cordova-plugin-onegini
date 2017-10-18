@@ -119,6 +119,15 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
       throw new TypeError("Onegini: missing 'url' argument for fetch");
     }
 
+    if (options.body && typeof options.body !== 'string') {
+      try {
+        options.body = JSON.stringify(options.body);
+      } catch (e) {
+        console.error(e);
+        throw new TypeError('Onegini: resource.fetch: options.body could not be stringified. JSON.stringify is used to transform the body to a String.');
+      }
+    }
+
     if (!Object.values(auth).includes(options.auth)) {
       throw new TypeError('Onegini: resource.fetch: options.auth should be of one of resource.fetch.auth.USER, ANONYMOUS or IMPLICIT');
     }
