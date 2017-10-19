@@ -41,6 +41,7 @@ import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFidoCallb
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFingerprintCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.AuthenticationAttemptCounter;
+import com.onegini.mobile.sdk.android.model.entity.CustomAuthenticatorInfo;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.ConfirmationCallback;
@@ -170,7 +171,7 @@ public class MobileAuthWithPushHandler
   // *START* Mobile authentication Handler methods
 
   @Override
-  public void onSuccess() {
+  public void onSuccess(final CustomAuthenticatorInfo customAuthenticatorInfo) {
     finishAuthenticationRequest(null);
   }
 
