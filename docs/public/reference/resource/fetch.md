@@ -14,7 +14,7 @@ This function takes one mandatory argument, the `url`. The `url` can be absolute
 | `anonymous` | `false` | A boolean distinguishing between anonymous resource calls and those on behalf of a user
 | `method` | `GET` | The method of the REST request
 | `headers` | `{}` | The headers of the REST request
-| `body` | - | The body of the REST request (only available for the methods that support a body)
+| `body` | - | The body of the REST request (only available for the methods that support a body). The body must be of type string or an object that can be stringified to JSON with `JSON.stingify`.
 
 The method only succeeds when an http success status (within the 200-299 range) is returned by the server.
 If no request could be made to the server or if the server returns an error status the error callback is called.
