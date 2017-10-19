@@ -10,13 +10,13 @@ Refer to the [Secure resource access topic guide](../../topics/secure-resource-a
 This function takes one mandatory argument, the `url`. The `url` can be absolute, or relative to the resource base url configured for the client. It also accepts
 several optional arguments such as `anonymous` which must be set to `true` for anonymous resource calls, and a number of arguments related to the REST call.
 
-| Property  | Default                      | Description                                                  |
-| ---       | ---                          | ---                                                          |
-| `url`     | -                            | URL of the resource to be fetched                            |
-| `auth`    | `onegini.resource.auth.USER` | Authentication token type obtained through authentication.   |
-| `method`  | `GET`                        | HTTP Request method                                          |
-| `headers` | `{}`                         | HTTP Request headers                                         |
-| `body`    | -                            | HTTP Request body (only send if supported by request method) |
+| Property  | Default                      | Description
+| ---       | ---                          | --- |
+| `url`     | -                            | URL of the resource to be fetched
+| `auth`    | `onegini.resource.auth.USER` | Authentication token type obtained through authentication.
+| `method`  | `GET`                        | HTTP Request method
+| `headers` | `{}`                         | HTTP Request headers
+| `body`    | -                            | The body of the REST request (only available for the methods that support a body). The body must be of type string or an object that can be stringified to JSON with `JSON.stingify`.
 
 The method only succeeds when an http success status (within the 200-299 range) is returned by the server.
 If no request could be made to the server or if the server returns an error status the error callback is called.
