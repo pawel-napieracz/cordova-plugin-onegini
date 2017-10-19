@@ -3,8 +3,8 @@
 <!-- toc -->
 
 Resources can be fetched by the device anonymously, or on behalf of a logged in user.
-                           
-                           ## `onegini.resource.fetch`
+
+## `onegini.resource.fetch`
 
 This function takes one mandatory argument, the `url`. The `url` can be absolute, or relative to the resource base url configured for the client. It also accepts several optional arguments such as `anonymous` which must be set to `true` for anonymous resource calls, and a number of arguments related to the REST call.
 
