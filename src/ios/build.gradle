@@ -53,11 +53,11 @@ configurations {
 }
 
 dependencies {
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.03.06-SNAPSHOT@a'
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.03.06-SNAPSHOT:headers@zip'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.03.06@a'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:5.03.06:headers@zip'
 
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:5.03.06-SNAPSHOT@a'
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:5.03.06-SNAPSHOT:headers@zip'
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:5.03.06@a'
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:5.03.06:headers@zip'
 }
 
 task prepareTargetDirectory {
