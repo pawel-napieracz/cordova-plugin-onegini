@@ -17,9 +17,11 @@
 #import "OGCDVUserAuthenticationClient.h"
 #import "OGCDVUserClientHelper.h"
 #import "OGCDVConstants.h"
+#import "OGCDVAuthenticatorsClientHelper.h"
 
-@implementation OGCDVUserAuthenticationClient {
-}
+static int const ARG_INDEX_AUTHENTICATOR = 1;
+
+@implementation OGCDVUserAuthenticationClient
 
 - (void)getAuthenticatedUserProfile:(CDVInvokedUrlCommand *)command
 {
@@ -43,7 +45,6 @@
     }
 }
 
-
 - (void)authenticateImplicitly:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
@@ -58,7 +59,7 @@
             return;
         }
 
-        [[ONGUserClient sharedInstance] implicitlyAuthenticateUser:user scopes:scopes completion:^(BOOL success, NSError * _Nonnull error){
+        [[ONGUserClient sharedInstance] implicitlyAuthenticateUser:user scopes:scopes completion:^(BOOL success, NSError *_Nonnull error) {
             if (error != nil || !success) {
                 [self sendErrorResultForCallbackId:command.callbackId withError:error];
             } else {
@@ -80,10 +81,39 @@
         if (user == nil) {
             [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeProfileNotRegistered
                                     andMessage:OGCDVPluginErrDescriptionProfileNotRegistered];
+            return;
+        }
+
+
+        if ([self shouldUseSpecifiedAuthenticator:command.arguments]) {
+            ONGAuthenticator *authenticator = [self getSpecifiedAuthenticator:command.arguments forUserProfile:user];
+            if (authenticator == nil) {
+                [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoSuchAuthenticator
+                                        andMessage:OGCDVPluginErrDescriptionNoSuchAuthenticator];
+                return;
+            }
+
+            [[ONGUserClient sharedInstance] authenticateUserWithAuthenticator:authenticator profile:user delegate:self];
         } else {
             [[ONGUserClient sharedInstance] authenticateUser:user delegate:self];
         }
     }];
+}
+
+- (BOOL)shouldUseSpecifiedAuthenticator:(NSArray *)args
+{
+    return args.count > ARG_INDEX_AUTHENTICATOR;
+}
+
+- (ONGAuthenticator *)getSpecifiedAuthenticator:(NSArray *)args forUserProfile:(ONGUserProfile *)profile
+{
+    NSDictionary *options = args[ARG_INDEX_AUTHENTICATOR];
+    if (![options isKindOfClass:[NSDictionary class]]) {
+        return nil;
+    }
+
+    NSSet<ONGAuthenticator *> *authenticators = [[ONGUserClient sharedInstance] allAuthenticatorsForUser:profile];
+    return [OGCDVAuthenticatorsClientHelper authenticatorFromArguments:authenticators options:options];
 }
 
 - (void)providePin:(CDVInvokedUrlCommand *)command

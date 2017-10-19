@@ -19,6 +19,7 @@ package com.onegini.mobile.sdk.cordova.client;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_FIDO_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_OPERATION_CANCELED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PROFILE_NOT_REGISTERED;
@@ -26,6 +27,7 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_FIDO_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED;
@@ -39,11 +41,13 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFidoCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFingerprintCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
+import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.AuthenticationHandler;
@@ -69,6 +73,7 @@ public class UserAuthenticationClient extends CordovaPlugin {
   private static final String ACTION_AUTHENTICATE_IMPLICITLY = "authenticateImplicitly";
   private static final String ACTION_GET_IMPLICITLY_AUTHENTICATED_USER_PROFILE = "getImplicitlyAuthenticatedUserProfile";
   private static final String ACTION_CANCEL_FLOW = "cancelFlow";
+  private static final int ARG_INDEX_AUTHENTICATOR = 1;
 
   private AuthenticationHandler authenticationHandler;
 
@@ -100,7 +105,7 @@ public class UserAuthenticationClient extends CordovaPlugin {
       return true;
     } else if (ACTION_GET_IMPLICITLY_AUTHENTICATED_USER_PROFILE.equals(action)) {
       getImplicitlyAuthenticatedUserProfile(callbackContext);
-     return true;
+      return true;
     } else if (ACTION_CANCEL_FLOW.equals(action)) {
       cancelFlow(callbackContext);
       return true;
@@ -130,16 +135,42 @@ public class UserAuthenticationClient extends CordovaPlugin {
       return;
     }
 
-    PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
-    FingerprintAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
-    FidoAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
-    authenticationHandler = new AuthenticationHandler(callbackContext);
-
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
-        getOneginiClient().getUserClient().authenticateUser(userProfile, authenticationHandler);
+        PinAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
+        FingerprintAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
+        FidoAuthenticationRequestHandler.getInstance().setStartAuthenticationCallbackContext(callbackContext);
+        authenticationHandler = new AuthenticationHandler(callbackContext);
+
+        if (shouldUseSpecifiedAuthenticator(args)) {
+          final OneginiAuthenticator authenticator = getSpecifiedAuthenticator(args, userProfile);
+          if (authenticator == null) {
+            callbackContext.sendPluginResult(new PluginResultBuilder()
+                .withPluginError(ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR, ERROR_CODE_NO_SUCH_AUTHENTICATOR)
+                .build());
+            return;
+          }
+          getOneginiClient().getUserClient().authenticateUser(userProfile, authenticator, authenticationHandler);
+        } else {
+          getOneginiClient().getUserClient().authenticateUser(userProfile, authenticationHandler);
+        }
       }
     });
+  }
+
+  private boolean shouldUseSpecifiedAuthenticator(final JSONArray args) {
+    return args.length() > ARG_INDEX_AUTHENTICATOR;
+  }
+
+  private OneginiAuthenticator getSpecifiedAuthenticator(final JSONArray args, final UserProfile userProfile) {
+    final Set<OneginiAuthenticator> authenticators = getOneginiClient().getUserClient().getAllAuthenticators(userProfile);
+
+    try {
+      final JSONObject options = args.getJSONObject(ARG_INDEX_AUTHENTICATOR);
+      return ActionArgumentsUtil.getAuthenticatorFromObject(options, authenticators);
+    } catch (JSONException e) {
+      return null;
+    }
   }
 
   private UserProfile getUserProfileForAuthentication(final JSONArray args) throws Exception {

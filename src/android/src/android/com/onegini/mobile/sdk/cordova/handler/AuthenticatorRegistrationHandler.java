@@ -23,6 +23,7 @@ import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.sdk.android.handlers.OneginiAuthenticatorRegistrationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiAuthenticatorRegistrationError;
+import com.onegini.mobile.sdk.android.model.entity.CustomAuthenticatorInfo;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class AuthenticatorRegistrationHandler implements OneginiAuthenticatorRegistrationHandler {
@@ -33,7 +34,7 @@ public class AuthenticatorRegistrationHandler implements OneginiAuthenticatorReg
   }
 
   @Override
-  public void onSuccess() {
+  public void onSuccess(final CustomAuthenticatorInfo customAuthenticatorInfo) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .withEvent(EVENT_SUCCESS)
@@ -43,7 +44,8 @@ public class AuthenticatorRegistrationHandler implements OneginiAuthenticatorReg
   }
 
   @Override
-  public void onError(final OneginiAuthenticatorRegistrationError oneginiAuthenticatorRegistrationError) {
+  public void onError(final OneginiAuthenticatorRegistrationError oneginiAuthenticatorRegistrationError,
+                      final CustomAuthenticatorInfo customAuthenticatorInfo) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withOneginiError(oneginiAuthenticatorRegistrationError)
         .build();
