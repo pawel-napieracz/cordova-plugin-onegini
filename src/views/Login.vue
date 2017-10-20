@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Login</h1>
+    <span v-text="decoratedUserId"></span>
     <select-profile v-if="userProfiles.length > 0" @select="selectProfileId" :user-profiles="userProfiles" />
     <button-lg v-if="userProfiles.length > 0" @click="login" text="Login" />
     <button-lg @click="register" text="Register" />
@@ -18,6 +19,7 @@ export default {
     return {
       userProfiles: [],
       selectedProfileId: null,
+      decoratedUserId: null,
       showFingerprintModal: false,
       fingerprintStatus: null,
       fingerprintActions: null
@@ -53,7 +55,7 @@ export default {
         .onPinRequest((actions, options) => {
           this.showFingerprintModal = false;
           let callback = (results) => {
-            if (results.buttonIndex == 1) {
+            if (results.buttonIndex === 1) {
               actions.providePin(results.input1);
             } else {
               actions.cancel()
@@ -66,7 +68,7 @@ export default {
         })
         .onFingerprintRequest((actions) => {
           let callback = (result) => {
-            if (result == 1) {
+            if (result === 1) {
               actions.acceptFingerprint({ iosPrompt: 'Login to the Example App'});
 
               if (cordova.platformId === 'android'){
@@ -89,7 +91,7 @@ export default {
         })
         .onFidoRequest((actions) => {
           let callback = (result) => {
-            if (result == 1) {
+            if (result === 1) {
               actions.acceptFido();
             } else {
               actions.fallbackToPin();
@@ -128,6 +130,23 @@ export default {
             navigator.notification.alert('Registration failed. ' + err.description);
           });
     }
+  },
+
+  watch: {
+    selectedProfileId: function() {
+      onegini.user.authenticateImplicitly(this.selectedProfileId)
+          .then(() => onegini.resource.fetch({
+            url: 'https://onegini-msp-snapshot.test.onegini.io/resources/user-id-decorated',
+            auth: onegini.resource.auth.IMPLICIT,
+          }))
+          .then((response) => {
+            this.decoratedUserId = response.json.decorated_user_id
+          })
+          .catch((err) => {
+            console.error('Could not fetch decorated user ID implicitly.', err);
+            this.decoratedUserId = null;
+      })
+    },
   },
 
   components: {
