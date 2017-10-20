@@ -47,7 +47,7 @@ import okhttp3.RequestBody;
 import okhttp3.internal.http.HttpMethod;
 
 public class ActionArgumentsUtil {
-  private static final MediaType CONTENT_TYPE_PLAIN_TEXT = MediaType.parse("text/plain; charset=utf-8");
+  private static final MediaType CONTENT_TYPE_PLAIN_TEXT = MediaType.parse("text/plain;charset=utf-8");
   private static final String HEADER_KEY_CONTENT_TYPE = "Content-Type";
 
   public static String[] getScopesFromArguments(final JSONArray args) throws JSONException {
