@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Login</h1>
+    <span v-text="decoratedUserId"></span>
     <select-profile v-if="userProfiles.length > 0" @select="selectProfileId" :user-profiles="userProfiles" />
     <button-lg v-if="userProfiles.length > 0" @click="login" text="Login" />
     <button-lg @click="register" text="Register" />
@@ -18,6 +19,7 @@ export default {
     return {
       userProfiles: [],
       selectedProfileId: null,
+      decoratedUserId: null,
       showFingerprintModal: false,
       fingerprintStatus: null,
       fingerprintActions: null
@@ -128,6 +130,25 @@ export default {
             navigator.notification.alert('Registration failed. ' + err.description);
           });
     }
+  },
+
+  watch: {
+    selectedProfileId: function() {
+      onegini.user.authenticateImplicitly(this.selectedProfileId)
+          .then(() => {
+            return onegini.resource.fetch({
+              url: 'https://onegini-msp-snapshot.test.onegini.io/resources/user-id-decorated',
+              auth: onegini.resource.auth.IMPLICIT,
+            })
+          })
+          .then((response) => {
+            this.decoratedUserId = response.json.decorated_user_id
+          })
+          .catch((err) => {
+            console.log(err);
+            alert('Could not fetch implicit resource');
+      })
+    },
   },
 
   components: {
