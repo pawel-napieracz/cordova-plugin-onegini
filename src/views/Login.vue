@@ -55,7 +55,7 @@ export default {
         .onPinRequest((actions, options) => {
           this.showFingerprintModal = false;
           let callback = (results) => {
-            if (results.buttonIndex == 1) {
+            if (results.buttonIndex === 1) {
               actions.providePin(results.input1);
             } else {
               actions.cancel()
@@ -68,7 +68,7 @@ export default {
         })
         .onFingerprintRequest((actions) => {
           let callback = (result) => {
-            if (result == 1) {
+            if (result === 1) {
               actions.acceptFingerprint({ iosPrompt: 'Login to the Example App'});
 
               if (cordova.platformId === 'android'){
@@ -91,7 +91,7 @@ export default {
         })
         .onFidoRequest((actions) => {
           let callback = (result) => {
-            if (result == 1) {
+            if (result === 1) {
               actions.acceptFido();
             } else {
               actions.fallbackToPin();
