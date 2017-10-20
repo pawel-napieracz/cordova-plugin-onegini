@@ -47,7 +47,7 @@ int const OGCDVFetchResultHeaderLength = 4;
         if (body) {
             [requestBuilder setBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
             if ([self isContentTypeNotSet:headers]) {
-                [headers setObject:@"text/plain;charset=utf-8" forKey:@"Content-Type"];
+                headers[@"Content-Type"] = @"text/plain;charset=utf-8";
             }
         }
 
