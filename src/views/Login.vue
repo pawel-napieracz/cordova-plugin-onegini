@@ -135,18 +135,16 @@ export default {
   watch: {
     selectedProfileId: function() {
       onegini.user.authenticateImplicitly(this.selectedProfileId)
-          .then(() => {
-            return onegini.resource.fetch({
-              url: 'https://onegini-msp-snapshot.test.onegini.io/resources/user-id-decorated',
-              auth: onegini.resource.auth.IMPLICIT,
-            })
-          })
+          .then(() => onegini.resource.fetch({
+            url: 'https://onegini-msp-snapshot.test.onegini.io/resources/user-id-decorated',
+            auth: onegini.resource.auth.IMPLICIT,
+          }))
           .then((response) => {
             this.decoratedUserId = response.json.decorated_user_id
           })
           .catch((err) => {
-            console.log(err);
-            alert('Could not fetch implicit resource');
+            console.error('Could not fetch decorated user ID implicitly.', err);
+            this.decoratedUserId = null;
       })
     },
   },
