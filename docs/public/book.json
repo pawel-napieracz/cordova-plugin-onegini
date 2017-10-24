@@ -12,6 +12,7 @@
     "onegini-styling",
     "-fontsettings"
   ],
+  "pluginsConfig": {},
   "styles": {
     "pdf": "styles/pdf.css",
     "epub": "styles/pdf.css"
