@@ -53,7 +53,7 @@ public class FcmListenerService extends FirebaseMessagingService {
       startActivity(launchIntent);
     } else {
       //TODO: uncomment
-      //new NotificationHelper(this).showNotification(launchIntent, "PUSH REQUEST: click me!");
+      new NotificationHelper(this).showNotification(launchIntent, "PUSH REQUEST: click me!");
     }
   }
 
