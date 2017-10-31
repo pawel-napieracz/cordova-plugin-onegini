@@ -20,10 +20,9 @@ module.exports = (function () {
   var utils = require('./utils');
   var resource = require('./resource');
   var mobileAuth = require('./mobileAuth');
-
   function start(options, successCb, failureCb) {
     var promise, callbackResult;
-
+    registerListeners();
     options = utils.getOptionsWithDefaults(options, {
       secureXhr: false
     });
@@ -59,3 +58,25 @@ module.exports = (function () {
     }
   };
 })();
+
+
+function registerListeners() {
+  document.addEventListener("resume", onResume, false);
+  document.addEventListener("pause", onPause, false);
+}
+
+function onPause() {
+    var utils = require('./utils');
+    // Handle the pause event
+    utils.callbackExec('AppLifecycleUtil', 'background', [], function() {
+      //console.log("STATE: CALLBACK");
+    });
+}
+
+function onResume() {
+    var utils = require('./utils');
+    // Handle the resume event
+    utils.callbackExec('AppLifecycleUtil', 'foreground', [], function() {
+      //console.log("STATE: CALLBACK");
+    });
+}

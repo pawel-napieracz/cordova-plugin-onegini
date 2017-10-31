@@ -220,6 +220,10 @@
         <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.OtpMobileAuthRequestClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="AppLifecycleUtil">
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.util.AppLifecycleUtil"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -299,6 +303,9 @@
                  target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/OkHttpResponseUtil.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AppLifecycleUtil.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticationHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>

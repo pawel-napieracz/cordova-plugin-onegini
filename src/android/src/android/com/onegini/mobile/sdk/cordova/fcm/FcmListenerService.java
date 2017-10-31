@@ -30,6 +30,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.onegini.mobile.sdk.cordova.util.AppLifecycleUtil;
 
 @SuppressLint("Registered")
 public class FcmListenerService extends FirebaseMessagingService {
@@ -39,7 +40,6 @@ public class FcmListenerService extends FirebaseMessagingService {
     if (message == null) {
       return;
     }
-
     if (isMobileAuthenticationRequest(message)) {
       startMainActivityWithIntentExtra(message);
     }
@@ -49,12 +49,17 @@ public class FcmListenerService extends FirebaseMessagingService {
     final String packageName = this.getPackageName();
     final Intent launchIntent = this.getPackageManager().getLaunchIntentForPackage(packageName);
     launchIntent.putExtra(EXTRA_MOBILE_AUTHENTICATION, message);
-    startActivity(launchIntent);
+    if (AppLifecycleUtil.isAppInForeground()) {
+      startActivity(launchIntent);
+    } else {
+      //TODO: uncomment
+      //new NotificationHelper(this).showNotification(launchIntent, "PUSH REQUEST: click me!");
+    }
   }
 
   private boolean isMobileAuthenticationRequest(final RemoteMessage message) {
     try {
-      Map<String, String> data = getRemoteMessageData(message);
+      final Map<String, String> data = getRemoteMessageData(message);
       final JSONObject messageContent = new JSONObject(data.get(PUSH_MSG_CONTENT));
       return messageContent.has(PUSH_MSG_TRANSACTION_ID);
     } catch (JSONException e) {
@@ -63,7 +68,7 @@ public class FcmListenerService extends FirebaseMessagingService {
   }
 
   private Map<String, String> getRemoteMessageData(RemoteMessage message) {
-    Map<String, String> data = message.getData();
+    final Map<String, String> data = message.getData();
     if (data == null) {
       return emptyMap();
     }
