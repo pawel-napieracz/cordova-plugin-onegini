@@ -43,6 +43,7 @@ import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.fcm.FcmTokenUpdateService;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
+import com.onegini.mobile.sdk.cordova.util.AppLifecycleUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 @SuppressWarnings("unused")
@@ -53,6 +54,9 @@ public class OneginiClient extends CordovaPlugin {
 
   @Override
   public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
+    // We must set that the app is in the foreground because the Start method is not triggered during initialization
+    AppLifecycleUtil.setAppIsInForeground();
+
     super.initialize(cordova, webView);
     final RemoteMessage remoteMessage = cordova.getActivity().getIntent().getParcelableExtra(EXTRA_MOBILE_AUTHENTICATION);
 
@@ -162,5 +166,23 @@ public class OneginiClient extends CordovaPlugin {
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {
     return OneginiSDK.getInstance().getOneginiClient(getApplicationContext());
+  }
+
+  @Override
+  public void onStart() {
+    AppLifecycleUtil.setAppIsInForeground();
+    super.onStart();
+  }
+
+  @Override
+  public void onResume(final boolean multitasking) {
+    AppLifecycleUtil.setAppIsInForeground();
+    super.onResume(multitasking);
+  }
+
+  @Override
+  public void onStop() {
+    AppLifecycleUtil.setAppIsInBackground();
+    super.onStop();
   }
 }
