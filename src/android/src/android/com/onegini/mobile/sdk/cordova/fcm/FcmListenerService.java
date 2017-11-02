@@ -18,6 +18,7 @@ package com.onegini.mobile.sdk.cordova.fcm;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EXTRA_MOBILE_AUTHENTICATION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_CONTENT;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_MESSAGE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_TRANSACTION_ID;
 import static java.util.Collections.emptyMap;
 
@@ -28,6 +29,8 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.onegini.mobile.sdk.cordova.util.AppLifecycleUtil;
@@ -41,19 +44,36 @@ public class FcmListenerService extends FirebaseMessagingService {
       return;
     }
     if (isMobileAuthenticationRequest(message)) {
-      startMainActivityWithIntentExtra(message);
+      handleNotification(message);
     }
   }
 
-  private void startMainActivityWithIntentExtra(final RemoteMessage message) {
-    final String packageName = this.getPackageName();
-    final Intent launchIntent = this.getPackageManager().getLaunchIntentForPackage(packageName);
-    launchIntent.putExtra(EXTRA_MOBILE_AUTHENTICATION, message);
+  private void handleNotification(final RemoteMessage message) {
+    final Intent launchIntent = getLaunchIntentWithExtra(message);
     if (AppLifecycleUtil.isAppInForeground()) {
       startActivity(launchIntent);
     } else {
-      //TODO: uncomment
-      new NotificationHelper(this).showNotification(launchIntent, "PUSH REQUEST: click me!");
+      new NotificationHelper(this).showNotification(launchIntent, getMessageFromAuthenticationRequest(message));
+    }
+  }
+
+  @NonNull
+  private Intent getLaunchIntentWithExtra(final RemoteMessage message) {
+    final String packageName = this.getPackageName();
+    final Intent launchIntent = this.getPackageManager().getLaunchIntentForPackage(packageName);
+    launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    launchIntent.putExtra(EXTRA_MOBILE_AUTHENTICATION, message);
+    return launchIntent;
+  }
+
+  @Nullable
+  private String getMessageFromAuthenticationRequest(final RemoteMessage message) {
+    try {
+      final Map<String, String> data = getRemoteMessageData(message);
+      final JSONObject messageContent = new JSONObject(data.get(PUSH_MSG_CONTENT));
+      return messageContent.getString(PUSH_MSG_MESSAGE);
+    } catch (JSONException e) {
+      return null;
     }
   }
 
