@@ -185,4 +185,10 @@ public class OneginiClient extends CordovaPlugin {
     AppLifecycleUtil.setAppIsInBackground();
     super.onStop();
   }
+
+  @Override
+  public void onPause(final boolean multitasking) {
+    AppLifecycleUtil.setAppIsInBackground();
+    super.onPause(multitasking);
+  }
 }

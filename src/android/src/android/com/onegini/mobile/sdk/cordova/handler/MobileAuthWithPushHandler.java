@@ -98,7 +98,8 @@ public class MobileAuthWithPushHandler
 
   @Override
   public void startAuthentication(final OneginiMobileAuthenticationRequest oneginiMobileAuthenticationRequest, final OneginiPinCallback oneginiPinCallback,
-                                  final AuthenticationAttemptCounter authenticationAttemptCounter) {
+                                  final AuthenticationAttemptCounter authenticationAttemptCounter,
+                                  final OneginiMobileAuthenticationError oneginiMobileAuthenticationError) {
     final PinCallback pinCallback = new PinCallback(oneginiMobileAuthenticationRequest, oneginiPinCallback, authenticationAttemptCounter);
     addAuthenticationRequestToQueue(pinCallback);
   }

@@ -46,7 +46,7 @@ public class AuthenticationHandler implements OneginiAuthenticationHandler {
   }
 
   @Override
-  public void onError(final OneginiAuthenticationError oneginiAuthenticationError, final CustomAuthenticatorInfo customAuthenticatorInfo) {
+  public void onError(final OneginiAuthenticationError oneginiAuthenticationError) {
     final PluginResultBuilder pluginResultBuilder = new PluginResultBuilder()
         .withError()
         .withOneginiError(oneginiAuthenticationError);

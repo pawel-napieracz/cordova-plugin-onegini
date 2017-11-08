@@ -33,22 +33,27 @@ public class NotificationHelper {
   }
 
   public void showNotification(final Intent intent, final String message) {
+    final int notificationId = NotificationId.getId();
+
     final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
         .setDefaults(Notification.DEFAULT_ALL)
         .setSmallIcon(context.getApplicationInfo().icon)
         .setContentText(message)
-        .setContentIntent(getPendingIntent(intent))
+        .setContentIntent(getPendingIntent(intent, notificationId))
         .setPriority(NotificationCompat.PRIORITY_MAX)
         .setAutoCancel(true);
 
-    getManager().notify(NotificationId.getId(), builder.build());
+    getManager().notify(notificationId, builder.build());
   }
 
   private NotificationManager getManager() {
     return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
   }
 
-  private PendingIntent getPendingIntent(final Intent intent) {
-    return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+  /*
+    According to the internet `requestCodes` have to be unique to avoid PendingIntent CanceledException when multiple notifications are displayed
+   */
+  private PendingIntent getPendingIntent(final Intent intent, final int notificationId) {
+    return PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
   }
 }
