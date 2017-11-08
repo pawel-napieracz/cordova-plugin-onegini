@@ -90,4 +90,5 @@ public interface OneginiCordovaPluginConstants {
   // Push message
   String PUSH_MSG_CONTENT = "content";
   String PUSH_MSG_TRANSACTION_ID = "og_transaction_id";
+  String PUSH_MSG_MESSAGE = "og_message";
 }

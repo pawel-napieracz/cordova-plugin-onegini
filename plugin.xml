@@ -287,6 +287,8 @@
                  target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmTokenUpdateService.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/NotificationHelper.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PluginResultBuilder.java"
@@ -299,6 +301,9 @@
                  target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/OkHttpResponseUtil.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AppLifecycleUtil.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticationHandler.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
@@ -354,5 +359,7 @@
     <!-- model -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/model/AuthMethod.java"
                  target-dir="src/com/onegini/mobile/sdk/cordova/model/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/model/NotificationId.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/model/"/>
   </platform>
 </plugin>
