@@ -31,6 +31,9 @@ allprojects {
   repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+      url "https://maven.google.com" // Google's Maven repository
+    }
     // The Jcenter repository is required for the Cordova framework dependency
     jcenter()
     maven {
@@ -51,14 +54,14 @@ allprojects {
 
 dependencies {
   // Onegini SDK
-  compile('com.onegini.mobile.sdk.android:onegini-sdk:8.0.0-SNAPSHOT@aar') {
+  compile('com.onegini.mobile.sdk.android:onegini-sdk:8.0.0@aar') {
     transitive = true
   }
 
   // Google Play Services availability check
-  compile 'com.google.android.gms:play-services-base:11.0.2'
+  compile 'com.google.android.gms:play-services-base:11.6.0'
   //Firebase Cloud Messaging (FCM)
-  compile "com.google.firebase:firebase-messaging:11.0.2"
+  compile "com.google.firebase:firebase-messaging:11.6.0"
 }
 
 afterEvaluate {
