@@ -33,8 +33,7 @@ allprojects {
     mavenCentral()
 
     maven {
-      // TODO Move to onegini-sdk repo before plugin release
-      url "https://repo.onegini.com/artifactory/libs-snapshot-local"
+      url "https://repo.onegini.com/artifactory/onegini-sdk"
       credentials {
         if (project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
           username artifactory_user

@@ -132,6 +132,11 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticator.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticatorRegistrationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGChangePinDelegate.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthFinishRegistrationChallenge.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthDeregistrationChallenge.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthFinishAuthenticationChallenge.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthInfo.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticatorDeregistrationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGClientBuilder.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGConfigModel.h"/>
