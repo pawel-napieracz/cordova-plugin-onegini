@@ -50,6 +50,10 @@ public class CreatePinRequestHandler implements OneginiCreatePinRequestHandler {
     return oneginiPinCallback;
   }
 
+  public int getPinLength() {
+    return pinLength;
+  }
+
   public void setOnStartPinCreationCallback(final CallbackContext registrationCallback) {
     this.onStartPinCreationCallback = registrationCallback;
   }

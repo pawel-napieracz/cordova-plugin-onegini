@@ -22,6 +22,7 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_OPERATION_CANCELED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_CREATE_PIN_REQUEST;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -30,6 +31,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.onegini.mobile.sdk.android.client.OneginiClient;
+import com.onegini.mobile.sdk.android.handlers.OneginiPinValidationHandler;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiPinValidationError;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.ChangePinHandler;
@@ -104,7 +107,7 @@ public class ChangePinClient extends CordovaPlugin {
           .build();
       callbackContext.sendPluginResult(pluginResult);
     } else {
-      pinCallback.acceptAuthenticationRequest(pin.toCharArray());
+      validatePin(callbackContext, pinCallback, pin.toCharArray());
     }
 
   }
@@ -117,5 +120,26 @@ public class ChangePinClient extends CordovaPlugin {
 
   private OneginiClient getOneginiClient() {
     return OneginiSDK.getInstance().getOneginiClient(cordova.getActivity().getApplicationContext());
+  }
+
+  private void validatePin(final CallbackContext callbackContext, final OneginiPinCallback pinCallback, final char[] pin) {
+    getOneginiClient().getUserClient().validatePinWithPolicy(pin, new OneginiPinValidationHandler() {
+      @Override
+      public void onSuccess() {
+        pinCallback.acceptAuthenticationRequest(pin);
+      }
+
+      @Override
+      public void onError(final OneginiPinValidationError oneginiPinValidationError) {
+        PluginResult pluginResult = new PluginResultBuilder()
+            .withOneginiError(oneginiPinValidationError)
+            .withSuccess()
+            .shouldKeepCallback()
+            .withEvent(EVENT_CREATE_PIN_REQUEST)
+            .withPinLength(CreatePinRequestHandler.getInstance().getPinLength())
+            .build();
+        callbackContext.sendPluginResult(pluginResult);
+      }
+    });
   }
 }
