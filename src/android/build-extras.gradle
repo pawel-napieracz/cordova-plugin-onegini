@@ -37,7 +37,6 @@ allprojects {
     // The Jcenter repository is required for the Cordova framework dependency
     jcenter()
     maven {
-      // We must use the public (virtual) repo since the FIDO plugin dependencies are also being resolved from Artifactory but reside in a different repo
       url "https://repo.onegini.com/artifactory/onegini-sdk"
       credentials {
         if (project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
