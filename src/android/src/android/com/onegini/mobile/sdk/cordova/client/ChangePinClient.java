@@ -107,7 +107,7 @@ public class ChangePinClient extends CordovaPlugin {
           .build();
       callbackContext.sendPluginResult(pluginResult);
     } else {
-      validatePin(callbackContext, pinCallback, pin.toCharArray());
+      validateAndAcceptAuthenticationRequest(callbackContext, pinCallback, pin.toCharArray());
     }
 
   }
@@ -122,7 +122,7 @@ public class ChangePinClient extends CordovaPlugin {
     return OneginiSDK.getInstance().getOneginiClient(cordova.getActivity().getApplicationContext());
   }
 
-  private void validatePin(final CallbackContext callbackContext, final OneginiPinCallback pinCallback, final char[] pin) {
+  private void validateAndAcceptAuthenticationRequest(final CallbackContext callbackContext, final OneginiPinCallback pinCallback, final char[] pin) {
     getOneginiClient().getUserClient().validatePinWithPolicy(pin, new OneginiPinValidationHandler() {
       @Override
       public void onSuccess() {
