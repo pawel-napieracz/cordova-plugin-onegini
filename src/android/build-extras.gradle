@@ -31,11 +31,13 @@ allprojects {
   repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+      url "https://maven.google.com" // Google's Maven repository
+    }
     // The Jcenter repository is required for the Cordova framework dependency
     jcenter()
     maven {
-      // We must use the public (virtual) repo since the FIDO plugin dependencies are also being resolved from Artifactory but reside in a different repo
-      url "https://repo.onegini.com/artifactory/public"
+      url "https://repo.onegini.com/artifactory/onegini-sdk"
       credentials {
         if (project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
           username artifactory_user
@@ -51,12 +53,14 @@ allprojects {
 
 dependencies {
   // Onegini SDK
-  compile('com.onegini.mobile.sdk.android:onegini-sdk:7.0.1@aar') {
+  compile('com.onegini.mobile.sdk.android:onegini-sdk:8.0.0@aar') {
     transitive = true
   }
 
-  // Google cloud messaging (GCM)
-  compile "com.google.android.gms:play-services-gcm:9.6.1"
+  // Google Play Services availability check
+  compile 'com.google.android.gms:play-services-base:11.6.0'
+  //Firebase Cloud Messaging (FCM)
+  compile "com.google.firebase:firebase-messaging:11.6.0"
 }
 
 afterEvaluate {

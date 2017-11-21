@@ -41,6 +41,7 @@ import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFidoCallb
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFingerprintCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.AuthenticationAttemptCounter;
+import com.onegini.mobile.sdk.android.model.entity.CustomAuthenticatorInfo;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.ConfirmationCallback;
@@ -97,7 +98,8 @@ public class MobileAuthWithPushHandler
 
   @Override
   public void startAuthentication(final OneginiMobileAuthenticationRequest oneginiMobileAuthenticationRequest, final OneginiPinCallback oneginiPinCallback,
-                                  final AuthenticationAttemptCounter authenticationAttemptCounter) {
+                                  final AuthenticationAttemptCounter authenticationAttemptCounter,
+                                  final OneginiMobileAuthenticationError oneginiMobileAuthenticationError) {
     final PinCallback pinCallback = new PinCallback(oneginiMobileAuthenticationRequest, oneginiPinCallback, authenticationAttemptCounter);
     addAuthenticationRequestToQueue(pinCallback);
   }
@@ -170,7 +172,7 @@ public class MobileAuthWithPushHandler
   // *START* Mobile authentication Handler methods
 
   @Override
-  public void onSuccess() {
+  public void onSuccess(final CustomAuthenticatorInfo customAuthenticatorInfo) {
     finishAuthenticationRequest(null);
   }
 
@@ -228,6 +230,12 @@ public class MobileAuthWithPushHandler
     }
 
     final CallbackContext callbackContext = callback.getChallengeResponseCallbackContext();
+    if (callbackContext == null) {
+      // We don't have a challenge / response callback so we cannot perform any callback. We'll just continue to process the next authentication request
+      startProcessingNextAuthenticationRequest();
+      return;
+    }
+
     final PluginResult pluginResult;
 
     if (oneginiError == null) {

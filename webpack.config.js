@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -20,7 +21,7 @@ module.exports = {
     ]
   },
 
-  devtool:  '#source-map',
+  devtool:  '#eval-source-map',
 
   module: {
     rules: [
@@ -30,10 +31,16 @@ module.exports = {
         loader: 'babel-loader'
       }
     ]
-  }
+  },
+
+  plugins: [
+    new CleanWebpackPlugin(['dist'])
+  ]
 };
 
 if (process.env.NODE_ENV === 'production') {
+  module.exports.devtool = '#source-map';
+
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
@@ -49,5 +56,5 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
-  ])
+  ]);
 }

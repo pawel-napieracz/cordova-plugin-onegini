@@ -138,32 +138,45 @@ module.exports = (function () {
     return this;
   };
 
-  var authenticate = function (options) {
-    options = utils.getOptionsWithDefaults(options, {}, 'profileId');
-    if (!options || !options.profileId) {
+  function authenticate (profileOptions, authenticatorOptions) {
+    profileOptions = utils.getOptionsWithDefaults(profileOptions, {}, 'profileId');
+    if (!profileOptions.profileId) {
       throw new TypeError("Onegini: missing 'profileId' argument for user.authenticate");
     }
 
-    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'start');
-  };
+    const options = [profileOptions];
 
-  var reauthenticate = function (options) {
-    options = utils.getOptionsWithDefaults(options, {}, 'profileId');
-    if (!options || !options.profileId) {
-      throw new TypeError("Onegini: missing 'profileId' argument for reauthenticate");
+    if (authenticatorOptions) {
+      authenticatorOptions = utils.getOptionsWithDefaults(authenticatorOptions, {}, 'authenticatorType');
+      if (!authenticatorOptions.authenticatorType) {
+        throw new TypeError("Onegini: missing 'authenticatorType' argument for user.authenticate");
+      }
+      options.push(authenticatorOptions);
     }
 
-    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'reauthenticate');
-  };
+    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'authenticate');
+  }
 
-  var register = function (options) {
+  function authenticateImplicitly (options, successCb, failureCb) {
+    options = utils.getOptionsWithDefaults(options, {
+      scopes: []
+    }, 'profileId');
+
+    if (!options || !options.profileId) {
+      throw new TypeError("Onegini: missing 'profileId' argument for user.authenticateImplicitly");
+    }
+
+    return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'authenticateImplicitly', options, successCb, failureCb);
+  }
+
+  function register (options) {
     options = utils.getOptionsWithDefaults(options, {}, 'scopes');
     return new AuthenticationHandler(options, 'OneginiUserRegistrationClient', 'start');
-  };
+  }
 
-  var changePin = function () {
+  function changePin () {
     return new AuthenticationHandler(null, 'OneginiChangePinClient', 'start');
-  };
+  }
 
   var authenticators = {
     getAll: function (options, successCb, failureCb) {
@@ -238,6 +251,10 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'getAuthenticatedUserProfile', [], successCb, failureCb);
   }
 
+  function getImplicitlyAuthenticatedUserProfile(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'getImplicitlyAuthenticatedUserProfile', [], successCb, failureCb);
+  }
+
   function logout(successCb, failureCb) {
     return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'logout', [], successCb, failureCb);
   }
@@ -251,7 +268,7 @@ module.exports = (function () {
 
   return {
     authenticate: authenticate,
-    reauthenticate: reauthenticate,
+    authenticateImplicitly: authenticateImplicitly,
     register: register,
     changePin: changePin,
     authenticators: authenticators,
@@ -259,6 +276,7 @@ module.exports = (function () {
     isUserRegistered: isUserRegistered,
     getUserProfiles: getUserProfiles,
     getAuthenticatedUserProfile: getAuthenticatedUserProfile,
+    getImplicitlyAuthenticatedUserProfile: getImplicitlyAuthenticatedUserProfile,
     logout: logout,
     validatePinWithPolicy: validatePinWithPolicy
   };

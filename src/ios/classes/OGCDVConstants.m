@@ -57,7 +57,6 @@ NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification = @"OGCDVDidR
 
 NSString *const OGCDVPluginErrDescriptionInternalError = @"Onegini: Internal plugin error";
 NSString *const OGCDVPluginErrDescriptionProfileNotRegistered = @"Onegini: No registered user found.";
-NSString *const OGCDVPluginErrDescriptionUserAlreadyAuthenticated = @"Onegini: User already authenticated.";
 NSString *const OGCDVPluginErrDescriptionNoUserAuthenticated = @"Onegini: No user authenticated.";
 NSString *const OGCDVPluginErrDescriptionNoSuchAuthenticator = @"Onegini: No such authenticator found";
 NSString *const OGCDVPluginErrDescriptionCreatePinNoRegistrationInProgress = @"Onegini: createPin called, but no registration in progress.";
@@ -66,8 +65,10 @@ NSString *const OGCDVPluginErrDescriptionFidoNoAuthenticationInProgress = @"Oneg
 NSString *const OGCDVPluginErrDescriptionFingerprintNoAuthenticationInProgress = @"Onegini: received reply for fingerprint authentication, but no fingerprint authentication in progress.";
 NSString *const OGCDVPluginErrDescriptionInvalidMobileAuthenticationMethod = @"Onegini: Invalid mobile authentication method";
 NSString *const OGCDVPluginErrDescriptionIncorrectPin = @"Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
+NSString *const OGCDVPluginErrDescriptionInvalidFetchAuthMethod = @"Onegini: invalid authentication method for resource.fetch";
 
 int const OGCDVPluginErrCodePluginInternalError = 8000;
+int const OGCDVPluginErrCodeIllegalArgument = 8002;
 
 int const OGCDVPluginErrCodeProfileNotRegistered = 8003;
 int const OGCDVPluginErrCodeNoUserAuthenticated = 8005;

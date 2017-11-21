@@ -15,98 +15,68 @@
  */
 
 module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
-  var utils = require('./utils'),
-      HEADER_LENGTH = 4,
-      resourceBaseUrl,
-      nativeXhrProperties = [
-        'onabort',
-        'onerror',
-        'onload',
-        'onloadend',
-        'onloadstart',
-        'onprogress',
-        'onreadystatechange',
-        'ontimeout',
-        'readyState',
-        'response',
-        'responseText',
-        'responseType',
-        'responseURL',
-        'responseXML',
-        'status',
-        'statusText',
-        'timeout',
-        'upload',
-        'XMLHttpRequestUpload',
-        'withCredentials'
-      ],
-      nativeXhrMethods = [
-        'abort',
-        'getAllResponseHeaders',
-        'getResponseHeader',
-        'overrideMimeType',
-        'send',
-        'setRequestHeader'
-      ];
+  const utils = require('./utils');
+  const HEADER_LENGTH = 4;
+  const nativeXhrProperties = [
+    'onabort',
+    'onerror',
+    'onload',
+    'onloadend',
+    'onloadstart',
+    'onprogress',
+    'onreadystatechange',
+    'ontimeout',
+    'readyState',
+    'response',
+    'responseText',
+    'responseType',
+    'responseURL',
+    'responseXML',
+    'status',
+    'statusText',
+    'timeout',
+    'upload',
+    'XMLHttpRequestUpload',
+    'withCredentials'
+  ];
+
+  const nativeXhrMethods = [
+    'abort',
+    'getAllResponseHeaders',
+    'getResponseHeader',
+    'overrideMimeType',
+    'send',
+    'setRequestHeader'
+  ];
+
+  const auth = {
+    USER: Symbol('user'),
+    ANONYMOUS: Symbol('anonymous'),
+    IMPLICIT: Symbol('implicit'),
+  };
+
+  let resourceBaseUrl;
 
   if (!TextDecoder) {
     TextDecoder = require('text-encoding').TextDecoder;
   }
 
   try {
-    var customEvent = new CustomEvent('test');
+    const customEvent = new CustomEvent('test');
     customEvent.preventDefault();
     if (customEvent.defaultPrevented !== true) {
       throw new Error('Could not prevent default')
     }
-  } catch(e) {
+  }
+  catch (e) {
     CustomEvent = require('./custom-event-polyfill');
   }
 
   function fetch(options, successCb, failureCb) {
-    var _successCb = successCb,
-        _failureCb = failureCb;
+    let _successCb = successCb;
+    let _failureCb = failureCb;
 
-    options = utils.getOptionsWithDefaults(options, {
-      method: 'GET',
-      headers: {},
-      anonymous: false
-    }, 'url');
-
-    if (!options || !options.url) {
-      throw new TypeError("Onegini: missing 'url' argument for fetch");
-    }
-
-    function sliceBuffer(buffer) {
-      var ArrrayBuffer = require('core-js/fn/typed/array-buffer');
-      buffer = ArrayBuffer.prototype.slice.call(buffer, [0, buffer.length]);
-    }
-
-    function httpResponseFromArrayBuffer(buffer) {
-      sliceBuffer(buffer);
-      var metaLength = new Int32Array(buffer.slice(0, HEADER_LENGTH))[0],
-          metadataBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength),
-          metadata = new Uint8Array(metadataBuffer),
-          result = JSON.parse(String.fromCharCode.apply(null, metadata));
-
-      Object.defineProperties(result, {
-        'rawBody': {
-          value: buffer.slice(HEADER_LENGTH + metaLength, buffer.byteLength)
-        },
-        'body': {
-          get: function () {
-            return new TextDecoder('utf-8').decode(this.rawBody);
-          }
-        },
-        'json': {
-          get: function () {
-            return JSON.parse(this.body);
-          }
-        }
-      });
-
-      return result;
-    }
+    options = parseOptions(options);
 
     function success(buffer) {
       _successCb(httpResponseFromArrayBuffer(buffer))
@@ -123,13 +93,79 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
     utils.callbackExec('OneginiResourceClient', 'fetch', options, success, failure);
 
     if (successCb) {
-      return
+      return;
     }
 
     return new Promise(function (resolve, reject) {
       _successCb = resolve;
       _failureCb = reject;
     });
+  }
+
+  function parseOptions(options) {
+    if (options && options.anonymous) {
+      console.warn("Warning: resource.fetch option 'anonymous' has been deprecated.\nInstead, set the 'auth' option to one of resource.fetch.auth.USER, ANONYMOUS or IMPLICIT");
+      options.auth = options.anonymous ? auth.ANONYMOUS : auth.USER;
+    }
+
+    options = utils.getOptionsWithDefaults(options, {
+      method: 'GET',
+      headers: {},
+      auth: auth.USER,
+      anonymous: null,
+    }, 'url');
+
+    if (!options || !options.url) {
+      throw new TypeError("Onegini: missing 'url' argument for fetch");
+    }
+
+    if (options.body && typeof options.body !== 'string') {
+      try {
+        options.body = JSON.stringify(options.body);
+      } catch (e) {
+        console.error(e);
+        throw new TypeError('Onegini: resource.fetch: options.body could not be stringified. JSON.stringify is used to transform the body to a String.');
+      }
+    }
+
+    if (!Object.values(auth).includes(options.auth)) {
+      throw new TypeError('Onegini: resource.fetch: options.auth should be of one of resource.fetch.auth.USER, ANONYMOUS or IMPLICIT');
+    }
+
+    options.auth = options.auth.toString();
+
+    return options;
+  }
+
+  function sliceBuffer(buffer) {
+    const ArrrayBuffer = require('core-js/fn/typed/array-buffer');
+    buffer = ArrayBuffer.prototype.slice.call(buffer, [0, buffer.length]);
+  }
+
+  function httpResponseFromArrayBuffer(buffer) {
+    sliceBuffer(buffer);
+    const metaLength = new Int32Array(buffer.slice(0, HEADER_LENGTH))[0];
+    const metadataBuffer = buffer.slice(HEADER_LENGTH, HEADER_LENGTH + metaLength);
+    const metadata = new Uint8Array(metadataBuffer);
+    const result = JSON.parse(String.fromCharCode.apply(null, metadata));
+
+    Object.defineProperties(result, {
+      'rawBody': {
+        value: buffer.slice(HEADER_LENGTH + metaLength, buffer.byteLength)
+      },
+      'body': {
+        get: function () {
+          return new TextDecoder('utf-8').decode(this.rawBody);
+        }
+      },
+      'json': {
+        get: function () {
+          return JSON.parse(this.body);
+        }
+      }
+    });
+
+    return result;
   }
 
   function init(url) {
@@ -162,9 +198,9 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
   };
 
   OneginiXMLHttpRequest.prototype.removeEventListener = function (type, listener) {
-    var listeners = this._eventListeners[type];
+    const listeners = this._eventListeners[type];
 
-    for (var i = 0, l = listeners.length; i < l; i++) {
+    for (let i = 0, l = listeners.length; i < l; i++) {
       if (listeners[i] === listener) {
         listeners.splice(i, 1);
         return this.removeEventListener(type, listener);
@@ -175,7 +211,7 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
   };
 
   OneginiXMLHttpRequest.prototype.dispatchEvent = function (event) {
-    var listeners = this._eventListeners[event.type];
+    const listeners = this._eventListeners[event.type];
 
     if (this['on' + event.type]) {
       this['on' + event.type].call(this);
@@ -183,7 +219,7 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
 
     if (listeners && listeners.length !== 0) {
       event.target = this;
-      for (var i = 0, l = listeners.length; i < l; i++) {
+      for (let i = 0, l = listeners.length; i < l; i++) {
         listeners[i].call(this, event);
       }
     }
@@ -242,10 +278,12 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
     });
 
     defineProperty(xhr, 'getAllResponseHeaders', function () {
-      var headersString = '';
+      let headersString = '';
 
-      for (var header in xhr._responseHeaders) {
-        headersString += header + ': ' + xhr._responseHeaders[header] + '\n';
+      for (let header in xhr._responseHeaders) {
+        if (xhr._responseHeaders.hasOwnProperty(header)) {
+          headersString += header + ': ' + xhr._responseHeaders[header] + '\n';
+        }
       }
 
       return headersString;
@@ -267,6 +305,7 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
     else {
       defineProperty(xhr, 'response', result.body);
     }
+
     defineProperty(xhr, 'readyState', 4);
     defineProperty(xhr, 'responseText', result.body);
     defineProperty(xhr, 'status', result.status);
@@ -282,9 +321,10 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
   }
 
   return {
-    fetch: fetch,
-    init: init,
-    disable: disable
+    fetch,
+    init,
+    disable,
+    auth,
   };
 
 })(window.XMLHttpRequest, window.TextDecoder, window.CustomEvent);

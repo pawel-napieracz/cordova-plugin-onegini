@@ -47,8 +47,8 @@ import okhttp3.RequestBody;
 import okhttp3.internal.http.HttpMethod;
 
 public class ActionArgumentsUtil {
-  public static final MediaType CONTENT_TYPE_PLAIN_TEXT = MediaType.parse("text/plain; charset=utf-8");
-  public static final String HEADER_KEY_CONTENT_TYPE = "Content-Type";
+  private static final MediaType CONTENT_TYPE_PLAIN_TEXT = MediaType.parse("text/plain;charset=utf-8");
+  private static final String HEADER_KEY_CONTENT_TYPE = "Content-Type";
 
   public static String[] getScopesFromArguments(final JSONArray args) throws JSONException {
     final String[] scopesArray;
@@ -84,13 +84,18 @@ public class ActionArgumentsUtil {
   @Nullable
   public static OneginiAuthenticator getAuthenticatorFromArguments(final JSONArray args,
                                                                    final Set<OneginiAuthenticator> availableAuthenticators) throws JSONException {
-
     final JSONObject options = args.getJSONObject(0);
-    final String authenticatorType = options.getString(PARAM_AUTHENTICATOR_TYPE);
-    final boolean hasAuthenticatorId = options.has(PARAM_AUTHENTICATOR_ID);
+    return getAuthenticatorFromObject(options, availableAuthenticators);
+  }
+
+  @Nullable
+  public static OneginiAuthenticator getAuthenticatorFromObject(final JSONObject authenticatorObj,
+                                                                final Set<OneginiAuthenticator> availableAuthenticators) throws JSONException {
+    final String authenticatorType = authenticatorObj.getString(PARAM_AUTHENTICATOR_TYPE);
+    final boolean hasAuthenticatorId = authenticatorObj.has(PARAM_AUTHENTICATOR_ID);
 
     if (hasAuthenticatorId) {
-      final String authenticatorId = options.getString(PARAM_AUTHENTICATOR_ID);
+      final String authenticatorId = authenticatorObj.getString(PARAM_AUTHENTICATOR_ID);
       return getAuthenticatorByTypeAndId(availableAuthenticators, authenticatorType, authenticatorId);
     } else {
       return getAuthenticatorByType(availableAuthenticators, authenticatorType);

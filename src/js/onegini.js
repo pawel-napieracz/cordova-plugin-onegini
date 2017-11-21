@@ -20,10 +20,8 @@ module.exports = (function () {
   var utils = require('./utils');
   var resource = require('./resource');
   var mobileAuth = require('./mobileAuth');
-
   function start(options, successCb, failureCb) {
     var promise, callbackResult;
-
     options = utils.getOptionsWithDefaults(options, {
       secureXhr: false
     });

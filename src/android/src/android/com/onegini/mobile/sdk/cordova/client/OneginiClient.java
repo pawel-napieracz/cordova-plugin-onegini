@@ -34,26 +34,31 @@ import org.json.JSONException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
+import com.google.firebase.messaging.RemoteMessage;
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiInitializationError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.fcm.FcmTokenUpdateService;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
+import com.onegini.mobile.sdk.cordova.util.AppLifecycleUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 @SuppressWarnings("unused")
 public class OneginiClient extends CordovaPlugin {
 
   private static final String ACTION_START = "start";
-  private final List<Bundle> delayedMobileAuthenticationRequests = new LinkedList<Bundle>();
+  private final List<RemoteMessage> delayedMobileAuthenticationRequests = new LinkedList<RemoteMessage>();
 
   @Override
   public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
+    // We must set that the app is in the foreground because the Start method is not triggered during initialization
+    AppLifecycleUtil.setAppIsInForeground();
+
     super.initialize(cordova, webView);
-    final Bundle mobileAuthenticationBundle = cordova.getActivity().getIntent().getBundleExtra(EXTRA_MOBILE_AUTHENTICATION);
+    final RemoteMessage remoteMessage = cordova.getActivity().getIntent().getParcelableExtra(EXTRA_MOBILE_AUTHENTICATION);
 
     /*
       Prepare an instance of the SDK.
@@ -62,7 +67,7 @@ public class OneginiClient extends CordovaPlugin {
      */
     getOneginiClient();
 
-    handlePushMobileAuthenticationRequest(mobileAuthenticationBundle);
+    handlePushMobileAuthenticationRequest(remoteMessage);
   }
 
   @Override
@@ -78,29 +83,28 @@ public class OneginiClient extends CordovaPlugin {
   @Override
   public void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
-    final Bundle mobileAuthenticationPushMessage = intent.getBundleExtra(EXTRA_MOBILE_AUTHENTICATION);
+    final RemoteMessage message = intent.getParcelableExtra(EXTRA_MOBILE_AUTHENTICATION);
 
-    handlePushMobileAuthenticationRequest(mobileAuthenticationPushMessage);
+    handlePushMobileAuthenticationRequest(message);
     handleRedirection(intent.getData());
   }
 
-  private void handlePushMobileAuthenticationRequest(final Bundle pushMessage) {
-    if (pushMessage == null) {
+  private void handlePushMobileAuthenticationRequest(final RemoteMessage remoteMessage) {
+    if (remoteMessage == null) {
       return;
     }
 
     if (OneginiSDK.getInstance().isStarted()) {
-      getOneginiClient().getUserClient()
-          .handleMobileAuthWithPushRequest(pushMessage, MobileAuthWithPushHandler.getInstance());
+      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(remoteMessage, MobileAuthWithPushHandler.getInstance());
     } else {
-      delayedMobileAuthenticationRequests.add(pushMessage);
+      delayedMobileAuthenticationRequests.add(remoteMessage);
     }
   }
 
   private void handleDelayedPushMobileAuthenticationRequests() {
-    for (Iterator<Bundle> iterator = delayedMobileAuthenticationRequests.iterator(); iterator.hasNext(); ) {
-      Bundle request = iterator.next();
-      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(request, MobileAuthWithPushHandler.getInstance());
+    for (Iterator<RemoteMessage> iterator = delayedMobileAuthenticationRequests.iterator(); iterator.hasNext(); ) {
+      RemoteMessage remoteMessage = iterator.next();
+      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(remoteMessage, MobileAuthWithPushHandler.getInstance());
       iterator.remove();
     }
   }
@@ -119,6 +123,11 @@ public class OneginiClient extends CordovaPlugin {
           @Override
           public void onSuccess(final Set<UserProfile> set) {
             sendOneginiClientStartSuccessResult(callbackContext);
+
+            // We must trigger the update FCM service in case onTokenRefresh was called when the SDK wasn't started yet.
+            final Intent fcmTokenUpdateIntent = new Intent(getApplicationContext(), FcmTokenUpdateService.class);
+            getApplicationContext().startService(fcmTokenUpdateIntent);
+
             handleDelayedPushMobileAuthenticationRequests();
           }
 
@@ -157,5 +166,29 @@ public class OneginiClient extends CordovaPlugin {
 
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {
     return OneginiSDK.getInstance().getOneginiClient(getApplicationContext());
+  }
+
+  @Override
+  public void onStart() {
+    AppLifecycleUtil.setAppIsInForeground();
+    super.onStart();
+  }
+
+  @Override
+  public void onResume(final boolean multitasking) {
+    AppLifecycleUtil.setAppIsInForeground();
+    super.onResume(multitasking);
+  }
+
+  @Override
+  public void onStop() {
+    AppLifecycleUtil.setAppIsInBackground();
+    super.onStop();
+  }
+
+  @Override
+  public void onPause(final boolean multitasking) {
+    AppLifecycleUtil.setAppIsInBackground();
+    super.onPause(multitasking);
   }
 }

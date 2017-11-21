@@ -52,7 +52,7 @@ NSString *const keyURL = @"url";
 {
     [self.commandDelegate runInBackground:^{
         self.callbackId = command.callbackId;
-        NSArray *optionalScopes = nil;
+        NSArray *optionalScopes;
         if (command.arguments.count > 0) {
             NSDictionary *options = command.arguments[0];
             optionalScopes = options[OGCDVPluginKeyScopes];
@@ -79,14 +79,16 @@ NSString *const keyURL = @"url";
 
 - (void)getUserProfiles:(CDVInvokedUrlCommand *)command
 {
-    NSArray<ONGUserProfile *> *profiles = [[ONGUserClient sharedInstance] userProfiles].allObjects;
+    [self.commandDelegate runInBackground:^{
+        NSArray<ONGUserProfile *> *profiles = [[ONGUserClient sharedInstance] userProfiles].allObjects;
 
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:profiles.count];
-    for (ONGUserProfile *profile in profiles) {
-        [result addObject:@{OGCDVPluginKeyProfileId: profile.profileId}];
-    }
+        NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:profiles.count];
+        for (ONGUserProfile *profile in profiles) {
+            [result addObject:@{OGCDVPluginKeyProfileId: profile.profileId}];
+        }
 
-    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
+    }];
 }
 
 - (void)isUserRegistered:(CDVInvokedUrlCommand *)command
@@ -118,12 +120,14 @@ NSString *const keyURL = @"url";
 
     if (!self.registrationRequestChallenge) {
 #ifdef DEBUG
-        NSLog(@"OneginiPlugin: Warning: tried to reply to registration challenge, but no registration challenge is active");
+        NSLog(@"OneginiPlugin - WARNING: tried to reply to registration challenge, but no registration challenge is active");
 #endif
         return;
     }
 
-    [self handleRegistrationCallbackURL:url];
+    [self.commandDelegate runInBackground:^{
+        [self handleRegistrationCallbackURL:url];
+    }];
 }
 
 - (void)sendRegistrationRequestEvent:(NSURL *)url

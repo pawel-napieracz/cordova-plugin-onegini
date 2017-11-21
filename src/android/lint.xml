@@ -20,5 +20,6 @@
     <ignore regexp=".*okio.*" />
     <ignore regexp=".*retrofit.*" />
     <ignore regexp=".*bouncycastle.*" />
+    <ignore regexp=".*spongycastle.*" />
   </issue>
 </lint>

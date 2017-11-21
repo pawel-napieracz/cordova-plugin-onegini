@@ -42,7 +42,6 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE = "Onegini: Argument provided is not a valid profile object";
 
   String ERROR_DESCRIPTION_PROFILE_NOT_REGISTERED = "Onegini: No registered user found.";
-  String ERROR_DESCRIPTION_USER_ALREADY_AUTHENTICATED = "Onegini: User already authenticated.";
   String ERROR_DESCRIPTION_NO_USER_AUTHENTICATED = "Onegini: No user authenticated.";
   String ERROR_DESCRIPTION_NO_SUCH_AUTHENTICATOR = "Onegini: No such authenticator found";
   String ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = "Onegini: createPin called, but no registration in progress.";
@@ -52,6 +51,7 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD = "Onegini: Invalid mobile authentication method";
   String ERROR_DESCRIPTION_INCORRECT_PIN = "Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
   String ERROR_DESCRIPTION_OPERATION_CANCELED = "Onegini: the operation was canceled.";
+  String ERROR_DESCRIPTION_INVALID_FETCH_AUTH_METHOD = "Onegini: invalid authentication method for resource.fetch";
 
   // Error codes
   int ERROR_CODE_PLUGIN_INTERNAL_ERROR = 8000;
@@ -59,7 +59,6 @@ public interface OneginiCordovaPluginConstants {
   int ERROR_CODE_ILLEGAL_ARGUMENT = 8002;
 
   int ERROR_CODE_PROFILE_NOT_REGISTERED = 8003;
-  int ERROR_CODE_USER_ALREADY_AUTHENTICATED = 8004;
   int ERROR_CODE_NO_USER_AUTHENTICATED = 8005;
   int ERROR_CODE_NO_SUCH_AUTHENTICATOR = 8006;
   int ERROR_CODE_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = 8007;
@@ -91,4 +90,5 @@ public interface OneginiCordovaPluginConstants {
   // Push message
   String PUSH_MSG_CONTENT = "content";
   String PUSH_MSG_TRANSACTION_ID = "og_transaction_id";
+  String PUSH_MSG_MESSAGE = "og_message";
 }

@@ -52,12 +52,13 @@ configurations {
   fido
 }
 
+// TODO Move to release version before plugin release
 dependencies {
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.0.0@a'
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:6.0.0:headers@zip'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.0.0@a'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.0.0:headers@zip'
 
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.0.0@a'
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:6.0.0:headers@zip'
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:7.0.0@a'
+  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:7.0.0:headers@zip'
 }
 
 task prepareTargetDirectory {
