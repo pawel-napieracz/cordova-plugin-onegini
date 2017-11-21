@@ -18,7 +18,8 @@
 #import "OGCDVConstants.h"
 #import "OGCDVAuthenticatorsClientHelper.h"
 
-@interface OGCDVAuthenticatorRegistrationClient ()<ONGAuthenticatorRegistrationDelegate>
+@interface OGCDVAuthenticatorRegistrationClient ()<ONGAuthenticatorRegistrationDelegate, ONGAuthenticatorDeregistrationDelegate>
+    @property (nonatomic, copy) NSString *authenticatorDeregistrationCallbackId;
 @end
 
 @implementation OGCDVAuthenticatorRegistrationClient : OGCDVAuthenticationDelegateHandler {
@@ -71,6 +72,8 @@
             return;
         }
 
+        self.authenticatorDeregistrationCallbackId = command.callbackId;
+
         NSDictionary *options = command.arguments[0];
         NSSet<ONGAuthenticator *> *registeredAuthenticators = [[ONGUserClient sharedInstance] registeredAuthenticatorsForUser:user];
         ONGAuthenticator *authenticator = [OGCDVAuthenticatorsClientHelper authenticatorFromArguments:registeredAuthenticators options:options];
@@ -80,13 +83,7 @@
             return;
         }
 
-        [[ONGUserClient sharedInstance] deregisterAuthenticator:authenticator completion:^(BOOL deregistered, NSError *_Nullable error) {
-            if (error || !deregistered) {
-                [self sendErrorResultForCallbackId:command.callbackId withError:error];
-            } else {
-                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-            }
-        }];
+        [[ONGUserClient sharedInstance] deregisterAuthenticator:authenticator delegate:self];
     }];
 }
 
@@ -103,7 +100,7 @@
 
 #pragma mark - ONGAuthenticatorRegistrationDelegate
 
-- (void)userClient:(ONGUserClient *)userClient didRegisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile
+- (void)userClient:(ONGUserClient *)userClient didRegisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile info:(ONGCustomAuthInfo * _Nullable)customAuthInfo
 {
     NSDictionary *message = @{
         OGCDVPluginKeyEvent: OGCDVPluginEventSuccess
@@ -116,6 +113,18 @@
 - (void)userClient:(ONGUserClient *)userClient didFailToRegisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile error:(NSError *)error
 {
     [self sendErrorResultForCallbackId:self.authenticationCallbackId withError:error];
+}
+
+#pragma mark - ONGAuthenticatorDeregistrationDelegate
+
+- (void)userClient:(ONGUserClient *)userClient didDeregisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile
+{
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.authenticatorDeregistrationCallbackId];
+}
+
+- (void)userClient:(ONGUserClient *)userClient didFailToDeregisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile error:(NSError *)error
+{
+    [self sendErrorResultForCallbackId:self.authenticatorDeregistrationCallbackId withError:error];
 }
 
 @end

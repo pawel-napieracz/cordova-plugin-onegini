@@ -1221,8 +1221,15 @@ exports.defineAutoTests = function () {
                 expect(actions).toBeDefined();
                 expect(request).toBeDefined();
                 actions.denyFingerprint();
+              })
+              .onSuccess(function() {
+                fail();
+              })
+              .onError(function(err) {
+                expect(err).toBeDefined();
+                expect(err.code).toBe(9006);
                 done();
-              });
+              })
           });
         });
 

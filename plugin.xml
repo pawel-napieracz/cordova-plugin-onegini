@@ -16,7 +16,7 @@
 -->
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-onegini"
-        version="4.0.0-SNAPSHOT">
+        version="4.0.1-SNAPSHOT">
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
@@ -132,6 +132,11 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticator.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticatorRegistrationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGChangePinDelegate.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthFinishRegistrationChallenge.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthDeregistrationChallenge.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthFinishAuthenticationChallenge.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthInfo.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticatorDeregistrationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGClientBuilder.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGConfigModel.h"/>
