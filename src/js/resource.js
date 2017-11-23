@@ -83,11 +83,15 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
     }
 
     function failure(buffer) {
-      _failureCb({
-        code: 8013,
-        description: 'Onegini: HTTP Request failed. Check httpResponse for more info.',
-        httpResponse: httpResponseFromArrayBuffer(buffer)
-      });
+      if (typeof(buffer) === 'ArrayBuffer') {
+        _failureCb({
+          code: 8013,
+          description: 'Onegini: HTTP Request failed. Check httpResponse for more info.',
+          httpResponse: httpResponseFromArrayBuffer(error)
+        });
+      } else {
+        _failureCb(buffer)
+      }
     }
 
     utils.callbackExec('OneginiResourceClient', 'fetch', options, success, failure);
