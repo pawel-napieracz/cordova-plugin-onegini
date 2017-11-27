@@ -83,11 +83,11 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
     }
 
     function failure(buffer) {
-      if (typeof(buffer) === 'ArrayBuffer') {
+      if (buffer instanceof ArrayBuffer) {
         _failureCb({
           code: 8013,
           description: 'Onegini: HTTP Request failed. Check httpResponse for more info.',
-          httpResponse: httpResponseFromArrayBuffer(error)
+          httpResponse: httpResponseFromArrayBuffer(buffer)
         });
       } else {
         _failureCb(buffer)
