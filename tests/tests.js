@@ -1350,37 +1350,64 @@ exports.defineAutoTests = function () {
 
       it('should fetch a non JSON resource', function (done) {
         onegini.resource.fetch(
-            {
-              url: 'https://onegini-msp-snapshot.test.onegini.io/admin/static/img/onegini-logo-dark.svg',
-              headers: {
-                'X-Test-String': 'foobar',
-                'X-Test-Int': 1337
+          {
+            url: 'https://onegini-msp-snapshot.test.onegini.io/admin/static/img/onegini-logo-dark.svg',
+            headers: {
+              'X-Test-String': 'foobar',
+              'X-Test-Int': 1337
+            }
+          },
+          function (response) {
+            expect(response).toBeDefined();
+            expect(response.body).toBeDefined();
+            expect(response.rawBody).toBeDefined();
+            try {
+              response.json;
+              fail("An error is expected here");
+            }
+            catch (error) {
+              if (!error instanceof TypeError) {
+                fail("Expected a TypeError because an image is not a valid JSON response")
               }
-            },
-            function (response) {
-              expect(response).toBeDefined();
-              expect(response.body).toBeDefined();
-              expect(response.rawBody).toBeDefined();
-              try {
-                response.json;
-                fail("An error is expected here");
-              }
-              catch (error) {
-                if (!error instanceof TypeError) {
-                  fail("Expected a TypeError because an image is not a valid JSON response")
-                }
-              }
-              expect(response.headers).toBeDefined();
-              expect(response.status).toEqual(200);
-              expect(response.statusText).toBeDefined();
-              done();
-            }, function (err) {
-              expect(err).toBeUndefined();
-              fail('Error callback called, but method should have succeeded');
-            });
+            }
+            expect(response.headers).toBeDefined();
+            expect(response.status).toEqual(200);
+            expect(response.statusText).toBeDefined();
+            done();
+          }, function (err) {
+            expect(err).toBeUndefined();
+            fail('Error callback called, but method should have succeeded');
+          });
       });
 
-      it('should fetch a resource with a JSON body without content-type', function (done) {
+      it('should fetch a resource with a specific body without content-type', function (done) {
+        var body = "foobar";
+        onegini.resource.fetch(
+          {
+            url: 'https://onegini-msp-snapshot.test.onegini.io/resources/mirror-request',
+            method: 'POST',
+            body: body,
+            headers: {
+              'X-Test-String': 'foobar',
+              'X-Test-Int': 1337
+            }
+          },
+          function (response) {
+            expect(response).toBeDefined();
+            expect(response.body).toEqual(body);
+            expect(response.rawBody).toBeDefined();
+            expect(response.headers).toBeDefined();
+            expect(response.headers['Content-Type']).toEqual('text/plain;charset=utf-8');
+            expect(response.status).toEqual(200);
+            expect(response.statusText).toBeDefined();
+            done();
+          }, function (err) {
+            expect(err).toBeUndefined();
+            fail('Error callback called, but method should have succeeded');
+          });
+      });
+
+      it('should fetch a resource with a JSON body', function (done) {
         var body = {
           "foo": "oof",
           "bar": "baz"
@@ -1391,6 +1418,7 @@ exports.defineAutoTests = function () {
             method: 'POST',
             body: body,
             headers: {
+              'Content-Type': 'application/json;charset=utf-8',
               'X-Test-String': 'foobar',
               'X-Test-Int': 1337
             }
@@ -1400,36 +1428,7 @@ exports.defineAutoTests = function () {
             expect(response.body).toEqual(JSON.stringify(body));
             expect(response.rawBody).toBeDefined();
             expect(response.headers).toBeDefined();
-            expect(response.headers['Content-Type']).toEqual('application/json');
-            expect(response.status).toEqual(200);
-            expect(response.statusText).toBeDefined();
-            done();
-          }, function (err) {
-            expect(err).toBeUndefined();
-            fail('Error callback called, but method should have succeeded');
-          });
-      });
-
-      it('should fetch a resource with a specific body', function (done) {
-        var body = "foobar";
-
-        onegini.resource.fetch(
-          {
-            url: 'https://onegini-msp-snapshot.test.onegini.io/resources/mirror-request',
-            method: 'POST',
-            body: body,
-            headers: {
-              'Content-Type': 'text/plain',
-              'X-Test-String': 'foobar',
-              'X-Test-Int': 1337
-            }
-          },
-          function (response) {
-            expect(response).toBeDefined();
-            expect(response.body).toEqual(body);
-            expect(response.rawBody).toBeDefined();
-            expect(response.headers).toBeDefined();
-            expect(response.headers['Content-Type']).toEqual('text/plain');
+            expect(response.headers['Content-Type']).toEqual('application/json;charset=utf-8');
             expect(response.status).toEqual(200);
             expect(response.statusText).toBeDefined();
             done();
