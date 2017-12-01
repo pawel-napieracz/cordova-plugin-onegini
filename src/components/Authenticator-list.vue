@@ -37,7 +37,7 @@ export default {
             this.authenticators = authenticators;
           })
           .catch((err) => {
-            console.log(err);
+            console.error('Could not get authenticated user profile', err);
             navigator.notification.alert('Could not get authenticators: ' + err.description);
           });
     },
