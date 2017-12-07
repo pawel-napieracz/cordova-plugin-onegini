@@ -53,7 +53,7 @@ public class FcmListenerService extends FirebaseMessagingService {
     if (AppLifecycleUtil.isAppInForeground()) {
       startActivity(launchIntent);
     } else {
-      new NotificationHelper(this).showNotification(launchIntent, getMessageFromAuthenticationRequest(message));
+      NotificationHelper.getInstance(this).showNotification(launchIntent, getMessageFromAuthenticationRequest(message));
     }
   }
 

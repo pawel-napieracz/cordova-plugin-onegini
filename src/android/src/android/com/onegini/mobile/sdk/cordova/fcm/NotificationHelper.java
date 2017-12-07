@@ -30,11 +30,20 @@ import com.onegini.mobile.sdk.cordova.model.NotificationId;
 
 public class NotificationHelper {
 
+  private static NotificationHelper INSTANCE;
+
+  public static NotificationHelper getInstance(final Context context) {
+    if (INSTANCE == null) {
+      INSTANCE = new NotificationHelper(context.getApplicationContext());
+    }
+    return INSTANCE;
+  }
+
   private static final String CHANNEL_ID = "transactions";
 
   private final Context context;
 
-  public NotificationHelper(final Context context) {
+  private NotificationHelper(final Context context) {
     this.context = context;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       registerNotificationChannel();
@@ -69,7 +78,6 @@ public class NotificationHelper {
   @RequiresApi(api = Build.VERSION_CODES.O)
   private void registerNotificationChannel() {
     final NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Transactions", NotificationManager.IMPORTANCE_HIGH);
-    notificationChannel.setDescription("Onegini SDK");
     notificationChannel.enableLights(true);
     notificationChannel.setLightColor(Color.BLUE);
     notificationChannel.enableVibration(true);
