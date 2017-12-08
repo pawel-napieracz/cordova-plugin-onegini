@@ -74,6 +74,9 @@
       <feature name="OneginiOtpMobileAuthRequestClient">
         <param name="ios-package" value="OGCDVOtpMobileAuthRequestClient"/>
       </feature>
+      <feature name="OneginiPendingMobileAuthRequestClient">
+        <param name="ios-package" value="OGCDVPendingPushMobileAuthRequestClient"/>
+      </feature>
     </config-file>
 
     <header-file src="src/ios/classes/Reachability.h"/>
