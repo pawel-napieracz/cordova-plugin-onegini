@@ -16,6 +16,7 @@
 
 #import "OGCDVPendingPushMobileAuthRequestClient.h"
 #import "OGCDVConstants.h"
+#import "OGCDVPendingPushMobileAuthRequestClientHelper.h"
 
 @implementation OGCDVPendingPushMobileAuthRequestClient {
 }
@@ -23,11 +24,15 @@
 - (void)fetchPendingPushMobileAuthRequests:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        [[ONGUserClient sharedInstance] pendingPushMobileAuthRequests:^(NSArray<ONGPendingMobileAuthRequest *> * _Nullable pentingTransactions, NSError * _Nullable error) {
+        [[ONGUserClient sharedInstance] pendingPushMobileAuthRequests:^(NSArray<ONGPendingMobileAuthRequest *> * _Nullable pendingTransactions, NSError * _Nullable error) {
             if (error) {
                 [self sendErrorResultForCallbackId:command.callbackId withError:error];
             } else {
-                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:pentingTransactions] callbackId:command.callbackId];
+                NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:pendingTransactions.count];
+                for (ONGPendingMobileAuthRequest *pendingMobileAuthRequest in pendingTransactions) {
+                    [result addObject:[OGCDVPendingPushMobileAuthRequestClientHelper dictionaryFromPendingMobileAuthRequest:pendingMobileAuthRequest]];
+                }
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result] callbackId:command.callbackId];
             }
         }];
     }];
