@@ -5,6 +5,6 @@
 
 @interface OGCDVPendingPushMobileAuthRequestClient : CDVPlugin
 
-- (void)fetchPendingPushMobileAuthRequests:(CDVInvokedUrlCommand *)command;
+- (void)getPendingRequests:(CDVInvokedUrlCommand *)command;
 
 @end

@@ -21,7 +21,7 @@
 @implementation OGCDVPendingPushMobileAuthRequestClient {
 }
 
-- (void)fetchPendingPushMobileAuthRequests:(CDVInvokedUrlCommand *)command
+- (void)getPendingRequests:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
         [[ONGUserClient sharedInstance] pendingPushMobileAuthRequests:^(NSArray<ONGPendingMobileAuthRequest *> * _Nullable pendingTransactions, NSError * _Nullable error) {
