@@ -16,13 +16,18 @@
 
 package com.onegini.mobile.sdk.cordova.handler;
 
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
+
 import java.util.Set;
 
 import org.apache.cordova.CallbackContext;
+import org.json.JSONException;
 
 import com.onegini.mobile.sdk.android.handlers.OneginiPendingMobileAuthWithPushRequestsHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiPendingMobileAuthWithPushRequestError;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthWithPushRequest;
+import com.onegini.mobile.sdk.cordova.util.PendingMobileAuthRequestUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class PendingMobileAuthWithPushRequestsHandler implements OneginiPendingMobileAuthWithPushRequestsHandler {
@@ -35,16 +40,19 @@ public class PendingMobileAuthWithPushRequestsHandler implements OneginiPendingM
 
   @Override
   public void onSuccess(final Set<OneginiMobileAuthWithPushRequest> set) {
-    // TODO pass the Set
-    callbackContext.sendPluginResult(new PluginResultBuilder()
-            .withSuccess()
-            .build());
+    try {
+      callbackContext.success(PendingMobileAuthRequestUtil.pendingMobileAuthRequestSetToJSONArray(set));
+    } catch (JSONException e) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withPluginError(ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR, ERROR_CODE_PLUGIN_INTERNAL_ERROR)
+          .build());
+    }
   }
 
   @Override
   public void onError(final OneginiPendingMobileAuthWithPushRequestError error) {
     callbackContext.sendPluginResult(new PluginResultBuilder()
-            .withOneginiError(error)
-            .build());
+        .withOneginiError(error)
+        .build());
   }
 }
