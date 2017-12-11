@@ -57,7 +57,8 @@
     if (userInfo != nil) {
         OGCDVPushMobileAuthRequestClient *mobileAuthenticationRequestClient = [(CDVViewController *)self.viewController
             getCommandInstance:OGCDVPluginClassPushMobileAuthRequestClient];
-        [[ONGUserClient sharedInstance] handlePushMobileAuthRequest:userInfo delegate:mobileAuthenticationRequestClient];
+        ONGPendingMobileAuthRequest *pendingMobileAuthRequest = [[ONGUserClient sharedInstance] pendingMobileAuthRequestFromUserInfo:userInfo];
+        [[ONGUserClient sharedInstance] handlePendingPushMobileAuthRequest:pendingMobileAuthRequest delegate:mobileAuthenticationRequestClient];
     }
 }
 
