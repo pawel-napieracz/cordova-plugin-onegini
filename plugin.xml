@@ -15,8 +15,8 @@
     limitations under the License.
 -->
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
-        id="cordova-plugin-onegini"
-        version="4.0.1-SNAPSHOT">
+    id="cordova-plugin-onegini"
+    version="4.0.1-SNAPSHOT">
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
@@ -233,6 +233,10 @@
         <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.OtpMobileAuthRequestClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiPendingMobileAuthRequestClient">
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.PendingPushMobileAuthRequestClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -255,123 +259,129 @@
 
     <!-- Onegini Plugin -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/OneginiSDK.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/OneginiCordovaPluginConstants.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/"/>
 
     <!-- client -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/AuthenticatorsClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/OneginiClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/UserClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/UserRegistrationClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/UserDeregistrationClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/UserAuthenticationClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/ChangePinClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/DeviceAuthenticationClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/ResourceClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/AuthenticatorRegistrationClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/MobileAuthClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/PushMobileAuthClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/PushMobileAuthRequestClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/OtpMobileAuthRequestClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/PendingPushMobileAuthRequestClient.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
 
     <!-- fcm -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmInstanceIdService.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmListenerService.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmStorage.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmTokenService.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmTokenUpdateService.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/NotificationHelper.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PluginResultBuilder.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/UserProfileUtil.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/ActionArgumentsUtil.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AuthenticatorUtil.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/OkHttpResponseUtil.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AppLifecycleUtil.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PendingMobileAuthRequestUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
 
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticationHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticatorRegistrationHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticatorDeregistrationHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/ImplicitAuthenticationHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/LogoutHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/RegistrationHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/DeregistrationHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/CreatePinRequestHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PinAuthenticationRequestHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/FidoAuthenticationRequestHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/FingerprintAuthenticationRequestHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/ChangePinHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/DeviceAuthenticationHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PinValidationHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthEnrollmentHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthWithPushEnrollmentHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthWithPushHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthWithOtpHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/RegistrationRequestHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PendingMobileAuthWithPushRequestsHandler.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
 
     <!-- mobileAuthentication -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/Callback.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/ConfirmationCallback.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/PinCallback.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/FingerprintCallback.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/FidoCallback.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
 
     <!-- model -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/model/AuthMethod.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/model/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/model/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/model/NotificationId.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/model/"/>
   </platform>
