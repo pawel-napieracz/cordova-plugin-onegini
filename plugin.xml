@@ -317,8 +317,6 @@
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AppLifecycleUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PendingMobileAuthRequestUtil.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
 
     <!-- handler -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AuthenticationHandler.java"
