@@ -20,28 +20,20 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ERROR_CODE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ERROR_DESCRIPTION;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_MESSAGE;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TIMESTAMP;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TIME_TO_LIVE_SECONDS;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TRANSACTION_ID;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_URL;
 import static org.apache.cordova.PluginResult.Status.ERROR;
 import static org.apache.cordova.PluginResult.Status.OK;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.cordova.PluginResult;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
-import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthWithPushRequest;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 
@@ -192,16 +184,6 @@ public class PluginResultBuilder {
     this.payload = new JSONObject(payload);
   }
 
-  public PluginResultBuilder withOneginiPendingMobileAuthPushRequest(final Set<OneginiMobileAuthWithPushRequest> set) {
-    try {
-      payload.put("pendingPushRequests", pendingMobileAuthRequestSetToJSONArray(set));
-    } catch (JSONException e) {
-      handleException(e);
-    }
-
-    return this;
-  }
-
   public PluginResult build() {
     PluginResult pluginResult;
 
@@ -214,27 +196,5 @@ public class PluginResultBuilder {
     pluginResult.setKeepCallback(shouldKeepCallback);
 
     return pluginResult;
-  }
-
-  private static JSONArray pendingMobileAuthRequestSetToJSONArray(final Set<OneginiMobileAuthWithPushRequest> oneginiMobileAuthWithPushRequests) throws
-      JSONException {
-    JSONArray authenticatorJSONArray = new JSONArray();
-    for (final OneginiMobileAuthWithPushRequest authenticator : oneginiMobileAuthWithPushRequests) {
-      final JSONObject authenticatorJSON = pendingMobileAuthRequestToJSONObject(authenticator);
-      authenticatorJSONArray.put(authenticatorJSON);
-    }
-
-    return authenticatorJSONArray;
-  }
-
-
-  private static JSONObject pendingMobileAuthRequestToJSONObject(final OneginiMobileAuthWithPushRequest oneginiMobileAuthWithPushRequest) throws JSONException {
-    final JSONObject authenticatorJSON = new JSONObject();
-    authenticatorJSON.put(PARAM_PROFILE_ID, oneginiMobileAuthWithPushRequest.getUserProfileId());
-    authenticatorJSON.put(PARAM_TRANSACTION_ID, oneginiMobileAuthWithPushRequest.getTransactionId());
-    authenticatorJSON.put(PARAM_MESSAGE, oneginiMobileAuthWithPushRequest.getMessage());
-    authenticatorJSON.put(PARAM_TIMESTAMP, oneginiMobileAuthWithPushRequest.getTimestamp());
-    authenticatorJSON.put(PARAM_TIME_TO_LIVE_SECONDS, oneginiMobileAuthWithPushRequest.getTimeToLiveSeconds());
-    return authenticatorJSON;
   }
 }
