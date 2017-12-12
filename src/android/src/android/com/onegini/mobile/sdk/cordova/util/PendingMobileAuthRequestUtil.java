@@ -20,6 +20,10 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TIMESTAMP;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TIME_TO_LIVE_SECONDS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TRANSACTION_ID;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_CONTENT;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_MESSAGE;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_PROFILE_ID;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_TRANSACTION_ID;
 
 import java.util.Set;
 
@@ -27,9 +31,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.support.annotation.Nullable;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthWithPushRequest;
 
 public class PendingMobileAuthRequestUtil {
+
+  public static OneginiMobileAuthWithPushRequest pendingMobileAuthRequestFromJSON(final JSONObject jsonObject) throws JSONException {
+    final String message = jsonObject.getString(PUSH_MSG_MESSAGE);
+    final String transactionId = jsonObject.getString(PUSH_MSG_TRANSACTION_ID);
+    final String userProfileId = jsonObject.getString(PUSH_MSG_PROFILE_ID);
+    return new OneginiMobileAuthWithPushRequest(transactionId, message, userProfileId);
+  }
 
   public static JSONArray pendingMobileAuthRequestSetToJSONArray(final Set<OneginiMobileAuthWithPushRequest> oneginiMobileAuthWithPushRequests) throws
       JSONException {
@@ -41,7 +53,6 @@ public class PendingMobileAuthRequestUtil {
 
     return authenticatorJSONArray;
   }
-
 
   private static JSONObject pendingMobileAuthRequestToJSONObject(final OneginiMobileAuthWithPushRequest oneginiMobileAuthWithPushRequest) throws JSONException {
     final JSONObject authenticatorJSON = new JSONObject();

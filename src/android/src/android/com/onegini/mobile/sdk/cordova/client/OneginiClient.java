@@ -18,9 +18,6 @@ package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EXTRA_MOBILE_AUTHENTICATION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_CONTENT;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_MESSAGE;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_PROFILE_ID;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_TRANSACTION_ID;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -51,6 +48,7 @@ import com.onegini.mobile.sdk.cordova.fcm.FcmTokenUpdateService;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.AppLifecycleUtil;
+import com.onegini.mobile.sdk.cordova.util.PendingMobileAuthRequestUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 @SuppressWarnings("unused")
@@ -184,10 +182,7 @@ public class OneginiClient extends CordovaPlugin {
 
     try {
       final JSONObject messageContent = new JSONObject(remoteMessage.getData().get(PUSH_MSG_CONTENT));
-      final String message = messageContent.getString(PUSH_MSG_MESSAGE);
-      final String transactionId = messageContent.getString(PUSH_MSG_TRANSACTION_ID);
-      final String userProfileId = messageContent.getString(PUSH_MSG_PROFILE_ID);
-      return new OneginiMobileAuthWithPushRequest(transactionId, message, userProfileId);
+      return PendingMobileAuthRequestUtil.pendingMobileAuthRequestFromJSON(messageContent);
     } catch (final JSONException e) {
       return null;
     }
