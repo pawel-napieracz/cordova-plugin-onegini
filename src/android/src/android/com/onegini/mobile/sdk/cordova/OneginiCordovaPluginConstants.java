@@ -95,4 +95,5 @@ public interface OneginiCordovaPluginConstants {
   String PUSH_MSG_CONTENT = "content";
   String PUSH_MSG_TRANSACTION_ID = "og_transaction_id";
   String PUSH_MSG_MESSAGE = "og_message";
+  String PUSH_MSG_PROFILE_ID = "og_profile_id";
 }
