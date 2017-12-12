@@ -1,6 +1,7 @@
 <template>
   <div>
     <h4 v-if="!devices.length">{{ status }}</h4>
+    <button-lg @click="fetchDeviceList()" />
     <ul v-if="devices.length" class="block-list">
       <li v-for="device in devices" class="block">
         <h5>{{ device.name }}</h5>
@@ -15,12 +16,18 @@
 </template>
 
 <script>
+import ButtonLarge from '../components/Button-large.vue';
+
 export default {
   data () {
     return {
       devices: [],
       status: 'Loading...'
     }
+  },
+
+ components: {
+    'button-lg': ButtonLarge
   },
 
   created: function() {

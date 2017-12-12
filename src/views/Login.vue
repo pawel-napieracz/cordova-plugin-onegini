@@ -5,14 +5,18 @@
     <select-profile v-if="userProfiles.length > 0" @select="selectProfileId" :user-profiles="userProfiles" />
     <button-lg v-if="userProfiles.length > 0" @click="login" text="Login" />
     <button-lg @click="register" text="Register" />
+    <button-lg @click="$router.push('pendingRequests')" text="PENDING REQUESTS" />
     <fingerprint-modal v-if="showFingerprintModal" :status="fingerprintStatus" :actions="fingerprintActions" />
+    <!--<navigation />-->
   </div>
+
 </template>
 
 <script>
 import ButtonLarge from '../components/Button-large.vue';
 import SelectProfile from '../components/Select-profile.vue';
 import FingerprintModal from '../components/Fingerprint-modal.vue';
+/*import Navigation from '../components/Menu.vue';*/
 
 export default {
   data () {
@@ -152,7 +156,8 @@ export default {
   components: {
     'button-lg': ButtonLarge,
     'select-profile': SelectProfile,
-    'fingerprint-modal': FingerprintModal
+    'fingerprint-modal': FingerprintModal,
+    /*'navigation': Navigation*/
   }
 }
 </script>
