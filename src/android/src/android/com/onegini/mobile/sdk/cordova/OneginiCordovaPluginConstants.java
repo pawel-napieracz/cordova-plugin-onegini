@@ -36,6 +36,10 @@ public interface OneginiCordovaPluginConstants {
   String PARAM_ERROR_DESCRIPTION = "description";
   String PARAM_ANONYMOUS = "anonymous";
   String PARAM_OTP = "otp";
+  String PARAM_TRANSACTION_ID = "transactionId";
+  String PARAM_MESSAGE = "message";
+  String PARAM_TIMESTAMP = "timestamp";
+  String PARAM_TIME_TO_LIVE_SECONDS = "timeToLiveSeconds";
 
   // Error descriptions
   String ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR = "Onegini: Internal plugin error";
