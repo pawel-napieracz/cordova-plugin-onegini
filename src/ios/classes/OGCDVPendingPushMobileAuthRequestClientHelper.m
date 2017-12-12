@@ -27,7 +27,7 @@
                                  OGCDVPluginKeyProfileId: pendingMobileAuthRequest.userProfile.profileId,
                                  OGCDVPluginKeyTransactionId: pendingMobileAuthRequest.transactionId,
                                  OGCDVPluginKeyMessage: pendingMobileAuthRequest.message,
-                                 OGCDVPluginKeyTimestamp: [NSNumber numberWithDouble:[pendingMobileAuthRequest.date timeIntervalSince1970]],
+                                 OGCDVPluginKeyTimestamp: [NSNumber numberWithInteger:(NSInteger)[pendingMobileAuthRequest.date timeIntervalSince1970]],
                                  OGCDVPluginKeyTTL: pendingMobileAuthRequest.timeToLive
                                  };
     return dictionary;
