@@ -1,7 +1,7 @@
 <template>
   <div>
     <h4 v-if="!devices.length">{{ status }}</h4>
-    <button-lg @click="fetchDeviceList()" />
+    <button-lg @click="fetchDeviceList()" text="Fetch devices" />
     <ul v-if="devices.length" class="block-list">
       <li v-for="device in devices" class="block">
         <h5>{{ device.name }}</h5>

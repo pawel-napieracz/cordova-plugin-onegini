@@ -19,7 +19,7 @@ const router = new VueRouter({
     {path: '/login', component: Login},
     {path: '/dashboard', component: Dashboard},
     {path: '/settings', component: Settings},
-    {path: '/pendingRequests', component: PendingPushRequests}
+    {path: '/pendingRequests', component: PendingPushRequests, name: 'PendingPushRequests'}
   ]
 });
 

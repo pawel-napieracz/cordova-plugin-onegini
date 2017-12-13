@@ -37,7 +37,7 @@
       fetchPendingPushRequests: function () {
         onegini.mobileAuth.push.getPendingRequests()
           .then((result) => {
-            this.pushRequests = result.pendingPushRequests;
+            this.pushRequests = result;
           })
           .catch((err) => {
             console.error('Error while fetching pending push requests:', err);

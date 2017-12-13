@@ -1,29 +1,33 @@
 <template>
   <div id="app">
-    <img src="img/logo.png"/>
-    <template v-if="$route.matched.length">
-      <router-view></router-view>
-    </template>
-    <template v-else>
-      <p>{{state}}</p>
-    </template>
-    <mobile-authentication-modal/>
-    <!--<div id="some"><h1>This is my bottom bar</h1></div>-->
+    <div class="main">
+      <img src="img/logo.png"/>
+      <template v-if="$route.matched.length">
+        <router-view></router-view>
+      </template>
+      <template v-else>
+        <p>{{state}}</p>
+      </template>
+      <mobile-authentication-modal/>
+    </div>
+    <navigation-bar/>
   </div>
 </template>
 
 <script>
   import MobileAuthenticationModal from '../components/Mobile-authentication-modal.vue';
+  import NavigationBar from '../components/Navigation-bar.vue';
 
   export default {
     data() {
       return {
-        state: 'Waiting for device...',
+        state: 'Waiting for device...'
       }
     },
 
     created: function () {
       document.addEventListener('deviceready', this.startOnegini, false);
+      this.fetchPendingPushRequests();
     },
 
     methods: {
@@ -42,11 +46,13 @@
               this.state = err.description;
             }
           });
+
       }
     },
 
     components: {
-      'mobile-authentication-modal': MobileAuthenticationModal
+      'mobile-authentication-modal': MobileAuthenticationModal,
+      'navigation-bar': NavigationBar
     }
   }
 </script>
@@ -57,7 +63,11 @@
     -webkit-font-smoothing: antialiased;
     text-align: center;
     color: #2c3e50;
+  }
+
+  .main {
     margin-top: 60px;
+    margin-bottom: 80px;
   }
 
   img {
@@ -68,14 +78,5 @@
 
   h1, h2 {
     font-weight: normal;
-  }
-
-  #some {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #00aeef;;
-    color: white;
   }
 </style>
