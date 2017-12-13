@@ -31,7 +31,6 @@ import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
@@ -180,9 +179,13 @@ public class OneginiClient extends CordovaPlugin {
       return null;
     }
 
+    final String content = remoteMessage.getData().get(PUSH_MSG_CONTENT);
+    if (content == null) {
+      return null;
+    }
+
     try {
-      final JSONObject messageContent = new JSONObject(remoteMessage.getData().get(PUSH_MSG_CONTENT));
-      return PendingMobileAuthRequestUtil.pendingMobileAuthRequestFromJSON(messageContent);
+      return PendingMobileAuthRequestUtil.pendingMobileAuthRequestFromJSON(content);
     } catch (final JSONException e) {
       return null;
     }

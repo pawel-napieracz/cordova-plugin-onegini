@@ -15,53 +15,29 @@
  */
 package com.onegini.mobile.sdk.cordova.util;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_MESSAGE;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TIMESTAMP;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TIME_TO_LIVE_SECONDS;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TRANSACTION_ID;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_CONTENT;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_MESSAGE;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_PROFILE_ID;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_TRANSACTION_ID;
-
 import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.support.annotation.Nullable;
+import com.google.gson.Gson;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthWithPushRequest;
 
 public class PendingMobileAuthRequestUtil {
 
-  public static OneginiMobileAuthWithPushRequest pendingMobileAuthRequestFromJSON(final JSONObject jsonObject) throws JSONException {
-    final String message = jsonObject.getString(PUSH_MSG_MESSAGE);
-    final String transactionId = jsonObject.getString(PUSH_MSG_TRANSACTION_ID);
-    final String userProfileId = jsonObject.getString(PUSH_MSG_PROFILE_ID);
-    return new OneginiMobileAuthWithPushRequest(transactionId, message, userProfileId);
+  private static final Gson gson = new Gson();
+
+  public static OneginiMobileAuthWithPushRequest pendingMobileAuthRequestFromJSON(final String json) throws JSONException {
+    return gson.fromJson(json, OneginiMobileAuthWithPushRequest.class);
   }
 
-  public static JSONArray pendingMobileAuthRequestSetToJSONArray(final Set<OneginiMobileAuthWithPushRequest> oneginiMobileAuthWithPushRequests) throws
-      JSONException {
-    JSONArray authenticatorJSONArray = new JSONArray();
-    for (final OneginiMobileAuthWithPushRequest authenticator : oneginiMobileAuthWithPushRequests) {
-      final JSONObject authenticatorJSON = pendingMobileAuthRequestToJSONObject(authenticator);
-      authenticatorJSONArray.put(authenticatorJSON);
+  public static JSONArray pendingMobileAuthRequestSetToJSONArray(final Set<OneginiMobileAuthWithPushRequest> oneginiMobileAuthWithPushRequests) throws JSONException {
+    final JSONArray authenticatorJSONArray = new JSONArray();
+    for (final OneginiMobileAuthWithPushRequest pushRequest : oneginiMobileAuthWithPushRequests) {
+      authenticatorJSONArray.put(new JSONObject(gson.toJson(pushRequest)));
     }
 
     return authenticatorJSONArray;
   }
-
-  private static JSONObject pendingMobileAuthRequestToJSONObject(final OneginiMobileAuthWithPushRequest oneginiMobileAuthWithPushRequest) throws JSONException {
-    final JSONObject authenticatorJSON = new JSONObject();
-    authenticatorJSON.put(PARAM_PROFILE_ID, oneginiMobileAuthWithPushRequest.getUserProfileId());
-    authenticatorJSON.put(PARAM_TRANSACTION_ID, oneginiMobileAuthWithPushRequest.getTransactionId());
-    authenticatorJSON.put(PARAM_MESSAGE, oneginiMobileAuthWithPushRequest.getMessage());
-    authenticatorJSON.put(PARAM_TIMESTAMP, oneginiMobileAuthWithPushRequest.getTimestamp());
-    authenticatorJSON.put(PARAM_TIME_TO_LIVE_SECONDS, oneginiMobileAuthWithPushRequest.getTimeToLiveSeconds());
-    return authenticatorJSON;
-  }
-
 }

@@ -22,7 +22,6 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import com.onegini.mobile.sdk.android.handlers.OneginiPendingMobileAuthWithPushRequestsHandler;
@@ -30,7 +29,6 @@ import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthWithPushRequ
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.PendingMobileAuthWithPushRequestsHandler;
-import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.PendingMobileAuthRequestUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
@@ -74,8 +72,8 @@ public class PendingPushMobileAuthRequestClient extends CordovaPlugin {
       @Override
       public void run() {
         try {
-          final JSONObject options = args.getJSONObject(0);
-          final OneginiMobileAuthWithPushRequest request = PendingMobileAuthRequestUtil.pendingMobileAuthRequestFromJSON(options);
+          final String json = args.getString(0);
+          final OneginiMobileAuthWithPushRequest request = PendingMobileAuthRequestUtil.pendingMobileAuthRequestFromJSON(json);
           getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(request, MobileAuthWithPushHandler.getInstance());
         } catch (Exception e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
