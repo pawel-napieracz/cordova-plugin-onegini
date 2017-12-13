@@ -8,9 +8,9 @@
       <template v-else>
         <p>{{state}}</p>
       </template>
-      <mobile-authentication-modal/>
     </div>
     <navigation-bar/>
+    <mobile-authentication-modal/>
   </div>
 </template>
 
