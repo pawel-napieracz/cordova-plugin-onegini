@@ -8,7 +8,7 @@
         <p class="request-attributes">{{pushRequest.profileId}}<span style="float:right;">{{parseTimestamp(pushRequest.timestamp)}}</span>
         </p>
         <p class="request-message">{{pushRequest.message}}</p>
-        <p class="request-attributes">Will expire at: {{parseTimestamp(pushRequest.time_toLiveSeconds * 1000 +
+        <p class="request-attributes">Will expire at: {{parseTimestamp(pushRequest.timeToLiveSeconds * 1000 +
           pushRequest.timestamp)}}</p>
       </li>
     </ul>
