@@ -15,6 +15,12 @@
  */
 package com.onegini.mobile.sdk.cordova.util;
 
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_MESSAGE;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TIMESTAMP;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TIME_TO_LIVE_SECONDS;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_TRANSACTION_ID;
+
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -32,12 +38,23 @@ public class PendingMobileAuthRequestUtil {
     return gson.fromJson(json, OneginiMobileAuthWithPushRequest.class);
   }
 
-  public static JSONArray pendingMobileAuthRequestSetToJSONArray(final Set<OneginiMobileAuthWithPushRequest> oneginiMobileAuthWithPushRequests) throws JSONException {
+  public static JSONArray pendingMobileAuthRequestSetToJSONArray(final Set<OneginiMobileAuthWithPushRequest> oneginiMobileAuthWithPushRequests)
+      throws JSONException {
     final JSONArray authenticatorJSONArray = new JSONArray();
     for (final OneginiMobileAuthWithPushRequest pushRequest : oneginiMobileAuthWithPushRequests) {
-      authenticatorJSONArray.put(new JSONObject(gson.toJson(pushRequest)));
+      authenticatorJSONArray.put(pendingMobileAuthRequestToJSONObject(pushRequest));
     }
 
     return authenticatorJSONArray;
+  }
+
+  private static JSONObject pendingMobileAuthRequestToJSONObject(final OneginiMobileAuthWithPushRequest oneginiMobileAuthWithPushRequest) throws JSONException {
+    final JSONObject authenticatorJSON = new JSONObject();
+    authenticatorJSON.put(PARAM_PROFILE_ID, oneginiMobileAuthWithPushRequest.getUserProfileId());
+    authenticatorJSON.put(PARAM_TRANSACTION_ID, oneginiMobileAuthWithPushRequest.getTransactionId());
+    authenticatorJSON.put(PARAM_MESSAGE, oneginiMobileAuthWithPushRequest.getMessage());
+    authenticatorJSON.put(PARAM_TIMESTAMP, oneginiMobileAuthWithPushRequest.getTimestamp());
+    authenticatorJSON.put(PARAM_TIME_TO_LIVE_SECONDS, oneginiMobileAuthWithPushRequest.getTimeToLiveSeconds());
+    return authenticatorJSON;
   }
 }
