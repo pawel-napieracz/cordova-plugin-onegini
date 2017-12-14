@@ -17,6 +17,7 @@
 package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EXTRA_MOBILE_AUTHENTICATION;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PUSH_MSG_CONTENT;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -34,23 +35,26 @@ import org.json.JSONException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import com.google.firebase.messaging.RemoteMessage;
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiInitializationError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
+import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthWithPushRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.fcm.FcmTokenUpdateService;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.AppLifecycleUtil;
+import com.onegini.mobile.sdk.cordova.util.PendingMobileAuthRequestUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 @SuppressWarnings("unused")
 public class OneginiClient extends CordovaPlugin {
 
   private static final String ACTION_START = "start";
-  private final List<RemoteMessage> delayedMobileAuthenticationRequests = new LinkedList<RemoteMessage>();
+  private final List<OneginiMobileAuthWithPushRequest> delayedMobileAuthenticationRequests = new LinkedList<OneginiMobileAuthWithPushRequest>();
 
   @Override
   public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
@@ -90,21 +94,22 @@ public class OneginiClient extends CordovaPlugin {
   }
 
   private void handlePushMobileAuthenticationRequest(final RemoteMessage remoteMessage) {
-    if (remoteMessage == null) {
+    final OneginiMobileAuthWithPushRequest mobileAuthWithPushRequest = parseOneginiMobileAuthRequest(remoteMessage);
+    if (mobileAuthWithPushRequest == null) {
       return;
     }
 
     if (OneginiSDK.getInstance().isStarted()) {
-      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(remoteMessage, MobileAuthWithPushHandler.getInstance());
+      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(mobileAuthWithPushRequest, MobileAuthWithPushHandler.getInstance());
     } else {
-      delayedMobileAuthenticationRequests.add(remoteMessage);
+      delayedMobileAuthenticationRequests.add(mobileAuthWithPushRequest);
     }
   }
 
   private void handleDelayedPushMobileAuthenticationRequests() {
-    for (Iterator<RemoteMessage> iterator = delayedMobileAuthenticationRequests.iterator(); iterator.hasNext(); ) {
-      RemoteMessage remoteMessage = iterator.next();
-      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(remoteMessage, MobileAuthWithPushHandler.getInstance());
+    final Iterator<OneginiMobileAuthWithPushRequest> iterator = delayedMobileAuthenticationRequests.iterator();
+    while (iterator.hasNext()) {
+      getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(iterator.next(), MobileAuthWithPushHandler.getInstance());
       iterator.remove();
     }
   }
@@ -167,6 +172,25 @@ public class OneginiClient extends CordovaPlugin {
   private com.onegini.mobile.sdk.android.client.OneginiClient getOneginiClient() {
     return OneginiSDK.getInstance().getOneginiClient(getApplicationContext());
   }
+
+  @Nullable
+  private OneginiMobileAuthWithPushRequest parseOneginiMobileAuthRequest(final RemoteMessage remoteMessage) {
+    if (remoteMessage == null || remoteMessage.getData() == null) {
+      return null;
+    }
+
+    final String content = remoteMessage.getData().get(PUSH_MSG_CONTENT);
+    if (content == null) {
+      return null;
+    }
+
+    try {
+      return PendingMobileAuthRequestUtil.pendingMobileAuthRequestFromJSON(content);
+    } catch (final JSONException e) {
+      return null;
+    }
+  }
+
 
   @Override
   public void onStart() {

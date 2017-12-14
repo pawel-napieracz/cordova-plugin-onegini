@@ -27,21 +27,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthWithPushRequest;
 
 public class PendingMobileAuthRequestUtil {
 
-  public static JSONArray pendingMobileAuthRequestSetToJSONArray(final Set<OneginiMobileAuthWithPushRequest> oneginiMobileAuthWithPushRequests) throws
-      JSONException {
-    JSONArray authenticatorJSONArray = new JSONArray();
-    for (final OneginiMobileAuthWithPushRequest authenticator : oneginiMobileAuthWithPushRequests) {
-      final JSONObject authenticatorJSON = pendingMobileAuthRequestToJSONObject(authenticator);
-      authenticatorJSONArray.put(authenticatorJSON);
+  private static final Gson gson = new Gson();
+
+  public static OneginiMobileAuthWithPushRequest pendingMobileAuthRequestFromJSON(final String json) throws JSONException {
+    return gson.fromJson(json, OneginiMobileAuthWithPushRequest.class);
+  }
+
+  public static JSONArray pendingMobileAuthRequestSetToJSONArray(final Set<OneginiMobileAuthWithPushRequest> oneginiMobileAuthWithPushRequests)
+      throws JSONException {
+    final JSONArray authenticatorJSONArray = new JSONArray();
+    for (final OneginiMobileAuthWithPushRequest pushRequest : oneginiMobileAuthWithPushRequests) {
+      authenticatorJSONArray.put(pendingMobileAuthRequestToJSONObject(pushRequest));
     }
 
     return authenticatorJSONArray;
   }
-
 
   private static JSONObject pendingMobileAuthRequestToJSONObject(final OneginiMobileAuthWithPushRequest oneginiMobileAuthWithPushRequest) throws JSONException {
     final JSONObject authenticatorJSON = new JSONObject();
@@ -52,5 +57,4 @@ public class PendingMobileAuthRequestUtil {
     authenticatorJSON.put(PARAM_TIME_TO_LIVE_SECONDS, oneginiMobileAuthWithPushRequest.getTimeToLiveSeconds());
     return authenticatorJSON;
   }
-
 }
