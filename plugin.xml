@@ -127,6 +127,8 @@
     <source-file src="src/ios/classes/OGCDVPendingPushMobileAuthRequestClient.m"/>
     <header-file src="src/ios/classes/OGCDVPendingPushMobileAuthRequestClientHelper.h"/>
     <source-file src="src/ios/classes/OGCDVPendingPushMobileAuthRequestClientHelper.m"/>
+    <header-file src="src/ios/classes/ONGPendingMobileAuthRequest+IntenalSetters.h"/>
+    <source-file src="src/ios/classes/ONGPendingMobileAuthRequest+IntenalSetters.m"/>
 
     <!-- Safari Services for SFSafariViewController -->
     <framework src="SafariServices.framework" weak="true"/>

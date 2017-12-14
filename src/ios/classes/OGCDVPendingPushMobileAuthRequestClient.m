@@ -17,6 +17,7 @@
 #import "OGCDVPendingPushMobileAuthRequestClient.h"
 #import "OGCDVConstants.h"
 #import "OGCDVPendingPushMobileAuthRequestClientHelper.h"
+#import "OGCDVPushMobileAuthRequestClient.h"
 
 @implementation OGCDVPendingPushMobileAuthRequestClient {
 }
@@ -36,6 +37,13 @@
             }
         }];
     }];
+}
+
+- (void)handle:(CDVInvokedUrlCommand *)command
+{
+    NSDictionary *options = command.arguments[0];
+    ONGPendingMobileAuthRequest *pendingMobileAuthRequest = [OGCDVPendingPushMobileAuthRequestClientHelper pendingMobileAuthRequestFromDictionary:options];
+    [[ONGUserClient sharedInstance] handlePendingPushMobileAuthRequest:pendingMobileAuthRequest delegate:[OGCDVPushMobileAuthRequestClient sharedInstance]];
 }
 
 @end

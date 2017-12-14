@@ -59,7 +59,8 @@ static OGCDVPushMobileAuthRequestClient *sharedInstance;
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [[ONGUserClient sharedInstance] handlePushMobileAuthRequest:userInfo delegate:self];
+    ONGPendingMobileAuthRequest* pendingMobileAuthRequest = [[ONGUserClient sharedInstance] pendingMobileAuthRequestFromUserInfo:userInfo];
+    [[ONGUserClient sharedInstance] handlePendingPushMobileAuthRequest:pendingMobileAuthRequest delegate:self];
 }
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation forRequest:(ONGMobileAuthRequest *)request

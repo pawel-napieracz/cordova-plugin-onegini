@@ -17,6 +17,7 @@
 #import "OGCDVPendingPushMobileAuthRequestClientHelper.h"
 #import "OGCDVConstants.h"
 #import "ONGPendingMobileAuthRequest.h"
+#import "ONGPendingMobileAuthRequest+IntenalSetters.h"
 
 @implementation OGCDVPendingPushMobileAuthRequestClientHelper
 
@@ -26,10 +27,21 @@
                                  OGCDVPluginKeyProfileId: pendingMobileAuthRequest.userProfile.profileId,
                                  OGCDVPluginKeyTransactionId: pendingMobileAuthRequest.transactionId,
                                  OGCDVPluginKeyMessage: pendingMobileAuthRequest.message,
-                                 OGCDVPluginKeyTimestamp: [NSNumber numberWithDouble:[pendingMobileAuthRequest.date timeIntervalSince1970]],
+                                 OGCDVPluginKeyTimestamp: [NSNumber numberWithInteger:(NSInteger)[pendingMobileAuthRequest.date timeIntervalSince1970]],
                                  OGCDVPluginKeyTTL: pendingMobileAuthRequest.timeToLive
                                  };
     return dictionary;
+}
+
++ (ONGPendingMobileAuthRequest *)pendingMobileAuthRequestFromDictionary:(NSDictionary *)dictionary
+{
+    ONGPendingMobileAuthRequest *pendingMobileAuthRequest = [[ONGPendingMobileAuthRequest alloc] init];
+    pendingMobileAuthRequest.message = dictionary[OGCDVPluginKeyMessage];
+    pendingMobileAuthRequest.transactionId = dictionary[OGCDVPluginKeyTransactionId];
+    pendingMobileAuthRequest.userProfile = [ONGUserProfile profileWithId: dictionary[OGCDVPluginKeyProfileId]];
+    pendingMobileAuthRequest.timeToLive = dictionary[OGCDVPluginKeyTTL];
+    pendingMobileAuthRequest.date = [NSDate dateWithTimeIntervalSince1970:[dictionary[OGCDVPluginKeyTimestamp] doubleValue]];
+    return pendingMobileAuthRequest;
 }
 
 @end

@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-#import "OneginiSDK.h"
+#import "ONGPendingMobileAuthRequest.h"
 
-@interface OGCDVPendingPushMobileAuthRequestClientHelper : NSObject
+@interface ONGPendingMobileAuthRequest (IntenalSetters)
 
-+ (NSDictionary *)dictionaryFromPendingMobileAuthRequest:(ONGPendingMobileAuthRequest *)pendingMobileAuthRequest;
-+ (ONGPendingMobileAuthRequest *)pendingMobileAuthRequestFromDictionary:(NSDictionary *)dictionary;
+@property (nonatomic, copy, readwrite) NSString *transactionId;
+@property (nonatomic, readwrite) ONGUserProfile *userProfile;
+@property (nonatomic, readwrite, nullable) NSDate *date;
+@property (nonatomic, readwrite, nullable) NSNumber *timeToLive;
+@property (nonatomic, copy, readwrite, nullable) NSString *message;
+@property (nonatomic, copy, readwrite, nullable) NSDictionary *userInfo;
 
 @end

@@ -39,7 +39,7 @@ NSString *const OGCDVPluginKeyOtp = @"otp";
 NSString *const OGCDVPluginKeyErrorCode = @"code";
 NSString *const OGCDVPluginKeyErrorDescription = @"description";
 NSString *const OGCDVPluginKeyTimestamp = @"timestamp";
-NSString *const OGCDVPluginKeyTTL = @"timeToliveSeconds";
+NSString *const OGCDVPluginKeyTTL = @"timeToLiveSeconds";
 
 NSString *const OGCDVPluginClassPushMobileAuthenticationClient = @"OneginiPushMobileAuthClient";
 NSString *const OGCDVPluginClassPushMobileAuthRequestClient = @"OneginiPushMobileAuthRequestClient";
