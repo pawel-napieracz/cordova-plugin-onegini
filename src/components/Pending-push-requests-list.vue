@@ -2,13 +2,14 @@
   <div>
     <h3>Pending push requests</h3>
     <button-lg text="Refresh" @click="fetchPendingPushRequests()"/>
-    <h4 v-if="!pushRequests.length">{{ status }}</h4>
+    <p v-if="!pushRequests.length">{{ status }}</p>
     <ul v-if="pushRequests.length" class="block-list">
       <li v-for="pushRequest in pushRequests" class="block">
-        <h5>{{pushRequest.profileId}}<span style="float:right;">{{parseTimestamp(pushRequest.timestamp)}}</span>
-        </h5>
-        <h3>{{pushRequest.message}}</h3>
-        <h5>Will expire at: {{parseTimestamp(pushRequest.timestamp + pushRequest.timeToLiveSeconds)}}</h5>
+        <p class="request-attributes">{{pushRequest.profileId}}<span style="float:right;">{{parseTimestamp(pushRequest.timestamp)}}</span>
+        </p>
+        <p class="request-message">{{pushRequest.message}}</p>
+        <p class="request-attributes">Will expire at: {{parseTimestamp(pushRequest.time_toLiveSeconds * 1000 +
+          pushRequest.timestamp)}}</p>
       </li>
     </ul>
   </div>
@@ -29,7 +30,7 @@
       'button-lg': ButtonLarge
     },
 
-    created: function () {
+    mounted: function () {
       this.fetchPendingPushRequests();
     },
 
@@ -45,20 +46,28 @@
           });
       },
 
-      parseTimestamp: function (seconds) {
-        return new Date(seconds * 1000).toLocaleTimeString();
+      parseTimestamp: function (millis) {
+        return new Date(millis).toLocaleTimeString();
       }
     },
   }
 </script>
 
 <style scoped>
+  h1 {
+    font-weight: normal;
+  }
+
   h5 {
-    margin-top: 0;
+    margin: 0 0 .3em 0;
   }
 
   ul {
     list-style-type: none;
+  }
+
+  p {
+    font-weight: bold;
   }
 
   .block-list {
@@ -75,7 +84,13 @@
     text-align: left;
   }
 
-  h5 {
+  .request-attributes {
     margin: 0 0 .3em 0;
+    font-size: smaller;
   }
+
+  .request-message {
+    font-size: larger;
+  }
+
 </style>

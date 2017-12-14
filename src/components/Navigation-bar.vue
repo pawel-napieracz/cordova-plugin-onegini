@@ -35,23 +35,13 @@
     bottom: 0;
     left: 0;
     background-color: #00aeef;
+    display: flex;
+    justify-content: space-around;
   }
 
   .box {
-    float: left;
-    align-content: end;
-  }
-
-  .box:nth-child(1) {
-    width: 33%;
-  }
-
-  .box:nth-child(2) {
-    width: 34%;
-  }
-
-  .box:nth-child(3) {
-    width: 33%;
+    align-content: center;
+    width: 5em;
   }
 
   .navigation-element-description {
