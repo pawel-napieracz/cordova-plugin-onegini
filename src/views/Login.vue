@@ -7,12 +7,14 @@
     <button-lg @click="register" text="Register" />
     <fingerprint-modal v-if="showFingerprintModal" :status="fingerprintStatus" :actions="fingerprintActions" />
   </div>
+
 </template>
 
 <script>
 import ButtonLarge from '../components/Button-large.vue';
 import SelectProfile from '../components/Select-profile.vue';
 import FingerprintModal from '../components/Fingerprint-modal.vue';
+import Navigation from '../components/Navigation-bar.vue';
 
 export default {
   data () {

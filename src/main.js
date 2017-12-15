@@ -11,13 +11,15 @@ import App from './views/App.vue';
 import Login from './views/Login.vue';
 import Dashboard from './views/Dashboard.vue';
 import Settings from './views/Settings.vue';
+import PendingPushRequests from './views/Pending-push-requests.vue';
 
 const router = new VueRouter({
   mode: 'hash',
   routes: [
     {path: '/login', component: Login},
     {path: '/dashboard', component: Dashboard},
-    {path: '/settings', component: Settings}
+    {path: '/settings', component: Settings},
+    {path: '/pendingRequests', component: PendingPushRequests, name: 'PendingPushRequests'}
   ]
 });
 
