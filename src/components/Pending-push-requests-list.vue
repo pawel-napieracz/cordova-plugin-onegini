@@ -2,12 +2,12 @@
   <div>
     <p v-if="!pushRequests.length">{{ status }}</p>
     <ul v-if="pushRequests.length" class="block-list">
-      <li v-for="pushRequest in pushRequests" class="block">
-        <p class="request-attributes">{{pushRequest.profileId}}<span style="float:right;">{{parseTimestamp(pushRequest.timestamp)}}</span>
+      <li v-for="pushRequest in pushRequests" class="block" @click="handleRequest(pushRequest)">
+        <p class="request-attributes">{{pushRequest.profileId}}<time style="float:right;">{{parseTimestamp(pushRequest.timestamp)}}</time>
         </p>
         <p class="request-message">{{pushRequest.message}}</p>
-        <p class="request-attributes">Will expire at: {{parseTimestamp(pushRequest.timeToLiveSeconds * 1000 +
-          pushRequest.timestamp)}}</p>
+        <p class="request-attributes">Will expire at:<time>{{parseTimestamp(pushRequest.timeToLiveSeconds * 1000 + pushRequest.timestamp)}}</time>
+        </p>
       </li>
     </ul>
   </div>
@@ -39,14 +39,20 @@
           });
       },
 
+      handleRequest: function (pushRequest) {
+        //TODO: refresh the list after the request in handled
+        onegini.mobileAuth.push.handlePendingRequest(pushRequest);
+      },
+
       parseTimestamp: function (millis) {
         return new Date(millis).toLocaleTimeString();
       }
-    },
+    }
   }
 </script>
 
 <style scoped>
+
   ul {
     list-style-type: none;
   }
