@@ -1,18 +1,12 @@
 <template>
   <div>
-    <h1>Pending push requests</h1>
-    <button-lg text="Refresh" @click="fetchPendingPushRequests()"/>
     <p v-if="!pushRequests.length">{{ status }}</p>
     <ul v-if="pushRequests.length" class="block-list">
       <li v-for="pushRequest in pushRequests" class="block" @click="handleRequest(pushRequest)">
-        <p class="request-attributes">{{pushRequest.profileId}}
-          <time style="float:right;">{{parseTimestamp(pushRequest.timestamp)}}</time>
+        <p class="request-attributes">{{pushRequest.profileId}}<time style="float:right;">{{parseTimestamp(pushRequest.timestamp)}}</time>
         </p>
         <p class="request-message">{{pushRequest.message}}</p>
-        <p class="request-attributes">Will expire at:
-          <time>{{parseTimestamp(pushRequest.timeToLiveSeconds * 1000 +
-            pushRequest.timestamp)}}
-          </time>
+        <p class="request-attributes">Will expire at:<time>{{parseTimestamp(pushRequest.timeToLiveSeconds * 1000 + pushRequest.timestamp)}}</time>
         </p>
       </li>
     </ul>
@@ -20,7 +14,6 @@
 </template>
 
 <script>
-  import ButtonLarge from '../components/Button-large.vue';
 
   export default {
     data() {
@@ -28,10 +21,6 @@
         pushRequests: [],
         status: 'No pending requests'
       }
-    },
-
-    components: {
-      'button-lg': ButtonLarge
     },
 
     created: function () {
@@ -49,6 +38,7 @@
             this.status = 'Could not fetch pending push requests';
           });
       },
+
       handleRequest: function (pushRequest) {
         //TODO: refresh the list after the request in handled
         onegini.mobileAuth.push.handlePendingRequest(pushRequest);
@@ -62,14 +52,6 @@
 </script>
 
 <style scoped>
-  h1 {
-    font-weight: normal;
-    font-size: smaller;
-  }
-
-  h5 {
-    margin: 0 0 .3em 0;
-  }
 
   ul {
     list-style-type: none;
