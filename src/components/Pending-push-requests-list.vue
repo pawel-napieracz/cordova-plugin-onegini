@@ -1,15 +1,19 @@
 <template>
   <div>
-    <h3>Pending push requests</h3>
+    <h1>Pending push requests</h1>
     <button-lg text="Refresh" @click="fetchPendingPushRequests()"/>
     <p v-if="!pushRequests.length">{{ status }}</p>
     <ul v-if="pushRequests.length" class="block-list">
-      <li v-for="pushRequest in pushRequests" class="block">
-        <p class="request-attributes">{{pushRequest.profileId}}<span style="float:right;">{{parseTimestamp(pushRequest.timestamp)}}</span>
+      <li v-for="pushRequest in pushRequests" class="block" @click="handleRequest(pushRequest)">
+        <p class="request-attributes">{{pushRequest.profileId}}
+          <time style="float:right;">{{parseTimestamp(pushRequest.timestamp)}}</time>
         </p>
         <p class="request-message">{{pushRequest.message}}</p>
-        <p class="request-attributes">Will expire at: {{parseTimestamp(pushRequest.time_toLiveSeconds * 1000 +
-          pushRequest.timestamp)}}</p>
+        <p class="request-attributes">Will expire at:
+          <time>{{parseTimestamp(pushRequest.timeToLiveSeconds * 1000 +
+            pushRequest.timestamp)}}
+          </time>
+        </p>
       </li>
     </ul>
   </div>
@@ -30,7 +34,7 @@
       'button-lg': ButtonLarge
     },
 
-    mounted: function () {
+    created: function () {
       this.fetchPendingPushRequests();
     },
 
@@ -45,17 +49,22 @@
             this.status = 'Could not fetch pending push requests';
           });
       },
+      handleRequest: function (pushRequest) {
+        //TODO: refresh the list after the request in handled
+        onegini.mobileAuth.push.handlePendingRequest(pushRequest);
+      },
 
       parseTimestamp: function (millis) {
         return new Date(millis).toLocaleTimeString();
       }
-    },
+    }
   }
 </script>
 
 <style scoped>
   h1 {
     font-weight: normal;
+    font-size: smaller;
   }
 
   h5 {
