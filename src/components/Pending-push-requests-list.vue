@@ -23,7 +23,7 @@
       }
     },
 
-    mounted: function () {
+    created: function () {
       this.fetchPendingPushRequests();
     },
 
