@@ -47,11 +47,6 @@
 </script>
 
 <style scoped>
-
-  h5 {
-    margin: 0 0 .3em 0;
-  }
-
   ul {
     list-style-type: none;
   }
