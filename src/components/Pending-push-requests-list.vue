@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h1>Pending push requests</h1>
-    <button-lg text="Refresh" @click="fetchPendingPushRequests()"/>
     <p v-if="!pushRequests.length">{{ status }}</p>
     <ul v-if="pushRequests.length" class="block-list">
       <li v-for="pushRequest in pushRequests" class="block">
@@ -16,7 +14,6 @@
 </template>
 
 <script>
-  import ButtonLarge from '../components/Button-large.vue';
 
   export default {
     data() {
@@ -24,10 +21,6 @@
         pushRequests: [],
         status: 'No pending requests'
       }
-    },
-
-    components: {
-      'button-lg': ButtonLarge
     },
 
     mounted: function () {
@@ -54,10 +47,6 @@
 </script>
 
 <style scoped>
-  h1 {
-    font-weight: normal;
-    font-size: smaller;
-  }
 
   h5 {
     margin: 0 0 .3em 0;
