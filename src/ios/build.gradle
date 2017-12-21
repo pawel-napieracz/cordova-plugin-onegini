@@ -52,7 +52,6 @@ configurations {
   fido
 }
 
-// TODO Move to release version before plugin release
 dependencies {
   sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.1.0@a'
   sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.1.0:headers@zip'
