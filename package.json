@@ -37,9 +37,6 @@
             "cordova-plugin-onegini": {},
             "cordova-plugin-onegini-fcm": {}
         },
-        "platforms": [
-            "android",
-            "ios"
-        ]
+        "platforms": []
     }
 }
