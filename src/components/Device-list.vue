@@ -15,21 +15,21 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      devices: [],
-      status: 'Loading...'
-    }
-  },
+  export default {
+    data() {
+      return {
+        devices: [],
+        status: 'Loading...'
+      }
+    },
 
-  created: function() {
-    this.fetchDeviceList();
-  },
+    created: function () {
+      this.fetchDeviceList();
+    },
 
-  methods: {
-    fetchDeviceList: function() {
-      onegini.resource.fetch('https://onegini-msp-snapshot.test.onegini.io/resources/devices')
+    methods: {
+      fetchDeviceList: function () {
+        onegini.resource.fetch('https://onegini-msp-snapshot.test.onegini.io/resources/devices')
           .then((result) => {
             this.devices = result.json.devices;
           })
@@ -37,41 +37,41 @@ export default {
             console.error('Error while fetching devices:', err);
             this.status = 'Could not fetch devices';
           });
-    }
-  },
-}
+      }
+    },
+  }
 </script>
 
 <style scoped>
-h5 {
-  margin-top: 0;
-}
+  h5 {
+    margin-top: 0;
+  }
 
-ul {
-  list-style-type: none;
-}
+  ul {
+    list-style-type: none;
+  }
 
-.block-list {
-  padding: 0 1em;
-  margin: 0 auto;
-  width: 80%;
-}
+  .block-list {
+    padding: 0 1em;
+    margin: 0 auto;
+    width: 80%;
+  }
 
-.block {
-  padding: .5em;
-  margin: 1.2em 0;
-  background-color: rgba(0, 0, 0, .05);
-  box-shadow: 0 0 5px rgba(0, 0, 0, .3);
-  text-align: left;
-}
+  .block {
+    padding: .5em;
+    margin: 1.2em 0;
+    background-color: rgba(0, 0, 0, .05);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+    text-align: left;
+  }
 
-h5 {
-  margin: 0 0 .3em 0;
-}
+  h5 {
+    margin: 0 0 .3em 0;
+  }
 
-.prop-list {
-  padding: 0;
-  margin: 0;
-  font-size: .8em;
-}
+  .prop-list {
+    padding: 0;
+    margin: 0;
+    font-size: .8em;
+  }
 </style>
