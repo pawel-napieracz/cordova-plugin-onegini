@@ -704,7 +704,23 @@ exports.defineAutoTests = function () {
                 done();
               });
           });
-        })
+        });
+        describe("getPendingMobileAuth", function () {
+          it("should exist", function () {
+            expect(onegini.mobileAuth.push.getPendingRequests).toBeDefined();
+          });
+          it("should return pending mobile auth requests", function (done) {
+            onegini.mobileAuth.push.getPendingRequests(
+              function (result) {
+                expect(result).toBeDefined();
+                done();
+              },
+              function (err) {
+                expect(err).toBeUndefined();
+                fail('Error callback called, but method should have succeeded');
+              });
+            });
+          });
       });
     });
 

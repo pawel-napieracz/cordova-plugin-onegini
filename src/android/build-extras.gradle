@@ -53,14 +53,16 @@ allprojects {
 
 dependencies {
   // Onegini SDK
-  compile('com.onegini.mobile.sdk.android:onegini-sdk:8.0.0@aar') {
+  compile('com.onegini.mobile.sdk.android:onegini-sdk:8.1.0@aar') {
     transitive = true
   }
 
   // Google Play Services availability check
-  compile 'com.google.android.gms:play-services-base:11.6.0'
+  compile 'com.google.android.gms:play-services-base:11.6.2'
   //Firebase Cloud Messaging (FCM)
-  compile "com.google.firebase:firebase-messaging:11.6.0"
+  compile "com.google.firebase:firebase-messaging:11.6.2"
+
+  compile 'com.android.support:appcompat-v7:26.1.0'
 }
 
 afterEvaluate {

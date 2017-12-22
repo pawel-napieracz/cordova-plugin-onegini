@@ -30,6 +30,14 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'enroll', [], successCb, failureCb);
   }
 
+  function getPendingRequests(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiPendingMobileAuthRequestClient', 'fetch', [], successCb, failureCb);
+  }
+
+  function handlePendingRequest(options, successCb, failureCb) {
+      return utils.promiseOrCallbackExec('OneginiPendingMobileAuthRequestClient', 'handle', options, successCb, failureCb);
+   }
+
   function PushMobileAuthHandler(method) {
     var self = this;
     this.callbacks = {};
@@ -113,6 +121,8 @@ module.exports = (function () {
   return {
     isUserEnrolled: isUserEnrolled,
     enroll: enroll,
+    getPendingRequests: getPendingRequests,
+    handlePendingRequest: handlePendingRequest,
     on: on
   }
 })();

@@ -11,13 +11,13 @@ transaction information is encrypted and no sensitive information is sent throug
 ## Setup and requirements
 
 The setup and requirements to enable mobile authentication with push differ per platform. For Android devices, the medium used to send push messages is
-**Firebase Cloud Messaging (FCM)**. For iOS devices, the **Apple Push Notification service (APNs)** is used. You will need a valid `google-services.json` and/or 
+**Firebase Cloud Messaging (FCM)**. For iOS devices, the **Apple Push Notification service (APNs)** is used. You will need a valid `google-services.json` and/or
 APNs setup to receive push notifications in the Onegini Cordova Plugin.
 
-### Android 
+### Android
 
-Since FCM requires a valid `google-services.json` and not everyone might want to use the push mobile authentication feature this functionality is placed 
-in it's own Cordova plugin, the [Onegini FCM plugin](https://github.com/Onegini/cordova-plugin-onegini-fcm). To enable push mobile authentication you must add 
+Since FCM requires a valid `google-services.json` and not everyone might want to use the push mobile authentication feature this functionality is placed
+in it's own Cordova plugin, the [Onegini FCM plugin](https://github.com/Onegini/cordova-plugin-onegini-fcm). To enable push mobile authentication you must add
 the `cordova-plugin-onegini-fcm` plugin to your project:
 
 ```bash
@@ -26,13 +26,13 @@ cordova plugin add cordova-plugin-onegini-fcm
 
 This plugin will enable your application for FCM and trigger the `GoogleServices` Gradle plugin during the project build phase.
 
-To add your `google-services.json` to the application project, add your `google-services.json` file to the root of your Cordova project. This file can be 
-obtained from the [Firebase console](https://console.firebase.google.com) The FCM plugin contains a hook that is triggered on `after_prepare` which will copy 
+To add your `google-services.json` to the application project, add your `google-services.json` file to the root of your Cordova project. This file can be
+obtained from the [Firebase console](https://console.firebase.google.com) The FCM plugin contains a hook that is triggered on `after_prepare` which will copy
 your `google-services.json` to the correct location in the generated Android project.
 
 ### iOS
 
-For iOS to receive push notifications. You will need to open `platforms/ios/MyApp.xcodeproj` in Xcode and configure APNs. Make sure to enable 
+For iOS to receive push notifications. You will need to open `platforms/ios/MyApp.xcodeproj` in Xcode and configure APNs. Make sure to enable
 `Push Notifications` under your App's Capabilities.
 
 ### Onegini FCM plugin version compatibility
@@ -65,11 +65,11 @@ onegini.mobileAuth.push.enroll()
 If you want to use mobile fingerprint authentication, you will need to register the fingerprint authenticator for the relevant user (see
 [User authentication with fingerprint](user-authentication-with-fingerprint.md)).
 
-Successive invocations of enrollment for mobile authentication with push will re-enroll the device only if the mobile authentication with push override is 
-enabled in The Token Server configuration. See the [Token Server mobile authentication configuration]({{book.app_config_mobile_authentication}}) for more 
+Successive invocations of enrollment for mobile authentication with push will re-enroll the device only if the mobile authentication with push override is
+enabled in The Token Server configuration. See the [Token Server mobile authentication configuration]({{book.app_config_mobile_authentication}}) for more
 information on the server side configuration of mobile authentication.
 
-The plugin also provides a convenience method to check whether a user is enrolled for mobile authentication with push. The `onegini.mobileAuth.push.isUserEnrolled` 
+The plugin also provides a convenience method to check whether a user is enrolled for mobile authentication with push. The `onegini.mobileAuth.push.isUserEnrolled`
 method provides you with the information whether the user is already enrolled for mobile authentication with push. Below follows an example implementation.
 
 ```js
@@ -87,6 +87,45 @@ onegini.mobileAuth.push.isUserEnrolled({
       alert("error!\n\n" + err.description);
     });
 ```
+
+## Receiving requests
+
+Once the user is enrolled he is able to receive push notifications. When device did not receive sent push notifications you can use this feature to fetch a list
+containing pending mobile authentication requests. The process of receiving a push from the Token Server can be described as follows. In this flow we call the
+initiator of the mobile authentication request 'portal':
+
+```
+1. Portal -> Token Server: Initialize mobile authentication.
+2. Token Server -> Portal: Identifier of the initialized mobile authentication transaction.
+3. APP -> Cordova Plugin -> Token Server: Fetch all pending mobile authentication requests
+```
+
+Fetching pending mobile authentication requests can be performed using the following method:
+
+```js
+onegini.mobileAuth.push.getPendingRequests()
+          .then((result) => {
+            this.pushRequests = result;
+          })
+          .catch((err) => {
+            console.error('Error while fetching pending push requests:', err);
+            this.status = 'Could not fetch pending push requests';
+          });
+```
+
+From the fetched obejcts you can get following information about mobile authentication request:
+  - `userProfile` - instance of `ONGUserProfile` for which request has been received.
+  - `message` - message specified by the portal when initiating the mobile authentication request.
+  - `transactionId` - A unique identifier for each Mobile Authentication request.
+  - `timestamp` - the date when the mobile authentication request was sent.
+  - `timeToLive` - time to live for which mobile authentication request was sent.
+
+Handling one of the pending mobile authentication request from the list can be performed using the following method:
+
+```js
+  onegini.mobileAuth.push.handlePendingRequest(pushRequest)
+```
+
 
 ## Request handling
 
