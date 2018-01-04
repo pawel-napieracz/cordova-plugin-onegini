@@ -21,9 +21,9 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.PinValidationHandler;
-import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 
 @SuppressWarnings("unused")
