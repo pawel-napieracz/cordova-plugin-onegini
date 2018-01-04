@@ -22,6 +22,5 @@
 @property (nonatomic, copy) NSString *authenticationCallbackId;
 @property (nonatomic) ONGPinChallenge *pinChallenge;
 @property (nonatomic) ONGFingerprintChallenge *fingerprintChallenge;
-@property (nonatomic) ONGFIDOChallenge *fidoChallenge;
 
 @end

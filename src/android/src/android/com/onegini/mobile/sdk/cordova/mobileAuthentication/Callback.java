@@ -17,7 +17,6 @@
 package com.onegini.mobile.sdk.cordova.mobileAuthentication;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_CONFIRMATION_REQUEST;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_FIDO_REQUEST;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_FINGERPRINT_REQUEST;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_PIN_REQUEST;
 
@@ -65,9 +64,6 @@ public class Callback {
       case FINGERPRINT:
         eventName = EVENT_FINGERPRINT_REQUEST;
         break;
-      case FIDO:
-        eventName = EVENT_FIDO_REQUEST;
-        break;
       default:
         eventName = null;
         break;
@@ -79,8 +75,7 @@ public class Callback {
   public enum Method {
     CONFIRMATION,
     PIN,
-    FINGERPRINT,
-    FIDO
+    FINGERPRINT
   }
 
 }

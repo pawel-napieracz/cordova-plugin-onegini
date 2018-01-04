@@ -153,7 +153,6 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCreatePinChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGDeviceClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGErrors.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGFIDOChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGFingerprintChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthRequest.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGMobileAuthRequestDelegate.h"/>
@@ -346,8 +345,6 @@
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PinAuthenticationRequestHandler.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/FidoAuthenticationRequestHandler.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/FingerprintAuthenticationRequestHandler.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/ChangePinHandler.java"
@@ -377,8 +374,6 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/PinCallback.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/FingerprintCallback.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/FidoCallback.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/mobileAuthentication/"/>
 
     <!-- model -->

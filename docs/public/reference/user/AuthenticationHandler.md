@@ -19,7 +19,7 @@ handler.onPinrequest((actions, options) => {
 });
 ```
 
-When `onPinRequest` is called, the user should asked for their PIN. After the user has entered their PIN, you can supply it to the SDK by calling an `action`, 
+When `onPinRequest` is called, the user should asked for their PIN. After the user has entered their PIN, you can supply it to the SDK by calling an `action`,
 in this case `providePin`.
 
 **Example using the `prompt` to ask for the PIN:**
@@ -31,7 +31,7 @@ handler.onPinRequest((actions, options) => {
 })
 ```
 
-If the PIN entered is incorrect, the `onPinRequest` handler will be called with a new request. The `options` parameter contains additional parameters like max 
+If the PIN entered is incorrect, the `onPinRequest` handler will be called with a new request. The `options` parameter contains additional parameters like max
 allowed attempts and remaining attempts.
 
 If the PIN is correct, the `onSuccess` handler will be called.
@@ -52,7 +52,6 @@ The following methods can registered to handle different authentication events:
 - [`onFingerprintRequest`](#onfingerprintrequest)
 - [`onFingerprintCaptured`](#onfingerprintcaptured)
 - [`onFingerprintFailed`](#onfingerprintfailed)
-- [`onFidoRequest`](#onfidorequest)
 - [`onSuccess`](#onsuccess)
 - [`onError`](#onerror)
 
@@ -60,8 +59,8 @@ The following methods can registered to handle different authentication events:
 
 This method is called when the SDK starts the registration flow. The options object contains a URL to the registration endpoint.
 By default you do **not** have to register a handler for this event, as the plugin opens a browser automatically.
-If you handle opening the registration page yourself, you can pass back the callback URL with `actions.handleRegistrationUrl` after the user has finished the 
-registration. You can determine whether the registration is done by checking if the URL that the browser opens matches the configured redirect URL in the Token 
+If you handle opening the registration page yourself, you can pass back the callback URL with `actions.handleRegistrationUrl` after the user has finished the
+registration. You can determine whether the registration is done by checking if the URL that the browser opens matches the configured redirect URL in the Token
 Server configuration.
 
 ```js
@@ -114,7 +113,7 @@ handler.onFingerprintRequest((actions) => {
 
 ### `onFingerprintCaptured`
 
-This method is called when the fingerprint sensor detects that a finger has been placed on the sensor. It has not yet been determined if the fingerprint is 
+This method is called when the fingerprint sensor detects that a finger has been placed on the sensor. It has not yet been determined if the fingerprint is
 correct. This method can be used to provide feedback to the user so that they are aware the device has detected their finger.
 
 **Note:** this method is never called on iOS. TouchID on iOS uses its own native UI to provide feedback to users.
@@ -127,27 +126,12 @@ handler.onFingerprintCaptured(() => {
 
 ### `onFingerprintFailed`
 
-This method is called when the fingerprint previously detected was not recognized as the correct fingerprint. This method can be used to provide feedback to 
+This method is called when the fingerprint previously detected was not recognized as the correct fingerprint. This method can be used to provide feedback to
 your users so the are aware the device did not recognize their fingerprint. Additionally, the user should be able to try again.
 
 ```js
 handler.onFingerprintFailed(() => {
   console.log("Fingerprint incorrect! The user should try again.");
-});
-```
-
-### `onFidoRequest`
-
-This method is called when the user is required to authenticate with a FIDO authenticator. The following three actions can be called in response:
-
-- `acceptFido`: _Start FIDO authentication_.
-- `denyFido`: _Cancel this authentication attempt_.
-- `fallbackToPin`: _Ask for a PIN instead, you will receive a PIN request_.
-
-```js
-handler.onFidoRequest((actions) => {
-  console.log("Accepting fingerprint request");
-  actions.acceptFido();
 });
 ```
 
@@ -163,7 +147,7 @@ handler.onSuccess(() => {
 
 ### `onError`
 
-This method is called when the authentication has failed. The failure can be due to several errors, like failing to connect to the network, or when the user 
+This method is called when the authentication has failed. The failure can be due to several errors, like failing to connect to the network, or when the user
 has exceeded the maximum attempts at entering a PIN and has been deregistered.
 
 ```js
