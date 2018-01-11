@@ -44,14 +44,12 @@ extern NSString *const OGCDVPluginClassPushMobileAuthRequestClient;
 
 extern NSString *const OGCDVPluginAuthenticatorTypePin;
 extern NSString *const OGCDVPluginAuthenticatorTypeTouchId;
-extern NSString *const OGCDVPluginAuthenticatorTypeFido;
 
 extern NSString *const OGCDVPluginEventSuccess;
 extern NSString *const OGCDVPluginEventConfirmationRequest;
 extern NSString *const OGCDVPluginEventPinRequest;
 extern NSString *const OGCDVPluginEventCreatePinRequest;
 extern NSString *const OGCDVPluginEventFingerprintRequest;
-extern NSString *const OGCDVPluginEventFidoRequest;
 
 extern NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification;
 
@@ -62,7 +60,6 @@ extern NSString *const OGCDVPluginErrDescriptionNoUserAuthenticated;
 extern NSString *const OGCDVPluginErrDescriptionNoSuchAuthenticator;
 extern NSString *const OGCDVPluginErrDescriptionCreatePinNoRegistrationInProgress;
 extern NSString *const OGCDVPluginErrDescriptionProvidePinNoAuthenticationInProgress;
-extern NSString *const OGCDVPluginErrDescriptionFidoNoAuthenticationInProgress;
 extern NSString *const OGCDVPluginErrDescriptionFingerprintNoAuthenticationInProgress;
 extern NSString *const OGCDVPluginErrDescriptionInvalidMobileAuthenticationMethod;
 extern NSString *const OGCDVPluginErrDescriptionIncorrectPin;
@@ -81,4 +78,3 @@ extern int const OGCDVPluginErrCodeFingerprintNoAuthenticationInProgress;
 extern int const OGCDVPluginErrCodeInvalidMobileAuthenticationMethod;
 extern int const OGCDVPluginErrCodeIoException;
 extern int const OGCDVPluginErrCodeIncorrectPin;
-extern int const OGCDVPluginErrCodeFidoNoAuthenticationInProgress;

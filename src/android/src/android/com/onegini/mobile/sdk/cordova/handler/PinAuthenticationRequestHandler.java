@@ -16,9 +16,9 @@
 
 package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_PIN_REQUEST;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_INCORRECT_PIN;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INCORRECT_PIN;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_PIN_REQUEST;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;

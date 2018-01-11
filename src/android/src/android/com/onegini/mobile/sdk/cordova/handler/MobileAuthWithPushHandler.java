@@ -32,12 +32,10 @@ import org.apache.cordova.PluginResult;
 import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthenticationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthenticationError;
-import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthWithPushFidoRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthWithPushFingerprintRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthWithPushPinRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.OneginiMobileAuthWithPushRequestHandler;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiAcceptDenyCallback;
-import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFidoCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiFingerprintCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.entity.AuthenticationAttemptCounter;
@@ -45,14 +43,13 @@ import com.onegini.mobile.sdk.android.model.entity.CustomAuthenticatorInfo;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.ConfirmationCallback;
-import com.onegini.mobile.sdk.cordova.mobileAuthentication.FidoCallback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.FingerprintCallback;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.PinCallback;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class MobileAuthWithPushHandler
     implements OneginiMobileAuthenticationHandler, OneginiMobileAuthWithPushRequestHandler,
-    OneginiMobileAuthWithPushPinRequestHandler, OneginiMobileAuthWithPushFingerprintRequestHandler, OneginiMobileAuthWithPushFidoRequestHandler {
+    OneginiMobileAuthWithPushPinRequestHandler, OneginiMobileAuthWithPushFingerprintRequestHandler {
 
   private static MobileAuthWithPushHandler instance = null;
   private final HashMap<Callback.Method, CallbackContext> challengeReceivers = new HashMap<Callback.Method, CallbackContext>();
@@ -155,16 +152,6 @@ public class MobileAuthWithPushHandler
         .withEvent(EVENT_FINGERPRINT_CAPTURED)
         .withOneginiMobileAuthenticationRequest(fingerprintCallback.getMobileAuthenticationRequest())
         .build());
-  }
-
-  // *END*
-
-  // *START* Handling mobile authentication with Fido
-
-  @Override
-  public void startAuthentication(final OneginiMobileAuthenticationRequest oneginiMobileAuthenticationRequest, final OneginiFidoCallback oneginiFidoCallback) {
-    final FidoCallback fidoCallback = new FidoCallback(oneginiMobileAuthenticationRequest, oneginiFidoCallback);
-    addAuthenticationRequestToQueue(fidoCallback);
   }
 
   // *END*

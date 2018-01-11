@@ -18,7 +18,6 @@ apply plugin: 'maven'
 
 def pluginSDKiOSDir = 'OneginiSDKiOS'
 def headersDir = pluginSDKiOSDir + '/Headers'
-def fidoPluginExtras = new File('../../../cordova-plugin-onegini-fido/src/ios/build.gradle')
 
 buildscript {
   repositories {
@@ -50,16 +49,12 @@ allprojects {
 
 configurations {
   sdk
-  fido
 }
 
 // TODO Move to release version before plugin release
 dependencies {
   sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.1.1-SNAPSHOT@a'
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.1.1-SNAPSHOT@zip'
-
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:7.1.1-SNAPSHOT@a'
-  fido 'com.onegini.mobile.sdk.ios:libOneginiSDKiOSFIDO:7.1.1-SNAPSHOT@zip'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.1.1-SNAPSHOT:headers@zip'
 }
 
 task prepareTargetDirectory {
@@ -72,11 +67,7 @@ task prepareTargetDirectory {
 
 task downloadLibs(type: Copy, dependsOn: prepareTargetDirectory) {
   into(pluginSDKiOSDir)
-  if (fidoPluginExtras.exists()) {
-    from configurations.fido
-  } else {
-    from configurations.sdk
-  }
+  from configurations.sdk
 
   exclude('*.zip')
   rename('libOneginiSDKiOS(.*)-(.*).a$', "libOneginiSDKiOS.a")
@@ -85,17 +76,9 @@ task downloadLibs(type: Copy, dependsOn: prepareTargetDirectory) {
 task resolveDependencies(type: Copy, dependsOn: downloadLibs) {
   def headersPackage
 
-  if (fidoPluginExtras.exists()) {
-    configurations.fido.each {
-      if (it.name.endsWith(".zip")) {
-        headersPackage = it.absoluteFile
-      }
-    }
-  } else {
-    configurations.sdk.each {
-      if (it.name.endsWith(".zip")) {
-        headersPackage = it.absoluteFile
-      }
+  configurations.sdk.each {
+    if (it.name.endsWith(".zip")) {
+      headersPackage = it.absoluteFile
     }
   }
 

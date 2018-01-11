@@ -26,7 +26,6 @@
 @property (atomic, retain) NSString *mobileAuthenticationMethod;
 @property (atomic, retain) ONGPinChallenge *pinChallenge;
 @property (atomic, retain) ONGFingerprintChallenge *fingerprintChallenge;
-@property (atomic, retain) ONGFIDOChallenge *fidoChallenge;
 @property (nonatomic, assign) BOOL _executing;
 @property (nonatomic, assign) BOOL _finished;
 
@@ -39,9 +38,6 @@
 - (id)initWithFingerprintChallenge:(ONGFingerprintChallenge *)challenge
                         forRequest:(ONGMobileAuthRequest *)request
                          forMethod:(NSString *)method;
-- (id)initWithFidoChallenge:(ONGFIDOChallenge *)challenge
-                 forRequest:(ONGMobileAuthRequest *)request
-                  forMethod:(NSString *)method;
 - (void)sendChallenge:(NSString *)callbackId;
 
 @end

@@ -156,36 +156,11 @@ static int const ARG_INDEX_AUTHENTICATOR = 1;
     }];
 }
 
-- (void)respondToFidoRequest:(CDVInvokedUrlCommand *)command
-{
-    if (!self.fidoChallenge) {
-        [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeFidoNoAuthenticationInProgress
-                                andMessage:OGCDVPluginErrDescriptionFidoNoAuthenticationInProgress];
-        return;
-    }
-
-    [self.commandDelegate runInBackground:^{
-        NSDictionary *options = command.arguments[0];
-        BOOL shouldNotAccept = ![options[OGCDVPluginKeyAccept] boolValue];
-
-        if (shouldNotAccept) {
-            [self.fidoChallenge.sender cancelChallenge:self.fidoChallenge];
-            return;
-        }
-
-        [self.fidoChallenge.sender respondWithFIDOForChallenge:self.fidoChallenge];
-    }];
-}
-
 - (void)fallbackToPin:(CDVInvokedUrlCommand *)command
 {
     if (self.fingerprintChallenge) {
         [self.commandDelegate runInBackground:^{
             [self.fingerprintChallenge.sender respondWithPinFallbackForChallenge:self.fingerprintChallenge];
-        }];
-    } else if (self.fidoChallenge) {
-        [self.commandDelegate runInBackground:^{
-            [self.fidoChallenge.sender respondWithPinFallbackForChallenge:self.fidoChallenge];
         }];
     }
 }

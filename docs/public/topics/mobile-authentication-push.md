@@ -5,7 +5,7 @@
 ## Introduction
 
 Two factor authentication can be implemented using APNs & FCM push notifications. It's a very secure and user friendly way of authentication. You can use this
-feature to allow users to confirm their transactions. Confirmation can be done using simple Accept button, PIN, Fingerprint or a FIDO authenticator. All
+feature to allow users to confirm their transactions. Confirmation can be done using simple Accept button, PIN or a Fingerprint  authenticator. All
 transaction information is encrypted and no sensitive information is sent through either APNs or FCM.
 
 ## Setup and requirements
@@ -130,7 +130,7 @@ Handling one of the pending mobile authentication request from the list can be p
 ## Request handling
 
 You can configure different mobile authentication types in the Token Server [mobile authentication configuration](https://docs.onegini.com/token-server/topics/mobile-apps/mobile-authentication/mobile-authentication.html#configure-authentication-properties)
-panel. There are currently four different methods of authentication. These are: **push**, **push with PIN**, **push with fingerprint**, and **push with FIDO**.
+panel. There are currently three different methods of authentication. These are: **push**, **push with PIN** and **push with fingerprint**.
 Only once the authentication type has been configured on the Token Server can it be used.
 
 ### Push
@@ -267,40 +267,3 @@ The details of these handler methods are exactly the same as explained in the fi
 `onFingerprintCaptured` and `onFingerprintFailed` are only available on Android devices, due to the more restrictive nature of Touch Id for iOS.
 Additionally, care must be taken to implement `onPinRequest`, as the Onegini Cordova plugin will perform a fallback to pin in the case of multiple failed
 fingerprint requests.
-
-### Push with FIDO
-
-For devices that support it, it is also possible to allow mobile authentication requests for FIDO authenticators. Like push with PIN, this mobile authentication
-method adds an extra layer of security, while often being more convenient for the user than PIN. The user is required to perform authentication with the
-specified FIDO authenticator before the mobile authentication request is confirmed.
-
-The use of this mobile authentication method requires the FIDO authenticator specified in the mobile authentication request to have been registered for the user.
-See the [User authentication with FIDO](user-authentication-with-fido.md) topic guide for more information.
-
-Handling a push with FIDO request is very similar to the other types of mobile authentication requests.
-See [`onegini.mobileAuth.push.on`](../reference/mobileAuthentication/push/on.md) for more details.
-
-**Example code to handle a push with FIDO mobile authentication requests:**
-
-```js
-onegini.mobileAuth.push.on("fido")
-    .onPinRequest((actions, request) => {
-      console.log("New mobile authentication request", request);
-
-      // We assume that on fallback, the user still accepts the request
-      // and provides a pin of "12346".
-      let pin = "12346";
-
-      actions.accept(pin);
-    })
-    .onFidoRequest((actions, request) => {
-        console.log("New mobile authentication request", request);
-    })
-    .onSuccess(() => {
-      alert("FIDO Mobile Authentication request success!");
-    })
-    .onError((err) => {
-      alert("FIDO Mobile authentication request failed!");
-      console.error("FIDO Mobile authentication request failed: ", err);
-    });
-```

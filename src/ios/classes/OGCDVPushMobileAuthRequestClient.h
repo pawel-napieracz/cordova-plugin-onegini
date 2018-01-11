@@ -43,7 +43,5 @@
            didReceivePinChallengeResponse:(BOOL)accept withPin:(NSString *)pin withCallbackId:(NSString *)callbackId;
 - (void)mobileAuthenticationRequestClient:(OGCDVPushMobileAuthRequestClient *)mobileAuthenticationRequestClient
    didReceiveFingerprintChallengeResponse:(BOOL)accept withPrompt:(NSString *)prompt withCallbackId:(NSString *)callbackId;
-- (void)mobileAuthenticationRequestClient:(OGCDVPushMobileAuthRequestClient *)mobileAuthenticationRequestClient
-   didReceiveFidoChallengeResponse:(BOOL)accept withCallbackId:(NSString *)callbackId;
 - (void)completeOperation;
 @end

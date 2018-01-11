@@ -51,7 +51,6 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_DESCRIPTION_CREATE_PIN_NO_REGISTRATION_IN_PROGRESS = "Onegini: createPin called, but no registration in progress.";
   String ERROR_DESCRIPTION_PROVIDE_PIN_NO_AUTHENTICATION_IN_PROGRESS = "Onegini: providePin called, but no pin authentication in progress.";
   String ERROR_DESCRIPTION_FINGERPRINT_NO_AUTHENTICATION_IN_PROGRESS = "Onegini: received reply for fingerprint authentication, but no fingerprint authentication in progress.";
-  String ERROR_DESCRIPTION_FIDO_NO_AUTHENTICATION_IN_PROGRESS = "Onegini: received reply for FIDO authentication, but no FIDO authentication in progress.";
   String ERROR_DESCRIPTION_INVALID_MOBILE_AUTHENTICATION_METHOD = "Onegini: Invalid mobile authentication method";
   String ERROR_DESCRIPTION_INCORRECT_PIN = "Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
   String ERROR_DESCRIPTION_OPERATION_CANCELED = "Onegini: the operation was canceled.";
@@ -71,7 +70,6 @@ public interface OneginiCordovaPluginConstants {
   int ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD = 8010;
   int ERROR_CODE_IO_EXCEPTION = 8011;
   int ERROR_CODE_INCORRECT_PIN = 8012;
-  int ERROR_CODE_FIDO_NO_AUTHENTICATION_IN_PROGRESS = 8014;
 
   int ERROR_CODE_OPERATION_CANCELED = 9006;
 
@@ -84,7 +82,6 @@ public interface OneginiCordovaPluginConstants {
   String EVENT_FINGERPRINT_FAILED = "onFingerprintFailed";
   String EVENT_FINGERPRINT_CAPTURED = "onFingerprintCaptured";
   String EVENT_ON_REGISTRATION_REQUEST = "onRegistrationRequest";
-  String EVENT_FIDO_REQUEST = "onFidoRequest";
 
   // Extras
   String EXTRA_MOBILE_AUTHENTICATION = "com.onegini.CordovaPluginMobileAuthenticationExtra";

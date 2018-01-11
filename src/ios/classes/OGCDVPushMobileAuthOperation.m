@@ -25,7 +25,6 @@
 @synthesize completeOperationCallbackId;
 @synthesize pinChallenge;
 @synthesize fingerprintChallenge;
-@synthesize fidoChallenge;
 
 - (id)initWithConfirmationChallenge:(void (^)(BOOL confirmRequest))confirmation
                          forRequest:(ONGMobileAuthRequest *)request
@@ -65,20 +64,6 @@
 
     [self initOperationWithRequest:request forMethod:method];
     [self setFingerprintChallenge:challenge];
-
-    return self;
-}
-
-- (id)initWithFidoChallenge:(ONGFIDOChallenge *)challenge
-                 forRequest:(ONGMobileAuthRequest *)request
-                  forMethod:(NSString *)method;
-{
-    if (![super init]) {
-        return nil;
-    }
-
-    [self initOperationWithRequest:request forMethod:method];
-    [self setFidoChallenge:challenge];
 
     return self;
 }
@@ -191,18 +176,6 @@
         [self.fingerprintChallenge.sender respondWithDefaultPromptForChallenge:fingerprintChallenge];
     } else {
         [self.fingerprintChallenge.sender respondWithPrompt:prompt challenge:fingerprintChallenge];
-    }
-}
-
-- (void)mobileAuthenticationRequestClient:(OGCDVPushMobileAuthRequestClient *)mobileAuthenticationRequestClient
-          didReceiveFidoChallengeResponse:(BOOL)accept withCallbackId:(NSString *)callbackId
-{
-    [self setCompleteOperationCallbackId:callbackId];
-
-    if (accept) {
-        [self.fidoChallenge.sender respondWithFIDOForChallenge:fidoChallenge];
-    } else {
-        [self.fidoChallenge.sender cancelChallenge:fidoChallenge];
     }
 }
 
