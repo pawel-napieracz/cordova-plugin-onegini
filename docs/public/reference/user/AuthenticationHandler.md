@@ -19,7 +19,7 @@ handler.onPinrequest((actions, options) => {
 });
 ```
 
-When `onPinRequest` is called, the user should asked for their PIN. After the user has entered their PIN, you can supply it to the SDK by calling an `action`,
+When `onPinRequest` is called, the user should be asked for their PIN. After the user has entered their PIN, you can supply it to the SDK by calling an `action`,
 in this case `providePin`.
 
 **Example using the `prompt` to ask for the PIN:**
@@ -31,7 +31,7 @@ handler.onPinRequest((actions, options) => {
 })
 ```
 
-If the PIN entered is incorrect, the `onPinRequest` handler will be called with a new request. The `options` parameter contains additional parameters like max
+If the entered PIN is incorrect, the `onPinRequest` handler will be called with a new request. The `options` parameter contains additional parameters like max
 allowed attempts and remaining attempts.
 
 If the PIN is correct, the `onSuccess` handler will be called.
