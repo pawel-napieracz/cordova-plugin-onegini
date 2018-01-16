@@ -1799,7 +1799,7 @@ exports.defineAutoTests = function () {
     it('should fetch an anonymous resource', function (done) {
       onegini.resource.fetch({
           url: 'https://onegini-msp-snapshot.test.onegini.io/resources/application-details',
-          anonymous: true
+          auth: onegini.resource.auth.ANONYMOUS
         },
         function (response) {
           expect(response).toBeDefined();
