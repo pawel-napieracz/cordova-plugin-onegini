@@ -127,7 +127,7 @@ export default {
     selectedProfileId: function() {
       onegini.user.authenticateImplicitly(this.selectedProfileId)
           .then(() => onegini.resource.fetch({
-            url: 'https://onegini-msp-snapshot.test.onegini.io/resources/user-id-decorated',
+            url: 'https://demo-msp.onegini.com/resources/user-id-decorated',
             auth: onegini.resource.auth.IMPLICIT,
           }))
           .then((response) => {
