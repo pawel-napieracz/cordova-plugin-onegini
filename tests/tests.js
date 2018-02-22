@@ -17,6 +17,9 @@
  */
 
 exports.defineAutoTests = function () {
+
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000; //set global test timeout to 30 seconds
+
   var config = {
     testForMultipleAuthenticators: true,
     testForMobileFingerprintAuthentication: false,
@@ -117,7 +120,7 @@ exports.defineAutoTests = function () {
             expect(err).toBeUndefined();
             fail('Error callback called, but method should have succeeded');
           });
-      }, 25000); // Timeout is increased because of permission popups on Android
+      });
 
       afterAll(function (done) {
         setUrlHandlerUserId(config.userId,
@@ -748,7 +751,7 @@ exports.defineAutoTests = function () {
               expect(err).toBeUndefined();
               fail("Error callback was called, but method should have succeeded");
             });
-        }, 20000);
+        });
       });
 
       describe("isUserEnrolled", function () {
@@ -876,7 +879,7 @@ exports.defineAutoTests = function () {
             });
 
           sendPushMobileAuthRequest();
-        }, 10000);
+        });
 
         it('should reject a push confirmation request', function (done) {
           onegini.mobileAuth.push.on("confirmation")
@@ -894,7 +897,7 @@ exports.defineAutoTests = function () {
             });
 
           sendPushMobileAuthRequest();
-        }, 10000);
+        });
 
         it('should be able to handle multiple requests', function (done) {
           var counter = 0;
@@ -918,7 +921,7 @@ exports.defineAutoTests = function () {
 
           sendPushMobileAuthRequest();
           sendPushMobileAuthRequest();
-        }, 10000);
+        });
 
         it('should accept a mobile pin request', function (done) {
           onegini.mobileAuth.push.on("pin")
@@ -967,7 +970,7 @@ exports.defineAutoTests = function () {
             });
 
           sendPushMobileAuthRequest("push_with_pin_cordova");
-        }, 10000);
+        });
       });
     });
 
@@ -1268,7 +1271,7 @@ exports.defineAutoTests = function () {
               });
 
             sendPushMobileAuthRequest("push_with_fingerprint_cordova");
-          }, 10000);
+          });
 
           it("Should reject a mobile fingerprint request", function (done) {
             onegini.mobileAuth.push.on("fingerprint")
@@ -1286,7 +1289,7 @@ exports.defineAutoTests = function () {
               });
 
             sendPushMobileAuthRequest("push_with_fingerprint_cordova");
-          }, 10000);
+          });
 
           if (cordova.platformId === "android") {
             it("Should be notified on fingerprint captured", function (done) {
@@ -1311,7 +1314,7 @@ exports.defineAutoTests = function () {
                 });
 
               sendPushMobileAuthRequest("push_with_fingerprint_cordova");
-            }, 10000);
+            });
 
             it("Should request fingerprint authentication again on incorrect fingerprint", function (done) {
               onegini.mobileAuth.push.on("fingerprint")
@@ -1332,7 +1335,7 @@ exports.defineAutoTests = function () {
                 });
 
               sendPushMobileAuthRequest("push_with_fingerprint_cordova");
-            }, 10000);
+            });
           }
         });
       });
