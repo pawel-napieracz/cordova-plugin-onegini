@@ -91,17 +91,6 @@ export default {
         .onFingerprintFailed(() => {
           this.fingerprintStatus = 'No match!';
         })
-        .onFidoRequest((actions) => {
-          let callback = (result) => {
-            if (result === 1) {
-              actions.acceptFido();
-            } else {
-              actions.fallbackToPin();
-           }
-         }
-
-          navigator.notification.confirm('Login using FIDO?', callback, 'Authenticate', ['Continue','Use PIN']);
-        })
         .onSuccess(() => {
           this.$router.push('dashboard');
         })
@@ -138,7 +127,7 @@ export default {
     selectedProfileId: function() {
       onegini.user.authenticateImplicitly(this.selectedProfileId)
           .then(() => onegini.resource.fetch({
-            url: 'https://onegini-msp-snapshot.test.onegini.io/resources/user-id-decorated',
+            url: 'https://demo-msp.onegini.com/resources/user-id-decorated',
             auth: onegini.resource.auth.IMPLICIT,
           }))
           .then((response) => {

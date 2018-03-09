@@ -15,7 +15,7 @@
     <div v-if="!fingerprintStatus">
       <button-lg text="✓ Accept" @click="this.accept" />
       <button-lg text="✗ Deny" @click="this.deny" />
-    </div>    
+    </div>
   </div>
 </template>
 
@@ -86,25 +86,6 @@ export default {
             navigator.notification.alert('Something went wrong! ' + err.description);
             this.complete();
           });
-
-      onegini.mobileAuth.push.on('fido')
-          .onFidoRequest(function (actions, request) {
-            navigator.notification.confirm(request.message, function (buttonIndex) {
-              if (buttonIndex === 1) {
-                actions.accept();
-              }
-              else {
-                actions.deny();
-              }
-            }, 'Mobile Authentication Request', ['Accept', 'Reject']);
-          })
-          .onSuccess(function () {
-            alert('FIDO Mobile Authentication request success!');
-          })
-          .onError(function (err) {
-            alert('FIDO Mobile authentication request failed!');
-            console.error('FIDO Mobile authentication request failed: ', err);
-          });
     },
 
     accept: function() {
@@ -152,7 +133,7 @@ export default {
     width: 100%;
     height: 100%;
     padding: 1em;
-    
+
     background-color: #fff;
     box-shadow: 0 0 1em rgba(0, 0, 0, .7);
 

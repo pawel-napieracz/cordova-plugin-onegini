@@ -29,7 +29,7 @@
 
     methods: {
       fetchDeviceList: function () {
-        onegini.resource.fetch('https://onegini-msp-snapshot.test.onegini.io/resources/devices')
+        onegini.resource.fetch('https://demo-msp.onegini.com/resources/devices')
           .then((result) => {
             this.devices = result.json.devices;
           })
