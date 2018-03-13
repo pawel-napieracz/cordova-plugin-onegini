@@ -177,11 +177,13 @@ public class PluginResultBuilder {
   }
 
   public PluginResultBuilder withCustomInfo(final CustomInfo customInfo) {
-    try {
-      payload.put("customInfoStatus", customInfo.getStatus());
-      payload.put("customInfoData", customInfo.getData());
-    } catch (JSONException e) {
-      handleException(e);
+    if (customInfo != null) {
+      try {
+        payload.put("customInfoStatus", customInfo.getStatus());
+        payload.put("customInfoData", customInfo.getData());
+      } catch (JSONException e) {
+        handleException(e);
+      }
     }
     return this;
   }
