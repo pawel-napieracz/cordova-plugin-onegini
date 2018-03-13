@@ -50,8 +50,8 @@ public class BrowserRegistrationRequestHandler implements OneginiBrowserRegistra
     return callback;
   }
 
-  public static void setBrowserRegistrationRequestCallbackContext(final CallbackContext registrationRequestCallbackContext) {
-    BrowserRegistrationRequestHandler.browserRegistrationRequestCallbackContext = registrationRequestCallbackContext;
+  public static void setBrowserRegistrationRequestCallbackContext(final CallbackContext browserRegistrationRequestCallbackContext) {
+    BrowserRegistrationRequestHandler.browserRegistrationRequestCallbackContext = browserRegistrationRequestCallbackContext;
   }
 
   public static void setShouldOpenBrowser(final boolean shouldOpenBrowser) {
@@ -65,9 +65,9 @@ public class BrowserRegistrationRequestHandler implements OneginiBrowserRegistra
   }
 
   @Override
-  public void startRegistration(Uri uri, final OneginiBrowserRegistrationCallback oneginiRegistrationCallback) {
+  public void startRegistration(Uri uri, final OneginiBrowserRegistrationCallback oneginiBrowserRegistrationCallback) {
     uri = getRegistrationUriWithParameters(uri);
-    callback = oneginiRegistrationCallback;
+    callback = oneginiBrowserRegistrationCallback;
 
     sendRegistrationRequestEvent(uri);
     if (shouldOpenBrowser) {
