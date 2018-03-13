@@ -33,19 +33,17 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiBrowserRegistrationCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
-import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiRegistrationCallback;
 import com.onegini.mobile.sdk.android.model.OneginiIdentityProvider;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.handler.BrowserRegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationHandler;
-import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 import com.onegini.mobile.sdk.cordova.util.IdentityProvidersUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
@@ -93,22 +91,18 @@ public class UserRegistrationClient extends CordovaPlugin {
 
   private void startRegistration(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String[] scopes = ActionArgumentsUtil.getScopesFromArguments(args);
+    final String identityProviderId = ActionArgumentsUtil.getIdentityProviderIdFromArguments(args);
 
-    RegistrationRequestHandler.setRegistrationRequestCallbackContext(callbackContext);
-    RegistrationRequestHandler.setShouldOpenBrowser(shouldOpenBrowserForRegistration());
+    BrowserRegistrationRequestHandler.setBrowserRegistrationRequestCallbackContext(callbackContext);
+    BrowserRegistrationRequestHandler.setShouldOpenBrowser(shouldOpenBrowserForRegistration());
     CreatePinRequestHandler.getInstance().setOnStartPinCreationCallback(callbackContext);
     registrationHandler = new RegistrationHandler(callbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
         try {
-          final JSONObject identityProviderObject = getIdentityProviderJsonObject(args);
-          if (identityProviderObject == null) {
-            getOneginiClient().getUserClient().registerUser(scopes, registrationHandler);
-          } else {
-            final OneginiIdentityProvider identityProvider = getSpecifiedIdentityProvider(args);
-            getOneginiClient().getUserClient().registerUser(identityProvider, scopes, registrationHandler);
-          }
+          final OneginiIdentityProvider identityProvider = getSpecifiedIdentityProvider(identityProviderId);
+          getOneginiClient().getUserClient().registerUser(identityProvider, scopes, registrationHandler);
         } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
               .withError()
@@ -119,19 +113,12 @@ public class UserRegistrationClient extends CordovaPlugin {
     });
   }
 
-  @Nullable
-  private JSONObject getIdentityProviderJsonObject(final JSONArray array) throws JSONException {
-    for (int i = 0; i < array.length(); i++) {
-      if (array.getJSONObject(i).has("identityProviderId")) {
-        return array.getJSONObject(i);
-      }
+  private OneginiIdentityProvider getSpecifiedIdentityProvider(final String identityProviderId) throws JSONException {
+    if (identityProviderId == null) {
+      return null;
     }
-    return null;
-  }
-
-  private OneginiIdentityProvider getSpecifiedIdentityProvider(final JSONObject identityProviderObject) throws JSONException {
     final Set<OneginiIdentityProvider> identityProviders = getOneginiClient().getUserClient().getIdentityProviders();
-    return IdentityProvidersUtil.parseJsonObjectToIdentityProvider(identityProviderObject, identityProviders);
+    return IdentityProvidersUtil.parseJsonObjectToIdentityProvider(identityProviderId, identityProviders);
   }
 
   private void createPin(final JSONArray args, final CallbackContext createPinCallbackContext) throws JSONException {
@@ -206,7 +193,7 @@ public class UserRegistrationClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        RegistrationRequestHandler.handleRegistrationCallback(uri);
+        BrowserRegistrationRequestHandler.handleRegistrationCallback(uri);
       }
     });
   }
@@ -220,7 +207,7 @@ public class UserRegistrationClient extends CordovaPlugin {
   }
 
   private void cancelFlow() {
-    OneginiRegistrationCallback callback = RegistrationRequestHandler.getCallback();
+    final OneginiBrowserRegistrationCallback callback = BrowserRegistrationRequestHandler.getCallback();
 
     if (callback == null) {
       return;

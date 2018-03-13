@@ -16,6 +16,7 @@
 
 package com.onegini.mobile.sdk.cordova.util;
 
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.IDENTITY_PROVIDER_ID;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_ANONYMOUS;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_ID;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_AUTHENTICATOR_TYPE;
@@ -70,6 +71,10 @@ public class ActionArgumentsUtil {
 
   public static String getPinFromArguments(final JSONArray args) throws JSONException {
     return args.getJSONObject(0).getString(PARAM_PIN);
+  }
+
+  public static String getIdentityProviderIdFromArguments(final JSONArray args) throws JSONException {
+    return args.getJSONObject(0).getString(IDENTITY_PROVIDER_ID);
   }
 
   public static Callback.Method getCallbackMethodFromArguments(final JSONArray args) throws JSONException {

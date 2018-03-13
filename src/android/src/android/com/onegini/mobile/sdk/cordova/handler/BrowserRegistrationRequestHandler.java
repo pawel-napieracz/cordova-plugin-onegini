@@ -23,39 +23,39 @@ import org.apache.cordova.CallbackContext;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import com.onegini.mobile.sdk.android.handlers.request.OneginiRegistrationRequestHandler;
-import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiRegistrationCallback;
+import com.onegini.mobile.sdk.android.handlers.request.OneginiBrowserRegistrationRequestHandler;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiBrowserRegistrationCallback;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
-public class RegistrationRequestHandler implements OneginiRegistrationRequestHandler {
+public class BrowserRegistrationRequestHandler implements OneginiBrowserRegistrationRequestHandler {
 
   private static final String PARAM_USER_ID = "user_id";
 
   private static String userId;
-  private static OneginiRegistrationCallback callback;
-  private static CallbackContext registrationRequestCallbackContext;
+  private static OneginiBrowserRegistrationCallback callback;
+  private static CallbackContext browserRegistrationRequestCallbackContext;
   private static boolean shouldOpenBrowser;
   private final Context context;
 
-  public RegistrationRequestHandler(final Context context) {
+  public BrowserRegistrationRequestHandler(final Context context) {
     this.context = context;
   }
 
   @SuppressWarnings("unused")
   public static void setUserId(final String userId) {
-    RegistrationRequestHandler.userId = userId;
+    BrowserRegistrationRequestHandler.userId = userId;
   }
 
-  public static OneginiRegistrationCallback getCallback() {
+  public static OneginiBrowserRegistrationCallback getCallback() {
     return callback;
   }
 
-  public static void setRegistrationRequestCallbackContext(final CallbackContext registrationRequestCallbackContext) {
-    RegistrationRequestHandler.registrationRequestCallbackContext = registrationRequestCallbackContext;
+  public static void setBrowserRegistrationRequestCallbackContext(final CallbackContext registrationRequestCallbackContext) {
+    BrowserRegistrationRequestHandler.browserRegistrationRequestCallbackContext = registrationRequestCallbackContext;
   }
 
   public static void setShouldOpenBrowser(final boolean shouldOpenBrowser) {
-    RegistrationRequestHandler.shouldOpenBrowser = shouldOpenBrowser;
+    BrowserRegistrationRequestHandler.shouldOpenBrowser = shouldOpenBrowser;
   }
 
   public static void handleRegistrationCallback(final Uri uri) {
@@ -65,7 +65,7 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
   }
 
   @Override
-  public void startRegistration(Uri uri, final OneginiRegistrationCallback oneginiRegistrationCallback) {
+  public void startRegistration(Uri uri, final OneginiBrowserRegistrationCallback oneginiRegistrationCallback) {
     uri = getRegistrationUriWithParameters(uri);
     callback = oneginiRegistrationCallback;
 
@@ -94,14 +94,14 @@ public class RegistrationRequestHandler implements OneginiRegistrationRequestHan
   }
 
   private void sendRegistrationRequestEvent(final Uri uri) {
-    registrationRequestCallbackContext.sendPluginResult(new PluginResultBuilder()
+    browserRegistrationRequestCallbackContext.sendPluginResult(new PluginResultBuilder()
         .shouldKeepCallback()
         .withSuccess()
         .withEvent(EVENT_ON_REGISTRATION_REQUEST)
         .withUri(uri)
         .build());
 
-    registrationRequestCallbackContext = null;
+    browserRegistrationRequestCallbackContext = null;
   }
 
 }

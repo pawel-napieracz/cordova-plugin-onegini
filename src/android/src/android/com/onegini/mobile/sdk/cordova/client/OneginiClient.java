@@ -45,7 +45,7 @@ import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.fcm.FcmTokenUpdateService;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
-import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.BrowserRegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.AppLifecycleUtil;
 import com.onegini.mobile.sdk.cordova.util.PendingMobileAuthRequestUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
@@ -117,7 +117,7 @@ public class OneginiClient extends CordovaPlugin {
   private void handleRedirection(final Uri uri) {
     final com.onegini.mobile.sdk.android.client.OneginiClient client = getOneginiClient();
     if (uri != null && client.getConfigModel().getRedirectUri().startsWith(uri.getScheme())) {
-      RegistrationRequestHandler.handleRegistrationCallback(uri);
+      BrowserRegistrationRequestHandler.handleRegistrationCallback(uri);
     }
   }
 

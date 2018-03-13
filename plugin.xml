@@ -369,7 +369,7 @@
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthWithOtpHandler.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/RegistrationRequestHandler.java"
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/BrowserRegistrationRequestHandler.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PendingMobileAuthWithPushRequestsHandler.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
