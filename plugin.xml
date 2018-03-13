@@ -238,6 +238,10 @@
         <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.PendingPushMobileAuthRequestClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiIdentityProvidersClient">
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.IdentityProvidersClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -295,6 +299,8 @@
         target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/PendingPushMobileAuthRequestClient.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/IdentityProvidersClient.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
 
     <!-- fcm -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmInstanceIdService.java"
@@ -324,6 +330,8 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AppLifecycleUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PendingMobileAuthRequestUtil.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/IdentityProvidersUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
 
     <!-- handler -->

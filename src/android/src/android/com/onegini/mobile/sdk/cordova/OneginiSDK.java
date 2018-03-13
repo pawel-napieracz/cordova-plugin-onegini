@@ -71,7 +71,7 @@ public class OneginiSDK {
         .setMobileAuthWithPushRequestHandler(mobileAuthWithPushHandler)
         .setMobileAuthWithPushPinRequestHandler(mobileAuthWithPushHandler)
         .setMobileAuthWithPushFingerprintRequestHandler(mobileAuthWithPushHandler)
-        .setFingerprintAuthenticatioRequestHandler(fingerprintAuthenticationRequestHandler)
+        .setFingerprintAuthenticationRequestHandler(fingerprintAuthenticationRequestHandler)
         .setMobileAuthWithOtpRequestHandler(mobileAuthWithOtpHandler);
 
     return builder.build();

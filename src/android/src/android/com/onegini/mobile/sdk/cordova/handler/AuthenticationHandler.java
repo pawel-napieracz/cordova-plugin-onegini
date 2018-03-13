@@ -23,7 +23,7 @@ import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.sdk.android.handlers.OneginiAuthenticationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiAuthenticationError;
-import com.onegini.mobile.sdk.android.model.entity.CustomAuthenticatorInfo;
+import com.onegini.mobile.sdk.android.model.entity.CustomInfo;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
@@ -35,10 +35,11 @@ public class AuthenticationHandler implements OneginiAuthenticationHandler {
   }
 
   @Override
-  public void onSuccess(final UserProfile userProfile, final CustomAuthenticatorInfo customAuthenticatorInfo) {
+  public void onSuccess(final UserProfile userProfile, final CustomInfo customInfo) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .withProfileId(userProfile)
+        .withCustomInfo(customInfo)
         .withEvent(EVENT_SUCCESS)
         .build();
 
