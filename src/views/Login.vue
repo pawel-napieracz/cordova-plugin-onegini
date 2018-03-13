@@ -103,25 +103,6 @@
               }
             }
 
-<<<<<<< Updated upstream
-          navigator.notification.confirm('Login using your fingerprint?', callback, 'Authenticate', ['Continue','Use PIN']);
-        })
-        .onFingerprintCaptured(() => {
-          this.fingerprintStatus = 'Verifying...';
-        })
-        .onFingerprintFailed(() => {
-          this.fingerprintStatus = 'No match!';
-        })
-        .onSuccess(() => {
-          this.$router.push('dashboard');
-        })
-        .onError((err) => {
-          console.error(err);
-          this.getUserProfiles();
-          navigator.notification.alert('Authentication failed. ' + err.description);
-        });
-    },
-=======
             navigator.notification.confirm('Login using your fingerprint?', callback, 'Authenticate', ['Continue', 'Use PIN']);
           })
           .onFingerprintCaptured(() => {
@@ -139,7 +120,6 @@
             navigator.notification.alert('Authentication failed. ' + err.description);
           });
       },
->>>>>>> Stashed changes
 
       register: function () {
         onegini.user.register({
