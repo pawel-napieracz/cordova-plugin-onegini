@@ -99,5 +99,5 @@ onegini.user.register({
 ## Choosing an identity provider
 
 To select an identity provider which will be used during the registration process you need to pass its id in place of the `identityProviderId` param. 
-Alternatively you can pass `null` value to use the identity provider set as default on the **Token Server**. To learn more about identity providers please read 
-the [getIdentityProviders](../reference/user/getIdentityProviders.md) reference guide. 
+If this parameter isn't specified or if its value is `null` the default identity provider set on the **Token Server** will be used. To learn more about identity 
+providers please read the [getIdentityProviders](../reference/user/getIdentityProviders.md) reference guide. 

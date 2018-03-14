@@ -73,8 +73,12 @@ public class ActionArgumentsUtil {
     return args.getJSONObject(0).getString(PARAM_PIN);
   }
 
-  public static String getIdentityProviderIdFromArguments(final JSONArray args) throws JSONException {
-    return args.getJSONObject(0).getString(IDENTITY_PROVIDER_ID);
+  public static String getIdentityProviderIdFromArguments(final JSONArray args) {
+    try {
+      return args.getJSONObject(0).getString(IDENTITY_PROVIDER_ID);
+    } catch (JSONException e) {
+      return null;
+    }
   }
 
   public static Callback.Method getCallbackMethodFromArguments(final JSONArray args) throws JSONException {
