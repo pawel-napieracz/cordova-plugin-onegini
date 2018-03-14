@@ -29,6 +29,7 @@
         * [logout](reference/user/logout.md)
         * [register](reference/user/register.md)
         * [validatePinWithPolicy](reference/user/validatePinWithPolicy.md)
+        * [getIdentityProviders](reference/user/getIdentityProviders.md)
     * [device](reference/device/introduction.md)
         * [authenticate](reference/device/authenticate.md)
     * [resource](reference/resource/introduction.md)

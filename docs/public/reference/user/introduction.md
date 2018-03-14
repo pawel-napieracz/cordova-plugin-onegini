@@ -16,3 +16,4 @@ This section describes the APIs that are available on the global `onegini.user` 
 * [`onegini.user.logout`](logout.md)
 * [`onegini.user.register`](register.md)
 * [`onegini.user.validatePinWithPolicy`](validatePinWithPolicy.md)
+* [`onegini.user.getIdentityProviders`](getIdentityProviders.md)
