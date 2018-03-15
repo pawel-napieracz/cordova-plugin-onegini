@@ -96,6 +96,6 @@ public interface OneginiCordovaPluginConstants {
   String PUSH_MSG_MESSAGE = "og_message";
 
   //Identity Providers
-  String IDENTITY_PROVIDER_ID = "id";
-  String IDENTITY_PROVIDER_NAME = "name";
+  String IDENTITY_PROVIDER_ID = "identityProviderId";
+  String IDENTITY_PROVIDER_NAME = "identityProviderName";
 }

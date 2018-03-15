@@ -77,6 +77,9 @@
       <feature name="OneginiPendingMobileAuthRequestClient">
         <param name="ios-package" value="OGCDVPendingPushMobileAuthRequestClient"/>
       </feature>
+      <feature name="OneginiIdentityProvidersClient">
+        <param name="ios-package" value="OGCDVIdentityProvidersClient"/>
+      </feature>
     </config-file>
 
     <header-file src="src/ios/classes/Reachability.h"/>
@@ -161,12 +164,13 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPinChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPublicDefines.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRegistrationDelegate.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRegistrationRequestChallenge.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGBrowserRegistrationChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRequestBuilder.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGResourceRequest.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGResourceResponse.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserProfile.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGIdentityProvider.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
     <!-- SDK binary -->
