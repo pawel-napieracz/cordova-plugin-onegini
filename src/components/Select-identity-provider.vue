@@ -1,7 +1,7 @@
 <template>
   <select v-model="selectedIdentityProviderId">
     <option :value="null">Default identity provider</option>
-    <option :value="identityProvider.id" v-for="identityProvider in identityProviders">{{identityProvider.name}}
+    <option :value="identityProvider.identityProviderId" v-for="identityProvider in identityProviders">{{identityProvider.identityProviderName}}
     </option>
   </select>
 </template>

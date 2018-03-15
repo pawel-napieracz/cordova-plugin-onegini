@@ -123,7 +123,7 @@
 
       register: function () {
         onegini.user.register({
-          id: this.selectedIdentityProviderId,
+          identityProviderId: this.selectedIdentityProviderId,
         })
           .onCreatePinRequest((actions, options) => {
             let callback = (results) => {
