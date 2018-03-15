@@ -68,10 +68,13 @@ module.exports = (function () {
       var event = options.pluginEvent;
       delete options.pluginEvent;
 
-      if (event === 'onSuccess') {
-        self.callbacks[event](options);
-      } else if (self.callbacks[event]) {
-        self.callbacks[event](self.callbackActions, options);
+      if (self.callbacks[event]) {
+        // for onSuccess we don't need to pass callbackActions
+        if (event === 'onSuccess') {
+          self.callbacks.onSuccess(options);
+        } else {
+          self.callbacks[event](self.callbackActions, options);
+        }
       }
     }
 
