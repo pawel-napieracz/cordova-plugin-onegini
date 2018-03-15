@@ -222,7 +222,7 @@ module.exports = (function (XMLHttpRequest, TextDecoder, CustomEvent) {
     }
 
     if (listeners && listeners.length !== 0) {
-      event.target = this;
+      Object.defineProperty(event, 'target', this);
       for (let i = 0, l = listeners.length; i < l; i++) {
         listeners[i].call(this, event);
       }
