@@ -32,14 +32,4 @@ public class IdentityProvidersUtil {
     result.put(IDENTITY_PROVIDER_NAME, identityProvider.getName());
     return result;
   }
-
-  public static OneginiIdentityProvider getIdentityProviderById(final String identityProviderId, final Set<OneginiIdentityProvider> identityProviders)
-      throws JSONException {
-    for (final OneginiIdentityProvider identityProvider : identityProviders) {
-      if (identityProviderId.equals(identityProvider.getId())) {
-        return identityProvider;
-      }
-    }
-    return null;
-  }
 }
