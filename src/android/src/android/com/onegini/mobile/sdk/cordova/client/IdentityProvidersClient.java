@@ -21,6 +21,8 @@ public class IdentityProvidersClient extends CordovaPlugin {
 
   private static final String ACTION_GET_IDENTITY_PROVIDERS = "getIdentityProviders";
 
+  private static Set<OneginiIdentityProvider> cachedIdentityProviders;
+
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if (ACTION_GET_IDENTITY_PROVIDERS.equals(action)) {
@@ -30,18 +32,25 @@ public class IdentityProvidersClient extends CordovaPlugin {
     return false;
   }
 
+  public static Set<OneginiIdentityProvider> getIdentityProviders(final com.onegini.mobile.sdk.android.client.OneginiClient oneginiClient) {
+    if (cachedIdentityProviders == null) {
+      cachedIdentityProviders = oneginiClient.getUserClient().getIdentityProviders();
+    }
+    return cachedIdentityProviders;
+  }
+
   private void getIdentityProviders(final CallbackContext callbackContext) {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        final Set<OneginiIdentityProvider> identityProviders = getOneginiClient().getUserClient().getIdentityProviders();
+        cachedIdentityProviders = getOneginiClient().getUserClient().getIdentityProviders();
         try {
-          final JSONArray parsedIdentityProviders = IdentityProvidersUtil.identityProvidersSetToJsonArray(identityProviders);
+          final JSONArray parsedIdentityProviders = IdentityProvidersUtil.identityProvidersSetToJsonArray(cachedIdentityProviders);
           callbackContext.success(parsedIdentityProviders);
         } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
-          .withPluginError(ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR, ERROR_CODE_PLUGIN_INTERNAL_ERROR)
-          .build());
+              .withPluginError(ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR, ERROR_CODE_PLUGIN_INTERNAL_ERROR)
+              .build());
         }
       }
     });

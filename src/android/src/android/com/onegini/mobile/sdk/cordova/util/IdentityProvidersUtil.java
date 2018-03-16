@@ -33,7 +33,7 @@ public class IdentityProvidersUtil {
     return result;
   }
 
-  public static OneginiIdentityProvider parseJsonObjectToIdentityProvider(final String identityProviderId, final Set<OneginiIdentityProvider> identityProviders)
+  public static OneginiIdentityProvider getIdentityProviderById(final String identityProviderId, final Set<OneginiIdentityProvider> identityProviders)
       throws JSONException {
     for (final OneginiIdentityProvider identityProvider : identityProviders) {
       if (identityProviderId.equals(identityProvider.getId())) {

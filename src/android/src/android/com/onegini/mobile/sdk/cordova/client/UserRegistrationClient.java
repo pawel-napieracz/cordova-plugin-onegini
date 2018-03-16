@@ -117,8 +117,8 @@ public class UserRegistrationClient extends CordovaPlugin {
     if (identityProviderId == null) {
       return null;
     }
-    final Set<OneginiIdentityProvider> identityProviders = getOneginiClient().getUserClient().getIdentityProviders();
-    return IdentityProvidersUtil.parseJsonObjectToIdentityProvider(identityProviderId, identityProviders);
+    final Set<OneginiIdentityProvider> identityProviders = IdentityProvidersClient.getIdentityProviders(getOneginiClient());
+    return IdentityProvidersUtil.getIdentityProviderById(identityProviderId, identityProviders);
   }
 
   private void createPin(final JSONArray args, final CallbackContext createPinCallbackContext) throws JSONException {
