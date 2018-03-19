@@ -82,7 +82,7 @@
               } else {
                 actions.cancel()
               }
-            }
+            };
 
             window.plugins.pinDialog.prompt(
               `Please enter your pin.\n${options.remainingFailureCount } out of ${options.maxFailureCount } attempts remaining`,
@@ -101,7 +101,7 @@
               } else {
                 actions.fallbackToPin();
               }
-            }
+            };
 
             navigator.notification.confirm('Login using your fingerprint?', callback, 'Authenticate', ['Continue', 'Use PIN']);
           })
@@ -127,14 +127,30 @@
         })
           .onCreatePinRequest((actions, options) => {
             let callback = (results) => {
-              if (results.buttonIndex == 1) {
+              if (results.buttonIndex === 1) {
                 actions.createPin(results.input1);
               } else {
                 actions.cancel();
               }
-            }
+            };
 
             window.plugins.pinDialog.prompt('Create your ' + options.pinLength + ' digit pin', callback, 'Register', ['Create', 'Cancel']);
+          })
+          .onCustomRegistrationInitRequest((actions, options) => {
+            actions.acceptRegistrationInitRequest({
+              data: null,
+              identityProviderId: options.identityProviderId,
+            });
+          })
+          .onCustomRegistrationCompleteRequest((actions, options) => {
+            this.$router.push({
+              name: 'TwoWayOtpRegistration',
+              params: {
+                actions: actions,
+                code: options.customInfoData,
+                identityProviderId: options.identityProviderId,
+              }
+            });
           })
           .onSuccess((result) => {
             this.$router.push('dashboard');
@@ -159,7 +175,7 @@
             console.error('Could not fetch decorated user ID implicitly.', err);
             this.decoratedUserId = null;
           })
-      },
+      }
     },
 
     components: {
