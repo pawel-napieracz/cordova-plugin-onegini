@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova.util;
+package com.onegini.mobile.sdk.cordova.customregistration;
 
-@SuppressWarnings("unused")
-public class AppLifecycleUtil {
 
-  private static boolean isAppInForeground = false;
+import org.apache.cordova.CallbackContext;
 
-  public static boolean isAppInForeground() {
-    return isAppInForeground;
-  }
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiCustomRegistrationCallback;
 
-  public static void setAppIsInForeground() {
-    isAppInForeground = true;
-  }
+public interface CustomRegistrationAction {
+  void setCallbackContext(final CallbackContext callbackContext);
 
-  public static void setAppIsInBackground() {
-    isAppInForeground = false;
-  }
+  OneginiCustomRegistrationCallback getCallback();
 }
