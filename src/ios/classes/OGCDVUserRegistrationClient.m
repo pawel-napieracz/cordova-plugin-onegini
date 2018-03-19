@@ -59,7 +59,9 @@ NSString *const keyURL = @"url";
         ONGIdentityProvider *identityProvider = nil;
         if (command.arguments.count > 0) {
             NSDictionary *options = command.arguments[0];
-            identityProvider = [OGCDVIdentityProvidersClientHelper identityProviderFromDictionary:command.arguments[0]];
+            if (![command.arguments[0][OGCDVPluginKeyIdentityProviderId] isKindOfClass:[NSNull class]]) {
+                identityProvider = [OGCDVIdentityProvidersClientHelper identityProviderFromDictionary:command.arguments[0]];
+            }
             optionalScopes = options[OGCDVPluginKeyScopes];
         }
         [[ONGUserClient sharedInstance] registerUserWithIdentityProvider:identityProvider scopes:optionalScopes delegate:self];
