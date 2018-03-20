@@ -28,7 +28,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
-import com.onegini.mobile.sdk.android.internal.utils.StringUtils;
 import com.onegini.mobile.sdk.cordova.customregistration.CustomIdentityProvider;
 import com.onegini.mobile.sdk.cordova.customregistration.CustomIdentityProvider.FlowType;
 
@@ -60,7 +59,7 @@ public class ApplicationConfigurationParser {
           if (CUSTOM_IDP.equals(xmlResourceParser.getName())) {
             final String id = xmlResourceParser.getAttributeValue(null, CUSTOM_IDP_ID);
             final @FlowType String flowType = xmlResourceParser.getAttributeValue(null, CUSTOM_IDP_FLOW_TYPE);
-            if(isCustomIdentityProviderValid(id, flowType)) {
+            if (isCustomIdentityProviderValid(id, flowType)) {
               identityProviders.add(new CustomIdentityProvider(id, flowType));
             }
           }
@@ -83,7 +82,11 @@ public class ApplicationConfigurationParser {
   }
 
   private boolean isCustomIdentityProviderValid(final String id, final String flowType) {
-    return StringUtils.isNotEmpty(id) && isFlowTypeValid(flowType);
+    return isIdValid(id) && isFlowTypeValid(flowType);
+  }
+
+  private boolean isIdValid(final String id) {
+    return id != null && !id.equals("");
   }
 
   private boolean isFlowTypeValid(final String flowType) {
