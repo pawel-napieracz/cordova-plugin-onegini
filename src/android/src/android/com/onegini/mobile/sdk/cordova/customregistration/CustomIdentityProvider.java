@@ -16,15 +16,30 @@
 
 package com.onegini.mobile.sdk.cordova.customregistration;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import android.support.annotation.StringDef;
 import com.onegini.mobile.sdk.android.handlers.action.OneginiCustomRegistrationAction;
 import com.onegini.mobile.sdk.android.model.OneginiCustomIdentityProvider;
 
 public class CustomIdentityProvider implements OneginiCustomIdentityProvider {
 
+  public static final String ONE_STEP = "ONE_STEP";
+  public static final String TWO_STEP = "TWO_STEP";
+
+  @StringDef({
+      ONE_STEP,
+      TWO_STEP
+  })
+
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface FlowType {}
+
   private final String id;
   private OneginiCustomRegistrationAction customRegistrationAction;
 
-  public CustomIdentityProvider(final String id, final String flowType) {
+  public CustomIdentityProvider(final String id, @FlowType final String flowType) {
     this.id = id;
     if (isTwoStep(flowType)) {
       customRegistrationAction = new CustomTwoStepRegistrationAction(id);
@@ -34,7 +49,7 @@ public class CustomIdentityProvider implements OneginiCustomIdentityProvider {
   }
 
   private boolean isTwoStep(final String flowType) {
-    return "TWO_STEP".equalsIgnoreCase(flowType);
+    return TWO_STEP.equalsIgnoreCase(flowType);
   }
 
   @Override
@@ -45,9 +60,5 @@ public class CustomIdentityProvider implements OneginiCustomIdentityProvider {
   @Override
   public OneginiCustomRegistrationAction getRegistrationAction() {
     return customRegistrationAction;
-  }
-
-  public CustomRegistrationAction getCustomRegistrationAction() {
-    return (CustomRegistrationAction) customRegistrationAction;
   }
 }

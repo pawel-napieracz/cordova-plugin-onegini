@@ -405,7 +405,7 @@
                  target-dir="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/CustomIdentityProvider.java"
                  target-dir="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/CustomIdentityProviderCollector.java"
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/CustomIdentityProviderModel.java"
                  target-dir="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/"/>
   </platform>
 </plugin>

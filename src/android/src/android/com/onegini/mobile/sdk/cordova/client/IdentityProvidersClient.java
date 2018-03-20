@@ -21,6 +21,7 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.cordova.CallbackContext;
@@ -38,7 +39,8 @@ public class IdentityProvidersClient extends CordovaPlugin {
 
   private static final String ACTION_GET_IDENTITY_PROVIDERS = "getIdentityProviders";
 
-  private static Set<OneginiIdentityProvider> cachedIdentityProviders = Collections.<OneginiIdentityProvider>emptySet();
+  private static final Set<OneginiIdentityProvider> cachedIdentityProviders =
+      Collections.<OneginiIdentityProvider>synchronizedSet(new HashSet<OneginiIdentityProvider>());
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -53,10 +55,11 @@ public class IdentityProvidersClient extends CordovaPlugin {
     if (identityProviderId == null) {
       return null;
     }
-
-    for (final OneginiIdentityProvider identityProvider : cachedIdentityProviders) {
-      if (identityProviderId.equals(identityProvider.getId())) {
-        return identityProvider;
+    synchronized (cachedIdentityProviders) {
+      for (final OneginiIdentityProvider identityProvider : cachedIdentityProviders) {
+        if (identityProviderId.equals(identityProvider.getId())) {
+          return identityProvider;
+        }
       }
     }
     return null;
@@ -66,10 +69,11 @@ public class IdentityProvidersClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        cachedIdentityProviders = getOneginiClient().getUserClient().getIdentityProviders();
         try {
-          final JSONArray parsedIdentityProviders = IdentityProvidersUtil.identityProvidersSetToJsonArray(cachedIdentityProviders);
-          callbackContext.success(parsedIdentityProviders);
+            cachedIdentityProviders.clear();
+            cachedIdentityProviders.addAll(getOneginiClient().getUserClient().getIdentityProviders());
+            final JSONArray parsedIdentityProviders = IdentityProvidersUtil.identityProvidersSetToJsonArray(cachedIdentityProviders);
+            callbackContext.success(parsedIdentityProviders);
         } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
               .withPluginError(ERROR_DESCRIPTION_PLUGIN_INTERNAL_ERROR, ERROR_CODE_PLUGIN_INTERNAL_ERROR)

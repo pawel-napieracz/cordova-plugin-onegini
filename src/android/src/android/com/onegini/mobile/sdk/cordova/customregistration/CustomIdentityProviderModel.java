@@ -4,23 +4,25 @@ package com.onegini.mobile.sdk.cordova.customregistration;
 import java.util.HashSet;
 import java.util.Set;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 import com.onegini.mobile.sdk.cordova.util.ApplicationConfigurationParser;
 
-public class CustomIdentityProviderCollector {
+public class CustomIdentityProviderModel {
 
   private static final Set<CustomIdentityProvider> customIdentityProviders = new HashSet<CustomIdentityProvider>();
 
-  private CustomIdentityProviderCollector() {
+  private ApplicationConfigurationParser applicationConfigurationParser;
+
+  public CustomIdentityProviderModel(final ApplicationConfigurationParser applicationConfigurationParser) {
+    this.applicationConfigurationParser = applicationConfigurationParser;
   }
 
-  public static Set getAll() {
+  public Set getAll() {
     return customIdentityProviders;
   }
 
   @Nullable
-  public static CustomIdentityProvider get(final String id) {
+  public CustomIdentityProvider get(final String id) {
     for (final CustomIdentityProvider identityProvider : customIdentityProviders) {
       if (id.equals(identityProvider.getId())) {
         return identityProvider;
@@ -29,8 +31,8 @@ public class CustomIdentityProviderCollector {
     return null;
   }
 
-  public static void collectFromConfigXml(final Context context) {
+  public void collectFromConfigXml() {
     customIdentityProviders.clear();
-    customIdentityProviders.addAll(new ApplicationConfigurationParser(context).parserCustomIdentityProviders());
+    customIdentityProviders.addAll(applicationConfigurationParser.parserCustomIdentityProviders());
   }
 }

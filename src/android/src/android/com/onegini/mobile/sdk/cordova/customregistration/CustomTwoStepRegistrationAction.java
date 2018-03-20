@@ -30,7 +30,6 @@ import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 public class CustomTwoStepRegistrationAction implements OneginiCustomTwoStepRegistrationAction, CustomRegistrationAction {
 
   private CallbackContext callbackContext;
-  private static CustomTwoStepRegistrationAction instance = null;
   private OneginiCustomRegistrationCallback callback;
   private String identityProviderId;
 
