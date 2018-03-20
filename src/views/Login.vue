@@ -137,20 +137,37 @@
             window.plugins.pinDialog.prompt('Create your ' + options.pinLength + ' digit pin', callback, 'Register', ['Create', 'Cancel']);
           })
           .onCustomRegistrationInitRequest((actions, options) => {
-            actions.acceptRegistrationInitRequest({
-              data: null,
-              identityProviderId: options.identityProviderId,
-            });
+            if (options.identityProviderId === "2-way-otp-api" ||
+              options.identityProviderId === "2-way-otp-api-2") {
+              actions.acceptRegistrationInitRequest({
+                data: null,
+                identityProviderId: options.identityProviderId,
+              });
+            } else {
+              actions.denyRegistrationInitRequest({
+                data: null,
+                identityProviderId: options.identityProviderId,
+              });
+              navigator.notification.alert('Registration failed. The identity provider id is not known.');
+            }
           })
           .onCustomRegistrationCompleteRequest((actions, options) => {
-            this.$router.push({
-              name: 'TwoWayOtpRegistration',
-              params: {
-                actions: actions,
-                code: options.customInfoData,
-                identityProviderId: options.identityProviderId,
-              }
-            });
+            if (options.identityProviderId === "2-way-otp-api" ||
+            options.identityProviderId === "2-way-otp-api-2") {
+              this.$router.push({
+                name: 'TwoWayOtpRegistration',
+                params: {
+                  actions: actions,
+                  code: options.customInfoData,
+                  identityProviderId: options.identityProviderId,
+                }
+              });
+            } else {
+              actions.denyRegistrationCompleteRequest({
+                identityProviderId: options.identityProviderId
+              });
+              navigator.notification.alert('Registration failed. The identity provider id is not known.');
+            }
           })
           .onSuccess((result) => {
             this.$router.push('dashboard');
