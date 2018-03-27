@@ -258,6 +258,10 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserClient', 'validatePinWithPolicy', options, successCb, failureCb);
   }
 
+  function getIdentityProviders(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiIdentityProvidersClient', 'getIdentityProviders', [], successCb, failureCb);
+  }
+
   return {
     authenticate: authenticate,
     authenticateImplicitly: authenticateImplicitly,
@@ -270,6 +274,7 @@ module.exports = (function () {
     getAuthenticatedUserProfile: getAuthenticatedUserProfile,
     getImplicitlyAuthenticatedUserProfile: getImplicitlyAuthenticatedUserProfile,
     logout: logout,
-    validatePinWithPolicy: validatePinWithPolicy
+    validatePinWithPolicy: validatePinWithPolicy,
+    getIdentityProviders: getIdentityProviders
   };
 })();

@@ -39,6 +39,9 @@ extern NSString *const OGCDVPluginKeyErrorDescription;
 extern NSString *const OGCDVPluginKeyTimestamp;
 extern NSString *const OGCDVPluginKeyTTL;
 
+extern NSString *const OGCDVPluginKeyIdentityProviderId;
+extern NSString *const OGCDVPluginKeyIdentityProviderName;
+
 extern NSString *const OGCDVPluginClassPushMobileAuthenticationClient;
 extern NSString *const OGCDVPluginClassPushMobileAuthRequestClient;
 

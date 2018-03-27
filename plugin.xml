@@ -77,6 +77,9 @@
       <feature name="OneginiPendingMobileAuthRequestClient">
         <param name="ios-package" value="OGCDVPendingPushMobileAuthRequestClient"/>
       </feature>
+      <feature name="OneginiIdentityProvidersClient">
+        <param name="ios-package" value="OGCDVIdentityProvidersClient"/>
+      </feature>
     </config-file>
 
     <header-file src="src/ios/classes/Reachability.h"/>
@@ -123,6 +126,10 @@
     <source-file src="src/ios/classes/OGCDVOtpMobileAuthRequestClient.m"/>
     <header-file src="src/ios/classes/OGCDVPushMobileAuthOperation.h"/>
     <source-file src="src/ios/classes/OGCDVPushMobileAuthOperation.m"/>
+    <header-file src="src/ios/classes/OGCDVIdentityProvidersClient.h"/>
+    <source-file src="src/ios/classes/OGCDVIdentityProvidersClient.m"/>
+    <header-file src="src/ios/classes/OGCDVIdentityProvidersClientHelper.h"/>
+    <source-file src="src/ios/classes/OGCDVIdentityProvidersClientHelper.m"/>
     <header-file src="src/ios/classes/OGCDVPendingPushMobileAuthRequestClient.h"/>
     <source-file src="src/ios/classes/OGCDVPendingPushMobileAuthRequestClient.m"/>
     <header-file src="src/ios/classes/OGCDVPendingPushMobileAuthRequestClientHelper.h"/>
@@ -145,7 +152,8 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthFinishRegistrationChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthDeregistrationChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthFinishAuthenticationChallenge.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthInfo.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomInfo.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomRegistrationChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticatorDeregistrationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGClientBuilder.h"/>
@@ -161,12 +169,13 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPinChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGPublicDefines.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRegistrationDelegate.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRegistrationRequestChallenge.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGBrowserRegistrationChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGRequestBuilder.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGResourceRequest.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGResourceResponse.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGUserProfile.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGIdentityProvider.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/OneginiSDK.h"/>
 
     <!-- SDK binary -->
@@ -238,6 +247,10 @@
         <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.PendingPushMobileAuthRequestClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiIdentityProvidersClient">
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.IdentityProvidersClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -295,6 +308,8 @@
         target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/PendingPushMobileAuthRequestClient.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/IdentityProvidersClient.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
 
     <!-- fcm -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmInstanceIdService.java"
@@ -324,6 +339,8 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AppLifecycleUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PendingMobileAuthRequestUtil.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/IdentityProvidersUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
 
     <!-- handler -->
@@ -361,7 +378,7 @@
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/MobileAuthWithOtpHandler.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/RegistrationRequestHandler.java"
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/BrowserRegistrationRequestHandler.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PendingMobileAuthWithPushRequestsHandler.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>

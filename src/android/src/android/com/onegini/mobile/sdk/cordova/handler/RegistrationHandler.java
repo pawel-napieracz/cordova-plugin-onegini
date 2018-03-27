@@ -23,6 +23,7 @@ import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.sdk.android.handlers.OneginiRegistrationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiRegistrationError;
+import com.onegini.mobile.sdk.android.model.entity.CustomInfo;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
@@ -39,12 +40,13 @@ public class RegistrationHandler implements OneginiRegistrationHandler {
   }
 
   @Override
-  public void onSuccess(final UserProfile userProfile) {
-    RegistrationRequestHandler.setRegistrationRequestCallbackContext(null);
+  public void onSuccess(final UserProfile userProfile, CustomInfo customInfo) {
+    BrowserRegistrationRequestHandler.setBrowserRegistrationRequestCallbackContext(null);
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
         .withEvent(EVENT_SUCCESS)
         .withProfileId(userProfile)
+        .withCustomInfo(customInfo)
         .build();
 
     sendPluginResult(pluginResult);

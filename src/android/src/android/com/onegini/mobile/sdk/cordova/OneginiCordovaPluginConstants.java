@@ -55,6 +55,7 @@ public interface OneginiCordovaPluginConstants {
   String ERROR_DESCRIPTION_INCORRECT_PIN = "Onegini: Incorrect Pin. Check the maxFailureCount and remainingFailureCount properties for details.";
   String ERROR_DESCRIPTION_OPERATION_CANCELED = "Onegini: the operation was canceled.";
   String ERROR_DESCRIPTION_INVALID_FETCH_AUTH_METHOD = "Onegini: invalid authentication method for resource.fetch";
+  String ERROR_DESCRIPTION_INVALID_IDENTITY_PROVIDER_ID = "Onegini: Identity provider with the specified ID not found.";
 
   // Error codes
   int ERROR_CODE_PLUGIN_INTERNAL_ERROR = 8000;
@@ -70,6 +71,7 @@ public interface OneginiCordovaPluginConstants {
   int ERROR_CODE_INVALID_MOBILE_AUTHENTICATION_METHOD = 8010;
   int ERROR_CODE_IO_EXCEPTION = 8011;
   int ERROR_CODE_INCORRECT_PIN = 8012;
+  int ERROR_CODE_NO_SUCH_IDENTITY_PROVIDER = 8013;
 
   int ERROR_CODE_OPERATION_CANCELED = 9006;
 
@@ -92,4 +94,8 @@ public interface OneginiCordovaPluginConstants {
   String PUSH_MSG_CONTENT = "content";
   String PUSH_MSG_TRANSACTION_ID = "og_transaction_id";
   String PUSH_MSG_MESSAGE = "og_message";
+
+  //Identity Providers
+  String IDENTITY_PROVIDER_ID = "identityProviderId";
+  String IDENTITY_PROVIDER_NAME = "identityProviderName";
 }

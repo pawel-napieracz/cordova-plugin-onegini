@@ -53,8 +53,8 @@ configurations {
 
 // TODO Move to release version before plugin release
 dependencies {
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.2.2-SNAPSHOT@a'
-  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:7.2.2-SNAPSHOT:headers@zip'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:8.0.0-SNAPSHOT@a'
+  sdk 'com.onegini.mobile.sdk.ios:libOneginiSDKiOS:8.0.0-SNAPSHOT:headers@zip'
 }
 
 task prepareTargetDirectory {

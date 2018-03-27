@@ -23,12 +23,12 @@ import android.util.Log;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.client.OneginiClientBuilder;
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
+import com.onegini.mobile.sdk.cordova.handler.BrowserRegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.FingerprintAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithOtpHandler;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.PinAuthenticationRequestHandler;
-import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
 
 public class OneginiSDK {
   private static OneginiSDK instance;
@@ -61,17 +61,18 @@ public class OneginiSDK {
     }
 
     final Context applicationContext = context.getApplicationContext();
-    final RegistrationRequestHandler registrationRequestHandler = new RegistrationRequestHandler(applicationContext);
     final CreatePinRequestHandler createPinRequestHandler = CreatePinRequestHandler.getInstance();
     final PinAuthenticationRequestHandler pinAuthenticationRequestHandler = PinAuthenticationRequestHandler.getInstance();
     final FingerprintAuthenticationRequestHandler fingerprintAuthenticationRequestHandler = FingerprintAuthenticationRequestHandler.getInstance();
     final MobileAuthWithPushHandler mobileAuthWithPushHandler = MobileAuthWithPushHandler.getInstance();
     final MobileAuthWithOtpHandler mobileAuthWithOtpHandler = MobileAuthWithOtpHandler.getInstance();
-    final OneginiClientBuilder builder = new OneginiClientBuilder(applicationContext, registrationRequestHandler, createPinRequestHandler, pinAuthenticationRequestHandler)
+    final BrowserRegistrationRequestHandler browserRegistrationRequestHandler = new BrowserRegistrationRequestHandler(applicationContext);
+    final OneginiClientBuilder builder = new OneginiClientBuilder(applicationContext, createPinRequestHandler, pinAuthenticationRequestHandler)
+        .setBrowserRegistrationRequestHandler(browserRegistrationRequestHandler)
         .setMobileAuthWithPushRequestHandler(mobileAuthWithPushHandler)
         .setMobileAuthWithPushPinRequestHandler(mobileAuthWithPushHandler)
         .setMobileAuthWithPushFingerprintRequestHandler(mobileAuthWithPushHandler)
-        .setFingerprintAuthenticatioRequestHandler(fingerprintAuthenticationRequestHandler)
+        .setFingerprintAuthenticationRequestHandler(fingerprintAuthenticationRequestHandler)
         .setMobileAuthWithOtpRequestHandler(mobileAuthWithOtpHandler);
 
     return builder.build();

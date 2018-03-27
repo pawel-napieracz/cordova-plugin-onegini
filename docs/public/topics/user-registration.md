@@ -8,7 +8,9 @@ User registration is a fundamental part of the Onegini Mobile Security Platform.
 
 Example to let the user register using a simple WebView or browser:
 ```js
-onegini.user.register()
+onegini.user.register({
+    id: identityProviderId
+  })
   .onCreatePinRequest((actions, options) => {
     let pin = prompt(`Create your {options.pinLength} digit pin`);
     actions.createPin(pin);
@@ -73,7 +75,9 @@ To prevent the plugin from opening any browser, set the `OneginiWebView` prefere
 
 Handle the `onRegistrationRequest` event and obtain the callback URL yourself:
 ```js
-onegini.user.register()
+onegini.user.register({
+    id: identityProviderId
+  })
   .onRegistrationRequest((actions, options) => {
     // Some logic to fetch the callback URL
     let registrationUrl = registerWithUrl(options.url);
@@ -91,3 +95,9 @@ onegini.user.register()
     console.error(err);
   });
 ```
+
+## Choosing an identity provider
+
+To select an identity provider which will be used during the registration process you need to pass its id in place of the `identityProviderId` param. 
+If this parameter isn't specified or if its value is `null` the default identity provider set on the **Token Server** will be used. To learn more about identity 
+providers please read the [getIdentityProviders](../reference/user/getIdentityProviders.md) reference guide. 
