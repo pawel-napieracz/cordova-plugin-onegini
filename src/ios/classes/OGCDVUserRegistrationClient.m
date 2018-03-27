@@ -61,9 +61,7 @@ NSString *const keyURL = @"url";
         if (command.arguments.count > 0) {
             NSDictionary *options = command.arguments[0];
             if (options[OGCDVPluginKeyIdentityProviderId] != nil && ![options[OGCDVPluginKeyIdentityProviderId] isKindOfClass:[NSNull class]]) {
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@", command.arguments[0][@"identityProviderId"]];
-                NSSet *filteredSet = [[[ONGUserClient sharedInstance] identityProviders] filteredSetUsingPredicate:predicate];
-                identityProvider = filteredSet.anyObject;
+                identityProvider = [OGCDVIdentityProvidersClientHelper identityProviderFromDictionary:command.arguments[0]];
             }
             optionalScopes = options[OGCDVPluginKeyScopes];
         }
