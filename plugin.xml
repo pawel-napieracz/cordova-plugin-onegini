@@ -126,6 +126,10 @@
     <source-file src="src/ios/classes/OGCDVOtpMobileAuthRequestClient.m"/>
     <header-file src="src/ios/classes/OGCDVPushMobileAuthOperation.h"/>
     <source-file src="src/ios/classes/OGCDVPushMobileAuthOperation.m"/>
+    <header-file src="src/ios/classes/OGCDVIdentityProvidersClient.h"/>
+    <source-file src="src/ios/classes/OGCDVIdentityProvidersClient.m"/>
+    <header-file src="src/ios/classes/OGCDVIdentityProvidersClientHelper.h"/>
+    <source-file src="src/ios/classes/OGCDVIdentityProvidersClientHelper.m"/>
     <header-file src="src/ios/classes/OGCDVPendingPushMobileAuthRequestClient.h"/>
     <source-file src="src/ios/classes/OGCDVPendingPushMobileAuthRequestClient.m"/>
     <header-file src="src/ios/classes/OGCDVPendingPushMobileAuthRequestClientHelper.h"/>
@@ -148,7 +152,8 @@
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthFinishRegistrationChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthDeregistrationChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthFinishAuthenticationChallenge.h"/>
-    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomAuthInfo.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomInfo.h"/>
+    <header-file src="src/ios/OneginiSDKiOS/Headers/ONGCustomRegistrationChallenge.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGAuthenticatorDeregistrationDelegate.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGClient.h"/>
     <header-file src="src/ios/OneginiSDKiOS/Headers/ONGClientBuilder.h"/>

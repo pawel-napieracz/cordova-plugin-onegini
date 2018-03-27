@@ -59,7 +59,7 @@ NSString *const keyURL = @"url";
         ONGIdentityProvider *identityProvider = nil;
         if (command.arguments.count > 0) {
             NSDictionary *options = command.arguments[0];
-            if (![command.arguments[0][OGCDVPluginKeyIdentityProviderId] isKindOfClass:[NSNull class]]) {
+            if (options[OGCDVPluginKeyIdentityProviderId] != nil && ![options[OGCDVPluginKeyIdentityProviderId] isKindOfClass:[NSNull class]]) {
                 identityProvider = [OGCDVIdentityProvidersClientHelper identityProviderFromDictionary:command.arguments[0]];
             }
             optionalScopes = options[OGCDVPluginKeyScopes];
@@ -276,7 +276,7 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
     }
 }
 
-- (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile
+- (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile info:(ONGCustomInfo * _Nullable)info
 {
     self.createPinChallenge = nil;
     self.browserRegistrationChallenge = nil;
