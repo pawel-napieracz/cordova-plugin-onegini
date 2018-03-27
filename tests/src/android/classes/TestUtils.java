@@ -27,7 +27,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.onegini.mobile.sdk.cordova.handler.RegistrationRequestHandler;
+import com.onegini.mobile.sdk.cordova.handler.BrowserRegistrationRequestHandler;
 
 public class TestUtils extends CordovaPlugin {
 
@@ -54,7 +54,7 @@ public class TestUtils extends CordovaPlugin {
 
   private void setUserId(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String userId = args.getJSONObject(0).getString(PARAM_USER_ID);
-    RegistrationRequestHandler.setUserId(userId);
+    BrowserRegistrationRequestHandler.setUserId(userId);
 
     callbackContext.success();
   }
