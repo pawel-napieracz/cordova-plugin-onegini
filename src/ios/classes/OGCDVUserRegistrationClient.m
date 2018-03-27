@@ -276,7 +276,7 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
     }
 }
 
-- (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile
+- (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile info:(ONGCustomInfo * _Nullable)info
 {
     self.createPinChallenge = nil;
     self.browserRegistrationChallenge = nil;
