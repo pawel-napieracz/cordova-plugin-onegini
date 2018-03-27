@@ -61,7 +61,9 @@ NSString *const keyURL = @"url";
         if (command.arguments.count > 0) {
             NSDictionary *options = command.arguments[0];
             if (options[OGCDVPluginKeyIdentityProviderId] != nil && ![options[OGCDVPluginKeyIdentityProviderId] isKindOfClass:[NSNull class]]) {
-                identityProvider = [OGCDVIdentityProvidersClientHelper identityProviderFromDictionary:command.arguments[0]];
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@", command.arguments[0][@"identityProviderId"]];
+                NSSet *filteredSet = [[[ONGUserClient sharedInstance] identityProviders] filteredSetUsingPredicate:predicate];
+                identityProvider = filteredSet.anyObject;
             }
             optionalScopes = options[OGCDVPluginKeyScopes];
         }
@@ -285,7 +287,7 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     result[OGCDVPluginKeyEvent] = OGCDVPluginEventCustomRegistrationInitChallege;
     result[OGCDVPluginKeyCustomInfoData] = challenge.info.data;
-    result[@"customInfoStatus"] = @(challenge.info.status);
+    result[OGCDVPluginKeyCustomInfoStatus] = @(challenge.info.status);
     result[OGCDVPluginKeyIdentityProviderId] = challenge.identityProvider.identifier;
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
@@ -312,12 +314,13 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 - (void)userClient:(ONGUserClient *)userClient didReceiveCustomRegistrationFinishChallenge:(ONGCustomRegistrationChallenge *)challenge
 {
     self.customRegistrationChallenge = challenge;
-
+    
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     result[OGCDVPluginKeyEvent] = OGCDVPluginEventCustomRegistrationFinishChallege;
     result[OGCDVPluginKeyCustomInfoData] = challenge.info.data;
-    result[@"customInfoStatus"] = @(challenge.info.status);
+    result[OGCDVPluginKeyCustomInfoStatus] = @(challenge.info.status);
     result[OGCDVPluginKeyIdentityProviderId] = challenge.identityProvider.identifier;
+    result[OGCDVPluginKeyProfileId] = challenge.userProfile.profileId;
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
     [pluginResult setKeepCallbackAsBool:YES];

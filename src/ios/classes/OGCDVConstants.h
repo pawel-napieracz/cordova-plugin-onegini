@@ -40,6 +40,7 @@ extern NSString *const OGCDVPluginKeyTimestamp;
 extern NSString *const OGCDVPluginKeyTTL;
 extern NSString *const OGCDVPluginKeyData;
 extern NSString *const OGCDVPluginKeyCustomInfoData;
+extern NSString *const OGCDVPluginKeyCustomInfoStatus;
 
 extern NSString *const OGCDVPluginKeyIdentityProviderId;
 extern NSString *const OGCDVPluginKeyIdentityProviderName;
