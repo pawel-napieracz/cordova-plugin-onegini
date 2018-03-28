@@ -34,6 +34,7 @@ NSString *const keyURL = @"url";
 @property (nonatomic, copy) NSString *userId;
 @property (nonatomic) ONGCreatePinChallenge *createPinChallenge;
 @property (nonatomic) ONGBrowserRegistrationChallenge *browserRegistrationChallenge;
+@property (nonatomic) ONGCustomRegistrationChallenge *customRegistrationChallenge;
 
 @end
 
@@ -60,10 +61,13 @@ NSString *const keyURL = @"url";
         if (command.arguments.count > 0) {
             NSDictionary *options = command.arguments[0];
             if (options[OGCDVPluginKeyIdentityProviderId] != nil && ![options[OGCDVPluginKeyIdentityProviderId] isKindOfClass:[NSNull class]]) {
-                identityProvider = [OGCDVIdentityProvidersClientHelper identityProviderFromDictionary:command.arguments[0]];
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@", command.arguments[0][@"identityProviderId"]];
+                NSSet *filteredSet = [[[ONGUserClient sharedInstance] identityProviders] filteredSetUsingPredicate:predicate];
+                identityProvider = filteredSet.anyObject;
             }
             optionalScopes = options[OGCDVPluginKeyScopes];
         }
+        
         [[ONGUserClient sharedInstance] registerUserWithIdentityProvider:identityProvider scopes:optionalScopes delegate:self];
     }];
 }
@@ -276,10 +280,73 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
     }
 }
 
+- (void)userClient:(ONGUserClient *)userClient didReceiveCustomRegistrationInitChallenge:(ONGCustomRegistrationChallenge *)challenge
+{
+    self.customRegistrationChallenge = challenge;
+    
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    result[OGCDVPluginKeyEvent] = OGCDVPluginEventCustomRegistrationInitChallege;
+    result[OGCDVPluginKeyCustomInfoData] = challenge.info.data;
+    result[@"customInfoStatus"] = @(challenge.info.status);
+    result[OGCDVPluginKeyIdentityProviderId] = challenge.identityProvider.identifier;
+
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+    [pluginResult setKeepCallbackAsBool:YES];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+}
+
+- (void)respondToCustomRegistrationInitRequest:(CDVInvokedUrlCommand *)command
+{
+    [self.commandDelegate runInBackground:^{
+        NSDictionary *options = command.arguments[0];
+        if ([options[OGCDVPluginKeyAccept] boolValue]) {
+            NSString *data = options[OGCDVPluginKeyData];
+            if ([data isKindOfClass:[NSNull class]]) {
+                data = nil;
+            }
+            [self.customRegistrationChallenge.sender respondWithData:data challenge:self.customRegistrationChallenge];
+        } else {
+            [self.customRegistrationChallenge.sender cancelChallenge:self.customRegistrationChallenge];
+        }
+    }];
+}
+
+- (void)userClient:(ONGUserClient *)userClient didReceiveCustomRegistrationFinishChallenge:(ONGCustomRegistrationChallenge *)challenge
+{
+    self.customRegistrationChallenge = challenge;
+
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    result[OGCDVPluginKeyEvent] = OGCDVPluginEventCustomRegistrationFinishChallege;
+    result[OGCDVPluginKeyCustomInfoData] = challenge.info.data;
+    result[@"customInfoStatus"] = @(challenge.info.status);
+    result[OGCDVPluginKeyIdentityProviderId] = challenge.identityProvider.identifier;
+    
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+    [pluginResult setKeepCallbackAsBool:YES];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+}
+
+- (void)respondToCustomRegistrationCompleteRequest:(CDVInvokedUrlCommand *)command
+{
+    [self.commandDelegate runInBackground:^{
+        NSDictionary *options = command.arguments[0];
+        if ([options[OGCDVPluginKeyAccept] boolValue]) {
+            NSString *data = options[OGCDVPluginKeyData];
+            if ([data isKindOfClass:[NSNull class]]) {
+                data = nil;
+            }
+            [self.customRegistrationChallenge.sender respondWithData:data challenge:self.customRegistrationChallenge];
+        } else {
+            [self.customRegistrationChallenge.sender cancelChallenge:self.customRegistrationChallenge];
+        }
+    }];
+}
+
 - (void)userClient:(ONGUserClient *)userClient didRegisterUser:(ONGUserProfile *)userProfile info:(ONGCustomInfo * _Nullable)info
 {
     self.createPinChallenge = nil;
     self.browserRegistrationChallenge = nil;
+    self.customRegistrationChallenge = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:OGCDVDidReceiveRegistrationCallbackURLNotification object:nil];
 
     NSDictionary *result = @{

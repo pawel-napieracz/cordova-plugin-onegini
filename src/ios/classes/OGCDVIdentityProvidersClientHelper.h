@@ -21,6 +21,5 @@
 @interface OGCDVIdentityProvidersClientHelper : NSObject
 
 + (NSDictionary *)dictionaryFromIdentityProvider:(ONGIdentityProvider *)identityProvider;
-+ (ONGIdentityProvider *)identityProviderFromDictionary:(NSDictionary *)dictionary;
 
 @end

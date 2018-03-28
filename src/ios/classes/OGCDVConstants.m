@@ -40,6 +40,10 @@ NSString *const OGCDVPluginKeyErrorCode = @"code";
 NSString *const OGCDVPluginKeyErrorDescription = @"description";
 NSString *const OGCDVPluginKeyTimestamp = @"timestamp";
 NSString *const OGCDVPluginKeyTTL = @"timeToLiveSeconds";
+NSString *const OGCDVPluginKeyData = @"data";
+NSString *const OGCDVPluginKeyCustomInfoData = @"customInfoData";
+
+
 
 NSString *const OGCDVPluginKeyIdentityProviderId = @"identityProviderId";
 NSString *const OGCDVPluginKeyIdentityProviderName = @"identityProviderName";
@@ -55,6 +59,8 @@ NSString *const OGCDVPluginEventConfirmationRequest = @"onConfirmationRequest";
 NSString *const OGCDVPluginEventPinRequest = @"onPinRequest";
 NSString *const OGCDVPluginEventCreatePinRequest = @"onCreatePinRequest";
 NSString *const OGCDVPluginEventFingerprintRequest = @"onFingerprintRequest";
+NSString *const OGCDVPluginEventCustomRegistrationInitChallege = @"onCustomRegistrationInitRequest";
+NSString *const OGCDVPluginEventCustomRegistrationFinishChallege = @"onCustomRegistrationCompleteRequest";
 
 NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification = @"OGCDVDidReceiveRegistrationCallbackURLNotification";
 
