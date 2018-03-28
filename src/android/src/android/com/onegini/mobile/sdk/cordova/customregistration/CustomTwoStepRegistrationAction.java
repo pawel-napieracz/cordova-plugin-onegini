@@ -48,11 +48,12 @@ public class CustomTwoStepRegistrationAction implements OneginiCustomTwoStepRegi
   }
 
   @Override
-  public void initRegistration(final OneginiCustomRegistrationCallback oneginiCustomRegistrationCallback) {
+  public void initRegistration(final OneginiCustomRegistrationCallback oneginiCustomRegistrationCallback, final CustomInfo customInfo) {
     callback = oneginiCustomRegistrationCallback;
     final PluginResult result = new PluginResultBuilder()
         .shouldKeepCallback()
         .withSuccess()
+        .withCustomInfo(customInfo)
         .withIdentityProviderId(identityProviderId)
         .withEvent(EVENT_ON_CUSTOM_REGISTRATION_INIT_REQUEST)
         .build();
