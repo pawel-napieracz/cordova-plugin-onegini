@@ -47,7 +47,7 @@
   .buttons {
     width: 100%;
     position: fixed;
-    top: 480px;
+    top: 440px;
     left: 0;
     display: flex;
     justify-content: space-around;
@@ -64,13 +64,13 @@
   }
 
   .request-code {
-    font-size: 350%;
+    font-size: 250%;
     color: #808080;
     margin: .1em;
   }
 
   .response-code {
-    font-size: 350%;
+    font-size: 250%;
     margin: .1em;
     width: 60%;
     text-align: center;
