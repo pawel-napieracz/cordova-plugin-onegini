@@ -29,12 +29,4 @@
     return dictionary;
 }
 
-+ (ONGIdentityProvider *)identityProviderFromDictionary:(NSDictionary *)dictionary
-{
-    ONGIdentityProvider *identityProvider = [ONGIdentityProvider new];
-    identityProvider.name = dictionary[OGCDVPluginKeyIdentityProviderName];
-    identityProvider.identifier = dictionary[OGCDVPluginKeyIdentityProviderId];
-    return identityProvider;
-}
-
 @end

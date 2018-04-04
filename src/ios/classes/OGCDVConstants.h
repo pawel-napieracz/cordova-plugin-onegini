@@ -38,6 +38,9 @@ extern NSString *const OGCDVPluginKeyErrorCode;
 extern NSString *const OGCDVPluginKeyErrorDescription;
 extern NSString *const OGCDVPluginKeyTimestamp;
 extern NSString *const OGCDVPluginKeyTTL;
+extern NSString *const OGCDVPluginKeyData;
+extern NSString *const OGCDVPluginKeyCustomInfoData;
+extern NSString *const OGCDVPluginKeyCustomInfoStatus;
 
 extern NSString *const OGCDVPluginKeyIdentityProviderId;
 extern NSString *const OGCDVPluginKeyIdentityProviderName;
@@ -53,6 +56,9 @@ extern NSString *const OGCDVPluginEventConfirmationRequest;
 extern NSString *const OGCDVPluginEventPinRequest;
 extern NSString *const OGCDVPluginEventCreatePinRequest;
 extern NSString *const OGCDVPluginEventFingerprintRequest;
+extern NSString *const OGCDVPluginEventCustomRegistrationInitChallege;
+extern NSString *const OGCDVPluginEventCustomRegistrationFinishChallege;
+
 
 extern NSString *const OGCDVDidReceiveRegistrationCallbackURLNotification;
 
