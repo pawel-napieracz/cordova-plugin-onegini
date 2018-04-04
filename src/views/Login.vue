@@ -82,7 +82,7 @@
               } else {
                 actions.cancel()
               }
-            }
+            };
 
             window.plugins.pinDialog.prompt(
               `Please enter your pin.\n${options.remainingFailureCount } out of ${options.maxFailureCount } attempts remaining`,
@@ -101,7 +101,7 @@
               } else {
                 actions.fallbackToPin();
               }
-            }
+            };
 
             navigator.notification.confirm('Login using your fingerprint?', callback, 'Authenticate', ['Continue', 'Use PIN']);
           })
@@ -127,14 +127,47 @@
         })
           .onCreatePinRequest((actions, options) => {
             let callback = (results) => {
-              if (results.buttonIndex == 1) {
+              if (results.buttonIndex === 1) {
                 actions.createPin(results.input1);
               } else {
                 actions.cancel();
               }
-            }
+            };
 
             window.plugins.pinDialog.prompt('Create your ' + options.pinLength + ' digit pin', callback, 'Register', ['Create', 'Cancel']);
+          })
+          .onCustomRegistrationInitRequest((actions, options) => {
+            if (options.identityProviderId === "2-way-otp-api" ||
+              options.identityProviderId === "2-way-otp-api-2") {
+              actions.acceptRegistrationInitRequest({
+                data: null,
+                identityProviderId: options.identityProviderId,
+              });
+            } else {
+              actions.denyRegistrationInitRequest({
+                data: null,
+                identityProviderId: options.identityProviderId,
+              });
+              navigator.notification.alert('Registration failed. The identity provider id is not known.');
+            }
+          })
+          .onCustomRegistrationCompleteRequest((actions, options) => {
+            if (options.identityProviderId === "2-way-otp-api" ||
+            options.identityProviderId === "2-way-otp-api-2") {
+              this.$router.push({
+                name: 'TwoWayOtpRegistration',
+                params: {
+                  actions: actions,
+                  code: options.customInfoData,
+                  identityProviderId: options.identityProviderId,
+                }
+              });
+            } else {
+              actions.denyRegistrationCompleteRequest({
+                identityProviderId: options.identityProviderId
+              });
+              navigator.notification.alert('Registration failed. The identity provider id is not known.');
+            }
           })
           .onSuccess((result) => {
             this.$router.push('dashboard');
@@ -159,7 +192,7 @@
             console.error('Could not fetch decorated user ID implicitly.', err);
             this.decoratedUserId = null;
           })
-      },
+      }
     },
 
     components: {
