@@ -100,7 +100,7 @@
 
 #pragma mark - ONGAuthenticatorRegistrationDelegate
 
-- (void)userClient:(ONGUserClient *)userClient didRegisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile info:(ONGCustomAuthInfo * _Nullable)customAuthInfo
+- (void)userClient:(ONGUserClient *)userClient didRegisterAuthenticator:(ONGAuthenticator *)authenticator forUser:(ONGUserProfile *)userProfile info:(ONGCustomInfo * _Nullable)customAuthInfo
 {
     NSDictionary *message = @{
         OGCDVPluginKeyEvent: OGCDVPluginEventSuccess

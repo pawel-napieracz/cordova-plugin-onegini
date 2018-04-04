@@ -22,7 +22,7 @@
 
 #pragma mark - ONGAuthenticationDelegate
 
-- (void)userClient:(ONGUserClient *)userClient didAuthenticateUser:(ONGUserProfile *)userProfile info:(nullable ONGCustomAuthInfo *)customAuthInfo
+- (void)userClient:(ONGUserClient *)userClient didAuthenticateUser:(ONGUserProfile *)userProfile info:(nullable ONGCustomInfo *)customAuthInfo
 {
     self.pinChallenge = nil;
     self.fingerprintChallenge = nil;

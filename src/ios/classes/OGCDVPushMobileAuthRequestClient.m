@@ -101,7 +101,7 @@ static OGCDVPushMobileAuthRequestClient *sharedInstance;
     [delegate completeOperation];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthRequest:(ONGMobileAuthRequest *)request info:(ONGCustomAuthInfo *_Nullable)customAuthenticatorInfo
+- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthRequest:(ONGMobileAuthRequest *)request info:(ONGCustomInfo *_Nullable)customAuthenticatorInfo
 {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[delegate completeOperationCallbackId]];
