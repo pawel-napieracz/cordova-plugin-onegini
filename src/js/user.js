@@ -89,7 +89,12 @@ module.exports = (function () {
       delete options.pluginEvent;
 
       if (self.callbacks[event]) {
-        self.callbacks[event](self.callbackActions, options);
+        // for onSuccess we don't need to pass callbackActions
+        if (event === 'onSuccess') {
+          self.callbacks.onSuccess(options);
+        } else {
+          self.callbacks[event](self.callbackActions, options);
+        }
       }
     }
 
