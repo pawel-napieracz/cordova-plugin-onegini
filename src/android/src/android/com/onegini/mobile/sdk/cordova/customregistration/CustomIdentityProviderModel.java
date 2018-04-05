@@ -24,7 +24,7 @@ public class CustomIdentityProviderModel {
   @Nullable
   public CustomIdentityProvider get(final String id) {
     for (final CustomIdentityProvider identityProvider : customIdentityProviders) {
-      if (id.equals(identityProvider.getId())) {
+      if (identityProvider.getId().equals(id)) {
         return identityProvider;
       }
     }
