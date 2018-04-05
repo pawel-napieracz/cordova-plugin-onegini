@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2018 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,19 +37,27 @@ import org.json.JSONException;
 import android.net.Uri;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiBrowserRegistrationCallback;
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiCustomRegistrationCallback;
 import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiPinCallback;
 import com.onegini.mobile.sdk.android.model.OneginiIdentityProvider;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.customregistration.CustomIdentityProvider;
+import com.onegini.mobile.sdk.cordova.customregistration.CustomIdentityProviderModel;
+import com.onegini.mobile.sdk.cordova.customregistration.CustomRegistrationAction;
 import com.onegini.mobile.sdk.cordova.handler.BrowserRegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.RegistrationHandler;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
+import com.onegini.mobile.sdk.cordova.util.ApplicationConfigurationParser;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
 @SuppressWarnings("unused")
 public class UserRegistrationClient extends CordovaPlugin {
+
+  private static final String ACTION_RESPOND_TO_CUSTOM_REGISTRATION_INIT_REQUEST = "respondToCustomRegistrationInitRequest";
+  private static final String ACTION_RESPOND_TO_CUSTOM_REGISTRATION_COMPLETE_REQUEST = "respondToCustomRegistrationCompleteRequest";
 
   private static final String ACTION_START = "start";
   private static final String ACTION_CREATE_PIN = "createPin";
@@ -83,9 +91,43 @@ public class UserRegistrationClient extends CordovaPlugin {
     } else if (ACTION_RESPOND_TO_REGISTRATION_REQUEST.equals(action)) {
       respondToRegistrationRequest(args, callbackContext);
       return true;
+    } else if (ACTION_RESPOND_TO_CUSTOM_REGISTRATION_INIT_REQUEST.equals(action)) {
+      performCustomRegistrationStep(args);
+      return true;
+    } else if (ACTION_RESPOND_TO_CUSTOM_REGISTRATION_COMPLETE_REQUEST.equals(action)) {
+      performCustomRegistrationStep(args);
+      return true;
     }
-
     return false;
+  }
+
+  private void performCustomRegistrationStep(final JSONArray args) throws JSONException {
+    final String identityProviderId = getIdentityProviderId(args);
+    final CustomIdentityProviderModel customIdentityProviderModel =
+        new CustomIdentityProviderModel(new ApplicationConfigurationParser(cordova.getActivity().getApplicationContext()));
+    final OneginiCustomRegistrationCallback customRegistrationCallback =
+        ((CustomRegistrationAction) customIdentityProviderModel.get(identityProviderId).getRegistrationAction()).getCallback();
+    if (isStepAcceptedByTheUser(args)) {
+      customRegistrationCallback.returnSuccess(getData(args));
+    } else {
+      customRegistrationCallback.returnError(new Exception("Registration canceled"));
+    }
+  }
+
+  private String getIdentityProviderId(final JSONArray args) throws JSONException {
+    return args.getJSONObject(0).getString("identityProviderId");
+  }
+
+  private boolean isStepAcceptedByTheUser(final JSONArray args) throws JSONException {
+    return args.getJSONObject(0).getBoolean("accept");
+  }
+
+  private String getData(final JSONArray args) {
+    try {
+      return args.getJSONObject(0).getString("data");
+    } catch (JSONException e) {
+      return null;
+    }
   }
 
   private void startRegistration(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -95,6 +137,13 @@ public class UserRegistrationClient extends CordovaPlugin {
     BrowserRegistrationRequestHandler.setBrowserRegistrationRequestCallbackContext(callbackContext);
     BrowserRegistrationRequestHandler.setShouldOpenBrowser(shouldOpenBrowserForRegistration());
     CreatePinRequestHandler.getInstance().setOnStartPinCreationCallback(callbackContext);
+
+    final CustomIdentityProvider customIdentityProvider = new CustomIdentityProviderModel(
+        new ApplicationConfigurationParser(cordova.getActivity().getApplicationContext())).get(identityProviderId);
+    if (customIdentityProvider != null) {
+      ((CustomRegistrationAction)customIdentityProvider.getRegistrationAction()).setCallbackContext(callbackContext);
+    }
+
     registrationHandler = new RegistrationHandler(callbackContext);
 
     cordova.getThreadPool().execute(new Runnable() {

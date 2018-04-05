@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2018 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -181,6 +181,17 @@ public class PluginResultBuilder {
       try {
         payload.put("customInfoStatus", customInfo.getStatus());
         payload.put("customInfoData", customInfo.getData());
+      } catch (JSONException e) {
+        handleException(e);
+      }
+    }
+    return this;
+  }
+
+  public PluginResultBuilder withIdentityProviderId(final String identityProviderId) {
+    if (identityProviderId != null) {
+      try {
+        payload.put("identityProviderId", identityProviderId);
       } catch (JSONException e) {
         handleException(e);
       }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2018 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,14 @@ import android.util.Log;
 import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.client.OneginiClientBuilder;
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
+import com.onegini.mobile.sdk.cordova.customregistration.CustomIdentityProviderModel;
 import com.onegini.mobile.sdk.cordova.handler.BrowserRegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.CreatePinRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.FingerprintAuthenticationRequestHandler;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithOtpHandler;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.PinAuthenticationRequestHandler;
+import com.onegini.mobile.sdk.cordova.util.ApplicationConfigurationParser;
 
 public class OneginiSDK {
   private static OneginiSDK instance;
@@ -61,6 +63,10 @@ public class OneginiSDK {
     }
 
     final Context applicationContext = context.getApplicationContext();
+
+    final CustomIdentityProviderModel customIdentityProviderModel = new CustomIdentityProviderModel(new ApplicationConfigurationParser(applicationContext));
+    customIdentityProviderModel.collectFromConfigXml();
+
     final CreatePinRequestHandler createPinRequestHandler = CreatePinRequestHandler.getInstance();
     final PinAuthenticationRequestHandler pinAuthenticationRequestHandler = PinAuthenticationRequestHandler.getInstance();
     final FingerprintAuthenticationRequestHandler fingerprintAuthenticationRequestHandler = FingerprintAuthenticationRequestHandler.getInstance();
@@ -73,7 +79,8 @@ public class OneginiSDK {
         .setMobileAuthWithPushPinRequestHandler(mobileAuthWithPushHandler)
         .setMobileAuthWithPushFingerprintRequestHandler(mobileAuthWithPushHandler)
         .setFingerprintAuthenticationRequestHandler(fingerprintAuthenticationRequestHandler)
-        .setMobileAuthWithOtpRequestHandler(mobileAuthWithOtpHandler);
+        .setMobileAuthWithOtpRequestHandler(mobileAuthWithOtpHandler)
+        .setCustomIdentityProviders(customIdentityProviderModel.getAll());
 
     return builder.build();
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2018 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,6 +84,8 @@ public interface OneginiCordovaPluginConstants {
   String EVENT_FINGERPRINT_FAILED = "onFingerprintFailed";
   String EVENT_FINGERPRINT_CAPTURED = "onFingerprintCaptured";
   String EVENT_ON_REGISTRATION_REQUEST = "onRegistrationRequest";
+  String EVENT_ON_CUSTOM_REGISTRATION_INIT_REQUEST = "onCustomRegistrationInitRequest";
+  String EVENT_ON_CUSTOM_REGISTRATION_COMPLETE_REQUEST = "onCustomRegistrationCompleteRequest";
 
   // Extras
   String EXTRA_MOBILE_AUTHENTICATION = "com.onegini.CordovaPluginMobileAuthenticationExtra";

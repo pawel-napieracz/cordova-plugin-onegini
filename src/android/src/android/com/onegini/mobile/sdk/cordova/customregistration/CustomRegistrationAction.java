@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package com.onegini.mobile.sdk.cordova.fcm;
+package com.onegini.mobile.sdk.cordova.customregistration;
 
-import android.content.Intent;
-import com.google.firebase.iid.FirebaseInstanceIdService;
 
-public class FcmInstanceIdService extends FirebaseInstanceIdService {
+import org.apache.cordova.CallbackContext;
 
-  /**
-   * Called if InstanceID token is created or updated. This may occur if the security of the previous token had been compromised.
-   * This call is initiated by the InstanceID provider.
-   */
-  @Override
-  public void onTokenRefresh() {
-    final Intent intent = new Intent(getApplicationContext(), FcmTokenUpdateService.class);
-    getApplicationContext().startService(intent);
-  }
+import com.onegini.mobile.sdk.android.handlers.request.callback.OneginiCustomRegistrationCallback;
+
+public interface CustomRegistrationAction {
+  void setCallbackContext(final CallbackContext callbackContext);
+
+  OneginiCustomRegistrationCallback getCallback();
 }
