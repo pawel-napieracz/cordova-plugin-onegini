@@ -22,7 +22,7 @@
 
 #pragma mark - ONGAuthenticationDelegate
 
-- (void)userClient:(ONGUserClient *)userClient didAuthenticateUser:(ONGUserProfile *)userProfile info:(nullable ONGCustomAuthInfo *)customAuthInfo
+- (void)userClient:(ONGUserClient *)userClient didAuthenticateUser:(ONGUserProfile *)userProfile info:(nullable ONGCustomInfo *)customAuthInfo
 {
     self.pinChallenge = nil;
     self.fingerprintChallenge = nil;
@@ -65,18 +65,6 @@
 
     NSDictionary *result = @{
         OGCDVPluginKeyEvent: OGCDVPluginEventFingerprintRequest
-    };
-    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
-    [pluginResult setKeepCallbackAsBool:YES];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.authenticationCallbackId];
-}
-
-- (void)userClient:(ONGUserClient *)userClient didReceiveFIDOChallenge:(ONGFIDOChallenge *)challenge
-{
-    self.fidoChallenge = challenge;
-
-    NSDictionary *result = @{
-        OGCDVPluginKeyEvent: OGCDVPluginEventFidoRequest
     };
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
     [pluginResult setKeepCallbackAsBool:YES];

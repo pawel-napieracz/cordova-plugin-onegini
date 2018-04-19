@@ -84,7 +84,7 @@
     [self finishRequest];
 }
 
-- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthRequest:(ONGMobileAuthRequest *)request info:(ONGCustomAuthInfo *_Nullable)customAuthenticatorInfo
+- (void)userClient:(ONGUserClient *)userClient didHandleMobileAuthRequest:(ONGMobileAuthRequest *)request info:(ONGCustomInfo *_Nullable)customAuthenticatorInfo
 {
     NSDictionary *result = @{
         OGCDVPluginKeyEvent: OGCDVPluginEventSuccess

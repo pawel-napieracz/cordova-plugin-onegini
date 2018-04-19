@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2018 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package com.onegini.mobile.sdk.cordova.handler;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_PIN_REQUEST;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_INCORRECT_PIN;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_INCORRECT_PIN;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT_PIN_REQUEST;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2018 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import android.net.Uri;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
+import com.onegini.mobile.sdk.android.model.entity.CustomInfo;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthenticationRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 
@@ -172,6 +173,29 @@ public class PluginResultBuilder {
       handleException(e);
     }
 
+    return this;
+  }
+
+  public PluginResultBuilder withCustomInfo(final CustomInfo customInfo) {
+    if (customInfo != null) {
+      try {
+        payload.put("customInfoStatus", customInfo.getStatus());
+        payload.put("customInfoData", customInfo.getData());
+      } catch (JSONException e) {
+        handleException(e);
+      }
+    }
+    return this;
+  }
+
+  public PluginResultBuilder withIdentityProviderId(final String identityProviderId) {
+    if (identityProviderId != null) {
+      try {
+        payload.put("identityProviderId", identityProviderId);
+      } catch (JSONException e) {
+        handleException(e);
+      }
+    }
     return this;
   }
 

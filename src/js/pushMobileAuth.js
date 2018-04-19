@@ -99,11 +99,6 @@ module.exports = (function () {
     return this;
   };
 
-  PushMobileAuthHandler.prototype.onFidoRequest = function (cb) {
-    this.callbacks.onFidoRequest = cb;
-    return this;
-  };
-
   PushMobileAuthHandler.prototype.onError = function (cb) {
     this.callbacks.onError = cb;
     return this;

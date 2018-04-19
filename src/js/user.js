@@ -17,7 +17,7 @@
 module.exports = (function () {
   var utils = require('./utils');
 
-  function AuthenticationHandler(options, client, action) {
+  function UserActionHandler(options, client, action) {
     var self = this;
     this.callbacks = {};
 
@@ -45,14 +45,6 @@ module.exports = (function () {
         utils.callbackExec(client, 'respondToFingerprintRequest', {accept: false}, callSuccessCallback, callErrorCallback)
       },
 
-      acceptFido: function () {
-        utils.callbackExec(client, 'respondToFidoRequest', {accept: true}, self.callbacks.onSuccess, self.callbacks.onError);
-      },
-
-      denyFido: function () {
-        utils.callbackExec(client, 'respondToFidoRequest', {accept: false}, self.callbacks.onSuccess, self.callbacks.onError)
-      },
-
       createPin: function (options) {
         options = utils.getOptionsWithDefaults(options, {}, 'pin');
         if (!options || !options.pin) {
@@ -62,9 +54,29 @@ module.exports = (function () {
         utils.callbackExec(client, 'createPin', options, callSuccessCallback, callErrorCallback);
       },
 
-      handleRegistrationUrl: function(options) {
+      handleRegistrationUrl: function (options) {
         options = utils.getOptionsWithDefaults(options, {}, 'url');
         utils.callbackExec(client, 'respondToRegistrationRequest', options, callSuccessCallback, callErrorCallback);
+      },
+
+      acceptRegistrationInitRequest: function (options) {
+        options = utils.getOptionsWithDefaults(options, {accept: true}, 'data');
+        utils.callbackExec(client, 'respondToCustomRegistrationInitRequest', options, callSuccessCallback, callErrorCallback);
+      },
+
+      denyRegistrationInitRequest: function (options) {
+        options = utils.getOptionsWithDefaults(options, {accept: false});
+        utils.callbackExec(client, 'respondToCustomRegistrationInitRequest', options, callSuccessCallback, callErrorCallback);
+      },
+
+      acceptRegistrationCompleteRequest: function (options) {
+        options = utils.getOptionsWithDefaults(options, {accept: true}, 'data');
+        utils.callbackExec(client, 'respondToCustomRegistrationCompleteRequest', options, callSuccessCallback, callErrorCallback);
+      },
+
+      denyRegistrationCompleteRequest: function () {
+        options = utils.getOptionsWithDefaults(options, {accept: false});
+        utils.callbackExec(client, 'respondToCustomRegistrationCompleteRequest', options, callSuccessCallback, callErrorCallback);
       },
 
       cancel: function () {
@@ -77,7 +89,12 @@ module.exports = (function () {
       delete options.pluginEvent;
 
       if (self.callbacks[event]) {
-        self.callbacks[event](self.callbackActions, options);
+        // for onSuccess we don't need to pass callbackActions
+        if (event === 'onSuccess') {
+          self.callbacks.onSuccess(options);
+        } else {
+          self.callbacks[event](self.callbackActions, options);
+        }
       }
     }
 
@@ -93,52 +110,57 @@ module.exports = (function () {
     utils.callbackExec(client, action, options, callSuccessCallback, callErrorCallback)
   }
 
-  AuthenticationHandler.prototype.onPinRequest = function (cb) {
+  UserActionHandler.prototype.onPinRequest = function (cb) {
     this.callbacks.onPinRequest = cb;
     return this;
   };
 
-  AuthenticationHandler.prototype.onCreatePinRequest = function (cb) {
+  UserActionHandler.prototype.onCreatePinRequest = function (cb) {
     this.callbacks.onCreatePinRequest = cb;
     return this;
   };
 
-  AuthenticationHandler.prototype.onFingerprintRequest = function (cb) {
+  UserActionHandler.prototype.onFingerprintRequest = function (cb) {
     this.callbacks.onFingerprintRequest = cb;
     return this;
   };
 
-  AuthenticationHandler.prototype.onFingerprintCaptured = function (cb) {
+  UserActionHandler.prototype.onFingerprintCaptured = function (cb) {
     this.callbacks.onFingerprintCaptured = cb;
     return this;
   };
 
-  AuthenticationHandler.prototype.onFingerprintFailed = function (cb) {
+  UserActionHandler.prototype.onFingerprintFailed = function (cb) {
     this.callbacks.onFingerprintFailed = cb;
     return this;
   };
 
-  AuthenticationHandler.prototype.onFidoRequest = function (cb) {
-    this.callbacks.onFidoRequest = cb;
-    return this;
-  };
-
-  AuthenticationHandler.prototype.onRegistrationRequest = function (cb) {
+  UserActionHandler.prototype.onRegistrationRequest = function (cb) {
     this.callbacks.onRegistrationRequest = cb;
     return this;
   };
 
-  AuthenticationHandler.prototype.onError = function (cb) {
+  UserActionHandler.prototype.onCustomRegistrationInitRequest = function (cb) {
+    this.callbacks.onCustomRegistrationInitRequest = cb;
+    return this;
+  };
+
+  UserActionHandler.prototype.onCustomRegistrationCompleteRequest = function (cb) {
+    this.callbacks.onCustomRegistrationCompleteRequest = cb;
+    return this;
+  };
+
+  UserActionHandler.prototype.onError = function (cb) {
     this.callbacks.onError = cb;
     return this;
   };
 
-  AuthenticationHandler.prototype.onSuccess = function (cb) {
+  UserActionHandler.prototype.onSuccess = function (cb) {
     this.callbacks.onSuccess = cb;
     return this;
   };
 
-  function authenticate (profileOptions, authenticatorOptions) {
+  function authenticate(profileOptions, authenticatorOptions) {
     profileOptions = utils.getOptionsWithDefaults(profileOptions, {}, 'profileId');
     if (!profileOptions.profileId) {
       throw new TypeError("Onegini: missing 'profileId' argument for user.authenticate");
@@ -154,10 +176,10 @@ module.exports = (function () {
       options.push(authenticatorOptions);
     }
 
-    return new AuthenticationHandler(options, 'OneginiUserAuthenticationClient', 'authenticate');
+    return new UserActionHandler(options, 'OneginiUserAuthenticationClient', 'authenticate');
   }
 
-  function authenticateImplicitly (options, successCb, failureCb) {
+  function authenticateImplicitly(options, successCb, failureCb) {
     options = utils.getOptionsWithDefaults(options, {
       scopes: []
     }, 'profileId');
@@ -169,13 +191,13 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserAuthenticationClient', 'authenticateImplicitly', options, successCb, failureCb);
   }
 
-  function register (options) {
+  function register(options) {
     options = utils.getOptionsWithDefaults(options, {}, 'scopes');
-    return new AuthenticationHandler(options, 'OneginiUserRegistrationClient', 'start');
+    return new UserActionHandler(options, 'OneginiUserRegistrationClient', 'start');
   }
 
-  function changePin () {
-    return new AuthenticationHandler(null, 'OneginiChangePinClient', 'start');
+  function changePin() {
+    return new UserActionHandler(null, 'OneginiChangePinClient', 'start');
   }
 
   var authenticators = {
@@ -218,7 +240,7 @@ module.exports = (function () {
         throw new TypeError("Onegini: missing 'authenticatorType' argument for authenticators.registerNew");
       }
 
-      return new AuthenticationHandler(options, 'OneginiAuthenticatorRegistrationClient', 'start');
+      return new UserActionHandler(options, 'OneginiAuthenticatorRegistrationClient', 'start');
     },
 
     deregister: function (options, successCb, failureCb) {
@@ -266,6 +288,10 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiUserClient', 'validatePinWithPolicy', options, successCb, failureCb);
   }
 
+  function getIdentityProviders(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiIdentityProvidersClient', 'getIdentityProviders', [], successCb, failureCb);
+  }
+
   return {
     authenticate: authenticate,
     authenticateImplicitly: authenticateImplicitly,
@@ -278,6 +304,7 @@ module.exports = (function () {
     getAuthenticatedUserProfile: getAuthenticatedUserProfile,
     getImplicitlyAuthenticatedUserProfile: getImplicitlyAuthenticatedUserProfile,
     logout: logout,
-    validatePinWithPolicy: validatePinWithPolicy
+    validatePinWithPolicy: validatePinWithPolicy,
+    getIdentityProviders: getIdentityProviders
   };
 })();

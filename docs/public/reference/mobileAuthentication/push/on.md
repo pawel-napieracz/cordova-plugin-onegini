@@ -2,7 +2,7 @@
 
 <!-- toc -->
 
-When a user is enrolled for push mobile authentication, they are able to receive and respond to mobile authentication requests that are received on the device 
+When a user is enrolled for push mobile authentication, they are able to receive and respond to mobile authentication requests that are received on the device
 through push notifications. The Onegini Cordova Plugin facilitates this by allowing you to register handler methods that implement the UI.
 
 ## `onegini.mobileAuth.push.on`
@@ -13,7 +13,7 @@ This method is used to register handlers for different mobile authentication met
 | --- | --- |
 | `method` | The mobile authentication method you wish to register a handler for
 
-Currently, the available method strings are `"confirmation"` (push), `"pin"` (push with PIN), `"fingerprint"` (push with fingerprint) and `"fido"` (push with FIDO).
+Currently, the available method strings are `"confirmation"` (push), `"pin"` (push with PIN) and `"fingerprint"` (push with fingerprint).
 
 The `on` method returns a [`PushMobileAuthHandler`](PushMobileAuthHandler.md) object, which can be used to implement the various handler methods.
 Examples for implementing Push Mobile Authentication request can be found in the Mobile Authentication with Push [topic guide](../../../topics/mobile-authentication-push.md).

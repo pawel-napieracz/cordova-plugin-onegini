@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2018 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import com.onegini.mobile.sdk.cordova.handler.PinValidationHandler;
-import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.cordova.util.ActionArgumentsUtil;
 
 @SuppressWarnings("unused")

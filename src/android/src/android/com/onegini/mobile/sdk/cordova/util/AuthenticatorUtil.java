@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2018 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,6 @@ public class AuthenticatorUtil {
 
   private final static String AUTHENTICATOR_TYPE_PIN = "PIN";
   private final static String AUTHENTICATOR_TYPE_FINGERPRINT = "Fingerprint";
-  private final static String AUTHENTICATOR_TYPE_FIDO = "FIDO";
 
   public static JSONArray authenticatorSetToJSONArray(final Set<OneginiAuthenticator> authenticatorSet) throws JSONException {
     JSONArray authenticatorJSONArray = new JSONArray();
@@ -64,10 +63,9 @@ public class AuthenticatorUtil {
         return AUTHENTICATOR_TYPE_PIN;
       case 1:
         return AUTHENTICATOR_TYPE_FINGERPRINT;
-      case 2:
-        return AUTHENTICATOR_TYPE_FIDO;
+      default:
+        return null;
     }
-    return null;
   }
 
   public static UserProfile getUserProfileFromArguments(final JSONArray args, final Set<UserProfile> registeredUserProfiles) throws JSONException {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2018 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import org.apache.cordova.PluginResult;
 
 import com.onegini.mobile.sdk.android.handlers.OneginiAuthenticatorRegistrationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiAuthenticatorRegistrationError;
-import com.onegini.mobile.sdk.android.model.entity.CustomAuthenticatorInfo;
+import com.onegini.mobile.sdk.android.model.entity.CustomInfo;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 
 public class AuthenticatorRegistrationHandler implements OneginiAuthenticatorRegistrationHandler {
@@ -34,9 +34,10 @@ public class AuthenticatorRegistrationHandler implements OneginiAuthenticatorReg
   }
 
   @Override
-  public void onSuccess(final CustomAuthenticatorInfo customAuthenticatorInfo) {
+  public void onSuccess(final CustomInfo customInfo) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withSuccess()
+        .withCustomInfo(customInfo)
         .withEvent(EVENT_SUCCESS)
         .build();
 

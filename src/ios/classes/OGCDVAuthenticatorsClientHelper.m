@@ -100,8 +100,6 @@
             return OGCDVPluginAuthenticatorTypePin;
         case ONGAuthenticatorTouchID:
             return OGCDVPluginAuthenticatorTypeTouchId;
-        case ONGAuthenticatorFIDO:
-            return OGCDVPluginAuthenticatorTypeFido;
         default:
             return nil;
     }
