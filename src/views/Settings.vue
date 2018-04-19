@@ -84,7 +84,7 @@ export default {
               } else {
                 actions.cancel();
               }
-            }
+            };
 
             window.plugins.pinDialog.prompt(
               `Please enter your current pin.\n${options.remainingFailureCount } out of ${options.maxFailureCount } attempts remaining`,
@@ -97,7 +97,7 @@ export default {
               } else {
                 actions.cancel();
               }
-            }
+            };
 
             window.plugins.pinDialog.prompt(
               `Please enter your new ${options.pinLength} digit PIN.`,

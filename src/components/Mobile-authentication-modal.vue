@@ -9,7 +9,7 @@
       <p v-else>{{request.message}}</p>
       <div v-if="request.type === 'push_with_pin'">
         <input type="password" pattern="[0-9]*" inputmode="numeric" v-model="pin" placeholder="Enter PIN" />
-        <p>{{request.remainingFailureCount}} out of {{request.maxFailureCount}} attempts remaning</p>
+        <p>{{request.remainingFailureCount}} out of {{request.maxFailureCount}} attempts remaining</p>
       </div>
     </div>
     <div v-if="!fingerprintStatus">
