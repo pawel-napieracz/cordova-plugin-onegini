@@ -119,9 +119,9 @@ public class MobileAuthWithPushHandler
 
   @NonNull
   private OneginiMobileAuthenticationRequest getFallbackMobileAuthenticationRequest(final PinCallback pinCallback) {
-    return new OneginiMobileAuthenticationRequest(pinCallback
-            .getMobileAuthenticationRequest().getMessage(), "push_with_pin", pinCallback.getMobileAuthenticationRequest().getUserProfile(),
-            pinCallback.getMobileAuthenticationRequest().getTransactionId(), pinCallback.getMobileAuthenticationRequest().getSigningData());
+    final OneginiMobileAuthenticationRequest mobileAuthenticationRequest = pinCallback.getMobileAuthenticationRequest();
+    return new OneginiMobileAuthenticationRequest(mobileAuthenticationRequest.getMessage(), "push_with_pin", mobileAuthenticationRequest.getUserProfile(),
+            mobileAuthenticationRequest.getTransactionId(), mobileAuthenticationRequest.getSigningData());
   }
 
   @Override
@@ -232,9 +232,15 @@ public class MobileAuthWithPushHandler
   }
 
   private int findFingerprintCallbackInTheQueue(final String transactionId) {
+    if (transactionId == null) {
+      return -1;
+    }
+
     for (int i = 0; i < callbackQueue.size(); i++) {
       final Callback callback = callbackQueue.get(i);
-      if (callback instanceof FingerprintCallback && callback.getMobileAuthenticationRequest().getTransactionId().equals(transactionId)) {
+      final OneginiMobileAuthenticationRequest mobileAuthenticationRequest = callback.getMobileAuthenticationRequest();
+      if (callback instanceof FingerprintCallback && mobileAuthenticationRequest != null
+          && transactionId.equals(mobileAuthenticationRequest.getTransactionId())) {
         return i;
       }
     }
