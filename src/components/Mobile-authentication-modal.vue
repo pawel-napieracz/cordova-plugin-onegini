@@ -57,6 +57,7 @@ export default {
             this.pin = null;
             this.actions = actions;
             this.request = request;
+            this.fingerprintStatus = null;
           })
           .onSuccess(() => {
             navigator.notification.alert('PIN authentication success!');
