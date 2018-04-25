@@ -41,6 +41,7 @@ import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushEnrollmentHandle
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
+@SuppressWarnings("unused")
 public class PushMobileAuthClient extends CordovaPlugin {
 
   private static final String ACTION_IS_ENROLLED = "isEnrolled";
