@@ -77,12 +77,21 @@ static OGCDVPushMobileAuthRequestClient *sharedInstance;
         [delegate sendChallenge:challengeReceiversCallbackIds[OGCDVPluginMobileAuthenticationMethodPin]];
         return;
     }
-
+    
     OGCDVPushMobileAuthOperation *operation = [[OGCDVPushMobileAuthOperation alloc]
         initWithPinChallenge:challenge
                   forRequest:request
                    forMethod:OGCDVPluginMobileAuthenticationMethodPin];
+
     [operationQueue addOperation:operation];
+    
+    if ([request.type isEqualToString:@"push_with_fingerprint"]) {
+        NSDictionary *result = @{
+                                 OGCDVPluginKeyFallbackToPin: @YES
+                                 };
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:result] callbackId:[delegate completeOperationCallbackId]];
+        [delegate completeOperation];
+    }
 }
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveFingerprintChallenge:(ONGFingerprintChallenge *)challenge

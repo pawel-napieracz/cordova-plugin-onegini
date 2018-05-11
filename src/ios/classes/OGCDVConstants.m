@@ -43,6 +43,7 @@ NSString *const OGCDVPluginKeyTTL = @"timeToLiveSeconds";
 NSString *const OGCDVPluginKeyData = @"data";
 NSString *const OGCDVPluginKeyCustomInfoData = @"customInfoData";
 NSString *const OGCDVPluginKeyCustomInfoStatus = @"customInfoStatus";
+NSString *const OGCDVPluginKeyFallbackToPin = @"fallbackToPin";
 
 
 
