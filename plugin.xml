@@ -403,14 +403,14 @@
 
     <!-- custom registration -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/CustomRegistrationAction.java"
-                 target-dir="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/"/>
+                 target-dir="src/com/onegini/mobile/sdk/cordova/customregistration/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/CustomOneStepRegistrationAction.java"
-                 target-dir="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/"/>
+                 target-dir="src/com/onegini/mobile/sdk/cordova/customregistration/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/CustomTwoStepRegistrationAction.java"
-                 target-dir="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/"/>
+                 target-dir="src/com/onegini/mobile/sdk/cordova/customregistration/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/CustomIdentityProvider.java"
-                 target-dir="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/"/>
+                 target-dir="src/com/onegini/mobile/sdk/cordova/customregistration/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/CustomIdentityProviderModel.java"
-                 target-dir="src/android/src/android/com/onegini/mobile/sdk/cordova/customregistration/"/>
+                 target-dir="src/com/onegini/mobile/sdk/cordova/customregistration/"/>
   </platform>
 </plugin>
