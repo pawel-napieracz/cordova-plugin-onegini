@@ -17,6 +17,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const spawn = require('child_process').spawn;
 
 const supportedPlatforms = ['android', 'ios'];
@@ -43,18 +44,12 @@ module.exports = function (context) {
   console.log('Configuring the Onegini SDK');
   console.log('===========================\n\n');
 
-  const platforms = context.opts.platforms;
+  // deduce the platforms based on whatever in the whitelist is currently installed
+  const platforms = supportedPlatforms.filter(platform => fs.existsSync(path.join(context.opts.projectRoot, "platforms", platform)));
 
   platforms
       .map(platform => platform.split('@')[0])
-      .filter((platform) => {
-        if (supportedPlatforms.includes(platform)) {
-          return true;
-        }
-
-        console.log(`Skipping unsupported platform: ${platform}`)
-      })
-      .forEach((platform) => {
+      .forEach(platform => {
         console.log(`Configuring the ${platform} platform`);
         console.log('--------------------------' + new Array(platform.length).join('-') + '\n');
 
