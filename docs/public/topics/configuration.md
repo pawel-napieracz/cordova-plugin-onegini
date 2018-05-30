@@ -5,7 +5,7 @@
 ## Configuring the Onegini SDKs
 
 The following steps describe how to configure our native Android and iOS SDKs for your platform.
-When you add a platform to your Cordova project, the Onegini Cordova Plugin will automatically try to invoke the [Onegini SDK Configurator](https://github.com/Onegini/onegini-sdk-configurator).
+When you add a platform to your Cordova project, or when you add the plugin to an existing project, the Onegini Cordova Plugin will automatically try to invoke the [Onegini SDK Configurator](https://github.com/Onegini/onegini-sdk-configurator).
 The SDK Configurator then reads the Token Server Configuration from configuration zip files you can obtain from your Token Server admin panel.
 Configuration settings not relevant to your Token Server will be read from your project's `config.xml` file.
 
