@@ -244,7 +244,7 @@
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="application/activity">
-      <intent-filter>
+      <intent-filter android:name="OneginiRedirectionIntent" android:label="OneginiRedirectionIntent">
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
