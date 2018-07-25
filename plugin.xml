@@ -20,8 +20,8 @@
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
-  <hook type="after_platform_add" src="hooks/configure_sdk.js"/>
   <hook type="before_plugin_install" src="hooks/resolve_dependencies.js"/>
+  <hook type="after_plugin_install" src="hooks/configure_sdk.js"/>
 
   <js-module src="dist/onegini.js" name="onegini">
     <clobbers target="onegini"/>
@@ -244,7 +244,7 @@
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="application/activity">
-      <intent-filter>
+      <intent-filter android:name="OneginiRedirectionIntent" android:label="OneginiRedirectionIntent">
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
@@ -324,6 +324,8 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AppLifecycleUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PendingMobileAuthRequestUtil.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PreferencesUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
 
     <!-- handler -->
