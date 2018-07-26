@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.onegini.mobile.sdk.cordova.util.PreferencesUtil;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -55,6 +56,7 @@ public class OneginiClient extends CordovaPlugin {
 
   private static final String ACTION_START = "start";
   private final List<OneginiMobileAuthWithPushRequest> delayedMobileAuthenticationRequests = new LinkedList<OneginiMobileAuthWithPushRequest>();
+  private PreferencesUtil preferencesUtil;
 
   @Override
   public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
@@ -62,6 +64,7 @@ public class OneginiClient extends CordovaPlugin {
     AppLifecycleUtil.setAppIsInForeground();
 
     super.initialize(cordova, webView);
+    preferencesUtil = new PreferencesUtil(preferences);
     final RemoteMessage remoteMessage = cordova.getActivity().getIntent().getParcelableExtra(EXTRA_MOBILE_AUTHENTICATION);
 
     /*
@@ -115,8 +118,12 @@ public class OneginiClient extends CordovaPlugin {
   }
 
   private void handleRedirection(final Uri uri) {
+    if (uri == null) {
+      return;
+    }
+
     final com.onegini.mobile.sdk.android.client.OneginiClient client = getOneginiClient();
-    if (uri != null && client.getConfigModel().getRedirectUri().startsWith(uri.getScheme())) {
+    if (shouldOpenBrowserForRegistration() && client.getConfigModel().getRedirectUri().startsWith(uri.getScheme())) {
       BrowserRegistrationRequestHandler.handleRegistrationCallback(uri);
     }
   }
@@ -214,5 +221,9 @@ public class OneginiClient extends CordovaPlugin {
   public void onPause(final boolean multitasking) {
     AppLifecycleUtil.setAppIsInBackground();
     super.onPause(multitasking);
+  }
+
+  private boolean shouldOpenBrowserForRegistration() {
+    return !preferencesUtil.isWebViewDisabled();
   }
 }

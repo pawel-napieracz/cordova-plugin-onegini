@@ -257,7 +257,7 @@
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="application/activity">
-      <intent-filter>
+      <intent-filter android:name="OneginiRedirectionIntent" android:label="OneginiRedirectionIntent">
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
@@ -339,6 +339,8 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AppLifecycleUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PendingMobileAuthRequestUtil.java"
+        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PreferencesUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/IdentityProvidersUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
