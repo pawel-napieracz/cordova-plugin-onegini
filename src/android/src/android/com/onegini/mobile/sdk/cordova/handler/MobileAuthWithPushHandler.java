@@ -24,11 +24,12 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
 
+import android.support.annotation.NonNull;
 import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthenticationHandler;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiMobileAuthenticationError;
@@ -53,7 +54,7 @@ public class MobileAuthWithPushHandler
 
   private static MobileAuthWithPushHandler instance = null;
   private final HashMap<Callback.Method, CallbackContext> challengeReceivers = new HashMap<Callback.Method, CallbackContext>();
-  private final Queue<Callback> callbackQueue = new LinkedList<Callback>();
+  private final List<Callback> callbackQueue = new LinkedList<Callback>();
   private boolean isRunning = false;
 
   private MobileAuthWithPushHandler() {
@@ -72,7 +73,7 @@ public class MobileAuthWithPushHandler
       return null;
     }
 
-    return callbackQueue.peek();
+    return getFirstElementFromCallbackQueue();
   }
 
   public void registerAuthenticationChallengeReceiver(final Callback.Method method, final CallbackContext callbackContext) {
@@ -98,13 +99,35 @@ public class MobileAuthWithPushHandler
                                   final AuthenticationAttemptCounter authenticationAttemptCounter,
                                   final OneginiMobileAuthenticationError oneginiMobileAuthenticationError) {
     final PinCallback pinCallback = new PinCallback(oneginiMobileAuthenticationRequest, oneginiPinCallback, authenticationAttemptCounter);
-    addAuthenticationRequestToQueue(pinCallback);
+    final int fallbackFromFingerprintRequestQueueId = findFingerprintCallbackInTheQueue(pinCallback.getMobileAuthenticationRequest().getTransactionId());
+    if (fallbackFromFingerprintRequestQueueId != -1) {
+        replaceFingerprintAuthenticationRequestWithPinFallbackToQueue(pinCallback, fallbackFromFingerprintRequestQueueId);
+        isRunning = false;
+        handleNextAuthenticationRequest();
+    } else {
+        addAuthenticationRequestToQueue(pinCallback);
+    }
+  }
+
+  private void replaceFingerprintAuthenticationRequestWithPinFallbackToQueue(final PinCallback pinCallback, final int isItFingerprintFallback) {
+    final OneginiMobileAuthenticationRequest fallbackMobileAuthenticationRequest = getFallbackMobileAuthenticationRequest(pinCallback);
+    final PinCallback fallbackPinCallback = new PinCallback(fallbackMobileAuthenticationRequest, pinCallback.getPinCallback(), pinCallback
+            .getAuthenticationAttemptCounter());
+    callbackQueue.remove(isItFingerprintFallback);
+    callbackQueue.add(isItFingerprintFallback, fallbackPinCallback);
+  }
+
+  @NonNull
+  private OneginiMobileAuthenticationRequest getFallbackMobileAuthenticationRequest(final PinCallback pinCallback) {
+    final OneginiMobileAuthenticationRequest mobileAuthenticationRequest = pinCallback.getMobileAuthenticationRequest();
+    return new OneginiMobileAuthenticationRequest(mobileAuthenticationRequest.getMessage(), "push_with_pin", mobileAuthenticationRequest.getUserProfile(),
+            mobileAuthenticationRequest.getTransactionId(), mobileAuthenticationRequest.getSigningData());
   }
 
   @Override
   public void onNextAuthenticationAttempt(final AuthenticationAttemptCounter authenticationAttemptCounter) {
     final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(Callback.Method.PIN);
-    final PinCallback pinCallback = (PinCallback) callbackQueue.peek();
+    final PinCallback pinCallback = (PinCallback) getFirstElementFromCallbackQueue();
 
     callbackContext.sendPluginResult(new PluginResultBuilder()
         .withPluginError(ERROR_DESCRIPTION_INCORRECT_PIN, ERROR_CODE_INCORRECT_PIN)
@@ -130,7 +153,7 @@ public class MobileAuthWithPushHandler
 
   @Override
   public void onNextAuthenticationAttempt() {
-    final FingerprintCallback fingerprintCallback = (FingerprintCallback) callbackQueue.peek();
+    final FingerprintCallback fingerprintCallback = (FingerprintCallback) getFirstElementFromCallbackQueue();
     final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(Callback.Method.FINGERPRINT);
 
     callbackContext.sendPluginResult(new PluginResultBuilder()
@@ -143,7 +166,7 @@ public class MobileAuthWithPushHandler
 
   @Override
   public void onFingerprintCaptured() {
-    final FingerprintCallback fingerprintCallback = (FingerprintCallback) callbackQueue.peek();
+    final FingerprintCallback fingerprintCallback = (FingerprintCallback) getFirstElementFromCallbackQueue();
     final CallbackContext callbackContext = getChallengeReceiverForCallbackMethod(Callback.Method.FINGERPRINT);
 
     callbackContext.sendPluginResult(new PluginResultBuilder()
@@ -172,7 +195,7 @@ public class MobileAuthWithPushHandler
   // *END*
 
   private void handleNextAuthenticationRequest() {
-    final Callback callback = callbackQueue.peek();
+    final Callback callback = getFirstElementFromCallbackQueue();
 
     if (isRunning || callback == null) {
       return;
@@ -208,8 +231,24 @@ public class MobileAuthWithPushHandler
     handleNextAuthenticationRequest();
   }
 
+  private int findFingerprintCallbackInTheQueue(final String transactionId) {
+    if (transactionId == null) {
+      return -1;
+    }
+
+    for (int i = 0; i < callbackQueue.size(); i++) {
+      final Callback callback = callbackQueue.get(i);
+      final OneginiMobileAuthenticationRequest mobileAuthenticationRequest = callback.getMobileAuthenticationRequest();
+      if (callback instanceof FingerprintCallback && mobileAuthenticationRequest != null
+          && transactionId.equals(mobileAuthenticationRequest.getTransactionId())) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   private void finishAuthenticationRequest(final OneginiError oneginiError) {
-    Callback callback = callbackQueue.poll();
+    final Callback callback = callbackQueue.remove(0);
     if (callback == null) {
       // We don't have a callback anymore so we cannot perform any callback. We'll just continue to process the next authentication request
       startProcessingNextAuthenticationRequest();
@@ -255,4 +294,10 @@ public class MobileAuthWithPushHandler
     // already want to close your UI dialog after authentication was finished.
   }
 
+  private Callback getFirstElementFromCallbackQueue() {
+    if (callbackQueue.isEmpty()) {
+      return null;
+    }
+    return callbackQueue.get(0);
+  }
 }

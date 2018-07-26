@@ -20,6 +20,7 @@
 #import "ONGBrowserRegistrationChallenge.h"
 #import "ONGIdentityProvider.h"
 #import "OGCDVIdentityProvidersClientHelper.h"
+#import "OneginiConfigModel.h"
 
 static OGCDVUserRegistrationClient *sharedInstance;
 NSString *const preferenceSFSafariViewController = @"SFSafariViewController";
@@ -155,12 +156,16 @@ NSString *const keyURL = @"url";
 - (void)handleRegistrationCallbackNotification:(NSNotification *)notification
 {
     NSURL *url = (NSURL *)notification.object;
-    [self handleRegistrationCallbackURL:url];
+    if ([url.absoluteString hasPrefix:[OneginiConfigModel configuration][@"ONGRedirectURL"]]) {
+        [self handleRegistrationCallbackURL:url];
+    }
 }
 
 - (void)handleRegistrationCallbackURL:(NSURL *)url
 {
-    [self.browserRegistrationChallenge.sender respondWithURL:url challenge:self.browserRegistrationChallenge];
+    if (self.browserRegistrationChallenge) {
+        [self.browserRegistrationChallenge.sender respondWithURL:url challenge:self.browserRegistrationChallenge];
+    }
 }
 
 - (void)openURLWithWKWebView:(NSURL *)url
@@ -253,7 +258,7 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleRegistrationCallbackNotification:)
-                                                 name:OGCDVDidReceiveRegistrationCallbackURLNotification
+                                                 name:CDVPluginHandleOpenURLNotification
                                                object:nil];
     NSURL *url;
     self.browserRegistrationChallenge = challenge;

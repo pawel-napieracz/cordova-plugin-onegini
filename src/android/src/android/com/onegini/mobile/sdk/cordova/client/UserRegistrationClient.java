@@ -28,9 +28,8 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM
 
 import java.util.Set;
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.PluginResult;
+import com.onegini.mobile.sdk.cordova.util.*;
+import org.apache.cordova.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -66,11 +65,14 @@ public class UserRegistrationClient extends CordovaPlugin {
   private static final String ACTION_CANCEL_FLOW = "cancelFlow";
   private static final String ACTION_RESPOND_TO_REGISTRATION_REQUEST = "respondToRegistrationRequest";
 
-  private static final String PREF_KEY_WEBVIEW = "oneginiwebview";
-  private static final String PREF_WEBVIEW_DISABLED = "disabled";
-  private static final String PREF_WEBVIEW_EXTERNAL = "external";
-
   private RegistrationHandler registrationHandler;
+  private PreferencesUtil preferencesUtil;
+
+  @Override
+  public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
+    super.initialize(cordova, webView);
+    preferencesUtil = new PreferencesUtil(preferences);
+  }
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -239,11 +241,7 @@ public class UserRegistrationClient extends CordovaPlugin {
   }
 
   private boolean shouldOpenBrowserForRegistration() {
-    return !isWebViewDisabled();
-  }
-
-  private boolean isWebViewDisabled() {
-    return preferences.getString(PREF_KEY_WEBVIEW, PREF_WEBVIEW_EXTERNAL).equals(PREF_WEBVIEW_DISABLED);
+    return !preferencesUtil.isWebViewDisabled();
   }
 
   private void cancelFlow() {
