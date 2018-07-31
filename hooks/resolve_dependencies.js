@@ -16,6 +16,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const process = require('process');
 const url = require('url');
 const https = require('https');
 const execSync = require('child_process').execSync;
@@ -53,10 +54,10 @@ module.exports = function (context) {
     return;
   }
 
-  log('Resolving Onegini iOS SDK dependencies...');
-
   fetchSdkDownloadPath(context);
   prepareSdkDirectories(context);
+
+  writeToStdOut('Resolving Onegini iOS SDK dependencies...');
 
   return new Promise(() => {
     // Downloading & verifying the SDK lib
@@ -84,12 +85,13 @@ function fetchSdkDownloadPath(context) {
   }
   else {
     log(`Downloading the Onegini iOS SDK to: '${pluginDir}'`);
-    sdkDownloadPath = path.join(pluginDir, 'ios-sdk';
+    sdkDownloadPath = path.join(pluginDir, 'ios-sdk');
   }
 }
 
 function checkSdkLibExistsOnFs() {
   return new Promise(resolve => {
+    writeToStdOut('.');
     const libFilePath = path.join(sdkDownloadPath, libName);
     if (fs.existsSync(libFilePath)) {
       debug('SDK lib is already downloaded');
@@ -104,6 +106,7 @@ function checkSdkLibExistsOnFs() {
 
 function checkHeadersFileExistsOnFs() {
   return new Promise(resolve => {
+    writeToStdOut('.');
     const headersFilePath = path.join(sdkDownloadPath, headersName);
     if (fs.existsSync(headersFilePath)) {
       debug('Headers ZIP is already downloaded');
@@ -128,6 +131,7 @@ function calculateSha256(filepath) {
 
 function downloadFile(fileExists, fileUrl) {
   return new Promise((resolve, reject) => {
+    writeToStdOut('.');
     const username = process.env[envVariables.artifactoryUser];
     const password = process.env[envVariables.artifactoryPassword];
     if (!username || !password) {
@@ -180,6 +184,7 @@ function downloadFile(fileExists, fileUrl) {
 }
 
 function checkDownloadedFileIntegrity(fileUrl) {
+  writeToStdOut('.');
   const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
   const downloadedFilePath = path.join(sdkDownloadPath, filename);
   const downloadedSha256FilePath = path.join(sdkDownloadPath, `${filename}.sha256`);
@@ -253,6 +258,7 @@ function deleteFilesFromDirs(directories) {
 
 function copyAndRenameSdkLib(context) {
   return new Promise((resolve, reject) => {
+    writeToStdOut('.');
     debug('Copying and renaming SDK library');
     const pluginDir = context.opts.plugin.pluginInfo.dir;
     let targetSdkLibPath = path.join(pluginDir, iosSdkLibPathCordova);
@@ -270,6 +276,7 @@ function copyAndRenameSdkLib(context) {
 
 function unzipAndRenameHeaders(context) {
   return new Promise((resolve, reject) => {
+    writeToStdOut('.');
     debug('Unzipping and renaming headers');
 
     const pluginDir = context.opts.plugin.pluginInfo.dir;
@@ -291,4 +298,8 @@ function log(line) {
 
 function error(line) {
   console.error(`${pluginId}: ${line}`)
+}
+
+function writeToStdOut(output) {
+  process.stdout.write(output);
 }
