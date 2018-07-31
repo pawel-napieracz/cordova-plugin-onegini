@@ -84,7 +84,7 @@ function fetchSdkDownloadPath(context) {
   }
   else {
     log(`Downloading the Onegini iOS SDK to: '${pluginDir}'`);
-    sdkDownloadPath = path.join(pluginDir, 'sdk';
+    sdkDownloadPath = path.join(pluginDir, 'ios-sdk';
   }
 }
 
