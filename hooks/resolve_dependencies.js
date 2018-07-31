@@ -15,23 +15,36 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 const url = require('url');
 const https = require('https');
-const exec = require('child_process').exec;
 const execSync = require('child_process').execSync;
 const debug = require('debug')('resolve_dependencies');
 
-const sdkDownloadPathEnv = process.env.SDK_DOWNLOAD_PATH;
+const pluginId = 'cordova-plugin-onegini';
+
+const envVariables = {
+  artifactoryUser: 'ARTIFACTORY_USER',
+  artifactoryPassword: 'ARTIFACTORY_PASSWORD',
+  sdkDownloadPath: 'ONEGINI_SDK_IOS_DOWNLOAD_PATH'
+};
+
 const sdkVersion = '8.0.0';
 
-const libOneginiSDKiOS = 'https://repo.onegini.com/artifactory/onegini-sdk/com/onegini/mobile/sdk/ios/libOneginiSDKiOS/' + sdkVersion + '/libOneginiSDKiOS-' + sdkVersion + '.a';
-const libOneginiSDKiOSHeaders = 'https://repo.onegini.com/artifactory/onegini-sdk/com/onegini/mobile/sdk/ios/libOneginiSDKiOS/' + sdkVersion + '/libOneginiSDKiOS-' + sdkVersion + '-headers.zip';
-const libName = libOneginiSDKiOS.substring(libOneginiSDKiOS.lastIndexOf('/') + 1);
-const headersName = libOneginiSDKiOSHeaders.substring(libOneginiSDKiOSHeaders.lastIndexOf('/') + 1);
+const baseArtifactoryUrl = `https://repo.onegini.com/artifactory/onegini-sdk/com/onegini/mobile/sdk/ios/libOneginiSDKiOS/${sdkVersion}`;
+const libOneginiSdkIos = `${baseArtifactoryUrl}/libOneginiSDKiOS-${sdkVersion}.a`;
+const libOneginiSdkIosHeaders = `${baseArtifactoryUrl}/libOneginiSDKiOS-${sdkVersion}-headers.zip`;
+
+const libName = libOneginiSdkIos.substring(libOneginiSdkIos.lastIndexOf('/') + 1);
+const headersName = libOneginiSdkIosHeaders.substring(libOneginiSdkIosHeaders.lastIndexOf('/') + 1);
+
+const iosSdkPathCordova = 'src/ios/OneginiSDKiOS';
+const iosSdkLibPathCordova = path.join(iosSdkPathCordova, 'libOneginiSDKiOS.a');
+const iosSdkHeadersPathCordova = path.join(iosSdkPathCordova, 'Headers');
+
+let sdkDownloadPath;
 
 module.exports = function (context) {
-  const pluginId = 'cordova-plugin-onegini';
-  const deferral = context.requireCordovaModule('q').defer();
   const platform = context.opts.plugin.platform;
 
   // We only want to invoke the plugin for the iOS platform since it doesn't make any sense to resolve the iOS SDK dependencies when
@@ -40,241 +53,242 @@ module.exports = function (context) {
     return;
   }
 
-  console.log(`${pluginId}: Resolving Onegini iOS SDK dependencies...`);
+  log('Resolving Onegini iOS SDK dependencies...');
 
-  createSDKDirectory(context);
+  fetchSdkDownloadPath(context);
+  prepareSdkDirectories(context);
 
-  return checkDownloadedSDKFile(context);
+  return new Promise(() => {
+    // Downloading & verifying the SDK lib
+    checkSdkLibExistsOnFs()
+      .then(result => downloadFile(result, libOneginiSdkIos))
+      .then(() => checkDownloadedFileIntegrity(libOneginiSdkIos))
+      .then(() => copyAndRenameSdkLib(context))
+
+      // Downloading & verifying the headers ZIP
+      .then(() => checkHeadersFileExistsOnFs())
+      .then((result) => downloadFile(result, libOneginiSdkIosHeaders))
+      .then(() => checkDownloadedFileIntegrity(libOneginiSdkIosHeaders))
+      .then(() => unzipAndRenameHeaders(context))
+  });
 };
 
-function downloadSDK(context) {
-  var libPromise = addLibPromise(context);
-  var headersPromise = addHeadersPromise(context);
+function fetchSdkDownloadPath(context) {
+  const pluginDir = context.opts.plugin.pluginInfo.dir;
+  const sdkDownloadPathVar = envVariables.sdkDownloadPath;
+  const sdkDownloadPathFromEnv = process.env[sdkDownloadPathVar];
 
-  return Promise.all([libPromise, headersPromise]);
+  if (sdkDownloadPathFromEnv) {
+    log(`Downloading the Onegini iOS SDK to: '${sdkDownloadPathFromEnv}' set in '${sdkDownloadPathVar}'`);
+    sdkDownloadPath = sdkDownloadPathFromEnv;
+  }
+  else {
+    log(`Downloading the Onegini iOS SDK to: '${pluginDir}'`);
+    sdkDownloadPath = path.join(pluginDir, 'sdk';
+  }
 }
 
-function addLibPromise(context) {
-  return new Promise(function() {
-    requestPromise(libOneginiSDKiOS, context)
-      .then(copyAndRenameSDK(context, libName));
-  });
-}
-
-function addHeadersPromise(context) {
-  return new Promise(function() {
-    requestPromise(libOneginiSDKiOSHeaders, context)
-      .then(function () {
-        unzipAndRenameHeadersPromise(context, headersName)
-      });
-  });
-}
-
-function checkDownloadedSDKFile(context) {
-    var libFilePath = sdkDownloadPathEnv + '/' + libName;
-    var headersFilePath = sdkDownloadPathEnv + '/' + headersName;
-
-    if (fs.existsSync(libFilePath) && fs.existsSync(headersFilePath)) {
-      debug('Validation downloaded SDK files');
-        var checkLibHash = checkLibHashPromise(context, libFilePath);
-        var checkHeadersHash = checkHeadersHashPromise(context, headersFilePath);
-
-        return Promise.all([checkLibHash, checkHeadersHash]);
-    } else {
-      return downloadSDK(context);
+function checkSdkLibExistsOnFs() {
+  return new Promise(resolve => {
+    const libFilePath = path.join(sdkDownloadPath, libName);
+    if (fs.existsSync(libFilePath)) {
+      debug('SDK lib is already downloaded');
+      resolve(true);
     }
-}
-
-function checkLibHashPromise(context, libFilePath) {
-  return new Promise(function() {
-    debug('Static library validation');
-    var libOneginiSDKiOSSHA256 = libOneginiSDKiOS + '.sha256';
-    requestPromise(libOneginiSDKiOSSHA256, context)
-      .then(function () {
-        generateSHA256(libFilePath)
-          .then(function (generatedLibHash) {
-            var librarySHA256File = libFilePath + '.sha256';
-            var libResult = compareHashes(generatedLibHash, librarySHA256File);
-            if (libResult) {
-              debug('Static library validation succeed');
-              return copyAndRenameSDK(context, libName);
-            } else {
-              debug('Static library validation failed');
-              return addLibPromise(context);
-            }
-          });
-      });
+    else {
+      debug('SDK lib is not downloaded yet');
+      resolve(false);
+    }
   });
 }
 
-function checkHeadersHashPromise(context, headersFilePath) {
-  debug('Header files validation');
-  return new Promise(function() {
-    var libOneginiSDKiOSHeadersSHA256 = libOneginiSDKiOSHeaders + '.sha256';
-    requestPromise(libOneginiSDKiOSHeadersSHA256, context)
-      .then(function () {
-        generateSHA256(headersFilePath)
-          .then(function (generatedHeadersHash) {
-            var headersSHA256File = headersFilePath + '.sha256';
-            var headersResult = compareHashes(generatedHeadersHash, headersSHA256File);
-            if (headersResult) {
-              debug('Header files validation succeed');
-              return unzipAndRenameHeadersPromise(context, headersName);
-            } else {
-              debug('Header files validation failed');
-              return addHeadersPromise(context);
-            }
-          });
-      });
+function checkHeadersFileExistsOnFs() {
+  return new Promise(resolve => {
+    const headersFilePath = path.join(sdkDownloadPath, headersName);
+    if (fs.existsSync(headersFilePath)) {
+      debug('Headers ZIP is already downloaded');
+      resolve(true);
+    }
+    else {
+      debug('Headers ZIP is not downloaded yet');
+      resolve(false);
+    }
   });
 }
 
-function compareHashes(hash, hashFile) {
-  var downlandedHash = fs.readFileSync(hashFile).toString();
-  debug('Comparing hashes: ' + downlandedHash + ' / ' + hash);
-  return downlandedHash === hash;
-}
-
-function generateSHA256(filepath) {
-  return new Promise(function(resolve) {
-    debug('Generating sha256 from: ' + filepath);
-    var result = execSync('openssl sha256 ' + filepath);
-    var hash = result.toString().substring(result.toString().lastIndexOf('=') + 1);
+function calculateSha256(filepath) {
+  return new Promise(resolve => {
+    debug(`Generating sha256 from: ${filepath}`);
+    let result = execSync(`openssl sha256 ${filepath}`).toString();
+    let hash = result.substring(result.lastIndexOf('=') + 1);
+    debug(`hashing done: ${hash.trim()}`);
     resolve(hash.trim());
   });
 }
 
-function requestPromise(fileURL, context) {
-  return new Promise(function(resolve, reject) {
-    var username = process.env.ARTIFACTORY_USERNAME;
-    var password = process.env.ARTIFACTORY_PASSWORD;
-    var sdkDownloadPath = (sdkDownloadPathEnv !== 'undefined') ? sdkDownloadPathEnv : context.opts.plugin.pluginInfo.dir;
-    if (username === 'undefined' || password === 'undefined' ) {
-      console.error('You must configure the artifactory_user and artifactory_password properties in your project before you can build it.');
-      reject();
+function downloadFile(fileExists, fileUrl) {
+  return new Promise((resolve, reject) => {
+    const username = process.env[envVariables.artifactoryUser];
+    const password = process.env[envVariables.artifactoryPassword];
+    if (!username || !password) {
+      reject('You must set the "ARTIFACTORY_USER" and "ARTIFACTORY_PASSWORD" environment variables in order to resolve the iOS SDK dependency.');
+      return;
     }
-    var filename = fileURL.substring(fileURL.lastIndexOf('/') + 1);
-    debug('Downloading: ' + filename);
-    var auth = Buffer.from(username + ':' + password).toString();
-    var filePath = sdkDownloadPath + '/' + filename;
-    var file = fs.createWriteStream(filePath);
-    var options = {
-      protocol: url.parse(fileURL).protocol,
-      host: url.parse(fileURL).host,
-      path: url.parse(fileURL).path,
+    const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+
+    // Check if the file was already downloaded previously.
+    if (fileExists) {
+      resolve();
+      return;
+    }
+
+    debug(`Downloading: ${filename}`);
+    const auth = Buffer.from(`${username}:${password}`).toString();
+    const filePath = path.join(sdkDownloadPath, filename);
+    const file = fs.createWriteStream(filePath);
+    const options = {
+      protocol: url.parse(fileUrl).protocol,
+      host: url.parse(fileUrl).host,
+      path: url.parse(fileUrl).path,
       auth: auth
     };
-    https.get(options, function(response) {
+    https.get(options, (response) => {
       if (response.statusCode === 200) {
         response.pipe(file);
         file.on('finish', function () {
           file.close();
-          debug('File downloaded: ' + filename);
-          var fileFormat = filename.substring(filename.lastIndexOf('.') + 1);
-          if (fileFormat !== 'sha256') {
-            debug(filename + ' validation');
-            checkHashDownloadedFile(options, sdkDownloadPath, filename).then(function () {
-              resolve();
-            });
-          } else {
-            resolve();
-          }
-        });
-      } else if(response.statusCode == 404) {
-        console.error(filename + ' not found in artifactory repository')
-      } else if(response.statusCode == 401) {
-        console.error(username + ' is unauthorized')
-      } else {
-        console.error('Downloading' + filename + 'went wrong: ' + response.statusCode);
-        fs.unlinkSync(filePath);
-      }
-
-    }).on('error', function(err) {
-      fs.unlinkSync(filePath);
-      console.error('Downloading' + filename + 'went wrong: ' + err);
-    });
-  });
-}
-
-function downloadHashFile(options, sdkDownloadPath, fileName) {
-  return new Promise(function(resolve) {
-    var downloadedFilePath = options.path;
-    options.path = downloadedFilePath + '.sha256';
-    var filename = fileName + '.sha256';
-    debug('Downloading: ' + filename);
-    var filePath = sdkDownloadPath + '/' + filename;
-    var file = fs.createWriteStream(filePath);
-
-    https.get(options, function (response) {
-      if (response.statusCode === 200) {
-        response.pipe(file);
-        file.on('finish', function () {
-          debug('File downloaded: ' + filename);
-          file.close();
+          debug(`File downloaded: ${filename}`);
           resolve();
         });
-      } else if(response.statusCode == 404){
-        console.error(filename + ' not found in artifactory repository')
-      } else if(response.statusCode == 401) {
-        console.error(username + ' is unauthorized')
-      } else {
-        console.error('Downloading' + filename + 'went wrong: ' + response.statusCode);
+      }
+      else if (response.statusCode === 404) {
+        reject(`${filename} not found in Onegini Artifactory repository`)
+      }
+      else if (response.statusCode === 401) {
+        reject(`${username} is unauthorized`)
+      }
+      else {
         fs.unlinkSync(filePath);
+        reject(`Downloading ${filename} went wrong: ${response.statusCode}`);
       }
 
     }).on('error', function (err) {
       fs.unlinkSync(filePath);
-      console.error('Downloading' + filename + 'went wrong: ' + err);
+      reject(`Downloading ${filename} went wrong: ${err}`);
     });
   });
 }
 
-function checkHashDownloadedFile(options, sdkDownloadPath, fileName) {
-  var downloadedFilePath = sdkDownloadPath + '/' + fileName;
-  return new Promise(function(resolve) {
-    downloadHashFile(options, sdkDownloadPath, fileName)
-      .then(function () {
-        generateSHA256(downloadedFilePath)
-          .then(function (generatedHash) {
-            var result = compareHashes(generatedHash, downloadedFilePath + '.sha256');
-            if (result) {
-              debug('Validation succeed');
-              resolve();
-            } else {
-              debug('Downloaded file is damaged. Please try again.');
+function checkDownloadedFileIntegrity(fileUrl) {
+  const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+  const downloadedFilePath = path.join(sdkDownloadPath, filename);
+  const downloadedSha256FilePath = path.join(sdkDownloadPath, `${filename}.sha256`);
+  const sha256FileUrl = `${fileUrl}.sha256`;
+  return new Promise((resolve, reject) => {
+    downloadFile(false, sha256FileUrl)
+      .then(() => calculateSha256(downloadedFilePath))
+      .then(calculatedHash => {
+        const downloadedHash = fs.readFileSync(downloadedSha256FilePath).toString();
+        debug(`Comparing hashes:`);
+        debug(`downloaded hash: ${downloadedHash}`);
+        debug(`calculated hash: ${calculatedHash}`);
+
+        if (downloadedHash === calculatedHash) {
+          debug('Hashes match!');
+          resolve();
+        }
+        else {
+          reject(`The file (${checkedFilePath}) is damaged. Please remove and add the Onegini Cordova plugin and clean the download directory (if you have specified the ${envVariables.sdkDownloadPath}).`);
+        }
+      }).catch((err) => {
+      reject(err)
+    });
+  });
+}
+
+function prepareSdkDirectories(context) {
+  const pluginDir = context.opts.plugin.pluginInfo.dir;
+  const sdkDir = path.join(pluginDir, iosSdkPathCordova);
+  const headersDir = path.join(pluginDir, iosSdkHeadersPathCordova);
+
+  if (!fs.existsSync(sdkDir)) {
+    debug(`Create SDK directory: ${sdkDir}`);
+    fs.mkdirSync(sdkDir);
+  }
+
+  if (!fs.existsSync(headersDir)) {
+    debug(`Create headers directory: ${headersDir}`);
+    fs.mkdirSync(headersDir);
+  }
+
+  if (!fs.existsSync(sdkDownloadPath)) {
+    debug(`Create SDK download : ${sdkDownloadPath}`);
+    fs.mkdirSync(sdkDownloadPath);
+  }
+
+  deleteFilesFromDirs([sdkDir, headersDir]);
+}
+
+function deleteFilesFromDirs(directories) {
+  directories.forEach(dir => {
+    fs.readdir(dir, (err, files) => {
+      if (err) {
+        console.error(err);
+        console.error(`An error occurred while reading files from directory: ${dir}`)
+      }
+
+      for (const file of files) {
+        if (file.endsWith('.a') || file.endsWith('.h')) {
+          fs.unlink(path.join(dir, file), err => {
+            if (err) {
+              console.error(err);
+              console.error(`An error occurred while deleting files from directory: ${dir}`)
             }
           });
-      });
+        }
+      }
     });
+  });
 }
 
-function createSDKDirectory(context) {
-  var sdkDir = context.opts.plugin.pluginInfo.dir + '/src/ios/OneginiSDKiOS';
-  debug('Create SDK directory : ' + sdkDir);
-  var headersDir = sdkDir + '/Headers';
-  fs.mkdirSync(sdkDir);
-  fs.mkdirSync(headersDir);
-}
-
-function copyAndRenameSDK(context, filename) {
-  debug('Copying and renaming SDK library');
-  var pluginDir = context.opts.plugin.pluginInfo.dir;
-  var downloadedPluginDir = (sdkDownloadPathEnv !== 'undefined') ? sdkDownloadPathEnv : pluginDir;
-  fs.createReadStream(downloadedPluginDir + '/' + filename).pipe(fs.createWriteStream(pluginDir + '/src/ios/OneginiSDKiOS/libOneginiSDKiOS.a'));
-}
-
-function unzipAndRenameHeadersPromise(context, filename) {
-  return new Promise(function(resolve) {
-    debug('Unzipping and renaming headers');
-
-    var pluginDir = context.opts.plugin.pluginInfo.dir;
-    var downloadedPluginDir = (sdkDownloadPathEnv !== 'undefined') ? sdkDownloadPathEnv : pluginDir;
-    var newDir = pluginDir + '/src/ios/OneginiSDKiOS/Headers';
-    try {
-      execSync('unzip ' + downloadedPluginDir + '/' + filename + ' -d ' + newDir);
+function copyAndRenameSdkLib(context) {
+  return new Promise((resolve, reject) => {
+    debug('Copying and renaming SDK library');
+    const pluginDir = context.opts.plugin.pluginInfo.dir;
+    let targetSdkLibPath = path.join(pluginDir, iosSdkLibPathCordova);
+    let downloadedSdkLibPath = path.join(sdkDownloadPath, libName);
+    if (fs.existsSync(downloadedSdkLibPath)) {
+      fs.createReadStream(downloadedSdkLibPath)
+        .pipe(fs.createWriteStream(targetSdkLibPath));
       resolve();
-    } catch (ex) {
-      console.error('Extracting archive failed.');
+    }
+    else {
+      reject(`Onegini iOS SDK library not found at path: ${downloadedSdkLibPath}`)
     }
   });
+}
+
+function unzipAndRenameHeaders(context) {
+  return new Promise((resolve, reject) => {
+    debug('Unzipping and renaming headers');
+
+    const pluginDir = context.opts.plugin.pluginInfo.dir;
+    const newDir = path.join(pluginDir, iosSdkHeadersPathCordova);
+    try {
+      execSync('unzip ' + sdkDownloadPath + '/' + headersName + ' -d ' + newDir);
+      resolve();
+    }
+    catch (ex) {
+      error('Extracting SDK headers archive failed.');
+      reject(ex);
+    }
+  });
+}
+
+function log(line) {
+  console.log(`${pluginId}: ${line}`)
+}
+
+function error(line) {
+  console.error(`${pluginId}: ${line}`)
 }
