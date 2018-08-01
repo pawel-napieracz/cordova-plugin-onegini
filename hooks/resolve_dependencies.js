@@ -291,20 +291,14 @@ function copyAndRenameSdkLib(context) {
 }
 
 function unzipAndRenameHeaders(context) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     writeToStdOut('.');
     debug('Unzipping and renaming headers');
 
     const pluginDir = context.opts.plugin.pluginInfo.dir;
     const newDir = path.join(pluginDir, iosSdkHeadersPathCordova);
-    try {
-      execSync('unzip ' + sdkDownloadPath + '/' + headersName + ' -d ' + newDir);
-      resolve();
-    }
-    catch (ex) {
-      error('Extracting SDK headers archive failed.');
-      reject(ex);
-    }
+    execSync('unzip ' + sdkDownloadPath + '/' + headersName + ' -d ' + newDir);
+    resolve();
   });
 }
 
