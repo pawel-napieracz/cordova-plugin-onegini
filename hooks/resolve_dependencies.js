@@ -306,10 +306,6 @@ function log(line) {
   console.log(`${pluginId}: ${line}`)
 }
 
-function error(line) {
-  console.error(`${pluginId}: ${line}`)
-}
-
 function writeToStdOut(output) {
   process.stdout.write(output);
 }
