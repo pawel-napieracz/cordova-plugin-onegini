@@ -17,6 +17,7 @@
 const fs = require('fs');
 const path = require('path');
 const process = require('process');
+const crypto = require('crypto');
 const url = require('url');
 const https = require('https');
 const execSync = require('child_process').execSync;
@@ -57,9 +58,9 @@ module.exports = function (context) {
   fetchSdkDownloadPath(context);
   prepareSdkDirectories(context);
 
-  writeToStdOut('Resolving Onegini iOS SDK dependencies...');
+  writeToStdOut(`${pluginId}: Resolving Onegini iOS SDK dependencies...`);
 
-  return new Promise(() => {
+  return new Promise((resolve, reject) => {
     // Downloading & verifying the SDK lib
     checkSdkLibExistsOnFs()
       .then(result => downloadFile(result, libOneginiSdkIos))
@@ -71,6 +72,13 @@ module.exports = function (context) {
       .then((result) => downloadFile(result, libOneginiSdkIosHeaders))
       .then(() => checkDownloadedFileIntegrity(libOneginiSdkIosHeaders))
       .then(() => unzipAndRenameHeaders(context))
+      .then(() => {
+        writeToStdOut('Success!\n');
+        resolve();
+      })
+      .catch((err) => {
+        reject(err);
+      });
   });
 };
 
@@ -122,10 +130,17 @@ function checkHeadersFileExistsOnFs() {
 function calculateSha256(filepath) {
   return new Promise(resolve => {
     debug(`Generating sha256 from: ${filepath}`);
-    let result = execSync(`openssl sha256 ${filepath}`).toString();
-    let hash = result.substring(result.lastIndexOf('=') + 1);
-    debug(`hashing done: ${hash.trim()}`);
-    resolve(hash.trim());
+    const shasum = crypto.createHash('sha256');
+
+    let readStream = fs.createReadStream(filepath);
+    readStream.on('data', (chunk) => {
+      shasum.update(chunk);
+    });
+    readStream.on('end', () => {
+      let hash = shasum.digest('hex');
+      debug(`hashing done: ${hash}`);
+      resolve(hash);
+    })
   });
 }
 
@@ -203,11 +218,12 @@ function checkDownloadedFileIntegrity(fileUrl) {
           resolve();
         }
         else {
-          reject(`The file (${checkedFilePath}) is damaged. Please remove and add the Onegini Cordova plugin and clean the download directory (if you have specified the ${envVariables.sdkDownloadPath}).`);
+          reject(`The file (${downloadedFilePath}) is damaged. Please remove and add the Onegini Cordova plugin and clean the download directory (if you have specified the ${envVariables.sdkDownloadPath}).`);
         }
-      }).catch((err) => {
-      reject(err)
-    });
+      })
+      .catch((err) => {
+        reject(err)
+      });
   });
 }
 
