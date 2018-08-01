@@ -37,12 +37,12 @@
     * [mobileAuthentication](reference/mobileAuthentication/introduction.md)
         * [isUserEnrolled](reference/mobileAuthentication/isUserEnrolled.md)
         * [enroll](reference/mobileAuthentication/enroll.md)
-        * push
+        * [push](reference/mobileAuthentication/push/index.md)
             * [isUserEnrolled](reference/mobileAuthentication/push/isUserEnrolled.md)
             * [enroll](reference/mobileAuthentication/push/enroll.md)
             * [on](reference/mobileAuthentication/push/on.md)
             * [PushMobileAuthHandler](reference/mobileAuthentication/push/PushMobileAuthHandler.md)
-        * OTP
+        * [OTP](reference/mobileAuthentication/otp/index.md)
             * [handleRequest](reference/mobileAuthentication/otp/handleRequest.md)
             * [OtpMobileAuthHandler](reference/mobileAuthentication/otp/OtpMobileAuthHandler.md)
 * [Release notes](release-notes/introduction.md)
@@ -52,6 +52,7 @@
     * [2.x](release-notes/2.x.md)
     * [1.x](release-notes/1.x.md)
 * [Upgrade instructions](upgrade-instructions/introduction.md)
+    * [5.0](upgrade-instructions/5.0.md)
     * [4.0](upgrade-instructions/4.0.md)
     * [3.0](upgrade-instructions/3.0.md)
     * [1.8](upgrade-instructions/1.8.md)

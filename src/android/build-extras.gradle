@@ -39,12 +39,24 @@ allprojects {
     maven {
       url "https://repo.onegini.com/artifactory/onegini-sdk"
       credentials {
-        if (project.hasProperty('artifactory_user') && project.hasProperty('artifactory_password')) {
-          username artifactory_user
-          password artifactory_password
+        def artifactoryUser
+        def artifactoryPassword
+        if (project.hasProperty('artifactory_user')) {
+          artifactoryUser = artifactory_user
         } else {
-          throw new InvalidUserDataException("You must configure the 'artifactory_user' and 'artifactory_password' properties in your project before you can " +
-              "build it.")
+          artifactoryUser = System.env.ARTIFACTORY_USER
+        }
+        if (project.hasProperty('artifactory_password')) {
+          artifactoryPassword = artifactory_password
+        } else {
+          artifactoryPassword = System.env.ARTIFACTORY_PASSWORD
+        }
+        if (artifactoryUser?.trim() && artifactoryPassword?.trim()) {
+          username artifactoryUser
+          password artifactoryPassword
+        } else {
+          throw new InvalidUserDataException("You must configure the 'ARTIFACTORY_USER' and 'ARTIFACTORY_PASSWORD' environment variables before you can " +
+              "build the project.")
         }
       }
     }
