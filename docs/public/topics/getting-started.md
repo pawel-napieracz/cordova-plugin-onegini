@@ -21,14 +21,15 @@ cordova create ./myapp com.mycompany.myapp "My App"
 
 ## Access the Onegini Repository
 
-The Onegini Cordova Plugin is a wrapper for the Onegini SDK. For your Cordova app to access the Onegini SDK you will need access to the [Onegini Repository](https://repo.onegini.com/). If you do not have login credentials for the Onegini Repository, you will need to [obtain those first](https://docs.onegini.com/app-developer-quickstart.html#step1). 
-After obtaining credentials, store them in your local `gradle.properties` file.
+The Onegini Cordova Plugin is a wrapper for the Onegini SDK. For your Cordova app to access the Onegini SDK you will need access to the [Onegini Repository](https://repo.onegini.com/). If you do not have login credentials for the Onegini Repository, you will need to [obtain those first](https://docs.onegini.com/app-developer-quickstart.html#step1).
+After obtaining credentials, store export them as environment variables:
 
-In `~/.gradle/gradle.properties`:
+```bash
+export ARTIFACTORY_USER="<username>"
+export ARTIFACTORY_PASSWORD="<password>"
 ```
-artifactory_user=<username>
-artifactory_password=<password>
-```
+
+In Android projects, Gradle is used to resolve the Android SDK since this is the default tool to manage dependencies. for iOS projects we use a Cordova hook (resolve dependencies) in order to download the iOS SDK from the Onegini repository. Please check the [configuration topic guide](configuration.md#customizing-the-resolve-dependencies-hook) for additional configuration options for this resolve dependencies hook.
 
 ## Add the plugin to your project
 

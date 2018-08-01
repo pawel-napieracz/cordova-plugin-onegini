@@ -28,7 +28,7 @@ const pluginId = 'cordova-plugin-onegini';
 const envVariables = {
   artifactoryUser: 'ARTIFACTORY_USER',
   artifactoryPassword: 'ARTIFACTORY_PASSWORD',
-  sdkDownloadPath: 'ONEGINI_SDK_IOS_DOWNLOAD_PATH'
+  sdkDownloadPath: 'ONEGINI_SDK_DOWNLOAD_PATH'
 };
 
 const sdkVersion = '8.0.0';
@@ -93,8 +93,10 @@ function fetchSdkDownloadPath(context) {
   }
   else {
     log(`Downloading the Onegini iOS SDK to: '${pluginDir}'`);
-    sdkDownloadPath = path.join(pluginDir, 'ios-sdk');
+    sdkDownloadPath = pluginDir;
   }
+
+  sdkDownloadPath = path.join(sdkDownloadPath, 'ios-sdk')
 }
 
 function checkSdkLibExistsOnFs() {

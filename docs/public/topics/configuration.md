@@ -57,16 +57,31 @@ For more information on Cordova Preferences refer to the [Cordova Documentation]
 
 The configuration hook is used to invoke the Configurator. The hook can be customized by setting the following environment variables:
 
-| Name                          | Default value                                    | Description
-|-------------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------
-| ONEGINI_AUTOCONFIGURE         | true                                             | Enable or disable the configuration hook, you will need to manually configure your platforms if disabled.
-| ONEGINI_SDK_CONFIGURATOR_PATH | resolved from `$PATH`                            | Location of the Onegini SDK Configurator executable.
-| ONEGINI_CONFIG_ANDROID_PATH   | &lt;project_root&gt;/onegini-config-android.zip  | Location of the Token Server configuration zip file for Android.
-| ONEGINI_CONFIG_IOS_PATH       | &lt;project_root&gt;/onegini-config-ios.zip      | Location of the Token Server configuration zip file for iOS.
+| Name                            | Default value                                | Description
+|---------------------------------|----------------------------------------------|---------------------------------------------------------------------------------------------------------
+| `ONEGINI_AUTOCONFIGURE`         | true                                         | Enable or disable the configuration hook, you will need to manually configure your platforms if disabled.
+| `ONEGINI_SDK_CONFIGURATOR_PATH` | resolved from `$PATH`                        | Location of the Onegini SDK Configurator executable.
+| `ONEGINI_CONFIG_ANDROID_PATH`   | `<project_root>/onegini-config-android.zip`  | Location of the Token Server configuration zip file for Android.
+| `ONEGINI_CONFIG_IOS_PATH`       | `<project_root>/onegini-config-ios.zip`      | Location of the Token Server configuration zip file for iOS.
 
 For example, to change the location of the Android and iOS configuration zips you can set:
 
 ```bash
 export ONEGINI_CONFIG_ANDROID_PATH=/path/to/android-config.zip
 export ONEGINI_CONFIG_IOS_PATH=/path/to/ios-config.zip
+```
+
+### Customizing the resolve dependencies hook
+
+This hook is only triggered for iOS platforms since the Android the SDK is downloaded and managed by Gradle which is automatically invoked when building your Android project.
+
+The resolve dependencies hook can be customized using the following environment variables:
+
+| Name                            | Default value                                            | Description
+|---------------------------------|----------------------------------------------------------|---------------------------------------------------------------------------------------------------------
+| `ONEGINI_SDK_DOWNLOAD_PATH`     | `<project_root>/plugins/cordova-plugin-onegini/ios-sdk`  | The iOS SDK is quite big and if you want to prevent downloading it every time you can specify a different location that is not cleaned when you remove or add the plugin to your Cordova project. The hook will check whether the SDK is already downloaded before downloading it again.
+
+For example, to change the location of the SDK download path you can set:
+```bash
+export ONEGINI_SDK_DOWNLOAD_PATH=/opt/onegini/sdk
 ```
