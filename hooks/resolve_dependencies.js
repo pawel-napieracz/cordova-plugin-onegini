@@ -89,15 +89,14 @@ function fetchSdkDownloadPath(context) {
   const sdkDownloadPathFromEnv = process.env[sdkDownloadPathVar];
 
   if (sdkDownloadPathFromEnv) {
-    log(`Downloading the Onegini iOS SDK to: '${sdkDownloadPathFromEnv}' set in '${sdkDownloadPathVar}'`);
-    sdkDownloadPath = sdkDownloadPathFromEnv;
+    sdkDownloadPath = path.join(sdkDownloadPathFromEnv, 'ios-sdk');
+    log(`Downloading the Onegini iOS SDK to: '${sdkDownloadPath}' set in '${sdkDownloadPathVar}'`);
   }
   else {
-    log(`Downloading the Onegini iOS SDK to: '${pluginDir}'`);
-    sdkDownloadPath = pluginDir;
+    sdkDownloadPath = path.join(pluginDir, 'ios-sdk');
+    log(`Downloading the Onegini iOS SDK to: '${sdkDownloadPath}'`);
   }
 
-  sdkDownloadPath = path.join(sdkDownloadPath, 'ios-sdk')
 }
 
 function checkSdkLibExistsOnFs() {
@@ -184,9 +183,11 @@ function downloadFile(fileExists, fileUrl) {
         });
       }
       else if (response.statusCode === 404) {
+        fs.unlinkSync(filePath);
         reject(`${filename} not found in Onegini Artifactory repository`)
       }
       else if (response.statusCode === 401) {
+        fs.unlinkSync(filePath);
         reject(`${username} is unauthorized`)
       }
       else {

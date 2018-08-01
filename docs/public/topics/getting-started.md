@@ -29,7 +29,7 @@ export ARTIFACTORY_USER="<username>"
 export ARTIFACTORY_PASSWORD="<password>"
 ```
 
-In Android projects, Gradle is used to resolve the Android SDK since this is the default tool to manage dependencies. for iOS projects we use a Cordova hook (resolve dependencies) in order to download the iOS SDK from the Onegini repository. Please check the [configuration topic guide](configuration.md#customizing-the-resolve-dependencies-hook) for additional configuration options for this resolve dependencies hook.
+In Android projects, Gradle is used to resolve the Android SDK since this is the default tool to manage dependencies. For iOS projects we use a Cordova hook (resolve dependencies) in order to download the iOS SDK from the Onegini repository. Please check the [configuration topic guide](configuration.md#customizing-the-resolve-dependencies-hook) for additional configuration options to this resolve dependencies hook.
 
 ## Add the plugin to your project
 
