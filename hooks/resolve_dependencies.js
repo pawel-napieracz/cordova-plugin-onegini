@@ -48,6 +48,7 @@ let sdkDownloadPath;
 
 module.exports = function (context) {
   const platform = context.opts.plugin.platform;
+  const deferral = context.requireCordovaModule('q').defer();
 
   // We only want to invoke the plugin for the iOS platform since it doesn't make any sense to resolve the iOS SDK dependencies when
   // you only have the Android platform installed.
@@ -60,26 +61,26 @@ module.exports = function (context) {
 
   writeToStdOut(`${pluginId}: Resolving Onegini iOS SDK dependencies...`);
 
-  return new Promise((resolve, reject) => {
-    // Downloading & verifying the SDK lib
-    checkSdkLibExistsOnFs()
-      .then(result => downloadFile(result, libOneginiSdkIos))
-      .then(() => checkDownloadedFileIntegrity(libOneginiSdkIos))
-      .then(() => copyAndRenameSdkLib(context))
+  // Downloading & verifying the SDK lib
+  checkSdkLibExistsOnFs()
+    .then(result => downloadFile(result, libOneginiSdkIos))
+    .then(() => checkDownloadedFileIntegrity(libOneginiSdkIos))
+    .then(() => copyAndRenameSdkLib(context))
 
-      // Downloading & verifying the headers ZIP
-      .then(() => checkHeadersFileExistsOnFs())
-      .then((result) => downloadFile(result, libOneginiSdkIosHeaders))
-      .then(() => checkDownloadedFileIntegrity(libOneginiSdkIosHeaders))
-      .then(() => unzipAndRenameHeaders(context))
-      .then(() => {
-        writeToStdOut('Success!\n');
-        resolve();
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+    // Downloading & verifying the headers ZIP
+    .then(() => checkHeadersFileExistsOnFs())
+    .then((result) => downloadFile(result, libOneginiSdkIosHeaders))
+    .then(() => checkDownloadedFileIntegrity(libOneginiSdkIosHeaders))
+    .then(() => unzipAndRenameHeaders(context))
+    .then(() => {
+      writeToStdOut('Success!\n');
+      deferral.resolve();
+    })
+    .catch((err) => {
+      deferral.reject(err);
+    });
+
+  return deferral.promise;
 };
 
 function fetchSdkDownloadPath(context) {
@@ -283,8 +284,11 @@ function copyAndRenameSdkLib(context) {
     let downloadedSdkLibPath = path.join(sdkDownloadPath, libName);
     if (fs.existsSync(downloadedSdkLibPath)) {
       fs.createReadStream(downloadedSdkLibPath)
-        .pipe(fs.createWriteStream(targetSdkLibPath));
-      resolve();
+        .pipe(fs.createWriteStream(targetSdkLibPath))
+        .on('close', () => {
+          debug('Copied the SDK');
+          resolve();
+        });
     }
     else {
       reject(`Onegini iOS SDK library not found at path: ${downloadedSdkLibPath}`)
