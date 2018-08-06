@@ -43,6 +43,7 @@
 - (void)userClient:(ONGUserClient *)userClient didReceivePinChallenge:(ONGPinChallenge *)challenge
 {
     self.pinChallenge = challenge;
+    self.fingerprintChallenge = nil;
 
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     result[OGCDVPluginKeyEvent] = OGCDVPluginEventPinRequest;
@@ -61,6 +62,7 @@
 
 - (void)userClient:(ONGUserClient *)userClient didReceiveFingerprintChallenge:(ONGFingerprintChallenge *)challenge
 {
+    self.pinChallenge = nil;
     self.fingerprintChallenge = challenge;
 
     NSDictionary *result = @{
