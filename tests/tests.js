@@ -1385,7 +1385,7 @@ exports.defineAutoTests = function () {
       it('should fetch a non JSON resource', function (done) {
         onegini.resource.fetch(
           {
-            url: 'https://onegini-msp-snapshot.test.onegini.io/admin/static/img/onegini-logo-dark.svg',
+            url: 'https://onegini-msp-snapshot.test.onegini.io/admin/static/img/connect.png',
             headers: {
               'X-Test-String': 'foobar',
               'X-Test-Int': 1337
