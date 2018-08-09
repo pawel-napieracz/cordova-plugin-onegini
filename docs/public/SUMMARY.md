@@ -52,7 +52,7 @@
     * [2.x](release-notes/2.x.md)
     * [1.x](release-notes/1.x.md)
 * [Upgrade instructions](upgrade-instructions/introduction.md)
-    * [5.0](upgrade-instructions/5.0.md)
+    * [5.1](upgrade-instructions/5.1.md)
     * [4.3](upgrade-instructions/4.3.md)
     * [4.0](upgrade-instructions/4.0.md)
     * [3.0](upgrade-instructions/3.0.md)
