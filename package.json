@@ -1,7 +1,7 @@
 {
   "name": "cordova-example-app",
   "description": "Example App for using the Onegini Cordova Plugin",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "author": "Onegini B.V",
   "private": true,
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "cordova-plugin-dialogs": "~1.3.0",
-    "cordova-plugin-onegini": "^5.0.0",
+    "cordova-plugin-onegini": "^5.1.0",
     "cordova-plugin-onegini-fcm": "~1.0.0",
     "cordova-plugin-pin-dialog": "~0.1.3",
     "cordova-plugin-whitelist": "1",
