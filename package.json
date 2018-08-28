@@ -37,10 +37,10 @@
     "prepublishOnly": "npm run build:prod"
   },
   "devDependencies": {
-    "babel-core": "^6.25.0",
+    "babel-core": "^6.26.3",
     "babel-loader": "^7.1.0",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.5.2",
+    "babel-preset-env": "^1.7.0",
     "clean-webpack-plugin": "^0.1.16",
     "core-js": "^2.4.1",
     "np": "^2.16.0",
