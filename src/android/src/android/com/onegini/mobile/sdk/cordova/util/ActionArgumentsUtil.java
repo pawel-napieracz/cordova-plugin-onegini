@@ -39,6 +39,7 @@ import org.json.JSONObject;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
+import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
 import okhttp3.Headers;
@@ -147,9 +148,9 @@ public class ActionArgumentsUtil {
     return null;
   }
 
-  public static Request getRequestFromArguments(final JSONObject options) throws JSONException, IllegalArgumentException {
+  public static Request getRequestFromArguments(final JSONObject options, final OneginiClient oneginiClient) throws JSONException {
+    final String url = buildUrl(options, oneginiClient);
     final String method = getMethodFromOptions(options);
-    final String url = getURLFromOptions(options);
     final Headers headers = getHeadersFromOptions(options);
     RequestBody body = getBodyFromOptions(options, headers);
 
@@ -163,6 +164,19 @@ public class ActionArgumentsUtil {
         .headers(headers)
         .build();
   }
+
+  private static String buildUrl(final JSONObject options, final OneginiClient oneginiClient) throws JSONException {
+    final String resourceUrl = getURLFromOptions(options);
+    if(isRelative(resourceUrl)) {
+      return oneginiClient.getConfigModel().getResourceBaseUrl() + resourceUrl;
+    }
+    return resourceUrl;
+  }
+
+  private static boolean isRelative(final String url) {
+    return url.startsWith("/");
+  }
+
 
   private static boolean methodDoesNotPermitRequestBody(final String method) {
     return !HttpMethod.permitsRequestBody(method);
