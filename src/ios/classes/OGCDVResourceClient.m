@@ -16,6 +16,7 @@
 
 #import "OGCDVResourceClient.h"
 #import "OGCDVConstants.h"
+#import "OneginiConfigModel.h"
 
 NSString *const OGCDVPluginKeyBody = @"body";
 NSString *const OGCDVPluginKeyUrl = @"url";
@@ -36,7 +37,7 @@ int const OGCDVFetchResultHeaderLength = 4;
     [self.commandDelegate runInBackground:^{
         NSDictionary *options = command.arguments[0];
 
-        NSString *url = options[OGCDVPluginKeyUrl];
+        NSString *url = [self buildUrl:options[OGCDVPluginKeyUrl]];
         NSString *method = options[OGCDVPluginKeyMethod];
         NSString *body = options[OGCDVPluginKeyBody];
         NSMutableDictionary *headers = options[OGCDVPluginKeyHeaders];
@@ -78,6 +79,13 @@ int const OGCDVFetchResultHeaderLength = 4;
             [[ONGUserClient sharedInstance] fetchImplicitResource:request completion:fetchCompletion];
         }
     }];
+}
+
+- (NSString *)buildUrl:(NSString *)url {
+    if ([url hasPrefix:@"/"]) {
+        return [[OneginiConfigModel configuration][@"ONGResourceBaseURL"] stringByAppendingString:url];
+    }
+    return url;
 }
 
 - (BOOL)isContentTypeNotSet:(NSMutableDictionary *)headers {
