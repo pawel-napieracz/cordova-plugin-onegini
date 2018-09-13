@@ -1382,6 +1382,31 @@ exports.defineAutoTests = function () {
           });
       });
 
+      it('should fetch a relative non-anonymous resource', function (done) {
+        onegini.resource.fetch(
+          {
+            url: '/devices',
+            headers: {
+              'X-Test-String': 'foobar',
+              'X-Test-Int': 1337
+            }
+          },
+          function (response) {
+            expect(response).toBeDefined();
+            expect(response.body).toBeDefined();
+            expect(response.rawBody).toBeDefined();
+            expect(response.json).toBeDefined();
+            expect(response.headers).toBeDefined();
+            expect(response.status).toEqual(200);
+            expect(response.statusText).toBeDefined();
+            expect(response.json.devices).toBeDefined();
+            done();
+          }, function (err) {
+            expect(err).toBeUndefined();
+            fail('Error callback called, but method should have succeeded');
+          });
+      });
+
       it('should fetch a non JSON resource', function (done) {
         onegini.resource.fetch(
           {
@@ -1441,6 +1466,33 @@ exports.defineAutoTests = function () {
           });
       });
 
+      it('should fetch a relative resource with a specific body without content-type', function (done) {
+        var body = "foobar";
+        onegini.resource.fetch(
+          {
+            url: '/mirror-request',
+            method: 'POST',
+            body: body,
+            headers: {
+              'X-Test-String': 'foobar',
+              'X-Test-Int': 1337
+            }
+          },
+          function (response) {
+            expect(response).toBeDefined();
+            expect(response.body).toEqual(body);
+            expect(response.rawBody).toBeDefined();
+            expect(response.headers).toBeDefined();
+            expect(response.headers['Content-Type']).toEqual('text/plain;charset=utf-8');
+            expect(response.status).toEqual(200);
+            expect(response.statusText).toBeDefined();
+            done();
+          }, function (err) {
+            expect(err).toBeUndefined();
+            fail('Error callback called, but method should have succeeded');
+          });
+      });
+
       it('should fetch a resource with a JSON body', function (done) {
         var body = {
           "foo": "oof",
@@ -1449,6 +1501,37 @@ exports.defineAutoTests = function () {
         onegini.resource.fetch(
           {
             url: 'https://onegini-msp-snapshot.test.onegini.io/resources/mirror-request',
+            method: 'POST',
+            body: body,
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+              'X-Test-String': 'foobar',
+              'X-Test-Int': 1337
+            }
+          },
+          function (response) {
+            expect(response).toBeDefined();
+            expect(response.body).toEqual(JSON.stringify(body));
+            expect(response.rawBody).toBeDefined();
+            expect(response.headers).toBeDefined();
+            expect(response.headers['Content-Type']).toEqual('application/json;charset=utf-8');
+            expect(response.status).toEqual(200);
+            expect(response.statusText).toBeDefined();
+            done();
+          }, function (err) {
+            expect(err).toBeUndefined();
+            fail('Error callback called, but method should have succeeded');
+          });
+      });
+
+      it('should fetch a relative resource with a JSON body', function (done) {
+        var body = {
+          "foo": "oof",
+          "bar": "baz"
+        };
+        onegini.resource.fetch(
+          {
+            url: '/mirror-request',
             method: 'POST',
             body: body,
             headers: {
@@ -1482,6 +1565,22 @@ exports.defineAutoTests = function () {
         onegini.resource.fetch({
             method: 'POST',
             url: 'https://onegini-msp-snapshot.test.onegini.io/resources/devices'
+          }, function (response) {
+            expect(response).toBeUndefined();
+            fail('Success callback called, but method should have failed');
+          },
+          function (err) {
+            expect(err).toBeDefined();
+            expect(err.httpResponse.status).toEqual(405);
+            expect(err.code).toEqual(8013);
+            done();
+          })
+      });
+
+      it('should return error context when relative resource request fails', function (done) {
+        onegini.resource.fetch({
+            method: 'POST',
+            url: '/devices'
           }, function (response) {
             expect(response).toBeUndefined();
             fail('Success callback called, but method should have failed');
@@ -1537,8 +1636,21 @@ exports.defineAutoTests = function () {
             fail('Method failed, but should have succeeded');
           });
         });
-      });
 
+        it('should fetch a relative implicit resource', function (done) {
+          onegini.resource.fetch({
+            url: '/user-id-decorated',
+            auth: onegini.resource.auth.IMPLICIT
+          }, function (response) {
+            expect(response.json.decorated_user_id).toEqual('✨ ' + config.userId + ' ✨');
+            done();
+          }, function (err) {
+            console.error(err);
+            fail('Method failed, but should have succeeded');
+          });
+        });
+
+      });
     });
   });
 
@@ -1802,6 +1914,27 @@ exports.defineAutoTests = function () {
     it('should fetch an anonymous resource', function (done) {
       onegini.resource.fetch({
           url: 'https://onegini-msp-snapshot.test.onegini.io/resources/application-details',
+          auth: onegini.resource.auth.ANONYMOUS
+        },
+        function (response) {
+          expect(response).toBeDefined();
+          expect(response.body).toBeDefined();
+          expect(response.rawBody).toBeDefined();
+          expect(response.json).toBeDefined();
+          expect(response.headers).toBeDefined();
+          expect(response.status).toEqual(200);
+          expect(response.statusText).toBeDefined();
+          done();
+        },
+        function (err) {
+          expect(err).toBeUndefined();
+          fail('Error response called, but method should have succeeded');
+        })
+    });
+
+    it('should fetch a relative anonymous resource', function (done) {
+      onegini.resource.fetch({
+          url: '/application-details',
           auth: onegini.resource.auth.ANONYMOUS
         },
         function (response) {
