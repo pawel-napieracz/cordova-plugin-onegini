@@ -39,7 +39,6 @@ import org.json.JSONObject;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
-import com.onegini.mobile.sdk.android.client.OneginiClient;
 import com.onegini.mobile.sdk.android.model.OneginiAuthenticator;
 import com.onegini.mobile.sdk.cordova.mobileAuthentication.Callback;
 import okhttp3.Headers;
@@ -148,8 +147,8 @@ public class ActionArgumentsUtil {
     return null;
   }
 
-  public static Request getRequestFromArguments(final JSONObject options, final OneginiClient oneginiClient) throws JSONException {
-    final String url = buildUrl(options, oneginiClient);
+  public static Request getRequestFromArguments(final JSONObject options, final String resourceBaseUrl) throws JSONException {
+    final String url = buildUrl(options, resourceBaseUrl);
     final String method = getMethodFromOptions(options);
     final Headers headers = getHeadersFromOptions(options);
     RequestBody body = getBodyFromOptions(options, headers);
@@ -165,10 +164,10 @@ public class ActionArgumentsUtil {
         .build();
   }
 
-  private static String buildUrl(final JSONObject options, final OneginiClient oneginiClient) throws JSONException {
+  private static String buildUrl(final JSONObject options, final String resourceBaseUrl) throws JSONException {
     final String resourceUrl = getURLFromOptions(options);
     if(isRelative(resourceUrl)) {
-      return oneginiClient.getConfigModel().getResourceBaseUrl() + resourceUrl;
+      return resourceBaseUrl + resourceUrl;
     }
     return resourceUrl;
   }
