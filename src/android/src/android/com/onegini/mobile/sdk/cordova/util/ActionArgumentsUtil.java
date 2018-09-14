@@ -147,9 +147,9 @@ public class ActionArgumentsUtil {
     return null;
   }
 
-  public static Request getRequestFromArguments(final JSONObject options) throws JSONException, IllegalArgumentException {
+  public static Request getRequestFromArguments(final JSONObject options, final String resourceBaseUrl) throws JSONException {
+    final String url = buildUrl(options, resourceBaseUrl);
     final String method = getMethodFromOptions(options);
-    final String url = getURLFromOptions(options);
     final Headers headers = getHeadersFromOptions(options);
     RequestBody body = getBodyFromOptions(options, headers);
 
@@ -163,6 +163,19 @@ public class ActionArgumentsUtil {
         .headers(headers)
         .build();
   }
+
+  private static String buildUrl(final JSONObject options, final String resourceBaseUrl) throws JSONException {
+    final String resourceUrl = getURLFromOptions(options);
+    if(isRelative(resourceUrl)) {
+      return resourceBaseUrl + resourceUrl;
+    }
+    return resourceUrl;
+  }
+
+  private static boolean isRelative(final String url) {
+    return url.startsWith("/");
+  }
+
 
   private static boolean methodDoesNotPermitRequestBody(final String method) {
     return !HttpMethod.permitsRequestBody(method);

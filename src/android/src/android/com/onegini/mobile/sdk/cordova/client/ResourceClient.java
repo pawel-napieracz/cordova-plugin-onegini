@@ -85,7 +85,8 @@ public class ResourceClient extends CordovaPlugin {
         final Request request;
 
         try {
-          request = ActionArgumentsUtil.getRequestFromArguments(options);
+          final String resourceBaseUrl = getOneginiClient().getConfigModel().getResourceBaseUrl();
+          request = ActionArgumentsUtil.getRequestFromArguments(options, resourceBaseUrl);
         } catch (InvalidParameterException e) {
           callbackContext.sendPluginResult(new PluginResultBuilder()
               .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
