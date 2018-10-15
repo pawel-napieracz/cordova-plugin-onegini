@@ -16,8 +16,7 @@
 
 #import <Cordova/CDVPlugin.h>
 #import "OGCDVOtpMobileAuthRequestClient.h"
-#import "ONGMobileAuthRequestDelegate.h"
-
+@import OneginiSDKiOS;
 
 @interface OGCDVOtpMobileAuthRequestClient : CDVPlugin<ONGMobileAuthRequestDelegate>
 

@@ -16,7 +16,6 @@
 
 #import "OGCDVPendingPushMobileAuthRequestClientHelper.h"
 #import "OGCDVConstants.h"
-#import "ONGPendingMobileAuthRequest.h"
 #import "ONGPendingMobileAuthRequest+IntenalSetters.h"
 
 @implementation OGCDVPendingPushMobileAuthRequestClientHelper

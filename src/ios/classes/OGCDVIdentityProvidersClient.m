@@ -16,7 +16,6 @@
 
 #import "OGCDVIdentityProvidersClient.h"
 #import "OGCDVIdentityProvidersClientHelper.h"
-#import "OneginiSDK.h"
 
 @implementation OGCDVIdentityProvidersClient {
 }

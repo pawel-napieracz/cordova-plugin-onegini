@@ -17,8 +17,6 @@
 #import "OGCDVUserRegistrationClient.h"
 #import "OGCDVUserClientHelper.h"
 #import "OGCDVConstants.h"
-#import "ONGBrowserRegistrationChallenge.h"
-#import "ONGIdentityProvider.h"
 #import "OGCDVIdentityProvidersClientHelper.h"
 #import "OneginiConfigModel.h"
 
