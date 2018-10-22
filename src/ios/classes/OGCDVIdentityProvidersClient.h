@@ -16,6 +16,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CDVPlugin+OGCDV.h"
+@import OneginiSDKiOS;
 
 @interface OGCDVIdentityProvidersClient : CDVPlugin
 

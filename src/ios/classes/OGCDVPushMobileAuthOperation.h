@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "OneginiSDK.h"
+@import OneginiSDKiOS;
 #import "OGCDVPushMobileAuthRequestClient.h"
 
 @interface OGCDVPushMobileAuthOperation : NSOperation<OGCDVPluginMobileAuthenticationRequestDelegate> {

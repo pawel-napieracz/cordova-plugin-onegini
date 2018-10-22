@@ -15,7 +15,7 @@
  */
 
 #import "AppDelegate.h"
-#import "OneginiSDK.h"
+@import OneginiSDKiOS;
 
 @interface AppDelegate (OGCDV)
 

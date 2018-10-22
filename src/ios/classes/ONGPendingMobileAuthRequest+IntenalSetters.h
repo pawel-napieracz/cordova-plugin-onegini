@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import "ONGPendingMobileAuthRequest.h"
+@import OneginiSDKiOS;
 
 @interface ONGPendingMobileAuthRequest (IntenalSetters)
 

@@ -15,7 +15,6 @@
  */
 
 #import "OGCDVIdentityProvidersClientHelper.h"
-#import "ONGIdentityProvider.h"
 #import "OGCDVConstants.h"
 
 @implementation OGCDVIdentityProvidersClientHelper

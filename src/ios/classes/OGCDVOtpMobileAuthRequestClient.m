@@ -16,11 +16,7 @@
 
 #import "OGCDVOtpMobileAuthRequestClient.h"
 #import "OGCDVConstants.h"
-#import "ONGUserProfile.h"
-#import "ONGUserClient.h"
 #import "CDVPlugin+OGCDV.h"
-#import "ONGMobileAuthRequest.h"
-
 
 @implementation OGCDVOtpMobileAuthRequestClient {
 }

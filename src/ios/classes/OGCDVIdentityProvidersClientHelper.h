@@ -15,6 +15,7 @@
  */
 
 #import <Foundation/Foundation.h>
+@import OneginiSDKiOS;
 
 @class ONGIdentityProvider;
 

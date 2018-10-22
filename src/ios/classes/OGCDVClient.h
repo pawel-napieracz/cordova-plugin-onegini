@@ -15,7 +15,7 @@
  */
 
 #import "CDVPlugin+OGCDV.h"
-#import "OneginiSDK.h"
+@import OneginiSDKiOS;
 
 @interface OGCDVClient : CDVPlugin
 

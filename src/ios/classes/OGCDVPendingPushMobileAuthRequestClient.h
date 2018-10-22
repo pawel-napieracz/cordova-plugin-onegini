@@ -1,7 +1,7 @@
 //  Copyright © 2017 Onegini. All rights reserved.
 
 #import "CDVPlugin+OGCDV.h"
-#import "OneginiSDK.h"
+@import OneginiSDKiOS;
 
 @interface OGCDVPendingPushMobileAuthRequestClient : CDVPlugin
 

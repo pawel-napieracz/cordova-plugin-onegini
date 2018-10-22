@@ -17,7 +17,7 @@
 #import <SafariServices/SafariServices.h>
 #import "CDVPlugin+OGCDV.h"
 #import <WebKit/WebKit.h>
-#import "OneginiSDK.h"
+@import OneginiSDKiOS;
 
 @interface OGCDVUserRegistrationClient : CDVPlugin<ONGRegistrationDelegate>
 

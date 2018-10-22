@@ -31,18 +31,17 @@ const envVariables = {
   sdkDownloadPath: 'ONEGINI_SDK_DOWNLOAD_PATH'
 };
 
-const sdkVersion = '8.0.0';
+const sdkVersion = '9.0.0';
 
 const baseArtifactoryUrl = `https://repo.onegini.com/artifactory/onegini-sdk/com/onegini/mobile/sdk/ios/libOneginiSDKiOS/${sdkVersion}`;
-const libOneginiSdkIos = `${baseArtifactoryUrl}/libOneginiSDKiOS-${sdkVersion}.a`;
-const libOneginiSdkIosHeaders = `${baseArtifactoryUrl}/libOneginiSDKiOS-${sdkVersion}-headers.zip`;
+const libOneginiSdkIos = `${baseArtifactoryUrl}/OneginiSDKiOS-${sdkVersion}.tar.gz`;
 
 const libName = libOneginiSdkIos.substring(libOneginiSdkIos.lastIndexOf('/') + 1);
-const headersName = libOneginiSdkIosHeaders.substring(libOneginiSdkIosHeaders.lastIndexOf('/') + 1);
 
 const iosSdkPathCordova = 'src/ios/OneginiSDKiOS';
-const iosSdkLibPathCordova = path.join(iosSdkPathCordova, 'libOneginiSDKiOS.a');
+const iosSdkLibPathCordova = path.join(iosSdkPathCordova, 'OneginiSDKiOS.framework');
 const iosSdkHeadersPathCordova = path.join(iosSdkPathCordova, 'Headers');
+const cryptoLibPathCordova = path.join(iosSdkPathCordova, 'OneginiCrypto.framework');
 
 let sdkDownloadPath;
 
@@ -65,13 +64,7 @@ module.exports = function (context) {
   checkSdkLibExistsOnFs()
     .then(result => downloadFile(result, libOneginiSdkIos))
     .then(() => checkDownloadedFileIntegrity(libOneginiSdkIos))
-    .then(() => copyAndRenameSdkLib(context))
-
-    // Downloading & verifying the headers ZIP
-    .then(() => checkHeadersFileExistsOnFs())
-    .then((result) => downloadFile(result, libOneginiSdkIosHeaders))
-    .then(() => checkDownloadedFileIntegrity(libOneginiSdkIosHeaders))
-    .then(() => unzipAndRenameHeaders(context))
+    .then(() => unzipSDK(context))
     .then(() => {
       writeToStdOut('Success!\n');
       deferral.resolve();
@@ -109,21 +102,6 @@ function checkSdkLibExistsOnFs() {
     }
     else {
       debug('SDK lib is not downloaded yet');
-      resolve(false);
-    }
-  });
-}
-
-function checkHeadersFileExistsOnFs() {
-  return new Promise(resolve => {
-    writeToStdOut('.');
-    const headersFilePath = path.join(sdkDownloadPath, headersName);
-    if (fs.existsSync(headersFilePath)) {
-      debug('Headers ZIP is already downloaded');
-      resolve(true);
-    }
-    else {
-      debug('Headers ZIP is not downloaded yet');
       resolve(false);
     }
   });
@@ -234,6 +212,7 @@ function checkDownloadedFileIntegrity(fileUrl) {
 function prepareSdkDirectories(context) {
   const pluginDir = context.opts.plugin.pluginInfo.dir;
   const sdkDir = path.join(pluginDir, iosSdkPathCordova);
+  const legacyHeadersPathCordova = path.join(iosSdkPathCordova, 'Headers');
   const headersDir = path.join(pluginDir, iosSdkHeadersPathCordova);
 
   if (!fs.existsSync(sdkDir)) {
@@ -241,17 +220,15 @@ function prepareSdkDirectories(context) {
     fs.mkdirSync(sdkDir);
   }
 
-  if (!fs.existsSync(headersDir)) {
-    debug(`Create headers directory: ${headersDir}`);
-    fs.mkdirSync(headersDir);
-  }
-
   if (!fs.existsSync(sdkDownloadPath)) {
     debug(`Create SDK download : ${sdkDownloadPath}`);
     fs.mkdirSync(sdkDownloadPath);
   }
-
-  deleteFilesFromDirs([sdkDir, headersDir]);
+  var directoriesToClean = [sdkDir];
+  if (fs.existsSync(legacyHeadersPathCordova)) {
+  	directoriesToClean.push(legacyHeadersPathCordova)
+  }
+  deleteFilesFromDirs(directoriesToClean);
 }
 
 function deleteFilesFromDirs(directories) {
@@ -263,7 +240,7 @@ function deleteFilesFromDirs(directories) {
       }
 
       for (const file of files) {
-        if (file.endsWith('.a') || file.endsWith('.h')) {
+        if (file.endsWith('.a') || file.endsWith('.h') || file.endsWith('.framework')) {
           fs.unlink(path.join(dir, file), err => {
             if (err) {
               console.error(err);
@@ -276,35 +253,14 @@ function deleteFilesFromDirs(directories) {
   });
 }
 
-function copyAndRenameSdkLib(context) {
-  return new Promise((resolve, reject) => {
-    writeToStdOut('.');
-    debug('Copying and renaming SDK library');
-    const pluginDir = context.opts.plugin.pluginInfo.dir;
-    let targetSdkLibPath = path.join(pluginDir, iosSdkLibPathCordova);
-    let downloadedSdkLibPath = path.join(sdkDownloadPath, libName);
-    if (fs.existsSync(downloadedSdkLibPath)) {
-      fs.createReadStream(downloadedSdkLibPath)
-        .pipe(fs.createWriteStream(targetSdkLibPath))
-        .on('close', () => {
-          debug('Copied the SDK');
-          resolve();
-        });
-    }
-    else {
-      reject(`Onegini iOS SDK library not found at path: ${downloadedSdkLibPath}`)
-    }
-  });
-}
-
-function unzipAndRenameHeaders(context) {
+function unzipSDK(context) {
   return new Promise((resolve) => {
     writeToStdOut('.');
-    debug('Unzipping and renaming headers');
-
     const pluginDir = context.opts.plugin.pluginInfo.dir;
-    const newDir = path.join(pluginDir, iosSdkHeadersPathCordova);
-    execSync('unzip ' + sdkDownloadPath + '/' + headersName + ' -d ' + newDir);
+    const newDir = path.join(pluginDir, iosSdkPathCordova);
+
+    debug('Unzipping SDK to ' + newDir);
+    execSync('tar -xf' + sdkDownloadPath + '/' + libName + ' -C ' + newDir);
     resolve();
   });
 }
