@@ -211,6 +211,9 @@ function checkDownloadedFileIntegrity(fileUrl) {
 function prepareSdkDirectories(context) {
   const pluginDir = context.opts.plugin.pluginInfo.dir;
   const sdkDir = path.join(pluginDir, iosSdkPathCordova);
+  const legacyHeadersPathCordova = path.join(iosSdkPathCordova, 'Headers');
+  const headersDir = path.join(pluginDir, iosSdkHeadersPathCordova);
+
 
   if (!fs.existsSync(sdkDir)) {
     debug(`Create SDK directory: ${sdkDir}`);
@@ -222,7 +225,7 @@ function prepareSdkDirectories(context) {
     fs.mkdirSync(sdkDownloadPath);
   }
 
-  deleteFilesFromDirs([sdkDir]);
+  deleteFilesFromDirs([sdkDir, legacyHeadersPathCordova]);
 }
 
 function deleteFilesFromDirs(directories) {
@@ -234,7 +237,7 @@ function deleteFilesFromDirs(directories) {
       }
 
       for (const file of files) {
-        if (file.endsWith('.a') || file.endsWith('.h')) {
+        if (file.endsWith('.a') || file.endsWith('.h') || file.endsWith('.framework')) {
           fs.unlink(path.join(dir, file), err => {
             if (err) {
               console.error(err);
