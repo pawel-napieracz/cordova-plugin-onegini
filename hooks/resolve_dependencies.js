@@ -40,6 +40,7 @@ const libName = libOneginiSdkIos.substring(libOneginiSdkIos.lastIndexOf('/') + 1
 
 const iosSdkPathCordova = 'src/ios/OneginiSDKiOS';
 const iosSdkLibPathCordova = path.join(iosSdkPathCordova, 'OneginiSDKiOS.framework');
+const iosSdkHeadersPathCordova = path.join(iosSdkPathCordova, 'Headers');
 const cryptoLibPathCordova = path.join(iosSdkPathCordova, 'OneginiCrypto.framework');
 
 let sdkDownloadPath;
@@ -214,7 +215,6 @@ function prepareSdkDirectories(context) {
   const legacyHeadersPathCordova = path.join(iosSdkPathCordova, 'Headers');
   const headersDir = path.join(pluginDir, iosSdkHeadersPathCordova);
 
-
   if (!fs.existsSync(sdkDir)) {
     debug(`Create SDK directory: ${sdkDir}`);
     fs.mkdirSync(sdkDir);
@@ -224,8 +224,11 @@ function prepareSdkDirectories(context) {
     debug(`Create SDK download : ${sdkDownloadPath}`);
     fs.mkdirSync(sdkDownloadPath);
   }
-
-  deleteFilesFromDirs([sdkDir, legacyHeadersPathCordova]);
+  var directoriesToClean = [sdkDir];
+  if (fs.existsSync(legacyHeadersPathCordova)) {
+  	directoriesToClean.push(legacyHeadersPathCordova)
+  }
+  deleteFilesFromDirs(directoriesToClean);
 }
 
 function deleteFilesFromDirs(directories) {
