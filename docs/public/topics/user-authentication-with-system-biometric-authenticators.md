@@ -1,20 +1,37 @@
-# User authentication with fingerprint
+# User authentication with system biometric authenticators
 
 <!-- toc -->
 
 ## Introduction
 
-The Onegini Cordova plugin allows you to authenticate users with the fingerprint scanner, if one is available on the device. Fingerprint can be used for both regular authentication as well as mobile authentication. Users will be able to scan their fingerprint as many times as the OS will allow them to. If the OS fingerprint API returns an error for any reason (for example in the case of too many failed attempts), the Onegini Cordova plugin revokes fingerprint authentication and performs a fallback to PIN authentication.
+The Onegini Cordova plugin allows you to authenticate users with the system biometric authenticators (fingerprint scanner - Android, iOS, face recognition - iOS), if they are available on the device. System biometric authenticators can be used for both regular authentication as well as mobile authentication. Users will be able to used system biometric authenticators as many times as the OS will allow them to. If the OS system biometric authenticators API returns an error for any reason (for example in the case of too many failed attempts), the Onegini Cordova plugin revokes system biometric authenticator authentication and performs a fallback to PIN authentication.
+
+### Requirements
+#### FaceID
+
+iOS needs to have configured message displayed on FaceID alert. It's configurable by adding `NSFaceIDUsageDescription` in your config.xml file.
+
+**Example configuration**
+
+```xml
+<platform name="ios">
+  <config-file parent="NSFaceIDUsageDescription" target="*-Info.plist">
+    <string>FaceID is used as a authenticator to login to application.</string>
+  </config-file>
+</platform>
+```
+
+Not specifying this property in your configuration will crash your application when you will try to use Face ID authentication.
 
 ### Differences between Android and iOS
 
 It should be noted that there are significant differences between Fingerprint on Android and Touch ID on iOS. As a result, some methods may be available on only one of the operating systems. This will be specified where applicable.
 
-## Enabling fingerprint authentication
+## Enabling system biometric authenticator authentication
 
-In order to enable fingerprint authentication for a user, the Onegini Cordova plugin provides the [`onegini.user.authenticators.registerNew`](../reference/user/authenticators.md#oneginiuserauthenticatorsregisternew). This function requires the user to authenticate. As a result, it is necessary to implement the UI associated with the `onPinRequest` method, in addition to the `onSuccess` and `onError` methods.
+In order to enable system biometric authenticator authentication for a user, the Onegini Cordova plugin provides the [`onegini.user.authenticators.registerNew`](../reference/user/authenticators.md#oneginiuserauthenticatorsregisternew). This function requires the user to authenticate. As a result, it is necessary to implement the UI associated with the `onPinRequest` method, in addition to the `onSuccess` and `onError` methods.
 
-**Example code for registering the fingerprint authenticator:**
+**Example code for registering the system biometric authenticator:**
 
 ```js
 onegini.user.authenticators.registerNew({ authenticatorType: "Fingerprint" })
@@ -29,6 +46,8 @@ onegini.user.authenticators.registerNew({ authenticatorType: "Fingerprint" })
       alert("Error!\n\n" + err.description);
     });
 ```
+
+> To register FaceID authenticator `authenticatorType` should be set as "Fingerprint"
 
 Fingerprint authentication may not be available on every device. In this case, or if the authenticator has already been registered, the above method will return an error.
 
@@ -47,6 +66,8 @@ onegini.user.authenticators.setPreferred({ authenticatorType: "Fingerprint" })
       alert("Error!\n\n" + err.description);
     });
 ```
+> To set FaceID as the preferred authenticator `authenticatorType` should be set as "Fingerprint"
+
 
 ## Authenticating a user with fingerprint
 

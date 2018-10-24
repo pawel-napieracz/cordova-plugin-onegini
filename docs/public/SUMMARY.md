@@ -5,7 +5,7 @@
     * [Configuration](topics/configuration.md)
     * [User registration](topics/user-registration.md)
     * [User authentication](topics/user-authentication.md)
-    * [User authentication with fingerprint](topics/user-authentication-with-fingerprint.md)
+    * [User authentication with system biometric authenticators](topics/user-authentication-with-system-biometric-authenticators.md)
     * [Change PIN](topics/change-pin.md)
     * [Logging out](topics/logging-out.md)
     * [Deregister user](topics/deregister-user.md)

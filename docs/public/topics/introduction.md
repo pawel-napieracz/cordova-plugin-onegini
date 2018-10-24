@@ -8,7 +8,7 @@ The following topic guides are available:
 * [Configuration](configuration.md)
 * [User registration](user-registration.md)
 * [User authentication](user-authentication.md)
-* [User authentication with fingerprint](user-authentication-with-fingerprint.md)
+* [User authentication with fingerprint](user-authentication-with-system-biometric-authenticators.md)
 * [Change PIN](change-pin.md)
 * [Logging out](logging-out.md)
 * [Mobile authentication](mobile-authentication.md)
