@@ -25,28 +25,24 @@ public class FcmRegistrationService {
   }
 
   public void getFCMToken(final TokenReadHandler tokenReadHandler) {
-    Log.d("ROBERT", "getFCMToken");
     FirebaseApp.initializeApp(context);
     FirebaseInstanceId.getInstance().getInstanceId()
         .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
           @Override
           public void onSuccess(final InstanceIdResult instanceIdResult) {
             final String fcmRefreshToken = instanceIdResult.getToken();
-            Log.d("ROBERT", "getFCMToken success "+fcmRefreshToken);
             tokenReadHandler.onSuccess(fcmRefreshToken);
           }
         })
         .addOnFailureListener(new OnFailureListener() {
           @Override
           public void onFailure(@NonNull final Exception e) {
-            Log.d("ROBERT", "getFCMToken error "+e.getMessage());
             tokenReadHandler.onError(e);
           }
         });
   }
 
   public boolean shouldUpdateRefreshToken(final String refreshToken) {
-    Log.d("ROBERT", "shouldUpdateRefreshToken");
     final String previousRefreshToken = storage.getRegistrationToken();
     if (previousRefreshToken.isEmpty()) {
       return false;
@@ -55,13 +51,11 @@ public class FcmRegistrationService {
   }
 
   public void storeNewRefreshToken(final String newRefreshToken) {
-    Log.d("ROBERT", "storeNewRefreshToken ("+newRefreshToken+")");
     storage.setRegistrationToken(newRefreshToken);
     storage.save();
   }
 
   public void updateRefreshToken(final String newRefreshToken) {
-    Log.d("ROBERT", "updateRefreshToken "+newRefreshToken);
     getOneginiClient().getDeviceClient()
         .refreshMobileAuthPushToken(newRefreshToken, new TokenUpdateHandler(newRefreshToken));
   }

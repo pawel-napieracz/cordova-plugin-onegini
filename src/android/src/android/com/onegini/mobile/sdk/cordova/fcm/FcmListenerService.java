@@ -24,7 +24,6 @@ import static java.util.Collections.emptyMap;
 
 import java.util.Map;
 
-import android.util.Log;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +52,6 @@ public class FcmListenerService extends FirebaseMessagingService {
   @Override
   public void onNewToken(final String newToken) {
     super.onNewToken(newToken);
-    Log.d("ROBERT", "onNewToken");
     if (OneginiSDK.getInstance().isStarted()) {
       updateToken(newToken);
     }
