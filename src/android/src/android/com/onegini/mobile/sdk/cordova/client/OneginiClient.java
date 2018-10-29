@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.onegini.mobile.sdk.cordova.fcm.FcmRegistrationService;
 import com.onegini.mobile.sdk.cordova.util.PreferencesUtil;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -44,7 +45,6 @@ import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthWithPushRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
-import com.onegini.mobile.sdk.cordova.fcm.FcmTokenUpdateService;
 import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
 import com.onegini.mobile.sdk.cordova.handler.BrowserRegistrationRequestHandler;
 import com.onegini.mobile.sdk.cordova.util.AppLifecycleUtil;
@@ -136,9 +136,21 @@ public class OneginiClient extends CordovaPlugin {
           public void onSuccess(final Set<UserProfile> set) {
             sendOneginiClientStartSuccessResult(callbackContext);
 
-            // We must trigger the update FCM service in case onTokenRefresh was called when the SDK wasn't started yet.
-            final Intent fcmTokenUpdateIntent = new Intent(getApplicationContext(), FcmTokenUpdateService.class);
-            getApplicationContext().startService(fcmTokenUpdateIntent);
+            // We must trigger the update FCM service in case onNewToken was called when the SDK wasn't started yet.
+            final FcmRegistrationService fcmRegistrationService = new FcmRegistrationService(getApplicationContext());
+            fcmRegistrationService.getFCMToken(new FcmRegistrationService.TokenReadHandler() {
+              @Override
+              public void onSuccess(final String token) {
+                if (fcmRegistrationService.shouldUpdateRefreshToken(token)) {
+                  fcmRegistrationService.updateRefreshToken(token);
+                }
+              }
+
+              @Override
+              public void onError(final Exception e) {
+                // ignore
+              }
+            });
 
             handleDelayedPushMobileAuthenticationRequests();
           }
