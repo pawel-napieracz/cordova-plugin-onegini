@@ -16,10 +16,8 @@
 
 package com.onegini.mobile.sdk.cordova.client;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_CONFIGURATION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
@@ -33,11 +31,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
-import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthWithPushEnrollmentHandler;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
-import com.onegini.mobile.sdk.cordova.fcm.FcmTokenService;
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushEnrollmentHandler;
+import com.onegini.mobile.sdk.cordova.fcm.FcmRegistrationService;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
@@ -110,29 +106,8 @@ public class PushMobileAuthClient extends CordovaPlugin {
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        try {
-          final FcmTokenService fcmTokenService = new FcmTokenService(getApplicationContext());
-          final String token = fcmTokenService.getRegistrationToken();
-
-          if (token == null || "".equals(token)) {
-            callbackContext.sendPluginResult(new PluginResultBuilder()
-                .withPluginError("Cannot enroll for push mobile auth: FCM Token is null. Please check your 'google-services.json'.", ERROR_CODE_CONFIGURATION)
-                .build());
-
-            return;
-          }
-
-          final OneginiMobileAuthWithPushEnrollmentHandler handler = new MobileAuthWithPushEnrollmentHandler(callbackContext);
-          getOneginiClient().getUserClient().enrollUserForMobileAuthWithPush(token, handler);
-        } catch (IllegalStateException e) {
-          callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withPluginError("Cannot enroll for push mobile auth: Could not initialize FCM. Please check if you installed the 'cordova-plugin-onegini-fcm' plugin.", ERROR_CODE_CONFIGURATION)
-              .build());
-        } catch (Exception e) {
-          callbackContext.sendPluginResult(new PluginResultBuilder()
-              .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
-              .build());
-        }
+        final FcmRegistrationService fcmRegistrationService = new FcmRegistrationService(getApplicationContext());
+        fcmRegistrationService.enrollForPush(callbackContext);
       }
     });
   }
