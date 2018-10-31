@@ -42,7 +42,8 @@ To check which Onegini FCM plugin and Onegini plugin are compatible with each ot
 | Onegini plugin Version (cordova-plugin-onegini) | Onegini FCM plugin version (cordova-plugin-onegini-fcm)| Remark
 |-------------------------------------------------|--------------------------------------------------------| -------------------
 | < 4.0.0                                         | n.a.                                                   | Onegini Cordova plugin versions before 4.0.0 still depend on GCM.
-| 4.x.x                                           | 1.x.x                                                  | n.a.
+| 4.0.0 - 5.1.0                                   | 1.x.x                                                  | n.a.
+| &ge; 5.2.0                                      | 1.2.x                                                  | n.a.
 
 ## Enrollment
 
