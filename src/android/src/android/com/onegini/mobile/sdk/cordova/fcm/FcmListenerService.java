@@ -24,6 +24,7 @@ import static java.util.Collections.emptyMap;
 
 import java.util.Map;
 
+import com.onegini.mobile.sdk.cordova.OneginiSDK;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,6 +46,25 @@ public class FcmListenerService extends FirebaseMessagingService {
     }
     if (isMobileAuthenticationRequest(message)) {
       handleNotification(message);
+    }
+  }
+
+  @Override
+  public void onNewToken(final String newToken) {
+    super.onNewToken(newToken);
+    if (OneginiSDK.getInstance().isStarted()) {
+      updateToken(newToken);
+    }
+  }
+
+  private void updateToken(final String newToken) {
+    final FcmRegistrationService fcmRegistrationService = new FcmRegistrationService(this);
+    if (fcmRegistrationService.shouldUpdateRefreshToken(newToken)) {
+      // the token was updated, notify the SDK
+      fcmRegistrationService.updateRefreshToken(newToken);
+    } else {
+      // the token is created for the first time
+      fcmRegistrationService.storeNewRefreshToken(newToken);
     }
   }
 

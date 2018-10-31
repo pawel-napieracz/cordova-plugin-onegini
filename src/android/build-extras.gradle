@@ -31,11 +31,7 @@ allprojects {
   repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-      url "https://maven.google.com" // Google's Maven repository
-    }
-    // The Jcenter repository is required for the Cordova framework dependency
-    jcenter()
+    google()
     maven {
       url "https://repo.onegini.com/artifactory/onegini-sdk"
       credentials {
@@ -60,22 +56,24 @@ allprojects {
         }
       }
     }
+    // The Jcenter repository is required for the Cordova framework dependency
+    jcenter()
   }
 }
 
 dependencies {
   // TODO Move to release version before plugin release
   // Onegini SDK
-  compile('com.onegini.mobile.sdk.android:onegini-sdk:9.1.0@aar') {
+  api('com.onegini.mobile.sdk.android:onegini-sdk:9.3.0@aar') {
     transitive = true
   }
 
   // Google Play Services availability check
-  compile 'com.google.android.gms:play-services-base:11.6.2'
+  implementation 'com.google.android.gms:play-services-base:16.0.1'
   //Firebase Cloud Messaging (FCM)
-  compile "com.google.firebase:firebase-messaging:11.6.2"
+  implementation "com.google.firebase:firebase-messaging:17.3.4"
 
-  compile 'com.android.support:appcompat-v7:26.1.0'
+  implementation 'com.android.support:appcompat-v7:26.1.0'
 }
 
 afterEvaluate {

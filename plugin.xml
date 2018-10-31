@@ -278,15 +278,11 @@
         target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
 
     <!-- fcm -->
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmInstanceIdService.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmListenerService.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmStorage.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmTokenService.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmTokenUpdateService.java"
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmRegistrationService.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/NotificationHelper.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
