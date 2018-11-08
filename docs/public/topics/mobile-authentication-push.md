@@ -64,7 +64,7 @@ onegini.mobileAuth.push.enroll()
 ```
 
 If you want to use mobile fingerprint authentication, you will need to register the fingerprint authenticator for the relevant user (see
-[User authentication with fingerprint](user-authentication-with-fingerprint.md)).
+[User authentication with fingerprint](user-authentication-with-system-biometric-authenticators.md)).
 
 Successive invocations of enrollment for mobile authentication with push will re-enroll the device only if the mobile authentication with push override is
 enabled in The Token Server configuration. See the [Token Server mobile authentication configuration]({{book.app_config_mobile_authentication}}) for more
@@ -216,7 +216,7 @@ adds an extra layer of security, while often being more convenient for the user 
 authentication request is confirmed.
 
 The use of this mobile authentication method requires the fingerprint authenticator to have been registered for the user. See
-[User authentication with fingerprint](user-authentication-with-fingerprint.md) topic guide for more information.
+[User authentication with fingerprint](user-authentication-with-system-biometric-authenticators.md) topic guide for more information.
 
 Handling a push with fingerprint is very similar to the other types of mobile authentication requests. See
 [`onegini.mobileAuth.push.on`](../reference/mobileAuthentication/push/on.md) for more details.
