@@ -1,10 +1,10 @@
 # User authentication with system biometric authenticators
 
-<!-- toc -->
-
 ## Introduction
 
-The Onegini Cordova plugin allows you to authenticate users with the system biometric authenticators (fingerprint scanner - Android and iOS, face recognition - iOS), if they are available on the device. System biometric authenticators can be used for both regular authentication as well as mobile authentication. Users will be able to retry system biometric authentications as many times as the OS will allow them to. If the OS system biometric authenticators API returns an error for any reason (for example in the case of too many failed attempts), the Onegini Cordova plugin revokes system biometric authenticator authentication and performs a fallback to PIN authentication.
+The Onegini Cordova plugin allows you to authenticate users with the system biometric authenticators. These authenticators are provided by the device's operating system (iOS - Touch ID and Face ID, Android - fingerprint), if they are available on the device. System biometric authenticators can be used for both regular authentication as well as mobile authentication. Users will be able to retry system biometric authentications as many times as the OS will allow them to. If the OS system biometric authenticators API returns an error for any reason (for example in the case of too many failed attempts), the Onegini Cordova plugin revokes system biometric authenticator authentication and performs a fallback to PIN authentication.
+
+<!-- toc -->
 
 ### Requirements
 #### FaceID
