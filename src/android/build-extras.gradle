@@ -64,7 +64,7 @@ allprojects {
 dependencies {
   // TODO Move to release version before plugin release
   // Onegini SDK
-  api('com.onegini.mobile.sdk.android:onegini-sdk:9.3.0@aar') {
+  api('com.onegini.mobile.sdk.android:onegini-sdk:9.4.0@aar') {
     transitive = true
   }
 
