@@ -40,7 +40,10 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import com.google.firebase.messaging.RemoteMessage;
 import com.onegini.mobile.sdk.android.handlers.OneginiInitializationHandler;
+import com.onegini.mobile.sdk.android.handlers.OneginiResetHandler;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiError;
 import com.onegini.mobile.sdk.android.handlers.error.OneginiInitializationError;
+import com.onegini.mobile.sdk.android.handlers.error.OneginiResetError;
 import com.onegini.mobile.sdk.android.model.OneginiClientConfigModel;
 import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthWithPushRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
@@ -55,6 +58,7 @@ import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 public class OneginiClient extends CordovaPlugin {
 
   private static final String ACTION_START = "start";
+  private static final String ACTION_RESET = "reset";
   private final List<OneginiMobileAuthWithPushRequest> delayedMobileAuthenticationRequests = new LinkedList<OneginiMobileAuthWithPushRequest>();
   private PreferencesUtil preferencesUtil;
 
@@ -81,6 +85,9 @@ public class OneginiClient extends CordovaPlugin {
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if (ACTION_START.equals(action)) {
       start(callbackContext);
+      return true;
+    } else if (ACTION_RESET.equals(action)) {
+      reset(callbackContext);
       return true;
     }
 
@@ -134,7 +141,7 @@ public class OneginiClient extends CordovaPlugin {
         OneginiSDK.getInstance().startSDK(getApplicationContext(), new OneginiInitializationHandler() {
           @Override
           public void onSuccess(final Set<UserProfile> set) {
-            sendOneginiClientStartSuccessResult(callbackContext);
+            sendOneginiClientSuccessResult(callbackContext);
 
             // We must trigger the update FCM service in case onNewToken was called when the SDK wasn't started yet.
             final FcmRegistrationService fcmRegistrationService = new FcmRegistrationService(getApplicationContext());
@@ -157,14 +164,33 @@ public class OneginiClient extends CordovaPlugin {
 
           @Override
           public void onError(final OneginiInitializationError initializationError) {
-            sendOneginiClientStartErrorResult(callbackContext, initializationError);
+            sendOneginiClientErrorResult(callbackContext, initializationError);
           }
         });
       }
     });
   }
 
-  private void sendOneginiClientStartSuccessResult(final CallbackContext callbackContext) {
+  private void reset(final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        OneginiSDK.getInstance().getOneginiClient(getApplicationContext()).reset(new OneginiResetHandler() {
+
+          @Override
+          public void onSuccess(final Set<UserProfile> removedUserProfiles) {
+            sendOneginiClientSuccessResult(callbackContext);
+          }
+
+          @Override
+          public void onError(final OneginiResetError error) {
+            sendOneginiClientErrorResult(callbackContext, error);
+          }
+        });
+      }
+    });
+  }
+
+  private void sendOneginiClientSuccessResult(final CallbackContext callbackContext) {
     final OneginiClientConfigModel configModel = getOneginiClient().getConfigModel();
 
     final PluginResult pluginResult = new PluginResultBuilder()
@@ -175,10 +201,10 @@ public class OneginiClient extends CordovaPlugin {
     callbackContext.sendPluginResult(pluginResult);
   }
 
-  private void sendOneginiClientStartErrorResult(final CallbackContext callbackContext, final OneginiInitializationError initializationError) {
+  private void sendOneginiClientErrorResult(final CallbackContext callbackContext, final OneginiError oneginiError) {
     final PluginResult pluginResult = new PluginResultBuilder()
         .withError()
-        .withOneginiError(initializationError)
+        .withOneginiError(oneginiError)
         .build();
 
     callbackContext.sendPluginResult(pluginResult);

@@ -20,6 +20,7 @@ module.exports = (function () {
   var utils = require('./utils');
   var resource = require('./resource');
   var mobileAuth = require('./mobileAuth');
+
   function start(options, successCb, failureCb) {
     var promise, callbackResult;
     options = utils.getOptionsWithDefaults(options, {
@@ -45,8 +46,13 @@ module.exports = (function () {
     return promise || callbackResult;
   }
 
+  function reset(successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiClient', 'reset', [], successCb, failureCb);
+  }
+
   return {
     start: start,
+    reset: reset,
     user: user,
     device: device,
     resource: resource,

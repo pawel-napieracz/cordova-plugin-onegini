@@ -134,6 +134,35 @@ exports.defineAutoTests = function () {
           });
       });
     });
+    describe('reset', function () {
+      it("should exist", function () {
+        expect(onegini.reset).toBeDefined();
+      });
+
+      it("should run ok", function (done) {
+        onegini.reset(
+          function () {
+            expect(true).toBe(true);
+            done();
+          },
+          function (err) {
+            expect(err).toBeUndefined();
+            fail('Error callback called, but method should have succeeded');
+          });
+      });
+
+      afterAll(function (done) {
+        setUrlHandlerUserId(config.userId,
+          function () {
+            expect(true).toBe(true);
+            done();
+          },
+          function (err) {
+            expect(err).toBeUndefined();
+            fail('Error callback called, but method should have succeeded');
+          });
+      });
+    });
   });
 
   /******** onegini.user (1/2) *********/
