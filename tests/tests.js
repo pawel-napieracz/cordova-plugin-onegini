@@ -141,9 +141,6 @@ exports.defineAutoTests = function () {
 
       it("should run ok", function (done) {
         onegini.reset(
-          {
-            secureXhr: true
-          },
           function () {
             expect(true).toBe(true);
             done();
