@@ -50,6 +50,19 @@
     }];
 }
 
+- (void)reset:(CDVInvokedUrlCommand *)command
+{
+    [self.commandDelegate runInBackground:^{
+        [ONGClient.sharedInstance reset:^(BOOL success, NSError *error) {
+            if (success) {
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            } else {
+                [self sendErrorResultForCallbackId:command.callbackId withError:error];
+            }
+        }];
+    }];
+}
+
 - (void)handleLaunchNotification
 {
     NSDictionary *userInfo = self.launchNotificationUserInfo;
