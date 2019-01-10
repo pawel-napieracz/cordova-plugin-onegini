@@ -154,7 +154,9 @@
            didReceivePinChallengeResponse:(BOOL)accept withPin:(NSString *)pin withCallbackId:(NSString *)callbackId
 {
     [self setCompleteOperationCallbackId:callbackId];
-
+    if ([pin class] == [NSNull class]) {
+        pin = @"";
+    }
     if (accept) {
         [self.pinChallenge.sender respondWithPin:pin challenge:pinChallenge];
     } else {
