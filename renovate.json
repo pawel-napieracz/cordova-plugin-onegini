@@ -6,6 +6,7 @@
   "packageRules": [
   	{
   	"packagePattern": "onegini-documentation-parent",
+    "baseBranches": [ "develop" ],
   	"enabled": "false"
   	}  	
   ]
