@@ -26,8 +26,12 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'isEnrolled', options, successCb, failureCb);
   }
 
-  function enroll(successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'enroll', [], successCb, failureCb);
+  function enroll(options, successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'enroll', options, successCb, failureCb);
+  }
+
+  function handlePushMessage(options, successCb, failureCb) {
+    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'handle', options, successCb, failureCb);
   }
 
   function getPendingRequests(successCb, failureCb) {
