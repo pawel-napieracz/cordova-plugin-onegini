@@ -99,6 +99,11 @@ public class OneginiClient extends CordovaPlugin {
           public void onSuccess(final Set<UserProfile> set) {
             sendOneginiClientSuccessResult(callbackContext);
           }
+
+          @Override
+          public void onError(final OneginiInitializationError initializationError) {
+            sendOneginiClientErrorResult(callbackContext, initializationError);
+          }
         });
       }
     });

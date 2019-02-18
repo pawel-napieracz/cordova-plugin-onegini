@@ -18,7 +18,8 @@ package com.onegini.mobile.sdk.cordova.client;
 
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_FCM_KEY;
+import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PUSH_MESSAGE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PROFILE;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_DESCRIPTION_NO_USER_AUTHENTICATED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM_PROFILE_ID;
@@ -32,8 +33,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
+import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthWithPushEnrollmentHandler;
+import com.onegini.mobile.sdk.android.model.entity.OneginiMobileAuthWithPushRequest;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushEnrollmentHandler;
+import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushHandler;
+import com.onegini.mobile.sdk.cordova.util.PendingMobileAuthRequestUtil;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
@@ -42,6 +48,7 @@ public class PushMobileAuthClient extends CordovaPlugin {
 
   private static final String ACTION_IS_ENROLLED = "isEnrolled";
   private static final String ACTION_ENROLL = "enroll";
+  private static final String ACTION_HANDLE = "handle";
 
   @Override
   public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -50,6 +57,9 @@ public class PushMobileAuthClient extends CordovaPlugin {
       return true;
     } else if (ACTION_ENROLL.equals(action)) {
       enrollForPush(args, callbackContext);
+      return true;
+    } else if (ACTION_HANDLE.equals(action)) {
+      handlePush(args, callbackContext);
       return true;
     }
 
@@ -103,13 +113,46 @@ public class PushMobileAuthClient extends CordovaPlugin {
       return;
     }
 
-    final String key = "TODO"; // TODO
+    final String key;
+    try {
+      key = args.getString(0);
+    } catch (JSONException e) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+        .withError()
+        .withPluginError(ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_FCM_KEY, ERROR_CODE_ILLEGAL_ARGUMENT)
+        .build());
+
+      return;
+    }
 
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
         final OneginiMobileAuthWithPushEnrollmentHandler handler = new MobileAuthWithPushEnrollmentHandler(callbackContext);
         getOneginiClient().getUserClient().enrollUserForMobileAuthWithPush(key, handler);
+      }
+    });
+  }
+
+  private void handlePush(final JSONArray args, final CallbackContext callbackContext) {
+    final OneginiMobileAuthWithPushRequest mobileAuthWithPushRequest;
+
+    try {
+      final String json = args.getString(0);
+      mobileAuthWithPushRequest = PendingMobileAuthRequestUtil.pendingMobileAuthRequestFromJSON(json);
+    } catch (Exception e) {
+      callbackContext.sendPluginResult(new PluginResultBuilder()
+          .withError()
+          .withPluginError(ERROR_DESCRIPTION_ILLEGAL_ARGUMENT_PUSH_MESSAGE, ERROR_CODE_ILLEGAL_ARGUMENT)
+          .build());
+
+      return;
+    }
+
+    cordova.getThreadPool().execute(new Runnable() {
+      @Override
+      public void run() {
+        getOneginiClient().getUserClient().handleMobileAuthWithPushRequest(mobileAuthWithPushRequest, MobileAuthWithPushHandler.getInstance());
       }
     });
   }
