@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018 Onegini B.V.
+ * Copyright (c) 2017-2019 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.onegini.mobile.sdk.cordova.client;
 
-import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_CONFIGURATION;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_ILLEGAL_ARGUMENT;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_NO_USER_AUTHENTICATED;
 import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.ERROR_CODE_PLUGIN_INTERNAL_ERROR;
@@ -26,8 +25,6 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.PARAM
 
 import java.util.Set;
 
-import com.onegini.mobile.sdk.android.handlers.OneginiMobileAuthWithPushEnrollmentHandler;
-import com.onegini.mobile.sdk.cordova.handler.MobileAuthWithPushEnrollmentHandler;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
@@ -37,7 +34,6 @@ import org.json.JSONException;
 import android.content.Context;
 import com.onegini.mobile.sdk.android.model.entity.UserProfile;
 import com.onegini.mobile.sdk.cordova.OneginiSDK;
-import com.onegini.mobile.sdk.cordova.fcm.FcmRegistrationService;
 import com.onegini.mobile.sdk.cordova.util.PluginResultBuilder;
 import com.onegini.mobile.sdk.cordova.util.UserProfileUtil;
 
@@ -107,30 +103,13 @@ public class PushMobileAuthClient extends CordovaPlugin {
       return;
     }
 
+    final String key = "TODO"; // TODO
+
     cordova.getThreadPool().execute(new Runnable() {
       @Override
       public void run() {
-        final FcmRegistrationService fcmRegistrationService = new FcmRegistrationService(getApplicationContext());
-        fcmRegistrationService.getFCMToken(new FcmRegistrationService.TokenReadHandler() {
-          @Override
-          public void onSuccess(final String token) {
-            if (token == null || token.isEmpty()) {
-              callbackContext.sendPluginResult(new PluginResultBuilder()
-                  .withPluginError("Cannot enroll for push mobile auth: FCM Token is null. Please check your 'google-services.json'.", ERROR_CODE_CONFIGURATION)
-                  .build());
-            } else {
-              final OneginiMobileAuthWithPushEnrollmentHandler handler = new MobileAuthWithPushEnrollmentHandler(callbackContext);
-              getOneginiClient().getUserClient().enrollUserForMobileAuthWithPush(token, handler);
-            }
-          }
-
-          @Override
-          public void onError(final Exception e) {
-            callbackContext.sendPluginResult(new PluginResultBuilder()
-                .withPluginError(e.getMessage(), ERROR_CODE_PLUGIN_INTERNAL_ERROR)
-                .build());
-          }
-        });
+        final OneginiMobileAuthWithPushEnrollmentHandler handler = new MobileAuthWithPushEnrollmentHandler(callbackContext);
+        getOneginiClient().getUserClient().enrollUserForMobileAuthWithPush(key, handler);
       }
     });
   }
