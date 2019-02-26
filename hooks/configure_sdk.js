@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2019 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ const envVariables = {
     ios: 'ONEGINI_CONFIG_IOS_PATH'
   }
 };
+const extractedConfigPlugin = 'cordova-plugin-onegini-extracted-config';
 
 module.exports = function (context) {
   if (process.env.ONEGINI_AUTOCONFIGURE === "false") {
@@ -36,16 +37,15 @@ module.exports = function (context) {
     return;
   }
 
+  const projectRoot = context.opts.projectRoot;
+  const hasExtractedConfig = hasExtractedConfigFiles(context);
   const deferral = context.requireCordovaModule('q').defer();
-  const args = [
-    '--cordova',
-    '--app-dir', context.opts.projectRoot
-  ];
+  const args = ['--cordova', '--app-dir', projectRoot];
   console.log('Configuring the Onegini SDK');
   console.log('===========================\n\n');
 
   // deduce the platforms based on whatever in the whitelist is currently installed
-  const platforms = supportedPlatforms.filter(platform => fs.existsSync(path.join(context.opts.projectRoot, "platforms", platform)));
+  const platforms = supportedPlatforms.filter(platform => fs.existsSync(path.join(projectRoot, "platforms", platform)));
 
   platforms
     .map(platform => platform.split('@')[0])
@@ -55,42 +55,54 @@ module.exports = function (context) {
 
       let platformArgs = args.slice();
       platformArgs.unshift(platform);
-      platformArgs.push('--config', getConfigFileForPlatform(context.opts.projectRoot, platform));
+      const configFile = getConfigFileForPlatform(projectRoot, platform, hasExtractedConfig);
+      platformArgs.push('--config', configFile);
 
-      execConfigurator(platformArgs, deferral);
+      execConfigurator(projectRoot, platform, hasExtractedConfig, platformArgs, deferral);
     });
 
   return deferral.promise;
 };
 
-function execConfigurator(args, deferral) {
-  const configuratorName = getConfiguratorName();
+function executeCommand(command, args) {
+  return new Promise(function (resolve, reject) {
+    console.log('\nRunning command:');
+    console.log(`${command} ${args.join(' ')}\n`);
 
-  console.log('\nRunning command:');
-  console.log(`${configuratorName} ${args.join(' ')}\n`);
+    const configurator = spawn(command, args);
 
-  const configurator = spawn(configuratorName, args);
+    configurator.stdout.on('data', (data) => {
+      process.stdout.write(data);
+    });
 
-  configurator.stdout.on('data', (data) => {
-    process.stdout.write(data);
-  });
+    configurator.stderr.on('data', (data) => {
+      process.stdout.write(data);
+    });
 
-  configurator.stderr.on('data', (data) => {
-    process.stdout.write(data);
-  });
-
-  configurator.on('close', (code) => {
-    if (code === 0) {
-      deferral.resolve();
-    } else {
-      deferral.reject('Could not configure the Onegini SDK with your configuration');
-    }
+    configurator.on('close', (code) => {
+      if (code === 0) {
+        resolve("finished");
+      }
+      else {
+        reject("failed");
+      }
+    });
   });
 }
 
-function getConfigFileForPlatform(projectRoot, platform) {
+function execConfigurator(projectRoot, platform, hasExtractedConfig, args, deferral) {
+  const configuratorName = getConfiguratorName(projectRoot, platform, hasExtractedConfig);
+  executeCommand(configuratorName, args).then(function () {
+    deferral.resolve();
+  }, function () {
+    deferral.reject('Could not configure the Onegini SDK with your configuration');
+  });
+}
+
+function getConfigFileForPlatform(projectRoot, platform, hasExtractedConfig) {
   const environmentVar = envVariables.configFiles[platform];
   const environmentLocation = process.env[environmentVar];
+  const extractedConfigPluginLocation = `${projectRoot}/plugins/${extractedConfigPlugin}/onegini-config-${platform}.zip`;
   const defaultLocation = `${projectRoot}/onegini-config-${platform}.zip`;
 
   if (environmentLocation) {
@@ -98,13 +110,19 @@ function getConfigFileForPlatform(projectRoot, platform) {
     return environmentLocation;
   }
 
+  if (hasExtractedConfig) {
+    console.log(`Using Token Server config zip from '${extractedConfigPluginLocation}'`);
+    return extractedConfigPluginLocation;
+  }
+
   console.log(`Using default Token Server config zip: '${defaultLocation}'`);
   return defaultLocation;
 }
 
-function getConfiguratorName() {
+function getConfiguratorName(projectRoot, platform, hasExtractedConfig) {
   const environmentVar = envVariables.configuratorName;
   const environmentName = process.env[environmentVar];
+  const extractedName = `${projectRoot}/plugins/${extractedConfigPlugin}/onegini-sdk-configurator-${platform}`;
   const defaultName = 'onegini-sdk-configurator';
 
   if (environmentName) {
@@ -112,6 +130,15 @@ function getConfiguratorName() {
     return environmentName;
   }
 
+  if (hasExtractedConfig) {
+    console.log(`Using SDK Configurator executable in '${extractedName}'`);
+    return extractedName;
+  }
+
   console.log('Using SDK Configurator from $PATH');
   return defaultName;
+}
+
+function hasExtractedConfigFiles(context) {
+  return context.opts.cordova.plugins.indexOf(extractedConfigPlugin) > -1;
 }
