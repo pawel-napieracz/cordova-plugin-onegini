@@ -92,11 +92,13 @@ function executeCommand(command, args) {
 
 function execConfigurator(projectRoot, platform, hasExtractedConfig, args, deferral) {
   const configuratorName = getConfiguratorName(projectRoot, platform, hasExtractedConfig);
-  executeCommand(configuratorName, args).then(function () {
-    deferral.resolve();
-  }, function () {
-    deferral.reject('Could not configure the Onegini SDK with your configuration');
-  });
+  executeCommand(configuratorName, args)
+    .then(copyArtifactoryCredentials(projectRoot, platform, hasExtractedConfig))
+    .then(function () {
+      deferral.resolve();
+    }, function () {
+      deferral.reject('Could not configure the Onegini SDK with your configuration');
+    });
 }
 
 function getConfigFileForPlatform(projectRoot, platform, hasExtractedConfig) {
@@ -137,6 +139,25 @@ function getConfiguratorName(projectRoot, platform, hasExtractedConfig) {
 
   console.log('Using SDK Configurator from $PATH');
   return defaultName;
+}
+
+function copyArtifactoryCredentials(projectRoot, platform, hasExtractedConfig) {
+  return new Promise(function (resolve, reject) {
+    if (platform === 'android' && hasExtractedConfig) {
+      const filePath = `${projectRoot}/plugins/${extractedConfigPlugin}/artifactory.properties`;
+      const destinationFilePath = path.join(projectRoot, 'platforms/android/artifactory.properties');
+      const destDir = path.dirname(destinationFilePath);
+
+      if (fs.existsSync(filePath) && fs.existsSync(destDir)) {
+        console.log(`Copying '${filePath}' into '${destDir}'`);
+        const stream = fs.createReadStream(filePath).pipe(fs.createWriteStream(destinationFilePath));
+        stream.on('end', () => resolve("finished"));
+        stream.on('error', (error) => reject("failed"));
+        return;
+      }
+    }
+    resolve("Skipping artifactory config");
+  });
 }
 
 function hasExtractedConfigFiles(context) {
