@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018 Onegini B.V.
+ * Copyright (c) 2017-2019 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,11 +67,6 @@ dependencies {
   api('com.onegini.mobile.sdk.android:onegini-sdk:9.4.0@aar') {
     transitive = true
   }
-
-  // Google Play Services availability check
-  implementation 'com.google.android.gms:play-services-base:16.0.1'
-  //Firebase Cloud Messaging (FCM)
-  implementation "com.google.firebase:firebase-messaging:17.3.4"
 
   implementation 'com.android.support:appcompat-v7:26.1.0'
 }
