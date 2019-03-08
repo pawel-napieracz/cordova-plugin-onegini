@@ -21,22 +21,4 @@
 
 @implementation AppDelegate (OGCDV)
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-    [[self.viewController getCommandInstance:OGCDVPluginClassPushMobileAuthenticationClient]
-        didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-}
-
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
-    [[self.viewController getCommandInstance:OGCDVPluginClassPushMobileAuthenticationClient]
-        didFailToRegisterForRemoteNotificationsWithError:error];
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    [[self.viewController getCommandInstance:OGCDVPluginClassPushMobileAuthRequestClient]
-        didReceiveRemoteNotification:userInfo];
-}
-
 @end

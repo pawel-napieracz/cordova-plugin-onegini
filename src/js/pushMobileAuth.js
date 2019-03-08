@@ -30,8 +30,18 @@ module.exports = (function () {
     return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'enroll', options, successCb, failureCb);
   }
 
+  function canHandlePushMessage(pushData) {
+    if (pushData && pushData.additionalData) {
+      var content = pushData.additionalData.content ? pushData.additionalData.content : pushData.additionalData
+      var transactionId = content.og_transaction_id;
+      return (typeof transactionId === "string" && transactionId.length > 0);
+    }
+    return false;
+  }
+
   function handlePushMessage(options, successCb, failureCb) {
-    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'handle', options, successCb, failureCb);
+    var content = options.additionalData.content ? options.additionalData.content : options.additionalData
+    return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'handle', content, successCb, failureCb);
   }
 
   function getPendingRequests(successCb, failureCb) {
@@ -120,6 +130,7 @@ module.exports = (function () {
   return {
     isUserEnrolled: isUserEnrolled,
     enroll: enroll,
+    canHandlePushMessage: canHandlePushMessage,
     handlePushMessage: handlePushMessage,
     getPendingRequests: getPendingRequests,
     handlePendingRequest: handlePendingRequest,

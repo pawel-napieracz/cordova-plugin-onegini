@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2019 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-#import "AppDelegate.h"
-@import OneginiSDKiOS;
+#import <Foundation/Foundation.h>
 
-@interface AppDelegate (OGCDV)
+NS_ASSUME_NONNULL_BEGIN
+
+@interface NSString (OGCDVHex)
+
+- (NSData *)ogcdv_dataFromHexString;
 
 @end
+
+NS_ASSUME_NONNULL_END
