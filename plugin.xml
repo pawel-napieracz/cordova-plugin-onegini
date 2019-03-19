@@ -86,8 +86,6 @@
     <source-file src="src/ios/classes/Reachability.m"/>
     <header-file src="src/ios/classes/OGCDVConstants.h"/>
     <source-file src="src/ios/classes/OGCDVConstants.m"/>
-    <header-file src="src/ios/classes/AppDelegate+OGCDV.h"/>
-    <source-file src="src/ios/classes/AppDelegate+OGCDV.m"/>
     <header-file src="src/ios/classes/NSString+OGCDVHex.h"/>
     <source-file src="src/ios/classes/NSString+OGCDVHex.m"/>
     <header-file src="src/ios/classes/CDVPlugin+OGCDV.h"/>
