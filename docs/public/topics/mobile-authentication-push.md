@@ -16,7 +16,7 @@ The user can be enrolled on only one application instance at a time. If the user
 can only enroll for mobile authentication with push on one of these devices. Enrollment is done by calling `onegini.mobileAuth.push.enroll()` function.
 
 You also need to implement handling of the notification event received by the system. After receiving the notification, you should verify if it can be handled by Onegini Cordova Plugin. 
-You can do it by calling `onegini.mobileAuth.push.canHandlePushMessage()` function. If the function returns `true` you can pass it the plugin by calling `onegini.mobileAuth.push.handlePushMessage()` function. 
+You can do it by calling `onegini.mobileAuth.push.canHandlePushMessage()` function. If the function returns `true` you can pass it the plugin by calling `onegini.mobileAuth.push.handlePushMessage()` function. Both methods expect you to pass a JSON object as the argument.
 
 **Example code to enroll an authenticated user for mobile authentication with push using PhonegapPluginPush:**
 
@@ -33,8 +33,8 @@ push.on('registration', (data) => {
     });
 });
 push.on('notification', (data) => {
-  if (onegini.mobileAuth.push.canHandlePushMessage(data)) { 
-    onegini.mobileAuth.push.handlePushMessage(data)
+  if (onegini.mobileAuth.push.canHandlePushMessage(data.additionalData)) { 
+    onegini.mobileAuth.push.handlePushMessage(data.additionalData)
       .catch((err) => alert('Push message error: ' + err.description));
   } else {
     var message = (data.title ? data.title + " " : "") + (data.message ? data.message : "");
