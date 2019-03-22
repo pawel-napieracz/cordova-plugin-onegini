@@ -31,8 +31,8 @@ module.exports = (function () {
   }
 
   function canHandlePushMessage(pushData) {
-    if (pushData && pushData.additionalData) {
-      var content = pushData.additionalData.content ? pushData.additionalData.content : pushData.additionalData
+    if (pushData) {
+      var content = pushData.content ? pushData.content : pushData
       var transactionId = content.og_transaction_id;
       return (typeof transactionId === "string" && transactionId.length > 0);
     }
@@ -40,7 +40,7 @@ module.exports = (function () {
   }
 
   function handlePushMessage(options, successCb, failureCb) {
-    var content = options.additionalData.content ? options.additionalData.content : options.additionalData
+    var content = options.content ? options.content : options
     return utils.promiseOrCallbackExec('OneginiPushMobileAuthClient', 'handle', content, successCb, failureCb);
   }
 

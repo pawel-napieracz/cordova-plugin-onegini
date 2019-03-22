@@ -40,6 +40,8 @@
         * [push](reference/mobileAuthentication/push/index.md)
             * [isUserEnrolled](reference/mobileAuthentication/push/isUserEnrolled.md)
             * [enroll](reference/mobileAuthentication/push/enroll.md)
+            * [canHandlePushMessage](reference/mobileAuthentication/push/canHandlePushMessage.md)
+            * [handlePushMessage](reference/mobileAuthentication/push/handlePushMessage.md)
             * [on](reference/mobileAuthentication/push/on.md)
             * [PushMobileAuthHandler](reference/mobileAuthentication/push/PushMobileAuthHandler.md)
         * [OTP](reference/mobileAuthentication/otp/index.md)
