@@ -2,7 +2,7 @@
 
 <!-- toc -->
 
-When your application receives a push message, which was sent by the Token Server it can be handled by the Onegini Cordova Plugin.
+When your application receives a push message (which was sent by the Token Server) it can be handled by the Onegini Cordova Plugin.
 
 ## `onegini.mobileAuth.push.handlePushMessage`
 
