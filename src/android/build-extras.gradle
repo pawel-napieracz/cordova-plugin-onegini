@@ -54,7 +54,7 @@ allprojects {
 dependencies {
   // TODO Move to release version before plugin release
   // Onegini SDK
-  compile('com.onegini.mobile.sdk.android:onegini-sdk:8.3.7@aar') {
+  compile('com.onegini.mobile.sdk.android:onegini-sdk:8.3.8@aar') {
     transitive = true
   }
 
