@@ -1,15 +1,15 @@
-# Verify if push message can be handled
+# Handle push message
 
 <!-- toc -->
 
-When your application receives a push message, you can verify whether it handlable by Onegini Cordova Plugin.
+When your application receives a push message, which was sent by the Token Server it can be handled by the Onegini Cordova Plugin.
 
-## `onegini.mobileAuth.push.canHandlePushMessage`
+## `onegini.mobileAuth.push.handlePushMessage`
 
 This function handles received push message
 
 - Requires a pushData in  form of a JSON object
-- Push can be handled by Onegini Cordova Plugin if the supplied JSON object contains the `og_transaction_id` and `og_profile_id` entry in the root or `content` key. Here are examples of accepted JSON object.
+- Push can be handled by the Onegini Cordova Plugin if the supplied JSON object contains the `og_transaction_id` and `og_profile_id` entry in the root or `content` key. Here are examples of accepted JSON object.
 
 Example 1:
 ```JSON

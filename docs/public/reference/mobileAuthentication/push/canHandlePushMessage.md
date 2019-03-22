@@ -2,7 +2,7 @@
 
 <!-- toc -->
 
-When your application receives a push message, you can verify whether it handleable by Onegini Cordova Plugin.
+When your application receives a push message, you can verify whether it handleable by the Onegini Cordova Plugin.
 
 ## `onegini.mobileAuth.push.canHandlePushMessage`
 
@@ -42,9 +42,3 @@ if (onegini.mobileAuth.push.canHandlePushMessage(data.additionalData)) {
     onegini.mobileAuth.push.handlePushMessage(data.additionalData)
 }
 ```
-The error callback contains an object with the following properties:
-
-| Property | Example | Description |
-| --- | --- | --- |
-| `code` | 8000 | The error code
-| `description` | "Onegini: Internal plugin error" | Human readable error description
