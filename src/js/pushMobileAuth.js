@@ -32,7 +32,7 @@ module.exports = (function () {
 
   function canHandlePushMessage(pushData) {
     if (pushData) {
-      var content = pushData.content ? pushData.content : pushData
+      var content = pushData.content ? pushData.content : pushData;
       var transactionId = content.og_transaction_id;
       return (typeof transactionId === "string" && transactionId.length > 0);
     }
