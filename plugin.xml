@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright (c) 2017 Onegini B.V.
+    Copyright (c) 2017-2019 Onegini B.V.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 -->
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-onegini"
-    version="5.3.1-SNAPSHOT">
+    version="6.0.0-M1">
   <name>OneginiCordovaPlugin</name>
   <description>Onegini Cordova Plugin</description>
 
@@ -86,8 +86,8 @@
     <source-file src="src/ios/classes/Reachability.m"/>
     <header-file src="src/ios/classes/OGCDVConstants.h"/>
     <source-file src="src/ios/classes/OGCDVConstants.m"/>
-    <header-file src="src/ios/classes/AppDelegate+OGCDV.h"/>
-    <source-file src="src/ios/classes/AppDelegate+OGCDV.m"/>
+    <header-file src="src/ios/classes/NSString+OGCDVHex.h"/>
+    <source-file src="src/ios/classes/NSString+OGCDVHex.m"/>
     <header-file src="src/ios/classes/CDVPlugin+OGCDV.h"/>
     <source-file src="src/ios/classes/CDVPlugin+OGCDV.m"/>
     <header-file src="src/ios/classes/OGCDVClient.h"/>
@@ -277,16 +277,6 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/IdentityProvidersClient.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
 
-    <!-- fcm -->
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmListenerService.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmStorage.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/FcmRegistrationService.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/fcm/NotificationHelper.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/fcm"/>
-
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PluginResultBuilder.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
@@ -297,8 +287,6 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AuthenticatorUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/OkHttpResponseUtil.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/AppLifecycleUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PendingMobileAuthRequestUtil.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/util"/>
@@ -361,8 +349,6 @@
 
     <!-- model -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/model/AuthMethod.java"
-        target-dir="src/com/onegini/mobile/sdk/cordova/model/"/>
-    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/model/NotificationId.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/model/"/>
 
     <!-- custom registration -->

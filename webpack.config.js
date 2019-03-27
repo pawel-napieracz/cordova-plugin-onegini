@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -41,16 +42,22 @@ module.exports = {
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map';
 
+  module.exports.optimization = {
+    minimizer: [
+      new UglifyJsPlugin({
+        sourceMap: true,
+        uglifyOptions: {
+          warnings: false,
+          compress: {}
+        },
+      }),
+    ]
+  }
+
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
       }
     }),
     new webpack.LoaderOptionsPlugin({

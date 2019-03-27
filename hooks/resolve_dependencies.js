@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Onegini B.V.
+ * Copyright (c) 2017-2019 Onegini B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ const execSync = require('child_process').execSync;
 const debug = require('debug')('resolve_dependencies');
 
 const pluginId = 'cordova-plugin-onegini';
+const extractedConfigPlugin = 'cordova-plugin-onegini-extracted-config';
 
 const envVariables = {
   artifactoryUser: 'ARTIFACTORY_USER',
@@ -57,13 +58,14 @@ module.exports = function (context) {
 
   fetchSdkDownloadPath(context);
   prepareSdkDirectories(context);
+  const artifactoryCredentials = getArtifactoryCredentials(context);
 
   writeToStdOut(`${pluginId}: Resolving Onegini iOS SDK dependencies...`);
 
   // Downloading & verifying the SDK lib
   checkSdkLibExistsOnFs()
-    .then(result => downloadFile(result, libOneginiSdkIos))
-    .then(() => checkDownloadedFileIntegrity(libOneginiSdkIos))
+    .then(result => downloadFile(artifactoryCredentials, result, libOneginiSdkIos))
+    .then(() => checkDownloadedFileIntegrity(artifactoryCredentials, libOneginiSdkIos))
     .then(() => unzipSDK(context))
     .then(() => {
       writeToStdOut('Success!\n');
@@ -89,7 +91,6 @@ function fetchSdkDownloadPath(context) {
     sdkDownloadPath = path.join(pluginDir, 'ios-sdk');
     log(`Downloading the Onegini iOS SDK to: '${sdkDownloadPath}'`);
   }
-
 }
 
 function checkSdkLibExistsOnFs() {
@@ -124,12 +125,10 @@ function calculateSha256(filepath) {
   });
 }
 
-function downloadFile(fileExists, fileUrl) {
+function downloadFile(artifactoryCredentials, fileExists, fileUrl) {
   return new Promise((resolve, reject) => {
     writeToStdOut('.');
-    const username = process.env[envVariables.artifactoryUser];
-    const password = process.env[envVariables.artifactoryPassword];
-    if (!username || !password) {
+    if (!artifactoryCredentials.artifactoryUser || !artifactoryCredentials.artifactoryPassword) {
       reject('You must set the "ARTIFACTORY_USER" and "ARTIFACTORY_PASSWORD" environment variables in order to resolve the iOS SDK dependency.');
       return;
     }
@@ -142,7 +141,7 @@ function downloadFile(fileExists, fileUrl) {
     }
 
     debug(`Downloading: ${filename}`);
-    const auth = Buffer.from(`${username}:${password}`).toString();
+    const auth = Buffer.from(`${artifactoryCredentials.artifactoryUser}:${artifactoryCredentials.artifactoryPassword}`).toString();
     const filePath = path.join(sdkDownloadPath, filename);
     const file = fs.createWriteStream(filePath);
     const options = {
@@ -180,14 +179,14 @@ function downloadFile(fileExists, fileUrl) {
   });
 }
 
-function checkDownloadedFileIntegrity(fileUrl) {
+function checkDownloadedFileIntegrity(artifactoryCredentials, fileUrl) {
   writeToStdOut('.');
   const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
   const downloadedFilePath = path.join(sdkDownloadPath, filename);
   const downloadedSha256FilePath = path.join(sdkDownloadPath, `${filename}.sha256`);
   const sha256FileUrl = `${fileUrl}.sha256`;
   return new Promise((resolve, reject) => {
-    downloadFile(false, sha256FileUrl)
+    downloadFile(artifactoryCredentials, false, sha256FileUrl)
       .then(() => calculateSha256(downloadedFilePath))
       .then(calculatedHash => {
         const downloadedHash = fs.readFileSync(downloadedSha256FilePath).toString();
@@ -265,10 +264,66 @@ function unzipSDK(context) {
   });
 }
 
+function getArtifactoryCredentials(context) {
+  const credentials = getArtifactoryCredentialsFromEnv();
+  if (credentials.artifactoryUser && credentials.artifactoryPassword) {
+    return credentials;
+  } else {
+    return getArtifactoryCredentialsFromGradleProperties(context);
+  }
+}
+
 function log(line) {
   console.log(`${pluginId}: ${line}`)
 }
 
 function writeToStdOut(output) {
   process.stdout.write(output);
+}
+
+function hasExtractedConfigFiles(context) {
+  return context.opts.cordova.plugins.indexOf(extractedConfigPlugin) > -1;
+}
+
+function getArtifactoryCredentialsFromEnv() {
+  var username = process.env[envVariables.artifactoryUser];
+  var password = process.env[envVariables.artifactoryPassword];
+
+  if (username && password) {
+    debug('Artifactory credentials found in env!');
+    return {artifactoryUser: username, artifactoryPassword: password};
+  }
+  return new Object();
+}
+
+function getArtifactoryCredentialsFromGradleProperties(context) {
+  const filePath = `${context.opts.projectRoot}/plugins/${extractedConfigPlugin}/artifactory.properties`;
+  const hasExtractedConfig = hasExtractedConfigFiles(context);
+  if (hasExtractedConfig && fs.existsSync(filePath)) {
+    debug('Reading artifactory.properties file');
+    var content = fs.readFileSync(filePath, 'utf8');
+    return parseArtifactoryCredentials(content);
+  }
+  return new Object();
+}
+
+function parseArtifactoryCredentials(fileContent) {
+  const artifactoryCredentials = new Object();
+  ('' + fileContent).split(/[\r\n]+/)
+    .map((x) => x.trim())
+    .filter((x) => Boolean(x))
+    .forEach(function(item, index) {
+      const result = item.match(/artifactory(User|Password)=(.*)/i)
+      if (result.length == 3) {
+        const key = result[1];
+        const value = result[2];
+
+        if (key === 'User') {
+          artifactoryCredentials.artifactoryUser = value;
+        } else if (key === 'Password') {
+          artifactoryCredentials.artifactoryPassword = value;
+        }
+      }
+    })
+  return artifactoryCredentials;
 }
