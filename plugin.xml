@@ -217,6 +217,10 @@
         <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.IdentityProvidersClient"/>
         <param name="onload" value="false"/>
       </feature>
+      <feature name="OneginiAppToWebSingleSignOnClient">
+        <param name="android-package" value="com.onegini.mobile.sdk.cordova.client.AppToWebSingleSignOnClient"/>
+        <param name="onload" value="false"/>
+      </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
@@ -276,6 +280,8 @@
         target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/IdentityProvidersClient.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/AppToWebSingleSignOnClient.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PluginResultBuilder.java"
@@ -336,6 +342,8 @@
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PendingMobileAuthWithPushRequestsHandler.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+    <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AppToWebSingleSignOnHandler.java"
+                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
 
     <!-- mobileAuthentication -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/Callback.java"
