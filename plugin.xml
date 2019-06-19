@@ -281,7 +281,7 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/IdentityProvidersClient.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/client/AppToWebSingleSignOnClient.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/client"/>
 
     <!-- util -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/util/PluginResultBuilder.java"
@@ -343,7 +343,7 @@
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/PendingMobileAuthWithPushRequestsHandler.java"
         target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/handler/AppToWebSingleSignOnHandler.java"
-                 target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
+        target-dir="src/com/onegini/mobile/sdk/cordova/handler/"/>
 
     <!-- mobileAuthentication -->
     <source-file src="src/android/src/android/com/onegini/mobile/sdk/cordova/mobileAuthentication/Callback.java"

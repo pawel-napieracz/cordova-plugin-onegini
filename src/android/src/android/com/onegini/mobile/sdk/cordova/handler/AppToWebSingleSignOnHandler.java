@@ -17,35 +17,35 @@ import static com.onegini.mobile.sdk.cordova.OneginiCordovaPluginConstants.EVENT
 
 public class AppToWebSingleSignOnHandler implements OneginiAppToWebSingleSignOnHandler {
 
-    private final CallbackContext callbackContext;
+  private final CallbackContext callbackContext;
 
-    public AppToWebSingleSignOnHandler(final CallbackContext callbackContext) {
-        this.callbackContext = callbackContext;
+  public AppToWebSingleSignOnHandler(final CallbackContext callbackContext) {
+    this.callbackContext = callbackContext;
+  }
+
+  @Override
+  public void onSuccess(final OneginiAppToWebSingleSignOn response) {
+    final PluginResult pluginResult = new PluginResultBuilder()
+        .withSuccess()
+        .withAppToWebSingleSignOn(response)
+        .build();
+
+    sendPluginResult(pluginResult);
+  }
+
+  @Override
+  public void onError(final OneginiAppToWebSingleSignOnError error) {
+    final PluginResult pluginResultBuilder = new PluginResultBuilder()
+        .withError()
+        .withOneginiError(error)
+        .build();
+
+    sendPluginResult(pluginResultBuilder);
+  }
+
+  private void sendPluginResult(final PluginResult pluginResult) {
+    if (!callbackContext.isFinished()) {
+      callbackContext.sendPluginResult(pluginResult);
     }
-
-    @Override
-    public void onSuccess(final OneginiAppToWebSingleSignOn response) {
-        final PluginResult pluginResult = new PluginResultBuilder()
-                .withSuccess()
-                .withAppToWebSingleSignOn(response)
-                .build();
-
-        sendPluginResult(pluginResult);
-    }
-
-    @Override
-    public void onError(final OneginiAppToWebSingleSignOnError error) {
-        final PluginResult pluginResultBuilder = new PluginResultBuilder()
-                .withError()
-                .withOneginiError(error)
-                .build();
-
-        sendPluginResult(pluginResultBuilder);
-    }
-
-    private void sendPluginResult(final PluginResult pluginResult) {
-        if (!callbackContext.isFinished()) {
-            callbackContext.sendPluginResult(pluginResult);
-        }
-    }
+  }
 }
