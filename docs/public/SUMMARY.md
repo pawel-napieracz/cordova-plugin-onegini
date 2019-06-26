@@ -30,6 +30,7 @@
         * [register](reference/user/register.md)
         * [validatePinWithPolicy](reference/user/validatePinWithPolicy.md)
         * [getIdentityProviders](reference/user/getIdentityProviders.md)
+        * [getAppToWebSingleSignOn](reference/user/getAppToWebSingleSignOn.md)
     * [device](reference/device/introduction.md)
         * [authenticate](reference/device/authenticate.md)
     * [resource](reference/resource/introduction.md)
