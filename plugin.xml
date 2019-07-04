@@ -80,6 +80,9 @@
       <feature name="OneginiIdentityProvidersClient">
         <param name="ios-package" value="OGCDVIdentityProvidersClient"/>
       </feature>
+      <feature name="OneginiAppToWebSingleSignOnClient">
+        <param name="ios-package" value="OGCDVAppToWebSingleSignOnClient"/>
+      </feature>
     </config-file>
 
     <header-file src="src/ios/classes/Reachability.h"/>
@@ -136,6 +139,8 @@
     <source-file src="src/ios/classes/OGCDVPendingPushMobileAuthRequestClientHelper.m"/>
     <header-file src="src/ios/classes/ONGPendingMobileAuthRequest+IntenalSetters.h"/>
     <source-file src="src/ios/classes/ONGPendingMobileAuthRequest+IntenalSetters.m"/>
+    <header-file src="src/ios/classes/OGCDVAppToWebSingleSignOnClient.h"/>
+    <source-file src="src/ios/classes/OGCDVAppToWebSingleSignOnClient.m"/>
 
     <!-- Safari Services for SFSafariViewController -->
     <framework src="SafariServices.framework" weak="true"/>
