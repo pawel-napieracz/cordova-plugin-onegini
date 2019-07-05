@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-onegini",
-  "version": "6.0.0-M1",
+  "version": "6.0.0",
   "description": "Onegini Cordova Plugin",
   "cordova": {
     "id": "cordova-plugin-onegini",
@@ -37,10 +37,10 @@
     "prepublishOnly": "npm run build:prod"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.0",
-    "@babel/plugin-transform-runtime": "^7.2.0",
-    "@babel/preset-env": "^7.2.0",
-    "@babel/runtime-corejs2": "^7.2.0",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/runtime-corejs2": "^7.4.4",
     "babel-loader": "^8.0.0",
     "clean-webpack-plugin": "^0.1.19",
     "core-js": "^2.5.7",
