@@ -49,7 +49,7 @@ module.exports = function (context) {
 
   platforms
     .map(platform => platform.split('@')[0])
-    .forEach(platform => {
+    .forEach((platform, index) => {
       console.log(`Configuring the ${platform} platform`);
       console.log('--------------------------' + new Array(platform.length).join('-') + '\n');
 
@@ -57,13 +57,13 @@ module.exports = function (context) {
       platformArgs.unshift(platform);
       platformArgs.push('--config', getConfigFileForPlatform(context.opts.projectRoot, platform));
 
-      execConfigurator(platformArgs, deferral);
+      execConfigurator(platformArgs, index, platform.length, deferral);
     });
 
   return deferral.promise;
 };
 
-function execConfigurator(args, deferral) {
+function execConfigurator(args, index, length, deferral) {
   const configuratorName = getConfiguratorName();
 
   console.log('\nRunning command:');
@@ -81,7 +81,9 @@ function execConfigurator(args, deferral) {
 
   configurator.on('close', (code) => {
     if (code === 0) {
-      deferral.resolve();
+      if(index + 1 === length) {
+        deferral.resolve();
+      }
     } else {
       deferral.reject('Could not configure the Onegini SDK with your configuration');
     }
