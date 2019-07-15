@@ -49,7 +49,7 @@ module.exports = function (context) {
 
   platforms
     .map(platform => platform.split('@')[0])
-    .forEach(platform => {
+    .forEach((platform, index) => {
       console.log(`Configuring the ${platform} platform`);
       console.log('--------------------------' + new Array(platform.length).join('-') + '\n');
 
@@ -58,7 +58,7 @@ module.exports = function (context) {
       const configFile = getConfigFileForPlatform(projectRoot, platform, hasExtractedConfig);
       platformArgs.push('--config', configFile);
 
-      execConfigurator(projectRoot, platform, hasExtractedConfig, platformArgs, deferral);
+      execConfigurator(projectRoot, platform, hasExtractedConfig, platformArgs, deferral, index, platform.length);
     });
 
   return deferral.promise;
