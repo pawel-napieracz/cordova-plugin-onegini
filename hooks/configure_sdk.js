@@ -90,12 +90,14 @@ function executeCommand(command, args) {
   });
 }
 
-function execConfigurator(projectRoot, platform, hasExtractedConfig, args, deferral) {
+function execConfigurator(projectRoot, platform, hasExtractedConfig, args, deferral, index, length) {
   const configuratorName = getConfiguratorName(projectRoot, platform, hasExtractedConfig);
   executeCommand(configuratorName, args)
     .then(copyArtifactoryCredentials(projectRoot, platform, hasExtractedConfig))
     .then(function () {
-      deferral.resolve();
+      if (index + 1 === length) {
+        deferral.resolve();
+      }
     }, function () {
       deferral.reject('Could not configure the Onegini SDK with your configuration');
     });
