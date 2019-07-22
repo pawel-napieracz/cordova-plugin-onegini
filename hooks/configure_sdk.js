@@ -41,27 +41,22 @@ module.exports = function (context) {
   const hasExtractedConfig = hasExtractedConfigFiles(context);
   const deferral = context.requireCordovaModule('q').defer();
   const args = ['--cordova', '--app-dir', projectRoot];
-  console.log('Configuring the Onegini SDK');
+  const platform = context.opts.plugin.platform;
+  console.log(`Configuring the ${platform} platform`);
   console.log('===========================\n\n');
 
-  // deduce the platforms based on whatever in the whitelist is currently installed
-  const platforms = supportedPlatforms.filter(platform => fs.existsSync(path.join(projectRoot, "platforms", platform)));
+  if (supportedPlatforms.indexOf(platform) < -1) {
+    console.log(`${platform} is not supported`);
+    return deferral.promise;
+  }
+  
+  let platformArgs = args.slice();
+  platformArgs.unshift(platform);
+  const configFile = getConfigFileForPlatform(projectRoot, platform, hasExtractedConfig);
+  platformArgs.push('--config', configFile);
 
-  platforms
-    .map(platform => platform.split('@')[0])
-    .forEach((platform, index) => {
-      console.log(`Configuring the ${platform} platform`);
-      console.log('--------------------------' + new Array(platform.length).join('-') + '\n');
-
-      let platformArgs = args.slice();
-      platformArgs.unshift(platform);
-      const configFile = getConfigFileForPlatform(projectRoot, platform, hasExtractedConfig);
-      platformArgs.push('--config', configFile);
-
-      execConfigurator(projectRoot, platform, hasExtractedConfig, platformArgs, deferral, index, platform.length);
-    });
-
-  return deferral.promise;
+  execConfigurator(projectRoot, platform, hasExtractedConfig, platformArgs, deferral)
+  return deferral.promise
 };
 
 function executeCommand(command, args) {
@@ -90,14 +85,12 @@ function executeCommand(command, args) {
   });
 }
 
-function execConfigurator(projectRoot, platform, hasExtractedConfig, args, deferral, index, length) {
+function execConfigurator(projectRoot, platform, hasExtractedConfig, args, deferral) {
   const configuratorName = getConfiguratorName(projectRoot, platform, hasExtractedConfig);
   executeCommand(configuratorName, args)
     .then(copyArtifactoryCredentials(projectRoot, platform, hasExtractedConfig))
     .then(function () {
-      if (index + 1 === length) {
-        deferral.resolve();
-      }
+      deferral.resolve();
     }, function () {
       deferral.reject('Could not configure the Onegini SDK with your configuration');
     });
