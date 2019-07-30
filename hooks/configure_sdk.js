@@ -41,7 +41,20 @@ module.exports = function (context) {
   const hasExtractedConfig = hasExtractedConfigFiles(context);
   const deferral = context.requireCordovaModule('q').defer();
   const args = ['--cordova', '--app-dir', projectRoot];
-  const platform = context.opts.plugin.platform;
+  let platform = context.opts.plugin.platform;
+
+  // We don't want to trigger the iOS SDK configurator as it will be triggered again during the 'after_platform_add' lifecycle phase.
+  if (afterPluginInstallHookTriggeredDuringPlatformInstallAndIosInstalled(context)) {
+    return;
+  }
+  // We only want to trigger the SDK configurator during the 'after_platform_add' lifecycle phase for the iOS platform in case the cordova command 'cordova platform add ios' is triggered.
+  if (afterPlatformAddHookTriggeredDuringPlatformAddAndIosPlatformInstalled(context)) {
+    // the platform is not provided in the context for the platform add command so we need to set it manually.
+    platform = 'ios';
+  } else {
+    return;
+  }
+
   console.log(`Configuring the ${platform} platform`);
   console.log('===========================\n\n');
 
@@ -49,7 +62,7 @@ module.exports = function (context) {
     console.log(`${platform} is not supported`);
     return deferral.promise;
   }
-  
+
   let platformArgs = args.slice();
   platformArgs.unshift(platform);
   const configFile = getConfigFileForPlatform(projectRoot, platform, hasExtractedConfig);
@@ -58,6 +71,22 @@ module.exports = function (context) {
   execConfigurator(projectRoot, platform, hasExtractedConfig, platformArgs, deferral)
   return deferral.promise
 };
+
+function afterPluginInstallHookTriggeredDuringPlatformInstallAndIosInstalled(context) {
+  if (context.hook === 'after_plugin_install') {
+    const iosPlatformInstalled = fs.existsSync(path.join(projectRoot, 'platforms', 'ios'));
+    const platformAddCommandTriggered = context.cmdLine.includes('platform add');
+    return (iosPlatformInstalled && platformAddCommandTriggered)
+  }
+}
+
+function afterPlatformAddHookTriggeredDuringPlatformAddAndIosPlatformInstalled(context) {
+  if (context.hook === 'after_platform_add') {
+    const iosPlatformInstalled = fs.existsSync(path.join(projectRoot, 'platforms', 'ios'));
+    const platformAddCommandTriggered = context.cmdLine.includes('platform add');
+    return (iosPlatformInstalled && platformAddCommandTriggered);
+  }
+}
 
 function executeCommand(command, args) {
   return new Promise(function (resolve, reject) {
