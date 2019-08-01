@@ -43,24 +43,31 @@ module.exports = function (context) {
   const args = ['--cordova', '--app-dir', projectRoot];
   let platform = context.opts.plugin.platform;
 
-  // We don't want to trigger the iOS SDK configurator as it will be triggered again during the 'after_platform_add' lifecycle phase.
-  if (afterPluginInstallHookTriggeredDuringPlatformInstallAndIosInstalled(context, projectRoot)) {
-    return;
-  }
-  // We only want to trigger the SDK configurator during the 'after_platform_add' lifecycle phase for the iOS platform in case the cordova command 'cordova platform add ios' is triggered.
-  if (afterPlatformAddHookTriggeredDuringPlatformAddAndIosPlatformInstalled(context, projectRoot)) {
-    // the platform is not provided in the context for the platform add command so we need to set it manually.
-    platform = 'ios';
-  } else {
+  // Don't trigger the iOS SDK configurator during the 'after_plugin_install' lifecycle phase as it will be triggered again during the 'after_platform_add'
+  // lifecycle phase.
+  // There is a caveat if 'cordova platform add ios android' is triggered. In this the configurator for iOS can't be suppressed for the iOS platform only.
+  // Hence, this command will execute the SDK configurator twice for the iOS platform. It does not break anything but is merely redundant.
+  if (afterPluginInstallHookTriggeredDuringPlatformInstallOnlyForIos(context)) {
     return;
   }
 
-  console.log(`Configuring the ${platform} platform`);
-  console.log('===========================\n\n');
+  // Only trigger the SDK configurator during the 'after_platform_add' lifecycle phase for the iOS platform in case the
+  // cordova command 'cordova platform add ios' is triggered.
+  if (afterPlatformAddHookTriggeredDuringPlatformAddAndIosPlatformInstalled(context, projectRoot)) {
+    // the platform is not provided in the context for the 'cordova platform add <platform>' command so it is set manually.
+    platform = 'ios';
+  }
+  else if (platform === undefined || platform === 'undefined') {
+    return;
+  }
+
+  console.log('==============================================' + new Array(platform.length).join('='));
+  console.log(`Configuring the Onegini SDK for the ${platform} platform`);
+  console.log('----------------------------------------------' + new Array(platform.length).join('-') + '\n\n');
 
   if (supportedPlatforms.indexOf(platform) < -1) {
     console.log(`${platform} is not supported`);
-    return deferral.promise;
+    return;
   }
 
   let platformArgs = args.slice();
@@ -72,20 +79,22 @@ module.exports = function (context) {
   return deferral.promise
 };
 
-function afterPluginInstallHookTriggeredDuringPlatformInstallAndIosInstalled(context, projectRoot) {
-  if (context.hook === 'after_plugin_install') {
-    const iosPlatformInstalled = fs.existsSync(path.join(projectRoot, 'platforms', 'ios'));
-    const platformAddCommandTriggered = context.cmdLine.includes('platform add');
-    return (iosPlatformInstalled && platformAddCommandTriggered)
-  }
+function afterPluginInstallHookTriggeredDuringPlatformInstallOnlyForIos(context) {
+  let afterPluginInstallHookTriggered = context.hook === 'after_plugin_install';
+  const platformAddCommandTriggeredOnlyForIos =
+    context.cmdLine.includes('platform add')
+    && context.cmdLine.includes('ios')
+    && !context.cmdLine.includes('android');
+
+  return (afterPluginInstallHookTriggered && platformAddCommandTriggeredOnlyForIos)
 }
 
 function afterPlatformAddHookTriggeredDuringPlatformAddAndIosPlatformInstalled(context, projectRoot) {
-  if (context.hook === 'after_platform_add') {
-    const iosPlatformInstalled = fs.existsSync(path.join(projectRoot, 'platforms', 'ios'));
-    const platformAddCommandTriggered = context.cmdLine.includes('platform add');
-    return (iosPlatformInstalled && platformAddCommandTriggered);
-  }
+  const afterPlatformAddHookTriggered = context.hook === 'after_platform_add';
+  const iosPlatformInstalled = fs.existsSync(path.join(projectRoot, 'platforms', 'ios'));
+  const platformAddCommandTriggeredForIos = context.cmdLine.includes('platform add') && context.cmdLine.includes('ios');
+
+  return (afterPlatformAddHookTriggered && iosPlatformInstalled && platformAddCommandTriggeredForIos);
 }
 
 function executeCommand(command, args) {
@@ -120,8 +129,10 @@ function execConfigurator(projectRoot, platform, hasExtractedConfig, args, defer
     .then(copyArtifactoryCredentials(projectRoot, platform, hasExtractedConfig))
     .then(function () {
       deferral.resolve();
+      console.log('==============================================' + new Array(platform.length).join('='));
     }, function () {
       deferral.reject('Could not configure the Onegini SDK with your configuration');
+      console.log('==============================================' + new Array(platform.length).join('=') + '\n');
     });
 }
 
