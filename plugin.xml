@@ -22,6 +22,12 @@
 
   <hook type="before_plugin_install" src="hooks/resolve_dependencies.js"/>
   <hook type="after_plugin_install" src="hooks/configure_sdk.js"/>
+  <!--
+  Due to the fact that Cordova modifies the Xcodeproj during the platform add phase we need to trigger the configurator hook again for iOS.
+  Explicit platform filtering is done in the hook code.
+  -->
+  <hook type="after_platform_add" src="hooks/configure_sdk.js"/>
+
 
   <js-module src="dist/onegini.js" name="onegini">
     <clobbers target="onegini"/>
