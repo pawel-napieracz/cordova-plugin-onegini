@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-onegini",
-  "version": "5.2.4",
+  "version": "5.2.5-SNAPSHOT",
   "description": "Onegini Cordova Plugin",
   "cordova": {
     "id": "cordova-plugin-onegini",
