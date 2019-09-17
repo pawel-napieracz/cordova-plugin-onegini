@@ -37,18 +37,17 @@
     "prepublishOnly": "npm run build:prod"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
-    "@babel/runtime-corejs2": "^7.4.4",
+    "@babel/core": "^7.6.0",
+    "@babel/plugin-transform-runtime": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/runtime-corejs2": "^7.6.0",
     "babel-loader": "^8.0.0",
-    "clean-webpack-plugin": "^0.1.19",
-    "core-js": "^2.5.7",
-    "np": "^2.20.1",
-    "text-encoding": "^0.6.4",
-    "uglifyjs-webpack-plugin": "^2.1.2",
-    "webpack": "^4.25.1",
-    "webpack-cli": "^3.1.2"
+    "clean-webpack-plugin": "^3.0.0",
+    "np": "^5.1.0",
+    "text-encoding": "^0.7.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9"
   },
   "dependencies": {}
 }
