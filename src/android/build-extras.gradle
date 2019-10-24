@@ -56,8 +56,6 @@ dependencies {
   api('com.onegini.mobile.sdk.android:onegini-sdk:9.7.0@aar') {
     transitive = true
   }
-
-  implementation 'com.android.support:appcompat-v7:26.1.0'
 }
 
 afterEvaluate {
