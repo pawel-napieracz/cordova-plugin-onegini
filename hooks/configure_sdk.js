@@ -19,7 +19,6 @@
 const fs = require('fs');
 const path = require('path');
 const spawn = require('child_process').spawn;
-const q = require('q')
 
 const supportedPlatforms = ['android', 'ios'];
 const envVariables = {
@@ -40,7 +39,6 @@ module.exports = function (context) {
 
   const projectRoot = context.opts.projectRoot;
   const hasExtractedConfig = hasExtractedConfigFiles(context);
-  const deferral = q.defer();
   const args = ['--cordova', '--app-dir', projectRoot];
   let platform = context.opts.plugin.platform;
 
@@ -76,8 +74,7 @@ module.exports = function (context) {
   const configFile = getConfigFileForPlatform(projectRoot, platform, hasExtractedConfig);
   platformArgs.push('--config', configFile);
 
-  execConfigurator(projectRoot, platform, hasExtractedConfig, platformArgs, deferral);
-  return deferral.promise
+  return execConfigurator(projectRoot, platform, hasExtractedConfig, platformArgs);
 };
 
 function afterPluginInstallHookTriggeredDuringPlatformInstallOnlyForIos(context) {
@@ -124,16 +121,16 @@ function executeCommand(command, args) {
   });
 }
 
-function execConfigurator(projectRoot, platform, hasExtractedConfig, args, deferral) {
+function execConfigurator(projectRoot, platform, hasExtractedConfig, args) {
   const configuratorName = getConfiguratorName(projectRoot, platform, hasExtractedConfig);
-  executeCommand(configuratorName, args)
+  return executeCommand(configuratorName, args)
     .then(copyArtifactoryCredentials(projectRoot, platform, hasExtractedConfig))
-    .then(function () {
-      deferral.resolve();
+    .then(value => {
       console.log('==============================================' + new Array(platform.length).join('='));
-    }, function () {
-      deferral.reject('Could not configure the Onegini SDK with your configuration');
+      return value;
+    }, reason => {
       console.log('==============================================' + new Array(platform.length).join('=') + '\n');
+      throw new Error('Could not configure the Onegini SDK with your configuration');
     });
 }
 
