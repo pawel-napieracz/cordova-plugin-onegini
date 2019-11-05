@@ -19,6 +19,7 @@
 const fs = require('fs');
 const path = require('path');
 const spawn = require('child_process').spawn;
+const q = require('q')
 
 const supportedPlatforms = ['android', 'ios'];
 const envVariables = {
@@ -39,7 +40,7 @@ module.exports = function (context) {
 
   const projectRoot = context.opts.projectRoot;
   const hasExtractedConfig = hasExtractedConfigFiles(context);
-  const deferral = context.requireCordovaModule('q').defer();
+  const deferral = q.defer();
   const args = ['--cordova', '--app-dir', projectRoot];
   let platform = context.opts.plugin.platform;
 
