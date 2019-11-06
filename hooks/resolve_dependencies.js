@@ -48,7 +48,6 @@ let sdkDownloadPath;
 
 module.exports = function (context) {
   const platform = context.opts.plugin.platform;
-  const deferral = context.requireCordovaModule('q').defer();
 
   // We only want to invoke the plugin for the iOS platform since it doesn't make any sense to resolve the iOS SDK dependencies when
   // you only have the Android platform installed.
@@ -63,19 +62,11 @@ module.exports = function (context) {
   writeToStdOut(`${pluginId}: Resolving Onegini iOS SDK dependencies...`);
 
   // Downloading & verifying the SDK lib
-  checkSdkLibExistsOnFs()
+  return checkSdkLibExistsOnFs()
     .then(result => downloadFile(artifactoryCredentials, result, libOneginiSdkIos))
     .then(() => checkDownloadedFileIntegrity(artifactoryCredentials, libOneginiSdkIos))
     .then(() => unzipSDK(context))
-    .then(() => {
-      writeToStdOut('Success!\n');
-      deferral.resolve();
-    })
-    .catch((err) => {
-      deferral.reject(err);
-    });
-
-  return deferral.promise;
+    .then(() => writeToStdOut('Success!\n'));
 };
 
 function fetchSdkDownloadPath(context) {
