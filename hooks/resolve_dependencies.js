@@ -32,7 +32,7 @@ const envVariables = {
   sdkDownloadPath: 'ONEGINI_SDK_DOWNLOAD_PATH'
 };
 
-const sdkVersion = '9.4.0';
+const sdkVersion = '9.4.2';
 
 const baseArtifactoryUrl = `https://repo.onegini.com/artifactory/onegini-sdk/com/onegini/mobile/sdk/ios/libOneginiSDKiOS/${sdkVersion}`;
 const libOneginiSdkIos = `${baseArtifactoryUrl}/OneginiSDKiOS-${sdkVersion}.tar.gz`;
