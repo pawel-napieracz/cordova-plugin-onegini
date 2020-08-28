@@ -46,6 +46,10 @@
             [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeNoUserAuthenticated andMessage:OGCDVPluginErrDescriptionNoUserAuthenticated];
             return;
         }
+        if ([command.arguments.firstObject isKindOfClass:NSNull.class]) {
+            [self sendErrorResultForCallbackId:command.callbackId withErrorCode:OGCDVPluginErrCodeIoException andMessage:@"Device token cannot be NULL."];
+            return;
+        }
         NSData *deviceToken = [command.arguments.firstObject ogcdv_dataFromHexString];
         [[ONGUserClient sharedInstance] enrollForPushMobileAuthWithDeviceToken:deviceToken
                                                                     completion:^(BOOL enrolled, NSError *_Nullable error) {
